@@ -1,6 +1,6 @@
 import React from 'react';
 import * as Rx from 'rxjs';
-import { mapTo, map, combineLatest, share, tap } from 'rxjs/operators';
+import { mapTo, map, combineLatest, share, switchMap } from 'rxjs/operators';
 import { Eth } from 'web3-eth';
 import { ConnectionMethodProps } from '~/components/Common/ConnectionSelector/ConnectionSelector';
 import { networkFromId } from '~/utils/networkFromId';
@@ -25,7 +25,7 @@ const connect = (): Rx.Observable<Environment> => {
   return enable$.pipe(
     mapTo(eth),
     combineLatest(network$, account$),
-    map(([eth, network, account]) => createEnvironment(eth, network, account))
+    switchMap(([eth, network, account]) => createEnvironment(eth, network, account))
   );
 };
 

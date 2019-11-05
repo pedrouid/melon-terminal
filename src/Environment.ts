@@ -2,11 +2,14 @@ import LRUCache from 'lru-cache';
 import { EnvironmentOptions } from '@melonproject/melonjs/Environment';
 import { Environment as BaseEnvironment, Address } from '@melonproject/melonjs';
 import { Eth } from 'web3-eth';
-import { NetworkEnum } from './types';
+import { getConfig } from '~/config';
+import { NetworkEnum, Deployment } from './types';
 import { HttpProvider, WebsocketProvider, HttpProviderOptions, WebsocketProviderOptions } from 'web3-providers';
 
-export function createEnvironment(eth: Eth, network: NetworkEnum, account?: Address) {
-  return new Environment(eth, network, account, {
+export async function createEnvironment(eth: Eth, network: NetworkEnum, account?: Address) {
+  const config = getConfig(network);
+  const deployment = await (config && config.deployment());
+  return new Environment(eth, network, deployment, account, {
     cache: new LRUCache(500),
   });
 }
@@ -27,6 +30,7 @@ export class Environment extends BaseEnvironment {
   constructor(
     eth: Eth,
     public readonly network: NetworkEnum,
+    public readonly deployment?: Deployment,
     public readonly account?: Address,
     options?: EnvironmentOptions
   ) {

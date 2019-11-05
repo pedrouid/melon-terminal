@@ -104,7 +104,7 @@ type Version {
 
 type PriceSource {
   address: Address!
-  lastUpdate: DateTime!
+  lastUpdate: DateTime
 }
 
 type Query {

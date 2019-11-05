@@ -4,13 +4,12 @@ import { ApolloLink, FetchResult, Observable, Operation } from 'apollo-link';
 import { makeExecutableSchema } from 'graphql-tools';
 import { isSubscription } from '~/graphql/utils/isSubscription';
 import { ensureIterable } from '~/graphql/utils/ensureIterable';
-import { Deployment } from '~/types';
 import { Environment } from '~/Environment';
+import { createTokenEnum, createTokenEnumDefinition } from '~/graphql/enums/TokenEnum';
 import * as loaders from '~/graphql/loaders';
 import * as resolvers from '~/graphql/resolvers';
 // @ts-ignore
 import SchemaDefinition from '~/graphql/schema.graphql';
-import * as EnumDefinitions from '~/graphql/enums';
 
 export type Resolver<TParent = any, TArgs = any> = (parent: TParent, args: TArgs, context: Context) => any;
 export type ContextCreator = (request: Operation) => Promise<Context> | Context;
@@ -19,7 +18,6 @@ export type Loaders = {
 };
 
 export interface Context {
-  deployment: Deployment;
   environment: Environment;
   loaders: Loaders;
   block: number;
@@ -33,10 +31,8 @@ interface SchemaLinkOptions<TRoot = any, TContext = any> {
 
 export const createQueryContext = (environment: Environment): ContextCreator => {
   return async () => {
-    const deployment = process.env.PROTOCOL_DEPLOYMENT;
     const block = await environment.client.getBlockNumber();
     const context: Context = {
-      deployment,
       block,
       environment,
       loaders: {} as Loaders,
@@ -51,10 +47,11 @@ export const createQueryContext = (environment: Environment): ContextCreator => 
   };
 };
 
-export const createSchema = () => {
+export const createSchema = (environment: Environment) => {
+  const TokenEnum = createTokenEnum(environment);
   const executable = makeExecutableSchema({
-    resolvers,
-    typeDefs: [...Object.values(EnumDefinitions), SchemaDefinition],
+    resolvers: { ...resolvers, TokenEnum },
+    typeDefs: [createTokenEnumDefinition(TokenEnum), SchemaDefinition],
     inheritResolversFromInterfaces: true,
   });
 

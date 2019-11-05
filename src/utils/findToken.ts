@@ -16,9 +16,5 @@ export function findToken(deployment: Deployment, which: string) {
     return false;
   });
 
-  if (!token) {
-    throw new Error(`Could not instantiate token class for unknown token ${token}.`);
-  }
-
   return token;
 }

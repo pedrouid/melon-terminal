@@ -9,6 +9,7 @@ import { Spinner } from './Common/Spinner/Spinner';
 import { Layout } from './Layout/Layout';
 import { Theme, ModalBackground } from './App.styles';
 import { OfflineModal } from './Common/OfflineModal/OfflineModal';
+import { NetworkEnum } from '~/types';
 
 const Home = React.lazy(() => import('./Routes/Home/Home'));
 const Wallet = React.lazy(() => import('./Routes/Wallet/Wallet'));
@@ -23,7 +24,10 @@ function isConnected(connection: OnChainContextValue) {
     return false;
   }
 
-  if (connection.environment.network !== process.env.ETHEREUM_NETWORK) {
+  if (
+    connection.environment.network === NetworkEnum.INVALID ||
+    connection.environment.network === NetworkEnum.OFFLINE
+  ) {
     return false;
   }
 

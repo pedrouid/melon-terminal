@@ -1,7 +1,7 @@
 import React from 'react';
 import * as Rx from 'rxjs';
 import * as R from 'ramda';
-import { switchMap, expand, distinctUntilChanged, map } from 'rxjs/operators';
+import { switchMap, expand, distinctUntilChanged } from 'rxjs/operators';
 import { Eth } from 'web3-eth';
 import { HttpProvider } from 'web3-providers';
 import { ConnectionMethodProps } from '~/components/Common/ConnectionSelector/ConnectionSelector';
@@ -40,7 +40,7 @@ const connect = (): Rx.Observable<Environment> => {
       switchMap(eth => checkConnection(eth)),
       expand(connection => Rx.timer(10000).pipe(switchMap(() => checkConnection(connection.eth)))),
       distinctUntilChanged((a, b) => R.equals(a, b)),
-      map(connection => createEnvironment(connection.eth, connection.network, connection.account))
+      switchMap(connection => createEnvironment(connection.eth, connection.network, connection.account))
     );
   });
 };

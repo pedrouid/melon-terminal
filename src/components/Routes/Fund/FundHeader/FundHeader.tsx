@@ -13,6 +13,7 @@ export const FundHeader: React.FC<FundHeaderProps> = ({ address }) => {
   const [details, query] = useFundDetailsQuery(address);
   const fundEtherscanLink = useEtherscanLink(address);
   const managerEtherscanLink = useEtherscanLink(details && details.manager);
+
   if (query.loading) {
     return <Spinner />;
   }

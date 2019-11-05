@@ -12,6 +12,8 @@ import { ApolloProvider } from '@apollo/react-hooks';
 import { createSchemaLink, createSchema, createQueryContext } from '~/graphql';
 import { Environment, createEnvironment, createProvider } from '~/Environment';
 import { networkFromId } from '~/utils/networkFromId';
+import { NetworkEnum } from '~/types';
+import { getConfig } from '~/config';
 
 // TODO: Fix this type.
 export type ConnectionProvider = any;
@@ -38,15 +40,7 @@ export interface TheGraphContextValue extends ApolloProviderContext {
 }
 
 export const OnChainContext = createContext<OnChainContextValue>({} as OnChainContextValue);
-export const TheGraphContext = createContext<TheGraphContextValue>(
-  (() => {
-    const uri = `https://api.thegraph.com/subgraphs/name/${process.env.THEGRAPH_SUBGRAPH}`;
-    const link = createHttpLink({ uri });
-    const cache = new InMemoryCache();
-    const client = new ApolloClient({ link, cache });
-    return { client };
-  })()
-);
+export const TheGraphContext = createContext<TheGraphContextValue>({} as TheGraphContextValue);
 
 const createErrorLink = () => {
   return onError(({ graphQLErrors, networkError }) => {
@@ -75,13 +69,15 @@ const createNullLink = () => {
 };
 
 const useOnChainApollo = (environment?: Environment) => {
-  const schema = useMemo(() => createSchema(), []);
-  const apollo = useMemo(() => {
-    const data =
-      environment && environment.network === process.env.ETHEREUM_NETWORK
-        ? createSchemaLink({ schema, context: createQueryContext(environment) })
-        : createNullLink();
+  const schema = useMemo(() => {
+    const connected =
+      environment && (environment.network !== NetworkEnum.INVALID && environment.network !== NetworkEnum.OFFLINE);
 
+    return connected && createSchema(environment!);
+  }, [environment]);
+
+  const apollo = useMemo(() => {
+    const data = schema ? createSchemaLink({ schema, context: createQueryContext(environment!) }) : createNullLink();
     const error = createErrorLink();
     const link = ApolloLink.from([error, data]);
     const memory = new InMemoryCache({
@@ -120,13 +116,47 @@ const useOnChainApollo = (environment?: Environment) => {
   return apollo;
 };
 
+const useTheGraphApollo = (environment?: Environment) => {
+  const client = useMemo(() => {
+    const config = environment && getConfig(environment.network);
+    const subgraph = config && config.subgraph;
+    const data = subgraph
+      ? createHttpLink({ uri: `https://api.thegraph.com/subgraphs/name/${subgraph}` })
+      : createNullLink();
+
+    const error = createErrorLink();
+    const link = ApolloLink.from([error, data]);
+    const memory = new InMemoryCache({
+      addTypename: true,
+    });
+
+    return new ApolloClient({
+      link,
+      cache: memory,
+      defaultOptions: {
+        watchQuery: {
+          errorPolicy: 'all',
+        },
+        query: {
+          errorPolicy: 'all',
+        },
+        mutate: {
+          errorPolicy: 'all',
+        },
+      },
+    });
+  }, [environment]);
+
+  return client;
+};
+
 export const ConnectionProvider: React.FC = props => {
   const [state, setState] = useState<{
     observable: Rx.Observable<Environment>;
     provider: ConnectionProviderEnum;
   }>({
     observable: Rx.defer(async () => {
-      const eth = new Eth(createProvider(process.env.DEFAULT_ENDPOINT), undefined, {
+      const eth = new Eth(createProvider('wss://mainnet.infura.io/ws/v3/8332aa03fcfa4c889aeee4d0e0628660'), undefined, {
         transactionConfirmationBlocks: 1,
       });
 
@@ -146,14 +176,17 @@ export const ConnectionProvider: React.FC = props => {
     [state.observable]
   );
 
-  const client = useOnChainApollo(environment);
+  const graph = useTheGraphApollo(environment);
+  const chain = useOnChainApollo(environment);
   const set = (provider: ConnectionProviderEnum, observable: Rx.Observable<Environment>) => {
     setState({ provider, observable });
   };
 
   return (
-    <OnChainContext.Provider value={{ set, client, environment, provider: state.provider }}>
-      <ApolloProvider client={client}>{props.children}</ApolloProvider>
+    <OnChainContext.Provider value={{ set, environment, client: chain, provider: state.provider }}>
+      <TheGraphContext.Provider value={{ client: graph }}>
+        <ApolloProvider client={chain}>{props.children}</ApolloProvider>
+      </TheGraphContext.Provider>
     </OnChainContext.Provider>
   );
 };

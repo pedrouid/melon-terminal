@@ -1,6 +1,5 @@
 export { DateTime } from '~/graphql/scalars/DateTime';
 export { BigNumber } from '~/graphql/scalars/BigNumber';
-export { TokenEnum } from '~/graphql/enums/TokenEnum';
 
 import * as Query from '~/graphql/resolvers/Query';
 import * as Block from '~/graphql/resolvers/Block';

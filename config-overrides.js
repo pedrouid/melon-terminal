@@ -23,16 +23,6 @@ const getPathAliases = () => {
   return aliases;
 };
 
-const getDeployment = () => {
-  const deployment = path.resolve(process.env.PROTOCOL_DEPLOYMENT);
-
-  try {
-    return require(deployment);
-  } catch (e) {
-    throw new Error(`Failed to load deployment from ${deployment}.`);
-  }
-};
-
 module.exports = override(
   addHotLoader,
   disableEsLint(),
@@ -41,14 +31,6 @@ module.exports = override(
   addWebpackAlias({
     'react-dom': '@hot-loader/react-dom',
   }),
-  addWebpackPlugin(
-    new webpack.DefinePlugin({
-      'process.env.ETHEREUM_NETWORK': JSON.stringify(process.env.ETHEREUM_NETWORK),
-      'process.env.THEGRAPH_SUBGRAPH': JSON.stringify(process.env.THEGRAPH_SUBGRAPH),
-      'process.env.DEFAULT_ENDPOINT': JSON.stringify(process.env.DEFAULT_ENDPOINT),
-      'process.env.PROTOCOL_DEPLOYMENT': JSON.stringify(getDeployment()),
-    })
-  ),
   addWebpackPlugin(new webpack.IgnorePlugin(/^scrypt$/)),
   addWebpackPlugin(
     new webpack.ContextReplacementPlugin(/graphql-language-service-interface[\\/]dist$/, new RegExp(`^\\./.*\\.js$`))
