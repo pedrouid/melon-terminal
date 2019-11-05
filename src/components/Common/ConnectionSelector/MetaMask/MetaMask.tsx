@@ -4,7 +4,7 @@ import { mapTo, map, combineLatest, share, switchMap } from 'rxjs/operators';
 import { Eth } from 'web3-eth';
 import { ConnectionMethodProps } from '~/components/Common/ConnectionSelector/ConnectionSelector';
 import { networkFromId } from '~/utils/networkFromId';
-import { Environment, createEnvironment } from '~/Environment';
+import { Environment, createEnvironment } from '~/environment';
 
 const connect = (): Rx.Observable<Environment> => {
   const ethereum = (window as any).ethereum;

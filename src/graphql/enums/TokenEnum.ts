@@ -1,7 +1,7 @@
 import * as R from 'ramda';
 import gql from 'graphql-tag';
 import { TokenDefinition } from '~/types';
-import { Environment } from '~/Environment';
+import { Environment } from '~/environment';
 
 const defaults = {
   ETH: 'ETH',

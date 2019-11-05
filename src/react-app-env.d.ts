@@ -13,14 +13,3 @@ declare module 'styled-components' {
 
   export interface DefaultTheme extends DerivedTheme {}
 }
-
-declare global {
-  namespace NodeJS {
-    interface ProcessEnv {
-      THEGRAPH_SUBGRAPH: string;
-      PROTOCOL_DEPLOYMENT: Deployment;
-      ETHEREUM_NETWORK: NetworkEnum;
-      DEFAULT_ENDPOINT: string;
-    }
-  }
-}

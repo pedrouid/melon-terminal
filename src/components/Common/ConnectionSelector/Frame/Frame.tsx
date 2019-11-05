@@ -6,7 +6,7 @@ import { Eth } from 'web3-eth';
 import { HttpProvider } from 'web3-providers';
 import { ConnectionMethodProps } from '~/components/Common/ConnectionSelector/ConnectionSelector';
 import { networkFromId } from '~/utils/networkFromId';
-import { Environment, createEnvironment } from '~/Environment';
+import { Environment, createEnvironment } from '~/environment';
 
 interface EthResource extends Rx.Unsubscribable {
   eth: Eth;

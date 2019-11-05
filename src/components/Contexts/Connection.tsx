@@ -10,7 +10,7 @@ import { useObservable } from 'rxjs-hooks';
 import { InMemoryCache, NormalizedCacheObject } from 'apollo-cache-inmemory';
 import { ApolloProvider } from '@apollo/react-hooks';
 import { createSchemaLink, createSchema, createQueryContext } from '~/graphql';
-import { Environment, createEnvironment, createProvider } from '~/Environment';
+import { Environment, createEnvironment, createProvider } from '~/environment';
 import { networkFromId } from '~/utils/networkFromId';
 import { NetworkEnum } from '~/types';
 import { getConfig } from '~/config';
@@ -120,9 +120,7 @@ const useTheGraphApollo = (environment?: Environment) => {
   const client = useMemo(() => {
     const config = environment && getConfig(environment.network);
     const subgraph = config && config.subgraph;
-    const data = subgraph
-      ? createHttpLink({ uri: `https://api.thegraph.com/subgraphs/name/${subgraph}` })
-      : createNullLink();
+    const data = subgraph ? createHttpLink({ uri: subgraph }) : createNullLink();
 
     const error = createErrorLink();
     const link = ApolloLink.from([error, data]);

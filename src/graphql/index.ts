@@ -4,7 +4,7 @@ import { ApolloLink, FetchResult, Observable, Operation } from 'apollo-link';
 import { makeExecutableSchema } from 'graphql-tools';
 import { isSubscription } from '~/graphql/utils/isSubscription';
 import { ensureIterable } from '~/graphql/utils/ensureIterable';
-import { Environment } from '~/Environment';
+import { Environment } from '~/environment';
 import { createTokenEnum, createTokenEnumDefinition } from '~/graphql/enums/TokenEnum';
 import * as loaders from '~/graphql/loaders';
 import * as resolvers from '~/graphql/resolvers';

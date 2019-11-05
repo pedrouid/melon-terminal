@@ -3,7 +3,7 @@ import * as Yup from 'yup';
 import useForm from 'react-hook-form';
 import { TransactionReceipt } from 'web3-core';
 import { Transaction } from '@melonproject/melonjs';
-import { Environment } from '~/Environment';
+import { Environment } from '~/environment';
 import { FormContextValues } from 'react-hook-form/dist/contextTypes';
 import { FieldValues } from 'react-hook-form/dist/types';
 

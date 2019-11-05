@@ -5,7 +5,7 @@ import { switchMap, expand, distinctUntilChanged } from 'rxjs/operators';
 import { Eth } from 'web3-eth';
 import { ConnectionMethodProps } from '~/components/Common/ConnectionSelector/ConnectionSelector';
 import { networkFromId } from '~/utils/networkFromId';
-import { createEnvironment, Environment, createProvider } from '~/Environment';
+import { createEnvironment, Environment, createProvider } from '~/environment';
 import { HttpProvider, WebsocketProvider } from 'web3-providers';
 
 interface EthResource extends Rx.Unsubscribable {

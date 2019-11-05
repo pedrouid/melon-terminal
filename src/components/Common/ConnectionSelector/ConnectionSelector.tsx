@@ -7,7 +7,7 @@ import { MetaMask } from './MetaMask/MetaMask';
 import { CustomRpc } from './CustomRpc/CustomRpc';
 import { Frame } from './Frame/Frame';
 import * as S from './ConnectionSelector.styles';
-import { Environment } from '~/Environment';
+import { Environment } from '~/environment';
 
 export interface ConnectionMethodProps {
   active: boolean;
