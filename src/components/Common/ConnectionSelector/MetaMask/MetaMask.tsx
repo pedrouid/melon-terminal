@@ -2,9 +2,9 @@ import React from 'react';
 import * as Rx from 'rxjs';
 import { mapTo, map, combineLatest, share, switchMap } from 'rxjs/operators';
 import { Eth } from 'web3-eth';
-import { ConnectionMethodProps } from '~/components/Common/ConnectionSelector/ConnectionSelector';
 import { networkFromId } from '~/utils/networkFromId';
 import { Environment, createEnvironment } from '~/environment';
+import { ConnectionMethod } from '~/components/Contexts/Connection';
 
 const connect = (): Rx.Observable<Environment> => {
   const ethereum = (window as any).ethereum;
@@ -29,11 +29,17 @@ const connect = (): Rx.Observable<Environment> => {
   );
 };
 
-export const MetaMask: React.FC<ConnectionMethodProps> = ({ set, active }) => {
+export const MetaMask: React.FC<any> = ({ select, active }) => {
   return (
     <div>
       <h2>Metamask</h2>
-      {!active && <button onClick={() => set(connect())}>Connect</button>}
+      {!active && <button onClick={() => select()}>Connect</button>}
     </div>
   );
+};
+
+export const method: ConnectionMethod = {
+  connect,
+  component: MetaMask,
+  name: 'MetaMask',
 };

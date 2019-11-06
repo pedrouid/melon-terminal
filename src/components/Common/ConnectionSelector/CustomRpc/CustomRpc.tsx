@@ -3,10 +3,10 @@ import * as Rx from 'rxjs';
 import * as R from 'ramda';
 import { switchMap, expand, distinctUntilChanged } from 'rxjs/operators';
 import { Eth } from 'web3-eth';
-import { ConnectionMethodProps } from '~/components/Common/ConnectionSelector/ConnectionSelector';
 import { networkFromId } from '~/utils/networkFromId';
 import { createEnvironment, Environment, createProvider } from '~/environment';
 import { HttpProvider, WebsocketProvider } from 'web3-providers';
+import { ConnectionMethod } from '~/components/Contexts/Connection';
 
 interface EthResource extends Rx.Unsubscribable {
   eth: Eth;
@@ -22,7 +22,7 @@ const checkConnection = async (eth: Eth) => {
   return { eth, network, account: accounts && accounts[0] };
 };
 
-const connect = (endpoint: string): Rx.Observable<Environment> => {
+const connect = ({ endpoint }: { endpoint: string }): Rx.Observable<Environment> => {
   const createResource = (): EthResource => {
     const provider = createProvider(endpoint);
     const eth = new Eth(provider, undefined, {
@@ -53,14 +53,20 @@ const connect = (endpoint: string): Rx.Observable<Environment> => {
   });
 };
 
-export const CustomRpc: React.FC<ConnectionMethodProps> = ({ set, active }) => {
-  const [endpoint, setEndpoint] = useState('http://localhost:8545');
+export const CustomRpc: React.FC<any> = ({ select, active, config }) => {
+  const [endpoint, setEndpoint] = useState(config.endpoint || 'http://localhost:8545');
 
   return (
     <div>
       <h2>Custom endpoint</h2>
       <input type="text" onChange={e => setEndpoint(e.target.value)} value={endpoint} />
-      {!active && <button onClick={() => set(connect(endpoint))}>Connect</button>}
+      <button onClick={() => select({ endpoint })}>Connect</button>
     </div>
   );
+};
+
+export const method: ConnectionMethod = {
+  connect,
+  component: CustomRpc,
+  name: 'CustomRpc',
 };

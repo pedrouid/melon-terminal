@@ -4,12 +4,15 @@ import { ModalProvider } from 'styled-react-modal';
 import { hot } from 'react-hot-loader';
 import { useLocation } from 'react-router';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { NetworkEnum } from '~/types';
 import { ConnectionProvider, TheGraphContext, OnChainContext, OnChainContextValue } from './Contexts/Connection';
 import { Spinner } from './Common/Spinner/Spinner';
 import { Layout } from './Layout/Layout';
-import { Theme, ModalBackground } from './App.styles';
 import { OfflineModal } from './Common/OfflineModal/OfflineModal';
-import { NetworkEnum } from '~/types';
+import { method as metamask } from './Common/ConnectionSelector/MetaMask/MetaMask';
+import { method as custom } from './Common/ConnectionSelector/CustomRpc/CustomRpc';
+import { method as frame } from './Common/ConnectionSelector/Frame/Frame';
+import { Theme, ModalBackground } from './App.styles';
 
 const Home = React.lazy(() => import('./Routes/Home/Home'));
 const Wallet = React.lazy(() => import('./Routes/Wallet/Wallet'));
@@ -75,7 +78,7 @@ const AppRouter = () => {
 const AppComponent = () => (
   <Theme>
     <ModalProvider backgroundComponent={ModalBackground}>
-      <ConnectionProvider>
+      <ConnectionProvider methods={[metamask, frame, custom]}>
         <Router>
           <Layout>
             <ErrorBoundary FallbackComponent={ErrorFallback}>

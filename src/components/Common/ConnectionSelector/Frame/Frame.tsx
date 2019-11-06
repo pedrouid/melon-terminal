@@ -4,9 +4,9 @@ import * as R from 'ramda';
 import { switchMap, expand, distinctUntilChanged } from 'rxjs/operators';
 import { Eth } from 'web3-eth';
 import { HttpProvider } from 'web3-providers';
-import { ConnectionMethodProps } from '~/components/Common/ConnectionSelector/ConnectionSelector';
 import { networkFromId } from '~/utils/networkFromId';
 import { Environment, createEnvironment } from '~/environment';
+import { ConnectionMethod } from '~/components/Contexts/Connection';
 
 interface EthResource extends Rx.Unsubscribable {
   eth: Eth;
@@ -45,11 +45,17 @@ const connect = (): Rx.Observable<Environment> => {
   });
 };
 
-export const Frame: React.FC<ConnectionMethodProps> = ({ set, active }) => {
+export const Frame: React.FC<any> = ({ select, active }) => {
   return (
     <div>
       <h2>Frame</h2>
-      {!active && <button onClick={() => set(connect())}>Connect</button>}
+      {!active && <button onClick={() => select()}>Connect</button>}
     </div>
   );
+};
+
+export const method: ConnectionMethod = {
+  connect,
+  component: Frame,
+  name: 'Frame',
 };

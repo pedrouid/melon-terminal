@@ -1,7 +1,6 @@
 import React, { useState, useMemo, useEffect, createContext, useRef } from 'react';
 import * as Rx from 'rxjs';
 import ApolloClient from 'apollo-client';
-import { Eth } from 'web3-eth';
 import { switchAll, pluck } from 'rxjs/operators';
 import { ApolloLink, Observable, FetchResult } from 'apollo-link';
 import { onError } from 'apollo-link-error';
@@ -10,28 +9,22 @@ import { useObservable } from 'rxjs-hooks';
 import { InMemoryCache, NormalizedCacheObject } from 'apollo-cache-inmemory';
 import { ApolloProvider } from '@apollo/react-hooks';
 import { createSchemaLink, createSchema, createQueryContext } from '~/graphql';
-import { Environment, createEnvironment, createProvider } from '~/environment';
-import { networkFromId } from '~/utils/networkFromId';
+import { Environment } from '~/environment';
 import { NetworkEnum } from '~/types';
 import { getConfig } from '~/config';
 
 // TODO: Fix this type.
 export type ConnectionProvider = any;
 
-export enum ConnectionProviderEnum {
-  'DEFAULT' = 'DEFAULT',
-  'FRAME' = 'FRAME',
-  'METAMASK' = 'METAMASK',
-  'CUSTOM' = 'CUSTOM',
-}
-
 export interface ApolloProviderContext {
   client: ApolloClient<NormalizedCacheObject>;
 }
 
 export interface OnChainContextValue extends ApolloProviderContext {
-  set: (provider: ConnectionProviderEnum, observable: Rx.Observable<Environment>) => void;
-  provider: ConnectionProviderEnum;
+  select: (method: string, config?: any) => void;
+  methods: ConnectionMethod[];
+  method?: string;
+  config?: any;
   environment?: Environment;
 }
 
@@ -70,9 +63,8 @@ const createNullLink = () => {
 
 const useOnChainApollo = (environment?: Environment) => {
   const schema = useMemo(() => {
-    const connected =
-      environment && (environment.network !== NetworkEnum.INVALID && environment.network !== NetworkEnum.OFFLINE);
-
+    const offline = [NetworkEnum.INVALID, NetworkEnum.OFFLINE];
+    const connected = environment && !offline.includes(environment.network);
     return connected && createSchema(environment!);
   }, [environment]);
 
@@ -148,22 +140,42 @@ const useTheGraphApollo = (environment?: Environment) => {
   return client;
 };
 
-export const ConnectionProvider: React.FC = props => {
-  const [state, setState] = useState<{
-    observable: Rx.Observable<Environment>;
-    provider: ConnectionProviderEnum;
-  }>({
-    observable: Rx.defer(async () => {
-      const eth = new Eth(createProvider('wss://mainnet.infura.io/ws/v3/8332aa03fcfa4c889aeee4d0e0628660'), undefined, {
-        transactionConfirmationBlocks: 1,
-      });
+export interface ConnectionMethod {
+  name: string;
+  component: React.ComponentType<any>;
+  connect: (config?: any) => Rx.Observable<Environment>;
+}
 
-      return createEnvironment(eth, networkFromId(await eth.net.getId()));
-    }),
-    provider: ConnectionProviderEnum.DEFAULT,
+export interface ConnectionProviderProps {
+  methods: ConnectionMethod[];
+}
+
+export const ConnectionProvider: React.FC<ConnectionProviderProps> = props => {
+  const [current, set] = useState<{
+    config?: any;
+    name?: string;
+  }>(() => {
+    try {
+      const stored = window.localStorage.getItem('connection-method');
+      const method = stored ? JSON.parse(stored) : {};
+      return method;
+    } catch {
+      // Nothing to do here.
+      return {};
+    }
   });
 
-  const environment = useObservable<Environment | undefined, [Rx.Observable<Environment>]>(
+  const select = (name: string, config?: any) => {
+    window.localStorage.setItem('connection-method', JSON.stringify({ name, config }));
+    set({ name, config });
+  };
+
+  const observable = useMemo(() => {
+    const method = props.methods.find(item => item.name === current.name);
+    return method ? Rx.concat(Rx.of(undefined), method.connect(current.config)) : Rx.of(undefined);
+  }, [props.methods, current]);
+
+  const environment = useObservable<Environment | undefined, [Rx.Observable<Environment | undefined>]>(
     inputs$ => {
       return inputs$.pipe(
         pluck(0),
@@ -171,17 +183,17 @@ export const ConnectionProvider: React.FC = props => {
       );
     },
     undefined,
-    [state.observable]
+    [observable]
   );
 
   const graph = useTheGraphApollo(environment);
   const chain = useOnChainApollo(environment);
-  const set = (provider: ConnectionProviderEnum, observable: Rx.Observable<Environment>) => {
-    setState({ provider, observable });
-  };
+  const methods = props.methods || [];
 
   return (
-    <OnChainContext.Provider value={{ set, environment, client: chain, provider: state.provider }}>
+    <OnChainContext.Provider
+      value={{ select, environment, methods, method: current.name, config: current.config, client: chain }}
+    >
       <TheGraphContext.Provider value={{ client: graph }}>
         <ApolloProvider client={chain}>{props.children}</ApolloProvider>
       </TheGraphContext.Provider>
