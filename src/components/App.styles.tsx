@@ -60,6 +60,10 @@ export const theme = {
     m: 'min-width: 768px',
     s: 'min-width: 480px',
   },
+
+  transition: {
+    duration: '0.3s',
+  },
 };
 
 const Global = createGlobalStyle`

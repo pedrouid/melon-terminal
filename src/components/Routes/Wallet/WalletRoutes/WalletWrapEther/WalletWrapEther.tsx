@@ -46,7 +46,7 @@ export const WalletWrapEther: React.FC = () => {
       </FormContext>
 
       <FormContext {...transaction.form}>
-        <TransactionModal transaction={transaction} />
+        <TransactionModal transaction={transaction} title="Wrap Ether" />
       </FormContext>
     </div>
   );

@@ -32,7 +32,9 @@ export const Header: React.FC = () => {
                   {connection.network}
                 </Link>
               </S.AccountNetwork>
-              {connection.account && <S.AccountBalance>{connection.account.balance.toFixed(4)} ETH</S.AccountBalance>}
+              {connection.account && (
+                <S.AccountBalance>{connection.account.balanceEth.toFixed(4)} ETH</S.AccountBalance>
+              )}
             </S.AccountInfo>
           </S.Account>
         )}

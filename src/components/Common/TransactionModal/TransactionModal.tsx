@@ -3,6 +3,7 @@ import Modal, { ModalProps } from 'styled-react-modal';
 import { TransactionHookValues, TransactionProgress } from '~/hooks/useTransaction';
 import { Spinner } from '~/components/Common/Spinner/Spinner';
 import { ProgressBar } from '~/components/Common/ProgressBar/ProgressBar';
+import * as S from './TransactionModal.styles';
 
 function progressToPercentage(progress?: TransactionProgress) {
   if (progress && progress < TransactionProgress.ESTIMATION_FINISHED) {
@@ -30,6 +31,7 @@ function progressToPercentage(progress?: TransactionProgress) {
 
 export interface TransactionModalProps extends Partial<ModalProps> {
   transaction: TransactionHookValues;
+  title: string;
 }
 
 export const TransactionModal: React.FC<TransactionModalProps> = ({
@@ -43,60 +45,117 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
 
   return (
     <Modal isOpen={open} {...rest}>
-      <div>
-        <div>
-          {state.loading && <Spinner />}
+      <S.TransactionModal>
+        <S.TransactionModalTitle>{rest.title}</S.TransactionModalTitle>
+        {state.loading && <Spinner />}
 
+        <S.TransactionModalContent>
           {!finished && (
-            <form onSubmit={submit}>
-              <div>
-                <label htmlFor="gas-price">Gas price</label>
-                <input
-                  id="gas-price"
-                  type="number"
-                  step="any"
-                  name="gasPrice"
-                  ref={form.register}
-                  disabled={state.loading}
-                />
-              </div>
-              <div>
-                <label htmlFor="gas-limit">Gas limit</label>
-                <input
-                  id="gas-limit"
-                  type="number"
-                  step="any"
-                  name="gasLimit"
-                  ref={form.register}
-                  disabled={state.loading}
-                />
-              </div>
-              <button type="submit" disabled={state.loading}>
-                {state.error ? 'Retry' : 'Submit'}
-              </button>
-              <button type="button" disabled={state.loading} onClick={() => cancel()}>
-                Cancel
-              </button>
-            </form>
+            <S.TransactionModalForm onSubmit={submit}>
+              <S.TransactionModalFeeForm>
+                <S.TransactionModalInput>
+                  <S.TransactionModalInputLabel>Gas price</S.TransactionModalInputLabel>
+                  <S.TransactionModalInputField
+                    id="gas-price"
+                    type="number"
+                    step="any"
+                    name="gasPrice"
+                    ref={form.register}
+                    disabled={state.loading}
+                  />
+                </S.TransactionModalInput>
+                <S.TransactionModalInput>
+                  <S.TransactionModalInputLabel>Gas limit</S.TransactionModalInputLabel>
+                  <S.TransactionModalInputField
+                    id="gas-limit"
+                    type="number"
+                    step="any"
+                    name="gasLimit"
+                    ref={form.register}
+                    disabled={state.loading}
+                  />
+                </S.TransactionModalInput>
+              </S.TransactionModalFeeForm>
+              <S.TransactionModalMessage>
+                If you do not change the gas price field, the default gas price will be used. If you wish to set the gas
+                price according to network conditions, please refer to Eth Gas Station.
+              </S.TransactionModalMessage>
+              <S.TransactionModalActions>
+                <S.TransactionModalAction>
+                  <S.TransactionModalCancel type="button" disabled={state.loading} onClick={() => cancel()}>
+                    Cancel
+                  </S.TransactionModalCancel>
+                </S.TransactionModalAction>
+                <S.TransactionModalAction>
+                  <S.TransactionModalConfirm type="submit" disabled={state.loading}>
+                    {state.error ? 'Retry' : 'Confirm'}
+                  </S.TransactionModalConfirm>
+                </S.TransactionModalAction>
+              </S.TransactionModalActions>
+            </S.TransactionModalForm>
           )}
 
-          <div>
+          <S.TransactionModalMessages>
             <ProgressBar progress={progressToPercentage(state.progress)} />
-            {state.progress && <div>State: {state.progress}</div>}
-            {state.hash && <div>Hash: {state.hash}</div>}
-            {state.error && <div>Error: {state.error.message}</div>}
-            {state.receipt && <div>Block number: {state.receipt.blockNumber}</div>}
-            {state.receipt && <div>Gas used: {state.receipt.gasUsed}</div>}
-            {state.receipt && <div>Cummulative gas used: {state.receipt.cumulativeGasUsed}</div>}
-          </div>
+            <S.TransactionModalMessagesTable>
+              {state.progress && (
+                <S.TransactionModalMessagesTableRow>
+                  <S.TransactionModalMessagesTableRowLabel>State</S.TransactionModalMessagesTableRowLabel>
+                  <S.TransactionModalMessagesTableRowQuantity>
+                    {state.progress}
+                  </S.TransactionModalMessagesTableRowQuantity>
+                </S.TransactionModalMessagesTableRow>
+              )}
+              {state.hash && (
+                <S.TransactionModalMessagesTableRow>
+                  <S.TransactionModalMessagesTableRowLabel>Hash</S.TransactionModalMessagesTableRowLabel>
+                  <S.TransactionModalMessagesTableRowQuantity>{state.hash}</S.TransactionModalMessagesTableRowQuantity>
+                </S.TransactionModalMessagesTableRow>
+              )}
+              {state.error && (
+                <S.TransactionModalMessagesTableRow>
+                  <S.TransactionModalMessagesTableRowLabel>Error</S.TransactionModalMessagesTableRowLabel>
+                  <S.TransactionModalMessagesTableRowQuantity>
+                    {state.error.message}
+                  </S.TransactionModalMessagesTableRowQuantity>
+                </S.TransactionModalMessagesTableRow>
+              )}
+              {state.receipt && (
+                <S.TransactionModalMessagesTableRow>
+                  <S.TransactionModalMessagesTableRowLabel>Block number</S.TransactionModalMessagesTableRowLabel>
+                  <S.TransactionModalMessagesTableRowQuantity>
+                    {state.receipt.blockNumber}
+                  </S.TransactionModalMessagesTableRowQuantity>
+                </S.TransactionModalMessagesTableRow>
+              )}
+              {state.receipt && (
+                <S.TransactionModalMessagesTableRow>
+                  <S.TransactionModalMessagesTableRowLabel>Gas used</S.TransactionModalMessagesTableRowLabel>
+                  <S.TransactionModalMessagesTableRowQuantity>
+                    {state.receipt.gasUsed}
+                  </S.TransactionModalMessagesTableRowQuantity>
+                </S.TransactionModalMessagesTableRow>
+              )}
+              {state.receipt && (
+                <S.TransactionModalMessagesTableRow>
+                  <S.TransactionModalMessagesTableRowLabel>Cumulative gas used</S.TransactionModalMessagesTableRowLabel>
+                  <S.TransactionModalMessagesTableRowQuantity>
+                    {state.receipt.cumulativeGasUsed}
+                  </S.TransactionModalMessagesTableRowQuantity>
+                </S.TransactionModalMessagesTableRow>
+              )}
+            </S.TransactionModalMessagesTable>
+          </S.TransactionModalMessages>
 
           {finished && (
-            <button type="button" onClick={() => acknowledge()}>
-              Close
-            </button>
+            <S.TransactionModalAction>
+              <S.TransactionModalConfirm type="submit" onClick={() => acknowledge()}>
+                Close
+              </S.TransactionModalConfirm>
+            </S.TransactionModalAction>
           )}
-        </div>
-      </div>
+        </S.TransactionModalContent>
+      </S.TransactionModal>
     </Modal>
   );
 };

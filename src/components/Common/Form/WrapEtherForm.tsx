@@ -23,7 +23,7 @@ export const WrapEtherForm: React.FC<WrapEtherFormProps> = props => {
         <S.WrapEtherFormBalance>{balances && balances.weth.toFixed(4)} WETH</S.WrapEtherFormBalance>
       </S.WrapEtherFormBalances>
       <S.WrapEtherInput>
-        <S.WrapEtherLabel>Quantity</S.WrapEtherLabel>
+        <S.WrapEtherInputLabel>Quantity</S.WrapEtherInputLabel>
         {props.form.errors.quantity && <div>{props.form.errors.quantity.message}</div>}
         <S.WrapEtherInputField type="number" step="any" name="quantity" ref={props.form.register} />
       </S.WrapEtherInput>

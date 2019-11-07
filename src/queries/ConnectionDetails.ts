@@ -8,7 +8,8 @@ export interface ConnectionDetailsResult {
   network: NetworkEnum;
   account?: {
     address: Address;
-    balance: BigNumber;
+    balanceEth: BigNumber;
+    balanceWeth: BigNumber;
   };
 }
 
@@ -17,7 +18,8 @@ const ConnectionDetailsQuery = gql`
     network
     account {
       address
-      balance(token: ETH)
+      balanceEth: balance(token: ETH)
+      balanceWeth: balance(token: WETH)
     }
   }
 `;

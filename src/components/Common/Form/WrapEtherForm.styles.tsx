@@ -21,7 +21,12 @@ export const WrapEtherFormBalance = styled.span`
   }
 `;
 
-export const WrapEtherLabel = styled.span`
+export const WrapEtherInput = styled.div`
+  margin: 0 0 ${props => props.theme.spaceUnits.m} 0;
+  position: relative;
+`;
+
+export const WrapEtherInputLabel = styled.span`
   position: absolute;
   top: ${props => props.theme.spaceUnits.s};
   margin-bottom: 0;
@@ -30,11 +35,6 @@ export const WrapEtherLabel = styled.span`
   margin: 0 0 ${props => props.theme.spaceUnits.xxs} ${props => props.theme.spaceUnits.xs};
   font-size: ${props => props.theme.fontSizes.s};
   line-height: ${props => props.theme.spaceUnits.m};
-`;
-
-export const WrapEtherInput = styled.div`
-  margin: 0 0 ${props => props.theme.spaceUnits.m} 0;
-  position: relative;
 `;
 
 export const WrapEtherInputField = styled.input`
@@ -58,7 +58,7 @@ export const WrapEtherButton = styled.button`
   color: ${props => props.theme.otherColors.black};
   border: 1px solid ${props => props.theme.mainColors.secondaryDark};
   background-color: ${props => props.theme.mainColors.secondaryDarkAlpha};
-  transition-duration: 0.3s;
+  transition-duration: ${props => props.theme.transition.duration};
   font-size: ${props => props.theme.fontSizes.m};
   padding: ${props => props.theme.spaceUnits.s} ${props => props.theme.spaceUnits.m};
   font-family: ${props => props.theme.fontFamilies.primary};
