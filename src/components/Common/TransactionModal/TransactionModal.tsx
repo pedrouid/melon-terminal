@@ -98,52 +98,58 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
           <S.TransactionModalMessages>
             <ProgressBar progress={progressToPercentage(state.progress)} />
             <S.TransactionModalMessagesTable>
-              {state.progress && (
-                <S.TransactionModalMessagesTableRow>
-                  <S.TransactionModalMessagesTableRowLabel>State</S.TransactionModalMessagesTableRowLabel>
-                  <S.TransactionModalMessagesTableRowQuantity>
-                    {state.progress}
-                  </S.TransactionModalMessagesTableRowQuantity>
-                </S.TransactionModalMessagesTableRow>
-              )}
-              {state.hash && (
-                <S.TransactionModalMessagesTableRow>
-                  <S.TransactionModalMessagesTableRowLabel>Hash</S.TransactionModalMessagesTableRowLabel>
-                  <S.TransactionModalMessagesTableRowQuantity>{state.hash}</S.TransactionModalMessagesTableRowQuantity>
-                </S.TransactionModalMessagesTableRow>
-              )}
-              {state.error && (
-                <S.TransactionModalMessagesTableRow>
-                  <S.TransactionModalMessagesTableRowLabel>Error</S.TransactionModalMessagesTableRowLabel>
-                  <S.TransactionModalMessagesTableRowQuantity>
-                    {state.error.message}
-                  </S.TransactionModalMessagesTableRowQuantity>
-                </S.TransactionModalMessagesTableRow>
-              )}
-              {state.receipt && (
-                <S.TransactionModalMessagesTableRow>
-                  <S.TransactionModalMessagesTableRowLabel>Block number</S.TransactionModalMessagesTableRowLabel>
-                  <S.TransactionModalMessagesTableRowQuantity>
-                    {state.receipt.blockNumber}
-                  </S.TransactionModalMessagesTableRowQuantity>
-                </S.TransactionModalMessagesTableRow>
-              )}
-              {state.receipt && (
-                <S.TransactionModalMessagesTableRow>
-                  <S.TransactionModalMessagesTableRowLabel>Gas used</S.TransactionModalMessagesTableRowLabel>
-                  <S.TransactionModalMessagesTableRowQuantity>
-                    {state.receipt.gasUsed}
-                  </S.TransactionModalMessagesTableRowQuantity>
-                </S.TransactionModalMessagesTableRow>
-              )}
-              {state.receipt && (
-                <S.TransactionModalMessagesTableRow>
-                  <S.TransactionModalMessagesTableRowLabel>Cumulative gas used</S.TransactionModalMessagesTableRowLabel>
-                  <S.TransactionModalMessagesTableRowQuantity>
-                    {state.receipt.cumulativeGasUsed}
-                  </S.TransactionModalMessagesTableRowQuantity>
-                </S.TransactionModalMessagesTableRow>
-              )}
+              <S.TransactionModalMessagesTableBody>
+                {state.progress && (
+                  <S.TransactionModalMessagesTableRow>
+                    <S.TransactionModalMessagesTableRowLabel>State</S.TransactionModalMessagesTableRowLabel>
+                    <S.TransactionModalMessagesTableRowQuantity>
+                      {state.progress}
+                    </S.TransactionModalMessagesTableRowQuantity>
+                  </S.TransactionModalMessagesTableRow>
+                )}
+                {state.hash && (
+                  <S.TransactionModalMessagesTableRow>
+                    <S.TransactionModalMessagesTableRowLabel>Hash</S.TransactionModalMessagesTableRowLabel>
+                    <S.TransactionModalMessagesTableRowQuantity>
+                      {state.hash}
+                    </S.TransactionModalMessagesTableRowQuantity>
+                  </S.TransactionModalMessagesTableRow>
+                )}
+                {state.error && (
+                  <S.TransactionModalMessagesTableRow>
+                    <S.TransactionModalMessagesTableRowLabel>Error</S.TransactionModalMessagesTableRowLabel>
+                    <S.TransactionModalMessagesTableRowQuantity>
+                      {state.error.message}
+                    </S.TransactionModalMessagesTableRowQuantity>
+                  </S.TransactionModalMessagesTableRow>
+                )}
+                {state.receipt && (
+                  <S.TransactionModalMessagesTableRow>
+                    <S.TransactionModalMessagesTableRowLabel>Block number</S.TransactionModalMessagesTableRowLabel>
+                    <S.TransactionModalMessagesTableRowQuantity>
+                      {state.receipt.blockNumber}
+                    </S.TransactionModalMessagesTableRowQuantity>
+                  </S.TransactionModalMessagesTableRow>
+                )}
+                {state.receipt && (
+                  <S.TransactionModalMessagesTableRow>
+                    <S.TransactionModalMessagesTableRowLabel>Gas used</S.TransactionModalMessagesTableRowLabel>
+                    <S.TransactionModalMessagesTableRowQuantity>
+                      {state.receipt.gasUsed}
+                    </S.TransactionModalMessagesTableRowQuantity>
+                  </S.TransactionModalMessagesTableRow>
+                )}
+                {state.receipt && (
+                  <S.TransactionModalMessagesTableRow>
+                    <S.TransactionModalMessagesTableRowLabel>
+                      Cumulative gas used
+                    </S.TransactionModalMessagesTableRowLabel>
+                    <S.TransactionModalMessagesTableRowQuantity>
+                      {state.receipt.cumulativeGasUsed}
+                    </S.TransactionModalMessagesTableRowQuantity>
+                  </S.TransactionModalMessagesTableRow>
+                )}
+              </S.TransactionModalMessagesTableBody>
             </S.TransactionModalMessagesTable>
           </S.TransactionModalMessages>
 

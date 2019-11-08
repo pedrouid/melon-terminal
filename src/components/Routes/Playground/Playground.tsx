@@ -8,7 +8,6 @@ import { GraphQLRequest, execute } from 'apollo-link';
 import { parse } from 'graphql';
 import { NormalizedCacheObject } from 'apollo-cache-inmemory';
 import { Maybe } from '~/types';
-import { ApolloProviderContext } from '~/components/Contexts/Connection';
 import * as S from './Playground.styles';
 
 export type RawRequest = GraphQLRequest & {
@@ -48,16 +47,16 @@ const useStorage = (bucket: string) => {
 };
 
 export interface PlaygroundProps {
-  context: React.Context<ApolloProviderContext>;
+  context: React.Context<ApolloClient<NormalizedCacheObject>>;
   bucket: string;
 }
 
 export const Playground: React.FC<PlaygroundProps> = ({ context, bucket }) => {
   const ctx = useContext(context);
-  const fetcher = useFetcher(ctx && ctx.client);
+  const fetcher = ctx && useFetcher(ctx);
   const storage = useStorage(bucket);
 
-  return ctx && ctx.client ? (
+  return fetcher ? (
     <S.Playground>
       <GraphiQL key={bucket} fetcher={fetcher} storage={storage} />
     </S.Playground>

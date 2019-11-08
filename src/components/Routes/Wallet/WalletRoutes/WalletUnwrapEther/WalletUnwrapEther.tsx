@@ -6,10 +6,11 @@ import { toWei } from 'web3-utils';
 import { Weth } from '@melonproject/melonjs';
 import { findToken } from '~/utils/findToken';
 import { useTransaction } from '~/hooks/useTransaction';
-import { OnChainContext } from '~/components/Contexts/Connection';
 import { TransactionModal } from '~/components/Common/TransactionModal/TransactionModal';
 import { refetchQueries } from '~/utils/refetchQueries';
 import { WrapEtherForm } from '~/components/Common/Form/WrapEtherForm';
+import { useEnvironment } from '~/hooks/useEnvironment';
+import { useOnChainClient } from '~/hooks/useQuery';
 
 const validationSchema = Yup.object().shape({
   quantity: Yup.mixed<number>(),
@@ -20,9 +21,10 @@ const defaultValues = {
 };
 
 export const WalletUnwrapEther: React.FC = () => {
-  const chain = useContext(OnChainContext);
-  const transaction = useTransaction(chain.environment!, {
-    onFinish: () => refetchQueries(chain.client, ['AccountBalancesQuery', 'ConnectionQuery']),
+  const environment = useEnvironment()!;
+  const client = useOnChainClient();
+  const transaction = useTransaction(environment!, {
+    onFinish: () => refetchQueries(client, ['AccountBalancesQuery', 'ConnectionQuery']),
   });
 
   const form = useForm<typeof defaultValues>({
@@ -33,9 +35,9 @@ export const WalletUnwrapEther: React.FC = () => {
   });
 
   const submit = form.handleSubmit(async data => {
-    const token = findToken(chain.environment!.deployment!, 'WETH')!;
-    const weth = new Weth(chain.environment!, token.address);
-    const tx = weth.withdraw(new BigNumber(toWei(data.quantity)), chain.environment!.account!);
+    const token = findToken(environment.deployment, 'WETH')!;
+    const weth = new Weth(environment, token.address);
+    const tx = weth.withdraw(new BigNumber(toWei(data.quantity)), environment.account!);
     transaction.start(tx);
   });
 

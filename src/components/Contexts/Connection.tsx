@@ -1,149 +1,160 @@
-import React, { useState, useMemo, useEffect, createContext, useRef } from 'react';
+import React, { createContext, useReducer, useEffect, useMemo } from 'react';
 import * as Rx from 'rxjs';
-import ApolloClient from 'apollo-client';
-import { switchAll, pluck } from 'rxjs/operators';
-import { ApolloLink, Observable, FetchResult } from 'apollo-link';
-import { onError } from 'apollo-link-error';
-import { createHttpLink } from 'apollo-link-http';
-import { useObservable } from 'rxjs-hooks';
-import { InMemoryCache, NormalizedCacheObject } from 'apollo-cache-inmemory';
-import { ApolloProvider } from '@apollo/react-hooks';
-import { createSchemaLink, createSchema, createQueryContext } from '~/graphql';
-import { Environment } from '~/environment';
-import { NetworkEnum } from '~/types';
-import { getConfig } from '~/config';
+import { Environment, createEnvironment } from '~/environment';
+import { config } from '~/config';
+import { Address } from '@melonproject/melonjs';
+import { NetworkEnum, Deployment } from '~/types';
+import { Eth } from 'web3-eth';
 
-// TODO: Fix this type.
-export type ConnectionProvider = any;
-
-export interface ApolloProviderContext {
-  client: ApolloClient<NormalizedCacheObject>;
+export enum ConnectionStatus {
+  OFFLINE,
+  CONNECTING,
+  CONNECTED,
 }
 
-export interface OnChainContextValue extends ApolloProviderContext {
-  select: (method: string, config?: any) => void;
-  methods: ConnectionMethod[];
+export interface ConnectionState {
+  deployment?: Deployment;
+  eth?: Eth;
+  network?: NetworkEnum;
+  accounts?: Address[];
   method?: string;
-  config?: any;
+  error?: Error;
+  status: ConnectionStatus;
+}
+
+export enum ConnectionActionType {
+  METHOD_CHANGED,
+  CONNECTION_ESTABLISHED,
+  NETWORK_CHANGED,
+  ACCOUNTS_CHANGED,
+  DEPLOYMENT_LOADING,
+  DEPLOYMENT_LOADED,
+  DEPLOYMENT_ERROR,
+}
+
+export type ConnectionAction =
+  | MethodChanged
+  | ConnectionEstablished
+  | AccountsChanged
+  | NetworkChanged
+  | DeploymentLoading
+  | DeploymentLoaded
+  | DeploymentError;
+
+export interface MethodChanged {
+  type: ConnectionActionType.METHOD_CHANGED;
+  method: string;
+}
+
+export interface ConnectionEstablished {
+  type: ConnectionActionType.CONNECTION_ESTABLISHED;
+  eth: Eth;
+  network?: NetworkEnum;
+  accounts?: Address[];
+}
+
+export interface AccountsChanged {
+  type: ConnectionActionType.ACCOUNTS_CHANGED;
+  accounts?: Address[];
+}
+
+export interface NetworkChanged {
+  type: ConnectionActionType.NETWORK_CHANGED;
+  network?: NetworkEnum;
+}
+
+export interface DeploymentLoading {
+  type: ConnectionActionType.DEPLOYMENT_LOADING;
+}
+
+export interface DeploymentLoaded {
+  type: ConnectionActionType.DEPLOYMENT_LOADED;
+  deployment: Deployment;
+}
+
+export interface DeploymentError {
+  type: ConnectionActionType.DEPLOYMENT_ERROR;
+  error: Error;
+}
+
+export function accountsChanged(accounts: Address[]): AccountsChanged {
+  return { accounts, type: ConnectionActionType.ACCOUNTS_CHANGED };
+}
+
+export function networkChanged(network?: NetworkEnum): NetworkChanged {
+  return { network, type: ConnectionActionType.NETWORK_CHANGED };
+}
+
+export function methodChanged(method: string): MethodChanged {
+  return { method, type: ConnectionActionType.METHOD_CHANGED };
+}
+
+export function connectionEstablished(eth: Eth, network?: NetworkEnum, accounts?: Address[]): ConnectionEstablished {
+  return { eth, network, accounts, type: ConnectionActionType.CONNECTION_ESTABLISHED };
+}
+
+export function deploymentLoading(): DeploymentLoading {
+  return { type: ConnectionActionType.DEPLOYMENT_LOADING };
+}
+
+export function deploymentLoaded(deployment: Deployment): DeploymentLoaded {
+  return { deployment, type: ConnectionActionType.DEPLOYMENT_LOADED };
+}
+
+export function deploymentError(error: Error): DeploymentError {
+  return { error, type: ConnectionActionType.DEPLOYMENT_ERROR };
+}
+
+export function reducer(state: ConnectionState, action: ConnectionAction): ConnectionState {
+  switch (action.type) {
+    case ConnectionActionType.METHOD_CHANGED: {
+      return { ...state, network: undefined, deployment: undefined, accounts: undefined, method: action.method };
+    }
+
+    case ConnectionActionType.CONNECTION_ESTABLISHED: {
+      return { ...state, network: action.network, accounts: action.accounts, eth: action.eth };
+    }
+
+    case ConnectionActionType.NETWORK_CHANGED: {
+      return { ...state, deployment: undefined, network: action.network };
+    }
+
+    case ConnectionActionType.ACCOUNTS_CHANGED: {
+      return { ...state, accounts: action.accounts };
+    }
+
+    case ConnectionActionType.DEPLOYMENT_LOADING: {
+      return state;
+    }
+
+    case ConnectionActionType.DEPLOYMENT_LOADED: {
+      return { ...state, deployment: action.deployment };
+    }
+
+    case ConnectionActionType.DEPLOYMENT_ERROR: {
+      return { ...state, deployment: undefined, error: action.error };
+    }
+
+    default: {
+      throw new Error('Invalid action.');
+    }
+  }
+}
+
+export interface ConnectionContext {
   environment?: Environment;
+  method?: string;
+  status: ConnectionStatus;
+  methods: ConnectionMethod[];
+  switch: (method: string) => void;
 }
 
-export interface TheGraphContextValue extends ApolloProviderContext {
-  // Nothing to add here.
-}
-
-export const OnChainContext = createContext<OnChainContextValue>({} as OnChainContextValue);
-export const TheGraphContext = createContext<TheGraphContextValue>({} as TheGraphContextValue);
-
-const createErrorLink = () => {
-  return onError(({ graphQLErrors, networkError }) => {
-    if (graphQLErrors) {
-      graphQLErrors.forEach(({ message, locations, path, extensions }) => {
-        const fields = path && path.join('.');
-        console.error('[GQL ERROR]: Message: %s, Path: %s, Locations: %o', message, fields, locations);
-
-        const stacktrace = extensions && extensions.exception && extensions.exception.stacktrace;
-        if (stacktrace && stacktrace.length) {
-          stacktrace.forEach((line: string) => {
-            console.error(line);
-          });
-        }
-      });
-    }
-
-    if (networkError) {
-      console.error('[GQL NETWORK ERROR]: %o', networkError);
-    }
-  });
-};
-
-const createNullLink = () => {
-  return new ApolloLink(() => new Observable<FetchResult>(() => {}));
-};
-
-const useOnChainApollo = (environment?: Environment) => {
-  const schema = useMemo(() => {
-    const offline = [NetworkEnum.INVALID, NetworkEnum.OFFLINE];
-    const connected = environment && !offline.includes(environment.network);
-    return connected && createSchema(environment!);
-  }, [environment]);
-
-  const apollo = useMemo(() => {
-    const data = schema ? createSchemaLink({ schema, context: createQueryContext(environment!) }) : createNullLink();
-    const error = createErrorLink();
-    const link = ApolloLink.from([error, data]);
-    const memory = new InMemoryCache({
-      addTypename: true,
-    });
-
-    return new ApolloClient({
-      link,
-      cache: memory,
-      defaultOptions: {
-        watchQuery: {
-          errorPolicy: 'all',
-          fetchPolicy: 'no-cache',
-        },
-        query: {
-          errorPolicy: 'all',
-          fetchPolicy: 'no-cache',
-        },
-        mutate: {
-          errorPolicy: 'all',
-        },
-      },
-    });
-  }, [environment, schema]);
-
-  const apolloRef = useRef<ApolloClient<NormalizedCacheObject>>();
-  useEffect(
-    () => () => {
-      apolloRef.current && apolloRef.current.stop();
-      apolloRef.current && apolloRef.current.cache.reset();
-      apolloRef.current = apollo;
-    },
-    [apollo]
-  );
-
-  return apollo;
-};
-
-const useTheGraphApollo = (environment?: Environment) => {
-  const client = useMemo(() => {
-    const config = environment && getConfig(environment.network);
-    const subgraph = config && config.subgraph;
-    const data = subgraph ? createHttpLink({ uri: subgraph }) : createNullLink();
-
-    const error = createErrorLink();
-    const link = ApolloLink.from([error, data]);
-    const memory = new InMemoryCache({
-      addTypename: true,
-    });
-
-    return new ApolloClient({
-      link,
-      cache: memory,
-      defaultOptions: {
-        watchQuery: {
-          errorPolicy: 'all',
-        },
-        query: {
-          errorPolicy: 'all',
-        },
-        mutate: {
-          errorPolicy: 'all',
-        },
-      },
-    });
-  }, [environment]);
-
-  return client;
-};
+export const Connection = createContext<ConnectionContext>({} as ConnectionContext);
 
 export interface ConnectionMethod {
   name: string;
   component: React.ComponentType<any>;
-  connect: (config?: any) => Rx.Observable<Environment>;
+  connect: () => Rx.Observable<ConnectionAction>;
 }
 
 export interface ConnectionProviderProps {
@@ -151,57 +162,63 @@ export interface ConnectionProviderProps {
 }
 
 export const ConnectionProvider: React.FC<ConnectionProviderProps> = props => {
-  const [current, set] = useState<{
-    config?: any;
-    name?: string;
-  }>(() => {
-    try {
-      const stored = window.localStorage.getItem('connection-method');
-      const method = stored ? JSON.parse(stored) : {};
-      return method;
-    } catch {
-      // Nothing to do here.
-      return {};
-    }
-  });
+  const [state, dispatch] = useReducer(reducer, undefined, () => ({
+    status: ConnectionStatus.OFFLINE,
+    method: window.localStorage.getItem('connection.method') || undefined,
+  }));
 
-  const select = (name: string, config?: any) => {
-    window.localStorage.setItem('connection-method', JSON.stringify({ name, config }));
-    set({ name, config });
+  // Subscribe to the current connection method's observable whenever it changes.
+  useEffect(() => {
+    const method = props.methods.find(item => item.name === state.method);
+    if (!method) {
+      return;
+    }
+
+    // By doing this here, we keep the reducer clean of side-effects.
+    window.localStorage.setItem('connection.method', state.method!);
+
+    const observable = method.connect();
+    const subscription = observable.subscribe({
+      next: action => dispatch(action),
+    });
+
+    return () => subscription.unsubscribe();
+  }, [props.methods, state.method]);
+
+  // Load the deployment based on the current network whenever it changes.
+  useEffect(() => {
+    if (!state.network) {
+      return;
+    }
+
+    dispatch(deploymentLoading());
+
+    const current = config[state.network];
+    const subscription = Rx.from(current.deployment()).subscribe({
+      next: deployment => dispatch(deploymentLoaded(deployment)),
+      error: error => dispatch(deploymentError(error)),
+    });
+
+    return () => subscription.unsubscribe();
+  }, [state.network]);
+
+  // Create the environment once the required values are available.
+  const environment = useMemo(() => {
+    if (state.eth && state.network && state.deployment) {
+      const account = state.accounts && state.accounts[0];
+      return createEnvironment(state.eth, state.deployment, state.network, account);
+    }
+
+    return undefined;
+  }, [state.eth, state.network, state.accounts, state.deployment]);
+
+  const context: ConnectionContext = {
+    environment,
+    method: state.method,
+    status: state.status,
+    methods: props.methods,
+    switch: (method: string) => dispatch(methodChanged(method)),
   };
 
-  const observable = useMemo(() => {
-    const method = props.methods.find(item => item.name === current.name);
-    return method ? Rx.concat(Rx.of(undefined), method.connect(current.config)) : Rx.of(undefined);
-  }, [props.methods, current]);
-
-  const environment = useObservable<Environment | undefined, [Rx.Observable<Environment | undefined>]>(
-    inputs$ => {
-      return inputs$.pipe(
-        pluck(0),
-        switchAll()
-      );
-    },
-    undefined,
-    [observable]
-  );
-
-  const graph = useTheGraphApollo(environment);
-  const chain = useOnChainApollo(environment);
-  const methods = props.methods || [];
-
-  return (
-    <OnChainContext.Provider
-      value={{ select, environment, methods, method: current.name, config: current.config, client: chain }}
-    >
-      <TheGraphContext.Provider value={{ client: graph }}>
-        <ApolloProvider client={chain}>{props.children}</ApolloProvider>
-      </TheGraphContext.Provider>
-    </OnChainContext.Provider>
-  );
-};
-
-export const RequireSecureConnection: React.FC = props => {
-  // TODO: Render a modal window with the connection selector.
-  return <>{props.children}</>;
+  return <Connection.Provider value={context}>{props.children}</Connection.Provider>;
 };

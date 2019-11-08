@@ -7,14 +7,10 @@ export interface Config {
 }
 
 export type ConfigMap = {
-  [index in NetworkEnum]?: Config;
+  [index in NetworkEnum]: Config;
 };
 
-export function getConfig(network: NetworkEnum) {
-  return config[network];
-}
-
-const config: ConfigMap = {
+export const config: ConfigMap = {
   [NetworkEnum.MAINNET]: {
     default: 'wss://mainnet.infura.io/ws/v3/8332aa03fcfa4c889aeee4d0e0628660',
     subgraph: 'https://api.thegraph.com/subgraphs/name/melonproject/melon',

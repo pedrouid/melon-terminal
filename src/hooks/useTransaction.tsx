@@ -229,6 +229,7 @@ function executionError(dispatch: React.Dispatch<TransactionAction>, error: Erro
 
 export interface TransactionOptions {
   onFinish?: (receipt: TransactionReceipt) => void;
+  onAcknowledge?: (receipt: TransactionReceipt) => void;
   onError?: (error: Error) => void;
 }
 
@@ -290,7 +291,7 @@ export function useTransaction(environment: Environment, options?: TransactionOp
     }
 
     if (state.progress === TransactionProgress.TRANSACTION_ACKNOWLEDGED) {
-      options && options.onFinish && options.onFinish(state.receipt!);
+      options && options.onAcknowledge && options.onAcknowledge(state.receipt!);
     }
 
     if (

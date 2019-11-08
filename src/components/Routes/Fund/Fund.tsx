@@ -1,6 +1,5 @@
 import React from 'react';
 import { Switch, Route, useRouteMatch } from 'react-router';
-import { RequireSecureConnection } from '~/components/Contexts/Connection';
 import { useFundExistsQuery } from '~/queries/FundExists';
 import { Spinner } from '~/components/Common/Spinner/Spinner';
 import { FundHeader } from './FundHeader/FundHeader';
@@ -41,14 +40,10 @@ export const Fund: React.FC = () => {
             <FundDetails address={match.params.address} />
           </Route>
           <Route path={`${match.path}/invest`} exact={true}>
-            <RequireSecureConnection>
-              <FundInvest address={match.params.address} />
-            </RequireSecureConnection>
+            <FundInvest address={match.params.address} />
           </Route>
           <Route path={`${match.path}/redeem`} exact={true}>
-            <RequireSecureConnection>
-              <FundRedeem address={match.params.address} />
-            </RequireSecureConnection>
+            <FundRedeem address={match.params.address} />
           </Route>
           <Route>
             <NoMatch />

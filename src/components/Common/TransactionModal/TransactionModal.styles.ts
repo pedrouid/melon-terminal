@@ -133,6 +133,8 @@ export const TransactionModalMessagesTable = styled.table`
   margin: 0;
 `;
 
+export const TransactionModalMessagesTableBody = styled.tbody``;
+
 export const TransactionModalMessagesTableRow = styled.tr`
   margin: 0;
 `;

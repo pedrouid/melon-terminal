@@ -1,12 +1,16 @@
 import React from 'react';
 import * as Rx from 'rxjs';
-import * as R from 'ramda';
-import { switchMap, expand, distinctUntilChanged } from 'rxjs/operators';
 import { Eth } from 'web3-eth';
 import { HttpProvider } from 'web3-providers';
+import {
+  ConnectionMethod,
+  ConnectionAction,
+  networkChanged,
+  accountsChanged,
+  connectionEstablished,
+} from '~/components/Contexts/Connection';
+import { map, expand, switchMap, concatMap, retryWhen, retry, delay } from 'rxjs/operators';
 import { networkFromId } from '~/utils/networkFromId';
-import { Environment, createEnvironment } from '~/environment';
-import { ConnectionMethod } from '~/components/Contexts/Connection';
 
 interface EthResource extends Rx.Unsubscribable {
   eth: Eth;
@@ -22,26 +26,35 @@ const checkConnection = async (eth: Eth) => {
   return { eth, network, account: accounts && accounts[0] };
 };
 
-const connect = (): Rx.Observable<Environment> => {
-  const createResource = (): EthResource => {
+const connect = (): Rx.Observable<ConnectionAction> => {
+  const create = (): EthResource => {
     const provider = new HttpProvider('http://localhost:1248');
     const eth = new Eth(provider, undefined, {
       transactionConfirmationBlocks: 1,
     });
 
-    return {
-      eth,
-      unsubscribe: () => provider.disconnect(),
-    };
+    return { eth, unsubscribe: () => provider.disconnect() };
   };
 
-  return Rx.using(createResource, resource => {
-    return Rx.of((resource as EthResource).eth).pipe(
-      switchMap(eth => checkConnection(eth)),
-      expand(connection => Rx.timer(10000).pipe(switchMap(() => checkConnection(connection.eth)))),
-      distinctUntilChanged((a, b) => R.equals(a, b)),
-      switchMap(connection => createEnvironment(connection.eth, connection.network, connection.account))
+  return Rx.using(create, resource => {
+    const eth = (resource as EthResource).eth;
+    const enable$ = Rx.defer(async () => {
+      const [id, accounts] = await Promise.all([eth.net.getId(), eth.getAccounts()]);
+      const network = networkFromId(id);
+      return connectionEstablished(eth, network, accounts);
+    }).pipe(retryWhen(error => error.pipe(delay(1000))));
+
+    const accounts$ = Rx.EMPTY.pipe(
+      expand(() => Rx.timer(10000).pipe(concatMap(() => eth.getAccounts()))),
+      map(accounts => accountsChanged(accounts))
     );
+
+    const network$ = Rx.EMPTY.pipe(
+      expand(() => Rx.timer(10000).pipe(concatMap(() => eth.net.getId()))),
+      map(id => networkChanged(networkFromId(id)))
+    );
+
+    return Rx.concat(enable$, Rx.merge(network$, accounts$));
   });
 };
 
@@ -49,7 +62,7 @@ export const Frame: React.FC<any> = ({ select, active }) => {
   return (
     <div>
       <h2>Frame</h2>
-      {!active && <button onClick={() => select()}>Connect</button>}
+      {!active ? <button onClick={() => select()}>Connect</button> : <div>Currently selected</div>}
     </div>
   );
 };

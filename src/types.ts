@@ -4,8 +4,6 @@ export enum NetworkEnum {
   'TESTNET' = 'TESTNET',
   'MAINNET' = 'MAINNET',
   'KOVAN' = 'KOVAN',
-  'INVALID' = 'INVALID',
-  'OFFLINE' = 'OFFLINE',
 }
 
 export interface Deployment {

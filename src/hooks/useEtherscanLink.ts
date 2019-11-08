@@ -1,9 +1,8 @@
-import { useContext } from 'react';
-import { OnChainContext } from '~/components/Contexts/Connection';
+import { useEnvironment } from './useEnvironment';
 
 export const useEtherscanLink = (address?: string) => {
-  const chain = useContext(OnChainContext);
-  const network = chain && chain.environment && chain.environment.network;
+  const environment = useEnvironment();
+  const network = environment && environment.network;
 
   if (address && network === 'MAINNET') {
     return `https://etherscan.io/address/${address}`;

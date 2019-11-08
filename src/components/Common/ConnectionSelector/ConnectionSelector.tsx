@@ -1,19 +1,22 @@
-import React, { useContext } from 'react';
-import { OnChainContext } from '~/components/Contexts/Connection';
+import React from 'react';
+import { useConnectionState } from '~/hooks/useConnectionState';
+import * as S from './ConnectionSelector.styles';
 
 export const ConnectionSelector: React.FC = () => {
-  const context = useContext(OnChainContext);
+  const connection = useConnectionState();
 
   return (
     <>
-      {context.methods.map(method => {
+      {connection.methods.map(method => {
         const Component = method.component;
-        const active = method.name === context.method;
-        const select = (config: any) => {
-          context.select(method.name, config);
-        };
+        const active = method.name === connection.method;
+        const select = () => connection.switch(method.name);
 
-        return <Component active={active} config={active && context.config} select={select} />;
+        return (
+          <S.Method key={method.name}>
+            <Component active={active} select={select} />
+          </S.Method>
+        );
       })}
     </>
   );
