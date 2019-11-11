@@ -23,7 +23,12 @@ export const Fund: React.FC = () => {
   }
 
   if (!exists) {
-    return <NoMatch />;
+    return (
+      <S.FundNotFound>
+        <h1>Fund not found</h1>
+        <p>The given address {match.params.address} is invalid or is not a fund.</p>
+      </S.FundNotFound>
+    );
   }
 
   return (

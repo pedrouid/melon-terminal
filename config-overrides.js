@@ -27,6 +27,7 @@ module.exports = override(
   addHotLoader,
   disableEsLint(),
   addBabelPlugin(['styled-components', { ssr: false, displayName: true }]),
+  addBabelPlugin('@babel/proposal-optional-chaining'),
   addWebpackAlias(getPathAliases()),
   addWebpackAlias({
     'react-dom': '@hot-loader/react-dom',

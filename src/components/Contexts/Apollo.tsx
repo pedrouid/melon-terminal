@@ -32,7 +32,9 @@ const createErrorLink = () => {
   });
 };
 
-const nullLink = new ApolloLink(() => new Observable<FetchResult>(() => {}));
+const nullLink = new ApolloLink(
+  () => new Observable<FetchResult>(() => {})
+);
 const nullClient = new ApolloClient({
   link: nullLink,
   cache: new InMemoryCache(),

@@ -16,28 +16,26 @@ export const Header: React.FC = () => {
             <S.Logo name="with-text" height={30} width={120} />
           </Link>
         </S.LogoContainer>
-        {connection && (
-          <S.Account>
-            <S.AccountName />
-            <S.AccountInfo>
-              {connection.account && (
-                <S.AccountAddress>
-                  <Link to="/wallet" title={connection.account.address}>
-                    Your wallet
-                  </Link>
-                </S.AccountAddress>
-              )}
-              <S.AccountNetwork>
-                <Link to={{ pathname: '/connect', state: { redirect: location } }} title="Change connection method">
-                  {connection.network}
+        <S.Account>
+          <S.AccountName />
+          <S.AccountInfo>
+            {connection && connection.account && (
+              <S.AccountAddress>
+                <Link to="/wallet" title={connection.account.address}>
+                  Your wallet
                 </Link>
-              </S.AccountNetwork>
-              {connection.account && (
-                <S.AccountBalance>{connection.account.balanceEth.toFixed(4)} ETH</S.AccountBalance>
-              )}
-            </S.AccountInfo>
-          </S.Account>
-        )}
+              </S.AccountAddress>
+            )}
+            <S.AccountNetwork>
+              <Link to={{ pathname: '/connect', state: { redirect: location } }} title="Change connection method">
+                {connection ? connection.network : 'OFFLINE'}
+              </Link>
+            </S.AccountNetwork>
+            {connection && connection.account && (
+              <S.AccountBalance>{connection.account.balanceEth.toFixed(4)} ETH</S.AccountBalance>
+            )}
+          </S.AccountInfo>
+        </S.Account>
       </S.Header>
     </S.HeaderPosition>
   );

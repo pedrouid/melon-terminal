@@ -42,10 +42,10 @@ export interface MelonContracts {
   adapters: {
     kyberAdapter: string;
     zeroExAdapter: string;
-    matchingMarketAdapter: string;
-    matchingMarketAccessor: string;
     ethfinexAdapter: string;
-    engineAdapter: string;
+    matchingMarketAdapter?: string;
+    matchingMarketAccessor?: string;
+    engineAdapter?: string;
   };
   policies: {
     priceTolerance: string;
@@ -77,7 +77,7 @@ export interface ThirdPartyContracts {
     kyber: KyberEnvironment;
     matchingMarket: string;
     zeroEx: string;
-    ethfinex: EthfinexEnvironment;
+    ethfinex: string | EthfinexEnvironment;
   };
 }
 

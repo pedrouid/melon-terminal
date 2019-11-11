@@ -3,7 +3,7 @@ import { Deployment } from '~/types';
 const deployment: Deployment = {
   meta: {
     deployer: '0xC0c82081f2Ad248391cd1483ae211d56c280887a',
-    timestamp: '2019-11-05T10:18:49.170Z',
+    timestamp: '2019-11-11T14:22:29.217Z',
     track: 'kyberPrice',
     version: '1.0.9',
     chain: 4,

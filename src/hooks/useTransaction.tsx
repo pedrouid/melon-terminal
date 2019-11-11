@@ -278,6 +278,7 @@ export function useTransaction(environment: Environment, options?: TransactionOp
         gasPrice: data.gasPrice,
       };
 
+      await transaction.validate();
       const receipt = await transaction.send(opts).on('transactionHash', hash => executionReceived(dispatch, hash));
       executionFinished(dispatch, receipt);
     } catch (error) {

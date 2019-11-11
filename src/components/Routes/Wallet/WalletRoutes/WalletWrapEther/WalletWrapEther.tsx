@@ -13,11 +13,13 @@ import { useOnChainClient } from '~/hooks/useQuery';
 import { useEnvironment } from '~/hooks/useEnvironment';
 
 const validationSchema = Yup.object().shape({
-  quantity: Yup.mixed<number>(),
+  quantity: Yup.number()
+    .required()
+    .positive(),
 });
 
 const defaultValues = {
-  quantity: '0.5',
+  quantity: 0.5,
 };
 
 export const WalletWrapEther: React.FC = () => {
@@ -37,7 +39,7 @@ export const WalletWrapEther: React.FC = () => {
   const submit = form.handleSubmit(async data => {
     const token = findToken(environment.deployment, 'WETH')!;
     const weth = new Weth(environment, token.address);
-    const tx = weth.deposit(new BigNumber(toWei(data.quantity)), environment.account!);
+    const tx = weth.deposit(new BigNumber(toWei(`${data.quantity}`)), environment.account!);
     transaction.start(tx);
   });
 
@@ -47,9 +49,7 @@ export const WalletWrapEther: React.FC = () => {
         <WrapEtherForm submit={submit} form={form} label="wrap" />
       </FormContext>
 
-      <FormContext {...transaction.form}>
-        <TransactionModal transaction={transaction} title="Wrap Ether" />
-      </FormContext>
+      <TransactionModal transaction={transaction} title="Wrap Ether" />
     </div>
   );
 };

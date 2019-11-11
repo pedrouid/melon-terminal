@@ -10,8 +10,8 @@ import { method as frame } from './Common/ConnectionSelector/Frame/Frame';
 import { Theme, ModalBackground } from './App.styles';
 import { OnChainApollo, TheGraphApollo, ApolloProvider } from './Contexts/Apollo';
 import { ConnectionProvider } from './Contexts/Connection';
-import { useConnectionState } from '~/hooks/useConnectionState';
-import { ConnectionSelector } from './Common/ConnectionSelector/ConnectionSelector';
+import { RequiresAccount } from './Common/Gates/RequiresAccount/RequiresAccount';
+import { RequiresConnection } from './Common/Gates/RequiresConnection/RequiresConnection';
 
 const Home = React.lazy(() => import('./Routes/Home/Home'));
 const Wallet = React.lazy(() => import('./Routes/Wallet/Wallet'));
@@ -22,34 +22,41 @@ const Playground = React.lazy(() => import('./Routes/Playground/Playground'));
 const NoMatch = React.lazy(() => import('./Routes/NoMatch/NoMatch'));
 
 const AppRouter = () => {
-  const connection = useConnectionState();
-  if (!connection.method) {
-    return <ConnectionSelector />;
-  }
-
   return (
     <>
       <Switch>
         <Route path="/" exact={true}>
-          <Home />
+          <RequiresConnection>
+            <Home />
+          </RequiresConnection>
         </Route>
         <Route path="/connect" exact={true}>
           <Connect />
         </Route>
-        <Route path="/setup" exact={true}>
-          <Setup />
+        <Route path="/setup">
+          <RequiresAccount>
+            <Setup />
+          </RequiresAccount>
         </Route>
         <Route path="/wallet">
-          <Wallet />
+          <RequiresAccount>
+            <Wallet />
+          </RequiresAccount>
         </Route>
         <Route path="/fund/:address">
-          <Fund />
+          <RequiresConnection>
+            <Fund />
+          </RequiresConnection>
         </Route>
         <Route path="/playground/onchain" exact={true}>
-          <Playground context={OnChainApollo} bucket="onchain" />
+          <RequiresConnection>
+            <Playground context={OnChainApollo} bucket="onchain" />
+          </RequiresConnection>
         </Route>
         <Route path="/playground/thegraph" exact={true}>
-          <Playground context={TheGraphApollo} bucket="thegraph" />
+          <RequiresConnection>
+            <Playground context={TheGraphApollo} bucket="thegraph" />
+          </RequiresConnection>
         </Route>
         <Route>
           <NoMatch />

@@ -10,6 +10,18 @@ enum NetworkEnum {
   INVALID
 }
 
+enum SetupProgressEnum {
+  BEGIN
+  ACCOUNTING
+  FEE_MANAGER
+  PARTICIPATION
+  POLICY_MANAGER
+  SHARES
+  TRADING
+  VAULT
+  COMPLETE
+}
+
 type Block {
   hash: String!
   number: BigNumber!
@@ -19,6 +31,7 @@ type Block {
 type Account {
   address: Address!
   balance(token: TokenEnum!): BigNumber
+  fund: Hub
 }
 
 type Token {
@@ -52,6 +65,7 @@ type Hub {
   manager: String!
   creator: String!
   creationTime: DateTime!
+  progress: SetupProgressEnum!
 }
 
 type Accounting {
