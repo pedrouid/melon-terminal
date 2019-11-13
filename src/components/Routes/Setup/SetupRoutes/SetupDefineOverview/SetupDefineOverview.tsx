@@ -1,6 +1,6 @@
 import React, { FormEvent } from 'react';
 import BigNumber from 'bignumber.js';
-import { SetupStepsProps } from '~/components/Routes/Setup/Setup';
+import { SetupDefinitionProps } from '~/components/Routes/Setup/Setup';
 import { TransactionModal } from '~/components/Common/TransactionModal/TransactionModal';
 import { ButtonBlock } from '~/components/Common/Form/ButtonBlock/ButtonBlock';
 import { CancelButton } from '~/components/Common/Form/CancelButton/CancelButton';
@@ -8,10 +8,12 @@ import { SubmitButton } from '~/components/Common/Form/SubmitButton/SubmitButton
 import { useTransaction } from '~/hooks/useTransaction';
 import { useEnvironment } from '~/hooks/useEnvironment';
 import { Version } from '@melonproject/melonjs';
+import { useHistory } from 'react-router';
 
-export const SetupStepFinish: React.FC<Omit<SetupStepsProps, 'forward'>> = props => {
+export const SetupDefineOverview: React.FC<Omit<SetupDefinitionProps, 'forward'>> = props => {
   const environment = useEnvironment()!;
-  const transaction = useTransaction(environment);
+  const history = useHistory();
+  const transaction = useTransaction(environment, { onAcknowledge: () => history.push('/setup/transactions') });
 
   const assets = (props.state.assets || []).filter((asset: any) => asset !== false).map((asset: any) => `${asset}`);
   const exchanges = (props.state.exchanges || [])
@@ -42,10 +44,12 @@ export const SetupStepFinish: React.FC<Omit<SetupStepsProps, 'forward'>> = props
       fees: [managementFeeAddress, performanceFeeAddress],
       denominationAsset: weth!.address,
       defaultAssets: assetAddresses,
-      feePeriods: [new BigNumber(0), new BigNumber(props.state.performanceFeePeriod!)],
-      feeRates: [new BigNumber(props.state.managementFee!), new BigNumber(props.state.performanceFee!)],
+      feePeriods: [new BigNumber(0), new BigNumber(props.state.performanceFeePeriod!).multipliedBy(60 * 60 * 24)],
+      feeRates: [
+        new BigNumber(props.state.managementFee!).multipliedBy('1e16'),
+        new BigNumber(props.state.performanceFee!).multipliedBy('1e16'),
+      ],
     });
-
     transaction.start(tx);
   };
 

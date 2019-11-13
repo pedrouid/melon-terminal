@@ -1,19 +1,19 @@
 import React from 'react';
 import * as Yup from 'yup';
 import useForm, { FormContext } from 'react-hook-form';
-import { SetupStepsProps } from '~/components/Routes/Setup/Setup';
+import { SetupDefinitionProps } from '~/components/Routes/Setup/Setup';
 import { InputField } from '~/components/Common/Form/InputField/InputField';
 import { SubmitButton } from '~/components/Common/Form/SubmitButton/SubmitButton';
 import { ButtonBlock } from '~/components/Common/Form/ButtonBlock/ButtonBlock';
 import { CancelButton } from '~/components/Common/Form/CancelButton/CancelButton';
 
-export interface SetupFeesForm {
+export interface SetupDefineFeesForm {
   managementFee: number;
   performanceFee: number;
   performanceFeePeriod: number;
 }
 
-export const SetupFees: React.FC<SetupStepsProps> = props => {
+export const SetupDefineFees: React.FC<SetupDefinitionProps> = props => {
   const validationSchema = Yup.object().shape({
     managementFee: Yup.number()
       .min(0)
@@ -24,7 +24,7 @@ export const SetupFees: React.FC<SetupStepsProps> = props => {
     performanceFeePeriod: Yup.number().min(0),
   });
 
-  const form = useForm<SetupFeesForm>({
+  const form = useForm<SetupDefineFeesForm>({
     validationSchema,
     defaultValues: props.state,
     mode: 'onSubmit',

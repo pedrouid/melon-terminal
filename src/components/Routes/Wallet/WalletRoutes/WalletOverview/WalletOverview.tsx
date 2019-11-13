@@ -3,9 +3,12 @@ import NoMatch from '~/components/Routes/NoMatch/NoMatch';
 import { Spinner } from '~/components/Common/Spinner/Spinner';
 import * as S from './WalletOverview.styles';
 import { useAccountBalancesQuery } from '~/queries/AccountBalances';
+import { useAccountFundQuery } from '~/queries/AccountFund';
 
 export const WalletOverview: React.FC = () => {
   const [balances, query] = useAccountBalancesQuery();
+  const [account, fundQuery] = useAccountFundQuery();
+
   if (query.loading) {
     return <Spinner positioning="centered" size="large" />;
   }
@@ -13,6 +16,8 @@ export const WalletOverview: React.FC = () => {
   if (!balances) {
     return <NoMatch />;
   }
+
+  const fund = account && account.fund;
 
   return (
     <S.WalletOverviewBody>
@@ -32,8 +37,17 @@ export const WalletOverview: React.FC = () => {
         )}
       </S.WalletOverviewBalances>
       <S.WalletOverviewTitle>Fund</S.WalletOverviewTitle>
+
       <S.WalletOverviewFundActions>
-        <S.WalletOverviewFundAction to="/setup">Setup your fund</S.WalletOverviewFundAction>
+        {!fund && <S.WalletOverviewFundAction to="/setup">Setup your fund</S.WalletOverviewFundAction>}
+        {fund && fund.progress !== 'COMPLETE' && (
+          <S.WalletOverviewFundAction to="/setup/transactions">
+            Continue setting up your fund
+          </S.WalletOverviewFundAction>
+        )}
+        {fund && fund.progress === 'COMPLETE' && (
+          <S.WalletOverviewFundAction to={`/fund/${fund.address}`}>Go to your fund</S.WalletOverviewFundAction>
+        )}
       </S.WalletOverviewFundActions>
     </S.WalletOverviewBody>
   );

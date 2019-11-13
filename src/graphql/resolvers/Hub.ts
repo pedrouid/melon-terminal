@@ -21,11 +21,11 @@ export const creationTime: Resolver<Hub> = (hub, _, context) => hub.getCreationT
 export const routes: Resolver<Hub> = async (hub, _, context) => [hub, await hub.getRoutes(context.block)];
 export const progress: Resolver<Hub> = async (hub, _, context) => {
   const version = new Version(context.environment, context.environment.deployment.melonContracts.version);
-  if (await version.isInstance(hub.contract.address)) {
+  if (await version.isInstance(hub.contract.address, context.block)) {
     return SetupProgress.COMPLETE;
   }
 
-  const routes = await version.getManagersToRoutes(await hub.getManager(context.block));
+  const routes = await version.getManagersToRoutes(await hub.getManager(context.block), context.block);
   if (routes.vault) {
     return SetupProgress.VAULT;
   }

@@ -1,12 +1,12 @@
 import React from 'react';
 import * as Yup from 'yup';
 import useForm, { FormContext } from 'react-hook-form';
-import { SetupStepsProps } from '../../Setup';
+import { SetupDefinitionProps } from '../../Setup';
 import { SubmitButton } from '~/components/Common/Form/SubmitButton/SubmitButton';
 import { ButtonBlock } from '~/components/Common/Form/ButtonBlock/ButtonBlock';
 import { CancelButton } from '~/components/Common/Form/CancelButton/CancelButton';
 
-export interface SetupTermsAndConditionsForm {
+export interface SetupDefineTermsAndConditionsForm {
   termsAndConditions: boolean;
 }
 
@@ -25,12 +25,12 @@ LIABILITY AS WELL AS ALL WARRANTIES, INCLUDING ANY FITNESS FOR A PARTICULAR PURP
 PROTOCOL AND/OR THE UNDERLYING SOFTWARE AND THE USE THEREOF ARE DISCLAIMED.
 `;
 
-export const SetupTermsAndConditions: React.FC<SetupStepsProps> = props => {
+export const SetupTermsAndConditions: React.FC<SetupDefinitionProps> = props => {
   const validationSchema = Yup.object().shape({
     termsAndConditions: Yup.boolean(),
   });
 
-  const form = useForm<SetupTermsAndConditionsForm>({
+  const form = useForm<SetupDefineTermsAndConditionsForm>({
     validationSchema,
     defaultValues: props.state,
     mode: 'onSubmit',

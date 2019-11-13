@@ -1,20 +1,20 @@
 import React from 'react';
 import * as Yup from 'yup';
 import useForm, { FormContext } from 'react-hook-form';
-import { SetupStepsProps } from '~/components/Routes/Setup/Setup';
+import { SetupDefinitionProps } from '~/components/Routes/Setup/Setup';
 import { InputField } from '~/components/Common/Form/InputField/InputField';
 import { SubmitButton } from '~/components/Common/Form/SubmitButton/SubmitButton';
 import { ButtonBlock } from '~/components/Common/Form/ButtonBlock/ButtonBlock';
 import { CancelButton } from '~/components/Common/Form/CancelButton/CancelButton';
 import { useEnvironment } from '~/hooks/useEnvironment';
 
-export interface SetupFundForm {
+export interface SetupDefineFundForm {
   name: string;
   exchanges: any[];
   assets: any[];
 }
 
-export const SetupFund: React.FC<SetupStepsProps> = props => {
+export const SetupDefineFund: React.FC<SetupDefinitionProps> = props => {
   const environment = useEnvironment()!;
   const exchanges = Object.keys(environment.deployment.exchangeConfigs);
   const tokens = environment.deployment.thirdPartyContracts.tokens;
@@ -29,7 +29,7 @@ export const SetupFund: React.FC<SetupStepsProps> = props => {
       .min(1),
   });
 
-  const form = useForm<SetupFundForm>({
+  const form = useForm<SetupDefineFundForm>({
     validationSchema,
     defaultValues: props.state,
     mode: 'onSubmit',
