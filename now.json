@@ -8,5 +8,8 @@
     { "src": "^/manifest.json", "dest": "/manifest.json" },
     { "src": "^/robots.txt", "dest": "/robots.txt" },
     { "src": "^/(.*)", "dest": "/index.html" }
-  ]
+  ],
+  "github": {
+    "autoAlias": false
+  }
 }
