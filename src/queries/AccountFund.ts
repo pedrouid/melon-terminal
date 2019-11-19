@@ -7,6 +7,7 @@ export interface AccountFund {
   fund: {
     address: Address;
     name: string;
+    isShutDown: boolean;
     progress: string;
   };
 }
@@ -21,6 +22,7 @@ const AccountFundQuery = gql`
       fund {
         address
         name
+        isShutDown
         progress
       }
     }

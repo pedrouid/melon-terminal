@@ -6,6 +6,7 @@ export interface FundDetails {
   name: string;
   manager: string;
   creationTime: Date;
+  isShutDown: boolean;
   routes: {
     accounting?: {
       sharePrice: BigNumber;
@@ -40,6 +41,7 @@ const FundDetailsQuery = gql`
       name
       manager
       creationTime
+      isShutDown
       routes {
         accounting {
           sharePrice

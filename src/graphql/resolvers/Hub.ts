@@ -18,6 +18,7 @@ export const name: Resolver<Hub> = (hub, _, context) => hub.getName(context.bloc
 export const manager: Resolver<Hub> = (hub, _, context) => hub.getManager(context.block);
 export const creator: Resolver<Hub> = (hub, _, context) => hub.getCreator(context.block);
 export const creationTime: Resolver<Hub> = (hub, _, context) => hub.getCreationTime(context.block);
+export const isShutDown: Resolver<Hub> = (hub, _, context) => hub.isShutDown(context.block);
 export const routes: Resolver<Hub> = async (hub, _, context) => [hub, await hub.getRoutes(context.block)];
 export const progress: Resolver<Hub> = async (hub, _, context) => {
   const version = new Version(context.environment, context.environment.deployment.melonContracts.version);

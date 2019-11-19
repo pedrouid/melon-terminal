@@ -11,6 +11,13 @@ export const FundHeader = styled.div`
   }
 `;
 
+export const FundHeaderShutDown = styled.div`
+  width: 100%;
+  background: ${props => props.theme.statusColors.primaryLoss};
+  padding: ${props => props.theme.spaceUnits.s};
+  margin-bottom: ${props => props.theme.spaceUnits.s};
+`;
+
 export const FundHeaderTitle = styled.h1`
   margin: 0;
   white-space: nowrap;

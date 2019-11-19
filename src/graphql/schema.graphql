@@ -65,6 +65,7 @@ type Hub {
   manager: String!
   creator: String!
   creationTime: DateTime!
+  isShutDown: Boolean!
   progress: SetupProgressEnum!
 }
 
