@@ -54,8 +54,8 @@ type HubRoutes {
   shares: Shares
   trading: Trading
   vault: Vault
-  fees: FeeManager
-  policies: PolicyManager
+  feeManager: FeeManager
+  policyManager: PolicyManager
 }
 
 type Hub {
@@ -95,6 +95,52 @@ type Vault {
 
 type PolicyManager {
   address: Address!
+  policies: [Policy!]!
+}
+
+interface Policy {
+  address: Address!
+  identifier: String!
+}
+
+type MaxConcentration implements Policy {
+  address: Address!
+  identifier: String!
+  maxConcentration: BigNumber!
+}
+
+type MaxPositions implements Policy {
+  address: Address!
+  identifier: String!
+  maxPositions: Int!
+}
+
+type PriceTolerance implements Policy {
+  address: Address!
+  identifier: String!
+  priceTolerance: BigNumber!
+}
+
+type AssetWhitelist implements Policy {
+  address: Address!
+  identifier: String!
+  assetWhitelist: [Address!]!
+}
+
+type AssetBlacklist implements Policy {
+  address: Address!
+  identifier: String!
+  assetBlacklist: [Address!]!
+}
+
+type UserWhitelist implements Policy {
+  address: Address!
+  identifier: String!
+}
+
+type CustomPolicy implements Policy {
+  address: Address!
+  identifier: String!
 }
 
 type FeeManager {

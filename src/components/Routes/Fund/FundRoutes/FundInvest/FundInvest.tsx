@@ -1,12 +1,16 @@
 import React from 'react';
-import { Spinner } from '~/components/Common/Spinner/Spinner';
+import * as S from './FundInvest.styles';
 
 export interface InvestProps {
   address: string;
 }
 
 export const Invest: React.FC<InvestProps> = ({ address }) => {
-  return <Spinner positioning="centered" />;
+  return (
+    <S.FundInvestBody>
+      <h1>Not yet implemented</h1>
+    </S.FundInvestBody>
+  );
 };
 
 export default Invest;

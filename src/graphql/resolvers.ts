@@ -18,6 +18,12 @@ import * as FeeManager from '~/graphql/resolvers/routes/FeeManager';
 import * as PerformanceFee from '~/graphql/resolvers/fees/PerformanceFee';
 import * as ManagementFee from '~/graphql/resolvers/fees/ManagementFee';
 import * as PolicyManager from '~/graphql/resolvers/routes/PolicyManager';
+import * as Policy from '~/graphql/resolvers/policies/Policy';
+import * as MaxConcentration from '~/graphql/resolvers/policies/MaxConcentration';
+import * as MaxPositions from '~/graphql/resolvers/policies/MaxPositions';
+import * as PriceTolerance from '~/graphql/resolvers/policies/PriceTolerance';
+import * as AssetWhitelist from '~/graphql/resolvers/policies/AssetWhitelist';
+import * as AssetBlacklist from '~/graphql/resolvers/policies/AssetBlacklist';
 
 export {
   Query,
@@ -35,6 +41,12 @@ export {
   Vault,
   FeeManager,
   PolicyManager,
+  Policy,
+  MaxConcentration,
+  MaxPositions,
+  PriceTolerance,
+  AssetWhitelist,
+  AssetBlacklist,
   PerformanceFee,
   ManagementFee,
 };

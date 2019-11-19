@@ -14,7 +14,7 @@ export interface FundDetails {
     shares?: {
       totalSupply: BigNumber;
     };
-    fees?: {
+    feeManager?: {
       managementFee?: {
         rate: BigNumber;
       };
@@ -48,7 +48,7 @@ const FundDetailsQuery = gql`
         shares {
           totalSupply
         }
-        fees {
+        feeManager {
           managementFee {
             rate
           }

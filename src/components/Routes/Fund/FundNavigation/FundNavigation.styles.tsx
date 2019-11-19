@@ -3,6 +3,14 @@ import { NavLink } from 'react-router-dom';
 
 export const FundNavigation = styled.div``;
 
+export const FundNavigationAll = styled.div`
+  float: left;
+`;
+
+export const FundNavigationManager = styled.div`
+  float: right;
+`;
+
 export const FundNavigationLink = styled(NavLink)`
   display: inline-block;
   position: relative;

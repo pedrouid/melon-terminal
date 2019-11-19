@@ -27,9 +27,9 @@ export const FundHeader: React.FC<FundHeaderProps> = ({ address }) => {
   const shares = routes && routes.shares;
   const manager = details.manager;
   const creation = details.creationTime;
-  const fees = routes && routes.fees;
-  const managementFee = fees && fees.managementFee;
-  const performanceFee = fees && fees.performanceFee;
+  const feeManager = routes && routes.feeManager;
+  const managementFee = feeManager && feeManager.managementFee;
+  const performanceFee = feeManager && feeManager.performanceFee;
 
   return (
     <S.FundHeader>

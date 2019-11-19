@@ -1192,15 +1192,16 @@
     "@types/istanbul-reports" "^1.1.1"
     "@types/yargs" "^13.0.0"
 
-"@melonproject/melonjs@^0.0.27":
-  version "0.0.27"
-  resolved "https://registry.yarnpkg.com/@melonproject/melonjs/-/melonjs-0.0.27.tgz#37ea52fb465ab1bee09eebad291f5380f6c7b521"
-  integrity sha512-kQzxUfF3Hh33YdFSTb8aBgGLaYGVH5lnQXxc94jpnddQne5TnRagt7J6p6hB2zyA+KAYFZGCHvTF+YvlLKXt1Q==
+"@melonproject/melonjs@^0.0.28":
+  version "0.0.28"
+  resolved "https://registry.yarnpkg.com/@melonproject/melonjs/-/melonjs-0.0.28.tgz#87098c2f60fd92e278df75afb070d8a9e549f020"
+  integrity sha512-7WGpvTl/q2Zafg+hKoEVNrIVN4ZhUc7VFwTJoHSf9Es/DoISUIzFpsEkstA6vfjR175QUwFiu5gJYxaJsCW2Nw==
   dependencies:
     bignumber.js "^9.0.0"
     ramda "^0.26.1"
     web3-core "^2.0.0-alpha.1"
     web3-eth "^2.0.0-alpha.1"
+    web3-eth-abi "^2.0.0-alpha.1"
     web3-eth-contract "^2.0.0-alpha.1"
     web3-providers "^2.0.0-alpha.1"
     web3-utils "^2.0.0-alpha.1"
@@ -11786,7 +11787,7 @@ web3-core@2.0.0-alpha.1, web3-core@^2.0.0-alpha.1:
     web3-providers "2.0.0-alpha.1"
     web3-utils "2.0.0-alpha.1"
 
-web3-eth-abi@2.0.0-alpha.1:
+web3-eth-abi@2.0.0-alpha.1, web3-eth-abi@^2.0.0-alpha.1:
   version "2.0.0-alpha.1"
   resolved "https://registry.yarnpkg.com/web3-eth-abi/-/web3-eth-abi-2.0.0-alpha.1.tgz#cdcafcb9681c9a5be7917efbae838df4121c623f"
   integrity sha512-EcNgLm8dHqjGN5IjgAAPIGFgBowO2FKQbdLzk6Zc7WY5kpRA/EcJen4PzVZpH1THfqpIlmHAV2YimYUTIz6cDQ==

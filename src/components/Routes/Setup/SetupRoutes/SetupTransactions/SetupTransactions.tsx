@@ -133,7 +133,7 @@ export const SetupTransactions: React.FC = props => {
 
       <form onSubmit={submit}>
         <ButtonBlock>
-          <SubmitButton label={transactionPipeline[progress].name} />
+          <SubmitButton label={transactionPipeline[progress] && transactionPipeline[progress].name} />
         </ButtonBlock>
       </form>
 

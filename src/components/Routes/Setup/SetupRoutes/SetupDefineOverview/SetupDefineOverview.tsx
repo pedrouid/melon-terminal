@@ -7,8 +7,8 @@ import { CancelButton } from '~/components/Common/Form/CancelButton/CancelButton
 import { SubmitButton } from '~/components/Common/Form/SubmitButton/SubmitButton';
 import { useTransaction } from '~/hooks/useTransaction';
 import { useEnvironment } from '~/hooks/useEnvironment';
-import { Version } from '@melonproject/melonjs';
 import { useHistory } from 'react-router';
+import { Version } from '@melonproject/melonjs';
 
 export const SetupDefineOverview: React.FC<Omit<SetupDefinitionProps, 'forward'>> = props => {
   const environment = useEnvironment()!;

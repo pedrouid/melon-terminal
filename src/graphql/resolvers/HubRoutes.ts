@@ -36,10 +36,10 @@ export const vault: Resolver<[Hub, HubRoutes]> = ([_, routes], __, context) => {
   return routes.vault && new Vault(context.environment, routes.vault);
 };
 
-export const fees: Resolver<[Hub, HubRoutes]> = ([_, routes], __, context) => {
+export const feeManager: Resolver<[Hub, HubRoutes]> = ([_, routes], __, context) => {
   return routes.feeManager && new FeeManager(context.environment, routes.feeManager);
 };
 
-export const policies: Resolver<[Hub, HubRoutes]> = ([_, routes], __, context) => {
+export const policyManager: Resolver<[Hub, HubRoutes]> = ([_, routes], __, context) => {
   return routes.policyManager && new PolicyManager(context.environment, routes.policyManager);
 };
