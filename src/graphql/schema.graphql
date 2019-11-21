@@ -146,16 +146,23 @@ type CustomPolicy implements Policy {
 
 type FeeManager {
   address: Address!
+  managementFeeAmount: BigNumber
+  performanceFeeAmount: BigNumber
   performanceFee: PerformanceFee
   managementFee: ManagementFee
 }
 
 type PerformanceFee {
+  address: Address!
   rate: Float!
   period: Float!
+  highWaterMark: Float!
+  initializeTime: DateTime!
+  canUpdate: Boolean!
 }
 
 type ManagementFee {
+  address: Address!
   rate: Float!
 }
 

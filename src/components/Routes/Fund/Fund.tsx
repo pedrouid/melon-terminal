@@ -10,6 +10,7 @@ const NoMatch = React.lazy(() => import('~/components/Routes/NoMatch/NoMatch'));
 const FundRedeem = React.lazy(() => import('./FundRoutes/FundRedeem/FundRedeem'));
 const FundInvest = React.lazy(() => import('./FundRoutes/FundInvest/FundInvest'));
 const FundDetails = React.lazy(() => import('./FundRoutes/FundDetails/FundDetails'));
+const FundClaimFees = React.lazy(() => import('./FundRoutes/FundClaimFees/FundClaimFees'));
 const FundPolicies = React.lazy(() => import('./FundRoutes/FundPolicies/FundPolicies'));
 const FundShutdown = React.lazy(() => import('./FundRoutes/FundShutdown/FundShutdown'));
 
@@ -51,6 +52,9 @@ export const Fund: React.FC = () => {
           </Route>
           <Route path={`${match.path}/redeem`} exact={true}>
             <FundRedeem address={match.params.address} />
+          </Route>
+          <Route path={`${match.path}/claimfees`} exact={true}>
+            <FundClaimFees address={match.params.address} />
           </Route>
           <Route path={`${match.path}/policies`} exact={true}>
             <FundPolicies address={match.params.address} />

@@ -9,6 +9,7 @@ export interface FundDetails {
   isShutDown: boolean;
   routes: {
     accounting?: {
+      address: string;
       sharePrice: BigNumber;
       grossAssetValue: BigNumber;
     };
@@ -16,12 +17,16 @@ export interface FundDetails {
       totalSupply: BigNumber;
     };
     feeManager?: {
+      address: string;
+      managementFeeAmount: BigNumber;
+      performanceFeeAmount: BigNumber;
       managementFee?: {
         rate: BigNumber;
       };
       performanceFee?: {
         rate: BigNumber;
         period: number;
+        canUpdate: boolean;
       };
     };
   };
@@ -44,6 +49,7 @@ const FundDetailsQuery = gql`
       isShutDown
       routes {
         accounting {
+          address
           sharePrice
           grossAssetValue
         }
@@ -51,12 +57,16 @@ const FundDetailsQuery = gql`
           totalSupply
         }
         feeManager {
+          address
+          managementFeeAmount
+          performanceFeeAmount
           managementFee {
             rate
           }
           performanceFee {
             rate
             period
+            canUpdate
           }
         }
       }

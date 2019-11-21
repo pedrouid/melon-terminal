@@ -1,16 +1,26 @@
 import { Resolver } from '~/graphql';
 import { FeeManager, PerformanceFee, ManagementFee } from '@melonproject/melonjs';
 
-export const address: Resolver<FeeManager> = manager => manager.contract.address;
+export const address: Resolver<FeeManager> = feeManager => feeManager.contract.address;
 
-export const performanceFee: Resolver<FeeManager> = async (manager, _, context) => {
-  const address = await manager.getPerformanceFeeAddress(context.block);
-  const performance = new PerformanceFee(context.environment, address);
-  return [manager, performance];
+export const managementFeeAmount: Resolver<FeeManager> = async (feeManager, _, context) => {
+  const amount = await feeManager.getManagementFeeAmount(context.block);
+  return amount;
 };
 
-export const managementFee: Resolver<FeeManager> = async (manager, _, context) => {
-  const address = await manager.getManagementFeeAddress(context.block);
-  const management = new ManagementFee(context.environment, address);
-  return [manager, management];
+export const performanceFeeAmount: Resolver<FeeManager> = async (feeManager, _, context) => {
+  const amount = await feeManager.getPerformanceFeeAmount(context.block);
+  return amount;
+};
+
+export const performanceFee: Resolver<FeeManager> = async (feeManager, _, context) => {
+  const address = await feeManager.getPerformanceFeeAddress(context.block);
+  const performanceFee = new PerformanceFee(context.environment, address);
+  return [feeManager, performanceFee];
+};
+
+export const managementFee: Resolver<FeeManager> = async (feeManager, _, context) => {
+  const address = await feeManager.getManagementFeeAddress(context.block);
+  const managementFee = new ManagementFee(context.environment, address);
+  return [feeManager, managementFee];
 };
