@@ -2,7 +2,6 @@ import React from 'react';
 import { Spinner } from '~/components/Common/Spinner/Spinner';
 import { useFundHoldingsQuery } from '~/queries/FundHoldings';
 import * as S from './FundHoldings.styles';
-import { isNull } from 'util';
 
 export interface FundHoldingsProps {
   address: string;
