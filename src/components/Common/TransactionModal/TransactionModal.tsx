@@ -42,6 +42,7 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
   transaction: { form, state, cancel, submit, acknowledge },
   ...rest
 }) => {
+  const error = state.error;
   const finished = state.progress >= TransactionProgress.EXECUTION_FINISHED;
   const open =
     state.progress < TransactionProgress.TRANSACTION_ACKNOWLEDGED &&
@@ -55,11 +56,13 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
           {state.loading && <Spinner />}
 
           <S.TransactionModalContent>
-            {!finished && (
+            {!finished && !error && (
               <S.TransactionModalForm onSubmit={submit}>
                 <S.TransactionModalFeeForm>
                   <InputField id="gas-price" type="number" name="gasPrice" label="Gas Price" disabled={state.loading} />
-                  <InputField id="gas-limit" type="number" name="gasLimit" label="Gas Limit" disabled={state.loading} />
+                  {!state.loading && <div>Gas limit: {state.gasLimit}</div>}
+                  {!state.loading && state.amguValue && <div>AMGU: {state.amguValue.toFixed()}</div>}
+                  {!state.loading && state.incentiveValue && <div>INCENTIVE: {state.incentiveValue.toFixed()}</div>}
                 </S.TransactionModalFeeForm>
                 <S.TransactionModalMessage>
                   If you do not change the gas price field, the default gas price will be used. If you wish to set the

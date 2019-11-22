@@ -273,11 +273,9 @@ export function useTransaction(environment: Environment, options?: TransactionOp
     mode: 'onSubmit',
     reValidateMode: 'onBlur',
     validationSchema: Yup.object().shape({
-      gasLimit: Yup.number(),
       gasPrice: Yup.number(),
     }),
     defaultValues: {
-      gasLimit: `${state.gasLimit || ''}`,
       gasPrice: `${state.gasPrice || ''}`,
     },
   });
@@ -291,8 +289,8 @@ export function useTransaction(environment: Environment, options?: TransactionOp
       executionPending(dispatch);
       const transaction = state.transaction!;
       const opts: SendOptions = {
-        gas: parseFloat(data.gasLimit),
         gasPrice: data.gasPrice,
+        ...(state.gasLimit && { gas: state.gasLimit }),
         ...(state.amguValue && { amgu: state.amguValue }),
         ...(state.incentiveValue && { incentive: state.incentiveValue }),
       };

@@ -1192,10 +1192,10 @@
     "@types/istanbul-reports" "^1.1.1"
     "@types/yargs" "^13.0.0"
 
-"@melonproject/melonjs@^0.0.30":
-  version "0.0.30"
-  resolved "https://registry.yarnpkg.com/@melonproject/melonjs/-/melonjs-0.0.30.tgz#1940ea9a10d477ef06a3cef972fd90ee83ff2090"
-  integrity sha512-Z+2izCsspsM288vNd2bZnDM4FihXmXCGNUEGDUu0PVR/O9QmP2TC4sVjduqrs+TaxaW4f7zx2elb1nbD+eh18w==
+"@melonproject/melonjs@^0.0.31":
+  version "0.0.31"
+  resolved "https://registry.yarnpkg.com/@melonproject/melonjs/-/melonjs-0.0.31.tgz#13c53ca4343a165feb3054e4d2f7a251c1e6950c"
+  integrity sha512-mQ2f36UalbgbjT122TL9nMlH0Be8fvqIl6JP14eJzu8xSHdwdrg8WW7KyZjPK7cHGXysJGQWwxKN+Fwzd0TIRg==
   dependencies:
     bignumber.js "^9.0.0"
     ramda "^0.26.1"
@@ -12950,7 +12950,6 @@ websocket-extensions@>=0.1.1:
   dependencies:
     debug "^2.2.0"
     es5-ext "^0.10.50"
-    gulp "^4.0.2"
     nan "^2.14.0"
     typedarray-to-buffer "^3.1.5"
     yaeti "^0.0.6"
