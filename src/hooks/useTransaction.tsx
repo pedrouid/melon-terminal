@@ -2,10 +2,11 @@ import React, { useEffect, useReducer } from 'react';
 import * as Yup from 'yup';
 import useForm from 'react-hook-form';
 import { TransactionReceipt } from 'web3-core';
-import { Transaction } from '@melonproject/melonjs';
+import { Transaction, SendOptions } from '@melonproject/melonjs';
 import { Environment } from '~/environment';
 import { FormContextValues } from 'react-hook-form/dist/contextTypes';
 import { FieldValues } from 'react-hook-form/dist/types';
+import BigNumber from 'bignumber.js';
 
 export interface TransactionFormValues extends FieldValues {
   gasLimit: string;
@@ -16,6 +17,8 @@ export interface TransactionState {
   progress: number;
   gasLimit?: number;
   gasPrice?: string;
+  amguValue?: BigNumber;
+  incentiveValue?: BigNumber;
   transaction?: Transaction;
   hash?: string;
   receipt?: TransactionReceipt;
@@ -70,6 +73,8 @@ interface EstimationFinished {
   type: TransactionProgress.ESTIMATION_FINISHED;
   limit: number;
   price: string;
+  amgu?: BigNumber;
+  incentive?: BigNumber;
 }
 
 interface EstimationError {
@@ -108,6 +113,8 @@ function reducer(state: TransactionState, action: TransactionAction): Transactio
         receipt: undefined,
         gasPrice: undefined,
         gasLimit: undefined,
+        amguValue: undefined,
+        incentiveValue: undefined,
         loading: true,
       };
 
@@ -121,6 +128,8 @@ function reducer(state: TransactionState, action: TransactionAction): Transactio
         receipt: undefined,
         gasPrice: undefined,
         gasLimit: undefined,
+        amguValue: undefined,
+        incentiveValue: undefined,
         loading: false,
       };
 
@@ -156,6 +165,8 @@ function reducer(state: TransactionState, action: TransactionAction): Transactio
         loading: false,
         gasPrice: action.price,
         gasLimit: action.limit,
+        amguValue: action.amgu,
+        incentiveValue: action.incentive,
       };
 
     case TransactionProgress.EXECUTION_PENDING: {
@@ -203,8 +214,14 @@ function estimationPending(dispatch: React.Dispatch<TransactionAction>) {
   dispatch({ type: TransactionProgress.ESTIMATION_PENDING });
 }
 
-function estimationFinished(dispatch: React.Dispatch<TransactionAction>, price: string, limit: number) {
-  dispatch({ limit, price, type: TransactionProgress.ESTIMATION_FINISHED });
+function estimationFinished(
+  dispatch: React.Dispatch<TransactionAction>,
+  price: string,
+  limit: number,
+  amgu?: BigNumber,
+  incentive?: BigNumber
+) {
+  dispatch({ limit, amgu, incentive, price, type: TransactionProgress.ESTIMATION_FINISHED });
 }
 
 function estimationError(dispatch: React.Dispatch<TransactionAction>, error: Error) {
@@ -273,9 +290,11 @@ export function useTransaction(environment: Environment, options?: TransactionOp
     try {
       executionPending(dispatch);
       const transaction = state.transaction!;
-      const opts = {
+      const opts: SendOptions = {
         gas: parseFloat(data.gasLimit),
         gasPrice: data.gasPrice,
+        ...(state.amguValue && { amgu: state.amguValue }),
+        ...(state.incentiveValue && { incentive: state.incentiveValue }),
       };
 
       await transaction.validate();
@@ -311,12 +330,12 @@ export function useTransaction(environment: Environment, options?: TransactionOp
     (async () => {
       try {
         estimationPending(dispatch);
-        const [price, limit] = await Promise.all([
+        const [price, result] = await Promise.all([
           await environment.client.getGasPrice(),
-          await state.transaction!.estimateGas(),
+          await state.transaction!.prepare(),
         ]);
 
-        estimationFinished(dispatch, price, limit);
+        estimationFinished(dispatch, price, result.gas!, result.amgu, result.incentive);
       } catch (error) {
         estimationError(dispatch, error);
       }
