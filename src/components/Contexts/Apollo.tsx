@@ -91,7 +91,12 @@ const useOnChainApollo = (environment?: Environment) => {
 const useTheGraphApollo = (environment?: Environment) => {
   const client = useMemo(() => {
     const subgraph = environment && config[environment.network] && config[environment.network].subgraph;
-    const data = subgraph ? createHttpLink({ uri: subgraph }) : nullLink;
+    const data = subgraph
+      ? createHttpLink({
+          uri: subgraph,
+        })
+      : nullLink;
+
     const error = createErrorLink();
     const link = ApolloLink.from([error, data]);
     const memory = new InMemoryCache({

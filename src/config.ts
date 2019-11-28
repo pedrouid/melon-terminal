@@ -22,9 +22,8 @@ export const config: ConfigMap = {
     deployment: () => import('~/deployments/kovan').then(value => value.default),
   },
   [NetworkEnum.TESTNET]: {
-    default: 'http://localhost:8545',
-    // TODO: Add a development environment with a local subgraph.
-    subgraph: '',
+    default: 'http://127.0.0.1:8545',
+    subgraph: 'http://127.0.0.1:8000/subgraphs/name/melonproject/melon',
     deployment: () => import('~/deployments/testnet').then(value => value.default),
   },
 };
