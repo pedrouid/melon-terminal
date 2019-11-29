@@ -76,14 +76,11 @@ const useOnChainApollo = (environment?: Environment) => {
   }, [environment, schema]);
 
   const apolloRef = useRef<ApolloClient<NormalizedCacheObject>>();
-  useEffect(
-    () => () => {
-      apolloRef.current && apolloRef.current.stop();
-      apolloRef.current && apolloRef.current.cache.reset();
-      apolloRef.current = apollo;
-    },
-    [apollo]
-  );
+  useEffect(() => {
+    apolloRef.current && apolloRef.current.stop();
+    apolloRef.current && apolloRef.current.cache.reset();
+    apolloRef.current = apollo;
+  }, [apollo]);
 
   return apollo;
 };
