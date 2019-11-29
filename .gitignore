@@ -21,3 +21,4 @@ legacy/
 !.prettierignore
 !.travis.yml
 !.editorconfig
+!.dockerignore
