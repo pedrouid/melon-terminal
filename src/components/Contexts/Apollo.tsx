@@ -109,9 +109,11 @@ const useTheGraphApollo = (environment?: Environment) => {
       defaultOptions: {
         watchQuery: {
           errorPolicy: 'all',
+          fetchPolicy: 'no-cache',
         },
         query: {
           errorPolicy: 'all',
+          fetchPolicy: 'no-cache',
         },
         mutate: {
           errorPolicy: 'all',
