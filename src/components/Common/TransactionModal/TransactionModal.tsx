@@ -56,18 +56,22 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
           {state.loading && <Spinner />}
 
           <S.TransactionModalContent>
-            {!finished && !error && (
+            {!finished && (
               <S.TransactionModalForm onSubmit={submit}>
-                <S.TransactionModalFeeForm>
-                  <InputField id="gas-price" type="number" name="gasPrice" label="Gas Price" disabled={state.loading} />
-                  {!state.loading && <div>Gas limit: {state.gasLimit}</div>}
-                  {!state.loading && state.amguValue && <div>AMGU: {state.amguValue.toFixed()}</div>}
-                  {!state.loading && state.incentiveValue && <div>INCENTIVE: {state.incentiveValue.toFixed()}</div>}
-                </S.TransactionModalFeeForm>
-                <S.TransactionModalMessage>
-                  If you do not change the gas price field, the default gas price will be used. If you wish to set the
-                  gas price according to network conditions, please refer to Eth Gas Station.
-                </S.TransactionModalMessage>
+                {!error && !state.loading && (
+                  <>
+                    <S.TransactionModalFeeForm>
+                      <InputField id="gas-price" type="number" name="gasPrice" label="Gas Price (GWEI)" />
+                      <div>Gas limit: {state.gasLimit}</div>
+                      {state.amguValue && <div>AMGU: {state.amguValue.toFixed()}</div>}
+                      {state.incentiveValue && <div>INCENTIVE: {state.incentiveValue.toFixed()}</div>}
+                    </S.TransactionModalFeeForm>
+                    <S.TransactionModalMessage>
+                      If you do not change the gas price field, the default gas price will be used. If you wish to set
+                      the gas price according to network conditions, please refer to Eth Gas Station.
+                    </S.TransactionModalMessage>
+                  </>
+                )}
                 <S.TransactionModalActions>
                   <S.TransactionModalAction>
                     <CancelButton disabled={state.loading} label="Cancel" onClick={() => cancel()} />

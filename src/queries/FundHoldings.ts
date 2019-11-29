@@ -8,6 +8,7 @@ export interface FundHolding {
   token: {
     address: string;
     symbol: string;
+    decimals: number;
     name: string;
     price: BigNumber;
   };
@@ -37,6 +38,7 @@ const FundHoldingsQuery = gql`
             token {
               address
               symbol
+              decimals
               name
               price
             }

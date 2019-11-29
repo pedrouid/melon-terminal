@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 export const FundInvestBody = PaddedBody;
 
-export const FundInvestForm = styled.form``;
+export const RequestInvestmentForm = styled.form``;
 
 export const DropDownWrapper = styled.div`
   position: relative;

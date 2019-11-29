@@ -28,7 +28,7 @@ export const SetupTransactions: React.FC = props => {
   const history = useHistory();
 
   const transaction = useTransaction(environment, {
-    onFinish: () => query.refetch(),
+    onAcknowledge: () => query.refetch(),
   });
 
   if (query.loading) {

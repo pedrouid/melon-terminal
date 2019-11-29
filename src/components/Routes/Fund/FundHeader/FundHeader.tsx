@@ -48,27 +48,28 @@ export const FundHeader: React.FC<FundHeaderProps> = ({ address }) => {
         <S.FundHeaderInformation>
           <S.FundHeaderItem>
             <S.FundHeaderItemTitle>Share price</S.FundHeaderItemTitle>
-            {accounting && accounting.sharePrice && accounting.sharePrice.toFixed(4)}
+            {accounting && accounting.sharePrice && accounting.sharePrice.toFixed(4)} WETH / share
           </S.FundHeaderItem>
           <S.FundHeaderItem>
             <S.FundHeaderItemTitle>AUM</S.FundHeaderItemTitle>
             {accounting && accounting.grossAssetValue && accounting.grossAssetValue.toFixed(4)}
           </S.FundHeaderItem>
           <S.FundHeaderItem>
-            <S.FundHeaderItemTitle>Creation date</S.FundHeaderItemTitle>
-            {format(creation, 'yyyy-MM-dd hh:mm a')}
+            <S.FundHeaderItemTitle>Ranking</S.FundHeaderItemTitle>
+            n/a
           </S.FundHeaderItem>
           <S.FundHeaderItem>
-            <S.FundHeaderItemTitle>Manager</S.FundHeaderItemTitle>
-            <a href={managerEtherscanLink!} title={manager}>
-              {manager}
-            </a>
+            <S.FundHeaderItemTitle>Creation date</S.FundHeaderItemTitle>
+            {format(creation, 'yyyy-MM-dd hh:mm a')}
           </S.FundHeaderItem>
           <S.FundHeaderItem>
             <S.FundHeaderItemTitle>Total number of shares</S.FundHeaderItemTitle>
             {shares && shares.totalSupply && shares.totalSupply.toFixed(4)}
           </S.FundHeaderItem>
-          <S.FundHeaderItem />
+          <S.FundHeaderItem>
+            <S.FundHeaderItemTitle>Shares owned by me</S.FundHeaderItemTitle>
+            TODO
+          </S.FundHeaderItem>
           <S.FundHeaderItem>
             <S.FundHeaderItemTitle>Management fee</S.FundHeaderItemTitle>
             {`${managementFee && managementFee.rate ? managementFee.rate : 0}%`}

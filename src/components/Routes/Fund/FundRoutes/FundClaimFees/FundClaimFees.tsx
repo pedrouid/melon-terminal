@@ -52,8 +52,10 @@ export const ClaimFees: React.FC<ClaimFeesProps> = ({ address }) => {
       <h1>Claim fees</h1>
       <p>Claim management fees and performance fees for the fund.</p>
 
-      <p>Accrued management fee: {feeManagerInfo && feeManagerInfo.managementFeeAmount.toString()}</p>
-      <p>Accrued performance fee: {feeManagerInfo && feeManagerInfo.performanceFeeAmount.toString()}</p>
+      <p>Accrued management fee: {feeManagerInfo && feeManagerInfo.managementFeeAmount.dividedBy('1e18').toFixed(6)}</p>
+      <p>
+        Accrued performance fee: {feeManagerInfo && feeManagerInfo.performanceFeeAmount.dividedBy('1e18').toFixed(6)}
+      </p>
       <p>
         Payout of performance fee possible:{' '}
         {feeManagerInfo && feeManagerInfo.performanceFee && feeManagerInfo.performanceFee.canUpdate}

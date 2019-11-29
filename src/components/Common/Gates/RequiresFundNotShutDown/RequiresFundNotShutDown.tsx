@@ -10,13 +10,7 @@ export interface RequireFundNotShutDownProps {
 export const RequiresFundNotShutDown: React.FC<RequireFundNotShutDownProps> = props => {
   const [account, _] = useAccountFundQuery();
 
-  if (
-    account &&
-    account.fund &&
-    account.fund.progress === 'COMPLETE' &&
-    !account.fund.isShutDown &&
-    sameAddress(account.fund.address, props.address)
-  ) {
+  if (account && account.fund && !account.fund.isShutDown && sameAddress(account.fund.address, props.address)) {
     return <>{props.children}</>;
   }
 

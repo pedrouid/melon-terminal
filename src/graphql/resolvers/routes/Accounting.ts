@@ -4,6 +4,7 @@ import { Resolver } from '~/graphql';
 import { findToken } from '~/utils/findToken';
 import { TokenDefinition } from '~/types';
 import BigNumber from 'bignumber.js';
+import { share } from 'rxjs/operators';
 
 export const address: Resolver<Accounting> = accounting => accounting.contract.address;
 export const sharePrice: Resolver<Accounting> = async (accounting, _, context) => {
@@ -28,17 +29,22 @@ export interface Holding {
 
 export const holdings: Resolver<Accounting> = async (accounting, _, context) => {
   const holdings = await accounting.getFundHoldings(context.block);
-  return Object.keys(holdings).reduce<Holding[]>((carry, address) => {
-    const token = findToken(context.environment.deployment!, address);
-    if (!token) {
-      return carry;
-    }
 
-    const item = {
-      token,
-      amount: new BigNumber(fromWei(holdings[address].toFixed())),
-    };
+  return Promise.all(
+    holdings.map(async holding => {
+      const token = findToken(context.environment.deployment!, holding.address);
 
-    return [...carry, item];
-  }, []);
+      let shareCostInAsset = new BigNumber(0);
+      if (token && token.symbol) {
+        try {
+          shareCostInAsset = await accounting.getShareCostInAsset(
+            new BigNumber('1e18'),
+            holding.address,
+            context.block
+          );
+        } catch (e) {}
+      }
+      return { amount: holding.amount, token: token || null, shareCostInAsset };
+    })
+  );
 };

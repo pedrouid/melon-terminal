@@ -1,6 +1,6 @@
 import { PaddedBody } from '~/components/Common/Styles/Styles';
 import styled from 'styled-components';
 
-export const FundRedeemBody = PaddedBody;
+export const FundInvestBody = PaddedBody;
 
-export const FundRedeemForm = styled.form``;
+export const ExecuteRequestForm = styled.form``;

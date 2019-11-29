@@ -30,6 +30,9 @@ export enum TransactionProgress {
   TRANSACTION_WAITING,
   TRANSACTION_CANCELLED,
   TRANSACTION_STARTED,
+  VALIDATION_ERROR,
+  VALIDATION_PENDING,
+  VALIDATION_FINISHED,
   ESTIMATION_ERROR,
   ESTIMATION_PENDING,
   ESTIMATION_FINISHED,
@@ -44,6 +47,9 @@ type TransactionAction =
   | TransactionStarted
   | TransactionCancelled
   | TransactionAcknowledged
+  | ValidationPending
+  | ValidationFinished
+  | ValidationError
   | EstimationPending
   | EstimationFinished
   | EstimationError
@@ -79,6 +85,19 @@ interface EstimationFinished {
 
 interface EstimationError {
   type: TransactionProgress.ESTIMATION_ERROR;
+  error: Error;
+}
+
+interface ValidationPending {
+  type: TransactionProgress.VALIDATION_PENDING;
+}
+
+interface ValidationFinished {
+  type: TransactionProgress.VALIDATION_FINISHED;
+}
+
+interface ValidationError {
+  type: TransactionProgress.VALIDATION_ERROR;
   error: Error;
 }
 
@@ -139,6 +158,31 @@ function reducer(state: TransactionState, action: TransactionAction): Transactio
         progress: TransactionProgress.TRANSACTION_ACKNOWLEDGED,
       };
     }
+
+    case TransactionProgress.VALIDATION_PENDING: {
+      return {
+        ...state,
+        progress: TransactionProgress.VALIDATION_PENDING,
+        loading: true,
+        error: undefined,
+      };
+    }
+
+    case TransactionProgress.VALIDATION_ERROR: {
+      return {
+        ...state,
+        progress: TransactionProgress.VALIDATION_ERROR,
+        loading: false,
+        error: action.error,
+      };
+    }
+
+    case TransactionProgress.VALIDATION_FINISHED:
+      return {
+        ...state,
+        progress: TransactionProgress.VALIDATION_FINISHED,
+        loading: false,
+      };
 
     case TransactionProgress.ESTIMATION_PENDING: {
       return {
@@ -208,6 +252,18 @@ function reducer(state: TransactionState, action: TransactionAction): Transactio
     default:
       throw new Error('Invalid action.');
   }
+}
+
+function validationPending(dispatch: React.Dispatch<TransactionAction>) {
+  dispatch({ type: TransactionProgress.VALIDATION_PENDING });
+}
+
+function validationFinished(dispatch: React.Dispatch<TransactionAction>) {
+  dispatch({ type: TransactionProgress.VALIDATION_FINISHED });
+}
+
+function validationError(dispatch: React.Dispatch<TransactionAction>, error: Error) {
+  dispatch({ error, type: TransactionProgress.VALIDATION_ERROR });
 }
 
 function estimationPending(dispatch: React.Dispatch<TransactionAction>) {
@@ -280,71 +336,6 @@ export function useTransaction(environment: Environment, options?: TransactionOp
     },
   });
 
-  const submit = form.handleSubmit(async data => {
-    if (!state.transaction) {
-      return;
-    }
-
-    try {
-      executionPending(dispatch);
-      const transaction = state.transaction!;
-      const opts: SendOptions = {
-        gasPrice: data.gasPrice,
-        ...(state.gasLimit && { gas: state.gasLimit }),
-        ...(state.amguValue && { amgu: state.amguValue }),
-        ...(state.incentiveValue && { incentive: state.incentiveValue }),
-      };
-
-      await transaction.validate();
-      const receipt = await transaction.send(opts).on('transactionHash', hash => executionReceived(dispatch, hash));
-      executionFinished(dispatch, receipt);
-    } catch (error) {
-      executionError(dispatch, error);
-    }
-  });
-
-  useEffect(() => {
-    if (state.progress === TransactionProgress.EXECUTION_FINISHED) {
-      options && options.onFinish && options.onFinish(state.receipt!);
-    }
-
-    if (state.progress === TransactionProgress.TRANSACTION_ACKNOWLEDGED) {
-      options && options.onAcknowledge && options.onAcknowledge(state.receipt!);
-    }
-
-    if (
-      state.progress === TransactionProgress.EXECUTION_ERROR ||
-      state.progress === TransactionProgress.ESTIMATION_ERROR
-    ) {
-      options && options.onError && options.onError(state.error!);
-    }
-  }, [state.progress]);
-
-  useEffect(() => {
-    if (!state.transaction) {
-      return;
-    }
-
-    (async () => {
-      try {
-        estimationPending(dispatch);
-        const [price, result] = await Promise.all([
-          await environment.client.getGasPrice(),
-          await state.transaction!.prepare(),
-        ]);
-
-        estimationFinished(dispatch, price, result.gas!, result.amgu, result.incentive);
-      } catch (error) {
-        estimationError(dispatch, error);
-      }
-    })();
-  }, [state.transaction]);
-
-  useEffect(() => {
-    form.setValue('gasLimit', `${state.gasLimit || ''}`);
-    form.setValue('gasPrice', `${state.gasPrice || ''}`);
-  }, [state.gasLimit, state.gasPrice]);
-
   const start = (transaction: Transaction) => {
     dispatch({ transaction, type: TransactionProgress.TRANSACTION_STARTED });
   };
@@ -356,6 +347,91 @@ export function useTransaction(environment: Environment, options?: TransactionOp
   const acknowledge = () => {
     dispatch({ type: TransactionProgress.TRANSACTION_ACKNOWLEDGED });
   };
+
+  const submit = form.handleSubmit(async data => {
+    if (state.error && state.transaction) {
+      return start(state.transaction!);
+    }
+
+    if (state.transaction) {
+      try {
+        executionPending(dispatch);
+        const transaction = state.transaction!;
+        const opts: SendOptions = {
+          gasPrice: data.gasPrice,
+          ...(state.gasLimit && { gas: state.gasLimit }),
+          ...(state.amguValue && { amgu: state.amguValue }),
+          ...(state.incentiveValue && { incentive: state.incentiveValue }),
+        };
+
+        const receipt = await transaction.send(opts).on('transactionHash', hash => executionReceived(dispatch, hash));
+        executionFinished(dispatch, receipt);
+      } catch (error) {
+        executionError(dispatch, error);
+      }
+    }
+  });
+
+  useEffect(() => {
+    switch (state.progress) {
+      case TransactionProgress.EXECUTION_FINISHED: {
+        options && options.onFinish && options.onFinish(state.receipt!);
+        break;
+      }
+
+      case TransactionProgress.TRANSACTION_ACKNOWLEDGED: {
+        options && options.onAcknowledge && options.onAcknowledge(state.receipt!);
+        break;
+      }
+
+      case TransactionProgress.EXECUTION_ERROR:
+      case TransactionProgress.ESTIMATION_ERROR:
+      case TransactionProgress.VALIDATION_ERROR: {
+        options && options.onError && options.onError(state.error!);
+        break;
+      }
+
+      // Automatically start validation when the modal is opened.
+      case TransactionProgress.TRANSACTION_STARTED: {
+        (async () => {
+          try {
+            validationPending(dispatch);
+
+            const transaction = state.transaction!;
+            await transaction.validate();
+
+            validationFinished(dispatch);
+          } catch (error) {
+            validationError(dispatch, error);
+          }
+        })();
+        break;
+      }
+
+      // Automatically start estimation when validation is finished.
+      case TransactionProgress.VALIDATION_FINISHED: {
+        (async () => {
+          try {
+            estimationPending(dispatch);
+            const [price, result] = await Promise.all([
+              await environment.client.getGasPrice(),
+              await state.transaction!.prepare(),
+            ]);
+
+            estimationFinished(dispatch, price, result.gas!, result.amgu, result.incentive);
+          } catch (error) {
+            estimationError(dispatch, error);
+          }
+        })();
+        break;
+      }
+    }
+  }, [state.progress]);
+
+  useEffect(() => {
+    form.setValue('gasLimit', `${state.gasLimit || ''}`);
+    form.setValue('gasPrice', `${state.gasPrice || ''}`);
+  }, [state.gasLimit, state.gasPrice]);
 
   return {
     state,

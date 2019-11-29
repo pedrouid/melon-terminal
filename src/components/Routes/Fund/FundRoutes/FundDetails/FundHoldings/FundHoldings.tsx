@@ -2,6 +2,7 @@ import React from 'react';
 import { Spinner } from '~/components/Common/Spinner/Spinner';
 import { useFundHoldingsQuery } from '~/queries/FundHoldings';
 import * as S from './FundHoldings.styles';
+import BigNumber from 'bignumber.js';
 
 export interface FundHoldingsProps {
   address: string;
@@ -17,6 +18,15 @@ export const FundHoldings: React.FC<FundHoldingsProps> = ({ address }) => {
     return null;
   }
 
+  const holdingsDisplay =
+    holdings &&
+    holdings.map(holding => {
+      return {
+        ...holding,
+        amountDivided: holding.amount.dividedBy(new BigNumber(10).exponentiatedBy(holding.token.decimals)),
+      };
+    });
+
   return (
     <>
       <h1>Holdings</h1>
@@ -29,17 +39,15 @@ export const FundHoldings: React.FC<FundHoldingsProps> = ({ address }) => {
           </S.HeaderRow>
         </thead>
         <tbody>
-          {holdings
-            .filter(holding => holding)
-            .map(holding => (
-              <S.BodyRow key={holding.token.address}>
-                <S.BodyCell>
-                  {holding.token.symbol} ({holding.token.name})
-                </S.BodyCell>
-                <S.BodyCell>{holding.token.price.toFixed(4)}</S.BodyCell>
-                <S.BodyCell>{holding.amount.toFixed(4)}</S.BodyCell>
-              </S.BodyRow>
-            ))}
+          {holdingsDisplay.map(holding => (
+            <S.BodyRow key={holding.token.address}>
+              <S.BodyCell>
+                {holding.token.symbol} ({holding.token.name})
+              </S.BodyCell>
+              <S.BodyCell>{holding.token.price.toFixed(4)}</S.BodyCell>
+              <S.BodyCell>{holding.amountDivided.toFixed(4)}</S.BodyCell>
+            </S.BodyRow>
+          ))}
         </tbody>
       </S.Table>
     </>

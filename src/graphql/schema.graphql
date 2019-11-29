@@ -22,6 +22,13 @@ enum SetupProgressEnum {
   COMPLETE
 }
 
+enum InvestmentRequestStateEnum {
+  VALID
+  EXPIRED
+  WAITING
+  NONE
+}
+
 type Block {
   hash: String!
   number: BigNumber!
@@ -32,6 +39,38 @@ type Account {
   address: Address!
   balance(token: TokenEnum!): BigNumber
   fund: Hub
+  allowance(token: Address!, spender: Address!): BigNumber!
+  participation(address: Address!): AccountParticipation
+  shares(address: Address!): AccountShares
+}
+
+type AccountParticipation {
+  address: Address!
+  hasInvested: Boolean!
+  hasRequest: Boolean!
+  hasValidRequest: Boolean!
+  hasExpiredRequest: Boolean!
+  investmentRequestState: InvestmentRequestStateEnum!
+  request: Request
+  canCancelRequest: Boolean!
+}
+
+type AccountShares {
+  address: Address!
+  balanceOf: BigNumber!
+  totalSupply: BigNumber!
+}
+
+type Request {
+  investmentAsset: Address!
+  investmentAmount: BigNumber!
+  requestedShares: BigNumber!
+  timestamp: DateTime
+}
+
+type TokenBalance {
+  token: Token!
+  balance: BigNumber!
 }
 
 type Token {
@@ -43,8 +82,9 @@ type Token {
 }
 
 type Holding {
-  token: Token!
+  token: Token
   amount: BigNumber!
+  shareCostInAsset: BigNumber!
 }
 
 type HubRoutes {
@@ -79,10 +119,12 @@ type Accounting {
 
 type Participation {
   address: Address!
+  historicalInvestors: [Address!]!
 }
 
 type Shares {
   address: Address!
+  balanceOf(owner: Address!): BigNumber!
   totalSupply: BigNumber!
 }
 

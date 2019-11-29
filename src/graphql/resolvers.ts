@@ -7,6 +7,8 @@ import * as Token from '~/graphql/resolvers/Token';
 import * as PriceSource from '~/graphql/resolvers/PriceSource';
 import * as Version from '~/graphql/resolvers/Version';
 import * as Account from '~/graphql/resolvers/Account';
+import * as AccountParticipation from '~/graphql/resolvers/AccountParticipation';
+import * as AccountShares from '~/graphql/resolvers/AccountShares';
 import * as Hub from '~/graphql/resolvers/Hub';
 import * as HubRoutes from '~/graphql/resolvers/HubRoutes';
 import * as Accounting from '~/graphql/resolvers/routes/Accounting';
@@ -31,6 +33,8 @@ export {
   Token,
   PriceSource,
   Account,
+  AccountParticipation,
+  AccountShares,
   Version,
   Hub,
   HubRoutes,
