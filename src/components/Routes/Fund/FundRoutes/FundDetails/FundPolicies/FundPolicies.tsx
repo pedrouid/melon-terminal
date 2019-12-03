@@ -86,9 +86,15 @@ export const FundPolicies: React.FC<FundPoliciesProps> = ({ address }) => {
   }
 
   return (
-    <>
-      <h1>Policies</h1>
+    <S.Wrapper>
+      <S.Title>Policies</S.Title>
       <S.Table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Parameter</th>
+          </tr>
+        </thead>
         <tbody>
           {policies.map(policy => (
             <S.BodyRow key={policy.address}>
@@ -98,7 +104,7 @@ export const FundPolicies: React.FC<FundPoliciesProps> = ({ address }) => {
           ))}
         </tbody>
       </S.Table>
-    </>
+    </S.Wrapper>
   );
 };
 

@@ -1,16 +1,15 @@
 import React from 'react';
-import { useAccountFundQuery } from '~/queries/AccountFund';
 import { Address } from '@melonproject/melonjs';
-import { sameAddress } from '@melonproject/melonjs/utils/sameAddress';
+import { useFundDetailsQuery } from '~/queries/FundDetails';
 
 export interface RequireFundNotShutDownProps {
   address: Address;
 }
 
 export const RequiresFundNotShutDown: React.FC<RequireFundNotShutDownProps> = props => {
-  const [account, _] = useAccountFundQuery();
+  const [fund, _] = useFundDetailsQuery(props.address);
 
-  if (account && account.fund && !account.fund.isShutDown && sameAddress(account.fund.address, props.address)) {
+  if (fund && !fund.isShutDown) {
     return <>{props.children}</>;
   }
 

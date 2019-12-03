@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
 
 export const FullSubHeader = styled.div`
   background-color: ${props => props.theme.mainColors.secondary};
@@ -58,4 +57,10 @@ export const PrimaryButton = styled.button`
   &:hover {
     background-color: rgb(195, 179, 121);
   }
+`;
+
+export const Subtitle = styled.h3`
+  margin: 12px;
+  font-size: 1.125rem;
+  position: relative;
 `;

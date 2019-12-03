@@ -14,10 +14,6 @@ export const FundHoldings: React.FC<FundHoldingsProps> = ({ address }) => {
     return <Spinner positioning="centered" />;
   }
 
-  if (!holdings) {
-    return null;
-  }
-
   const holdingsDisplay =
     holdings &&
     holdings.map(holding => {
@@ -28,29 +24,32 @@ export const FundHoldings: React.FC<FundHoldingsProps> = ({ address }) => {
     });
 
   return (
-    <>
-      <h1>Holdings</h1>
+    <S.Wrapper>
+      <S.Title>Holdings</S.Title>
       <S.Table>
         <thead>
           <S.HeaderRow>
             <S.HeaderCell>Asset</S.HeaderCell>
-            <S.HeaderCell>Price</S.HeaderCell>
-            <S.HeaderCell>Balance</S.HeaderCell>
+            <S.HeaderCellRightAlign>Price</S.HeaderCellRightAlign>
+            <S.HeaderCellRightAlign>Balance</S.HeaderCellRightAlign>
           </S.HeaderRow>
         </thead>
         <tbody>
-          {holdingsDisplay.map(holding => (
-            <S.BodyRow key={holding.token.address}>
-              <S.BodyCell>
-                {holding.token.symbol} ({holding.token.name})
-              </S.BodyCell>
-              <S.BodyCell>{holding.token.price.toFixed(4)}</S.BodyCell>
-              <S.BodyCell>{holding.amountDivided.toFixed(4)}</S.BodyCell>
-            </S.BodyRow>
-          ))}
+          {holdingsDisplay &&
+            holdingsDisplay.map(holding => (
+              <S.BodyRow key={holding.token.address}>
+                <S.BodyCell>
+                  <S.HoldingSymbol>{holding.token.symbol}</S.HoldingSymbol>
+                  <br />
+                  <S.HoldingName>{holding.token.name}</S.HoldingName>
+                </S.BodyCell>
+                <S.BodyCellRightAlign>{holding.token.price.toFixed(4)}</S.BodyCellRightAlign>
+                <S.BodyCellRightAlign>{holding.amountDivided.toFixed(4)}</S.BodyCellRightAlign>
+              </S.BodyRow>
+            ))}
         </tbody>
       </S.Table>
-    </>
+    </S.Wrapper>
   );
 };
 
