@@ -18,8 +18,10 @@
   "scripts": {
     "clean": "rimraf coverage build",
     "prebuild": "yarn clean",
+    "storybook": "start-storybook --config-dir src/storybook/config",
+    "storybook:build": "build-storybook --config-dir src/storybook/config --output-dir build/storybook",
     "start": "cross-env TSC_WATCHFILE=UseFsEventsWithFallbackDynamicPolling react-app-rewired start",
-    "build": "react-app-rewired build",
+    "build": "react-app-rewired build && yarn storybook:build",
     "test": "react-app-rewired test",
     "lint": "tslint --project .",
     "format": "prettier --write 'src/**/*.{ts,tsx}'",
@@ -67,6 +69,10 @@
   },
   "devDependencies": {
     "@babel/plugin-proposal-optional-chaining": "^7.6.0",
+    "@storybook/addon-knobs": "^5.2.8",
+    "@storybook/addon-notes": "^5.2.8",
+    "@storybook/addon-options": "^5.2.8",
+    "@storybook/react": "^5.2.8",
     "@types/graphql-iso-date": "^3.3.3",
     "@types/lru-cache": "^5.1.0",
     "@types/ramda": "^0.26.33",
