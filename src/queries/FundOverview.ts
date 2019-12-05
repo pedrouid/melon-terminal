@@ -24,7 +24,7 @@ export interface FundOverviewQueryVariables {
 
 const FundOverviewQuery = gql`
   query FundOverviewQuery {
-    funds(orderBy: name, first: 20) {
+    funds(orderBy: name, first: 200) {
       id
       name
       gav

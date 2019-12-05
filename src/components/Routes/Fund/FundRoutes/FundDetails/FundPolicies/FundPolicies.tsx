@@ -81,29 +81,29 @@ export const FundPolicies: React.FC<FundPoliciesProps> = ({ address }) => {
     return <Spinner positioning="centered" />;
   }
 
-  if (!policies) {
-    return null;
-  }
-
   return (
     <S.Wrapper>
       <S.Title>Policies</S.Title>
-      <S.Table>
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Parameter</th>
-          </tr>
-        </thead>
-        <tbody>
-          {policies.map(policy => (
-            <S.BodyRow key={policy.address}>
-              <S.BodyCell>{policy.identifier}</S.BodyCell>
-              <FundPolicyParameters policy={policy} environment={environment} />
-            </S.BodyRow>
-          ))}
-        </tbody>
-      </S.Table>
+      {policies && policies.length > 0 ? (
+        <S.Table>
+          <thead>
+            <S.HeaderRow>
+              <S.HeaderCell>Name</S.HeaderCell>
+              <S.HeaderCell>Parameter(s)</S.HeaderCell>
+            </S.HeaderRow>
+          </thead>
+          <tbody>
+            {policies.map(policy => (
+              <S.BodyRow key={policy.address}>
+                <S.BodyCell>{policy.identifier}</S.BodyCell>
+                <FundPolicyParameters policy={policy} environment={environment} />
+              </S.BodyRow>
+            ))}
+          </tbody>
+        </S.Table>
+      ) : (
+        <S.NoRegisteredPolicies>No registered policies.</S.NoRegisteredPolicies>
+      )}
     </S.Wrapper>
   );
 };

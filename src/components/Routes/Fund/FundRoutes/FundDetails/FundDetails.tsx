@@ -5,6 +5,7 @@ import FundPolicies from './FundPolicies/FundPolicies';
 import FundOpenOrders from './FundOpenOrders/FundOpenOrders';
 import FundOrderBook from './FundOrderBook/FundOrderBook';
 import FundTrade from './FundTrade/FundTrade';
+import FundTradingHistory from './FundTradingHistory/FundTradingHistory';
 
 export interface FundDetailsProps {
   address: string;
@@ -20,6 +21,7 @@ export const FundDetails: React.FC<FundDetailsProps> = ({ address }) => (
     <S.FundDetailsLists>
       <FundPolicies address={address} />
       <FundOpenOrders address={address} />
+      <FundTradingHistory address={address} />
     </S.FundDetailsLists>
   </S.FundDetailsContent>
 );

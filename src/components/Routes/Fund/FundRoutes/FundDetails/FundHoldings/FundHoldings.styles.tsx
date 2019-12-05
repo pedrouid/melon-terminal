@@ -14,7 +14,6 @@ export const Wrapper = styled.div`
 export const Title = Subtitle;
 
 export const Table = styled.table`
-  // border: 1px solid ${props => props.theme.mainColors.border};
   background-color: ${props => props.theme.otherColors.white};
   margin-top: ${props => props.theme.spaceUnits.m};
   margin-bottom: ${props => props.theme.spaceUnits.m};

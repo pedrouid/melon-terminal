@@ -130,6 +130,19 @@ type Shares {
 
 type Trading {
   address: Address!
+  openMakeOrders: [OpenMakeOrder!]!
+}
+
+type OpenMakeOrder {
+  id: BigNumber!
+  expiresAt: DateTime!
+  orderIndex: BigNumber!
+  buyAsset: Address!
+  makerAsset: Address!
+  takerAsset: Address!
+  makerQuantity: BigNumber!
+  takerQuantity: BigNumber!
+  exchange: Address!
 }
 
 type Vault {
