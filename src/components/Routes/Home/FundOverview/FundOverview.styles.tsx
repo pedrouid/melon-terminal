@@ -6,32 +6,23 @@ export const Container = styled.div`
   align-items: flex-end;
 `;
 
-export const InputSearchBar = styled.input`
-  font-family: ${props => props.theme.fontFamilies.primary};
-  font-size: ${props => props.theme.fontSizes.m};
-  width: 100%;
-  max-width: 250px;
+export const ScrollableTable = styled.div`
+  overflow-y: auto;
   border: 1px solid ${props => props.theme.mainColors.border};
-  padding: ${props => props.theme.spaceUnits.xs};
-  line-height: 1;
-  height: 38px;
-  display: inline-block;
-`;
-
-export const Table = styled.table`
-  border: 1px solid ${props => props.theme.mainColors.border};
-  background-color: ${props => props.theme.otherColors.white};
   margin-top: ${props => props.theme.spaceUnits.m};
   margin-bottom: ${props => props.theme.spaceUnits.m};
   width: 100%;
-  display: block;
-  overflow-x: auto;
-  white-space: nowrap;
+`;
+
+export const Table = styled.table`
+  width: 100%;
+  background-color: ${props => props.theme.otherColors.white};
 `;
 
 export const HeaderCell = styled.th`
   padding: ${props => props.theme.spaceUnits.s};
   text-align: left;
+  cursor: pointer;
 `;
 
 export const HeaderRow = styled.tr``;
