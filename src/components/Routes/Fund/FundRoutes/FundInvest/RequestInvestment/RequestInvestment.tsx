@@ -158,7 +158,7 @@ export const RequestInvestment: React.FC<RequestInvestmentProps> = props => {
       .toString();
   const currentAllowance =
     allowance &&
-    allowance.balance
+    allowance.allowance
       // .times(new BigNumber(10).exponentiatedBy(props.holdings![selectedTokenIndex].token.decimals))
       .toString();
 

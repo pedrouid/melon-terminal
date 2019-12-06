@@ -37,23 +37,16 @@ export const Invest: React.FC<InvestProps> = ({ address }) => {
     <S.FundInvestBody>
       <h1>Invest</h1>
       {action === 'invest' && (
-        <RequestInvestment
-          address={address}
-          holdings={holdings}
-          account={account!}
-          fundQuery={fundQuery}
-        ></RequestInvestment>
+        <RequestInvestment address={address} holdings={holdings} account={account!} fundQuery={fundQuery} />
       )}
-      {action === 'execute' && (
-        <ExecuteRequest address={address} account={account!} fundQuery={fundQuery}></ExecuteRequest>
-      )}
+      {action === 'execute' && <ExecuteRequest address={address} account={account!} fundQuery={fundQuery} />}
       {action === 'waiting' && (
         <p>
           You need to wait before you can execute your investment request. The time-window to execute your investment
           request is between the next price update and 24 hours after your investment request .
         </p>
       )}
-      {canCancelRequest && <CancelRequest address={address} account={account!} fundQuery={fundQuery}></CancelRequest>}
+      {canCancelRequest && <CancelRequest address={address} account={account!} fundQuery={fundQuery} />}
     </S.FundInvestBody>
   );
 };

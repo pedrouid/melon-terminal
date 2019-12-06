@@ -76,9 +76,11 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
                   <S.TransactionModalAction>
                     <CancelButton disabled={state.loading} label="Cancel" onClick={() => cancel()} />
                   </S.TransactionModalAction>
-                  <S.TransactionModalAction>
-                    <SubmitButton disabled={state.loading} label={state.error ? 'Retry' : 'Confirm'} />
-                  </S.TransactionModalAction>
+                  {!state.loading && (
+                    <S.TransactionModalAction>
+                      <SubmitButton disabled={state.loading} label={state.error ? 'Retry' : 'Confirm'} />
+                    </S.TransactionModalAction>
+                  )}
                 </S.TransactionModalActions>
               </S.TransactionModalForm>
             )}
