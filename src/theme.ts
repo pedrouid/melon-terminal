@@ -22,6 +22,8 @@ export const theme = {
     black: 'rgb(0, 0, 0)',
     white: 'rgb(255, 255, 255)',
     grey: 'rgb(155, 155, 155)',
+    red: 'rgb(244,67,54)',
+    green: 'rgb(76,175,80)',
   },
 
   spaceUnits: {
