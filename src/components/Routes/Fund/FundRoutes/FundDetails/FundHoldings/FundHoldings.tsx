@@ -14,12 +14,15 @@ export const FundHoldings: React.FC<FundHoldingsProps> = ({ address }) => {
     return <Spinner positioning="centered" />;
   }
 
-  const holdingsDisplay =
-    holdings &&
-    holdings.map(holding => {
+  const mapped = (holdings || [])
+    .filter(holding => holding && holding.token)
+    .map(holding => {
+      const decimals = holding.token.decimals;
+      const amount = holding.amount;
+
       return {
         ...holding,
-        amountDivided: holding.amount.dividedBy(new BigNumber(10).exponentiatedBy(holding.token.decimals)),
+        divided: decimals && amount ? amount.dividedBy(new BigNumber(10).exponentiatedBy(decimals)) : new BigNumber(0),
       };
     });
 
@@ -35,18 +38,17 @@ export const FundHoldings: React.FC<FundHoldingsProps> = ({ address }) => {
           </S.HeaderRow>
         </thead>
         <tbody>
-          {holdingsDisplay &&
-            holdingsDisplay.map(holding => (
-              <S.BodyRow key={holding.token.address}>
-                <S.BodyCell>
-                  <S.HoldingSymbol>{holding.token.symbol}</S.HoldingSymbol>
-                  <br />
-                  <S.HoldingName>{holding.token.name}</S.HoldingName>
-                </S.BodyCell>
-                <S.BodyCellRightAlign>{holding.token.price.toFixed(4)}</S.BodyCellRightAlign>
-                <S.BodyCellRightAlign>{holding.amountDivided.toFixed(4)}</S.BodyCellRightAlign>
-              </S.BodyRow>
-            ))}
+          {mapped.map(holding => (
+            <S.BodyRow key={holding.token.address}>
+              <S.BodyCell>
+                <S.HoldingSymbol>{holding.token.symbol}</S.HoldingSymbol>
+                <br />
+                <S.HoldingName>{holding.token.name}</S.HoldingName>
+              </S.BodyCell>
+              <S.BodyCellRightAlign>{holding.token.price.toFixed(4)}</S.BodyCellRightAlign>
+              <S.BodyCellRightAlign>{holding.divided.toFixed(4)}</S.BodyCellRightAlign>
+            </S.BodyRow>
+          ))}
         </tbody>
       </S.Table>
     </S.Wrapper>

@@ -1,7 +1,6 @@
 import { NetworkEnum, Deployment } from './types';
 
 export interface Config {
-  default: string;
   subgraph: string;
   deployment: () => Promise<Deployment>;
 }
@@ -11,19 +10,25 @@ export type ConfigMap = {
 };
 
 export const config: ConfigMap = {
-  [NetworkEnum.MAINNET]: {
-    default: 'wss://mainnet.infura.io/ws/v3/8332aa03fcfa4c889aeee4d0e0628660',
-    subgraph: 'https://api.thegraph.com/subgraphs/name/melonproject/melon',
-    deployment: () => import('~/deployments/mainnet').then(value => value.default),
-  },
-  [NetworkEnum.KOVAN]: {
-    default: 'wss://kovan.infura.io/ws/v3/8332aa03fcfa4c889aeee4d0e0628660',
-    subgraph: 'https://api.thegraph.com/subgraphs/name/melonproject/melon-kovan',
-    deployment: () => import('~/deployments/kovan').then(value => value.default),
-  },
-  [NetworkEnum.TESTNET]: {
-    default: 'http://127.0.0.1:8545',
-    subgraph: 'http://127.0.0.1:8000/subgraphs/name/melonproject/melon',
-    deployment: () => import('~/deployments/testnet').then(value => value.default),
-  },
+  ...(JSON.parse(process.env.MELON_MAINNET) && {
+    [NetworkEnum.MAINNET]: {
+      subgraph: process.env.MELON_MAINNET_SUBGRAPH,
+      // @ts-ignore
+      deployment: async () => (await import('deployments/mainnet-deployment')) as Deployment,
+    },
+  }),
+  ...(JSON.parse(process.env.MELON_KOVAN) && {
+    [NetworkEnum.KOVAN]: {
+      subgraph: process.env.MELON_KOVAN_SUBGRAPH,
+      // @ts-ignore
+      deployment: async () => (await import('deployments/kovan-deployment')) as Deployment,
+    },
+  }),
+  ...(JSON.parse(process.env.MELON_TESTNET) && {
+    [NetworkEnum.TESTNET]: {
+      subgraph: process.env.MELON_TESTNET_SUBGRAPH,
+      // @ts-ignore
+      deployment: async () => (await import('deployments/testnet-deployment')) as Deployment,
+    },
+  }),
 };

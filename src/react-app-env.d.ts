@@ -13,3 +13,18 @@ declare module 'styled-components' {
 
   export interface DefaultTheme extends DerivedTheme {}
 }
+
+declare global {
+  declare namespace NodeJS {
+    export interface ProcessEnv {
+      MELON_MAINNET: string;
+      MELON_MAINNET_SUBGRAPH: string;
+      MELON_KOVAN: string;
+      MELON_KOVAN_SUBGRAPH: string;
+      MELON_TESTNET: string;
+      MELON_TESTNET_SUBGRAPH: string;
+      MELON_TESTNET_PROVIDER: string;
+      MELON_DEFAULT_PROVIDER: string;
+    }
+  }
+}

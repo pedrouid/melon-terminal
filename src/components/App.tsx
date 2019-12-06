@@ -1,4 +1,4 @@
-import React, { Suspense } from 'react';
+import React, { Suspense, useMemo } from 'react';
 import ErrorBoundary, { FallbackProps } from 'react-error-boundary';
 import { ModalProvider } from 'styled-react-modal';
 import { hot } from 'react-hot-loader';
@@ -7,6 +7,7 @@ import { Spinner } from './Common/Spinner/Spinner';
 import { Layout } from './Layout/Layout';
 import { method as metamask } from './Common/ConnectionSelector/MetaMask/MetaMask';
 import { method as frame } from './Common/ConnectionSelector/Frame/Frame';
+import { method as ganache } from './Common/ConnectionSelector/Ganache/Ganache';
 import { Theme, ModalBackground } from './App.styles';
 import { OnChainApollo, TheGraphApollo, ApolloProvider } from './Contexts/Apollo';
 import { ConnectionProvider } from './Contexts/Connection';
@@ -66,25 +67,35 @@ const AppRouter = () => {
   );
 };
 
-const AppComponent = () => (
-  <Theme>
-    <ModalProvider backgroundComponent={ModalBackground}>
-      <ConnectionProvider methods={[metamask, frame]}>
-        <ApolloProvider>
-          <Router>
-            <Layout>
-              <ErrorBoundary FallbackComponent={ErrorFallback}>
-                <Suspense fallback={<Spinner size="large" positioning="overlay" />}>
-                  <AppRouter />
-                </Suspense>
-              </ErrorBoundary>
-            </Layout>
-          </Router>
-        </ApolloProvider>
-      </ConnectionProvider>
-    </ModalProvider>
-  </Theme>
-);
+const AppComponent = () => {
+  const methods = useMemo(() => {
+    if (process.env.MELON_TESTNET) {
+      return [ganache, metamask, frame];
+    }
+
+    return [metamask, frame];
+  }, []);
+
+  return (
+    <Theme>
+      <ModalProvider backgroundComponent={ModalBackground}>
+        <ConnectionProvider methods={methods}>
+          <ApolloProvider>
+            <Router>
+              <Layout>
+                <ErrorBoundary FallbackComponent={ErrorFallback}>
+                  <Suspense fallback={<Spinner size="large" positioning="overlay" />}>
+                    <AppRouter />
+                  </Suspense>
+                </ErrorBoundary>
+              </Layout>
+            </Router>
+          </ApolloProvider>
+        </ConnectionProvider>
+      </ModalProvider>
+    </Theme>
+  );
+};
 
 const ErrorFallback: React.FC<FallbackProps> = ({ error, componentStack }) => (
   <div>
