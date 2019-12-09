@@ -5,10 +5,10 @@ import { Spinner } from '~/components/Common/Spinner/Spinner';
 import { FundHeader } from './FundHeader/FundHeader';
 import { FundOpenOrders } from './FundOpenOrders/FundOpenOrders';
 import { FundRedeem } from './FundRedeem/FundRedeem';
-import * as S from './Fund.styles';
 import { FundShutdown } from './FundShutdown/FundShutdown';
-import { FundClaimFees } from './FundClaimFees/FundClaimFees';
 import { RequiresFundManager } from '~/components/Common/Gates/RequiresFundManager/RequiresFundManager';
+import { RequiresFundNotShutDown } from '~/components/Common/Gates/RequiresFundNotShutDown/RequiresFundNotShutDown';
+import * as S from './Fund.styles';
 
 export interface FundRouteParams {
   address: string;
@@ -39,10 +39,11 @@ export const Fund: React.FC = () => {
         <S.FundDetailsContent>
           <S.FundDetailsLists>
             <FundRedeem address={match.params.address} />
-            <FundClaimFees address={match.params.address} />
             <FundOpenOrders address={match.params.address} />
             <RequiresFundManager address={match.params.address}>
-              <FundShutdown address={match.params.address} />
+              <RequiresFundNotShutDown address={match.params.address}>
+                <FundShutdown address={match.params.address} />
+              </RequiresFundNotShutDown>
             </RequiresFundManager>
           </S.FundDetailsLists>
         </S.FundDetailsContent>

@@ -118,4 +118,8 @@ export const Global = createGlobalStyle`
     border-top: 1px solid ${theme.mainColors.border};
     margin: ${theme.spaceUnits.s} 0;
   }
+
+  p {
+    margin-bottom: ${theme.spaceUnits.m};
+  }
 `;

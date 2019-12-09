@@ -22,7 +22,6 @@ export const Table = styled.table`
 export const HeaderCell = styled.th`
   padding: ${props => props.theme.spaceUnits.s};
   text-align: left;
-  cursor: pointer;
 `;
 
 export const HeaderRow = styled.tr``;

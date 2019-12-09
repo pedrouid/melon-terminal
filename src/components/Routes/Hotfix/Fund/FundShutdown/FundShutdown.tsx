@@ -23,14 +23,13 @@ export const FundShutdown: React.FC<ShutdownProps> = ({ address }) => {
 
   const submit = (event: FormEvent) => {
     event.preventDefault();
-
     const tx = version.shutDownFund(environment.account!, address);
     transaction.start(tx);
   };
 
   return (
     <S.Wrapper>
-      <S.Title>Shut down fund</S.Title>
+      <S.Title>Shut down</S.Title>
       <p>
         Shutting down your fund closes the fund for new investors and trades will no longer be possible. Investor can
         redeem their shares whenever they want.

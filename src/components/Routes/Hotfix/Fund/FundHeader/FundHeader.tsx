@@ -55,7 +55,7 @@ export const FundHeader: React.FC<FundHeaderProps> = ({ address }) => {
             {shares && shares.totalSupply && shares.totalSupply.toFixed(4)}
           </S.FundHeaderItem>
           <S.FundHeaderItem>
-            <S.FundHeaderItemTitle>Shares owned by me</S.FundHeaderItemTitle>
+            <S.FundHeaderItemTitle>Shares owned by you</S.FundHeaderItemTitle>
             {accountShares && accountShares.balanceOf && accountShares.balanceOf.toFixed(4)}
           </S.FundHeaderItem>
           <S.FundHeaderItem>

@@ -23,7 +23,7 @@ export const FundOpenOrders: React.FC<FundOpenOrdersProps> = ({ address }) => {
   return (
     <S.Wrapper>
       <S.Title>Open orders</S.Title>
-      {orders && orders.length > 0 ? (
+      {orders && orders.length ? (
         <S.Table>
           <thead>
             <S.HeaderRow>

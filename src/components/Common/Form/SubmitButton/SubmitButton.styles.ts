@@ -13,7 +13,6 @@ export const SubmitButtonWrapper = styled.button`
   font-size: ${props => props.theme.fontSizes.m};
   padding: ${props => props.theme.spaceUnits.s} ${props => props.theme.spaceUnits.m};
   font-family: ${props => props.theme.fontFamilies.primary};
-  margin: ${props => props.theme.spaceUnits.m} 0;
 
   &:hover,
   &:focus,
