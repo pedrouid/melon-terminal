@@ -21,7 +21,7 @@ export const AppRouter = () => (
       <Route path="/connect" exact={true}>
         <Connect />
       </Route>
-      <Route path="/fund/:address">
+      <Route path="/fund/:address" exact={true}>
         <RequiresAccount>
           <Fund />
         </RequiresAccount>
