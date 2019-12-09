@@ -39,7 +39,8 @@ export const FundRedeem: React.FC<RedeemProps> = ({ address }) => {
   const account = result && result.account;
   const participationAddress = account && account.participation && account.participation.address;
   const hasInvested = account && account.participation && account.participation.hasInvested;
-  const shares = account && account.shares;
+  const ownShares = account && account.shares;
+  const hasShares = hasInvested && ownShares && !ownShares.balanceOf.isZero();
 
   const participationContract = new Participation(environment, participationAddress);
 
@@ -69,7 +70,7 @@ export const FundRedeem: React.FC<RedeemProps> = ({ address }) => {
   });
 
   const handleRedeemAllClick = (e: any) => {
-    shares && form.setValue('shareQuantity', shares.balanceOf.toNumber());
+    ownShares && form.setValue('shareQuantity', ownShares.balanceOf.toNumber());
   };
 
   if (query.loading) {
@@ -84,10 +85,11 @@ export const FundRedeem: React.FC<RedeemProps> = ({ address }) => {
   return (
     <S.Wrapper>
       <S.Title>Redeem assets</S.Title>
-      {hasInvested && shares && (
+      {!hasShares && <div>You don't own any shares in this fund.</div>}
+      {hasShares && (
         <>
           <p>
-            You own {shares.balanceOf.toString()} shares!
+            You own {ownShares!.balanceOf.toString()} shares!
             <br />
             <br />
           </p>
@@ -100,7 +102,7 @@ export const FundRedeem: React.FC<RedeemProps> = ({ address }) => {
                 type="number"
                 step="any"
                 min="0"
-                max={shares.balanceOf.toString()}
+                max={ownShares!.balanceOf.toString()}
                 disabled={redeemAll}
               />
 

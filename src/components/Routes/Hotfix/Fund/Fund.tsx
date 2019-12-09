@@ -8,6 +8,7 @@ import { FundRedeem } from './FundRedeem/FundRedeem';
 import * as S from './Fund.styles';
 import { FundShutdown } from './FundShutdown/FundShutdown';
 import { FundClaimFees } from './FundClaimFees/FundClaimFees';
+import { RequiresFundManager } from '~/components/Common/Gates/RequiresFundManager/RequiresFundManager';
 
 export interface FundRouteParams {
   address: string;
@@ -37,10 +38,12 @@ export const Fund: React.FC = () => {
       <S.FundBody>
         <S.FundDetailsContent>
           <S.FundDetailsLists>
-            <FundOpenOrders address={match.params.address} />
             <FundRedeem address={match.params.address} />
             <FundClaimFees address={match.params.address} />
-            <FundShutdown address={match.params.address} />
+            <FundOpenOrders address={match.params.address} />
+            <RequiresFundManager address={match.params.address}>
+              <FundShutdown address={match.params.address} />
+            </RequiresFundManager>
           </S.FundDetailsLists>
         </S.FundDetailsContent>
       </S.FundBody>

@@ -50,8 +50,6 @@ const FundDetailsQuery = gql`
       routes {
         accounting {
           address
-          sharePrice
-          grossAssetValue
         }
         shares {
           totalSupply

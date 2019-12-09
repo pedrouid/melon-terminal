@@ -8,7 +8,6 @@ export const Wrapper = styled.div`
     flex: 1;
     border-right: 1px solid rgb(234, 229, 212);
     border-top: none;
-    flex: 0 0 25%;
     order: 1;
   }
 `;
