@@ -67,7 +67,7 @@ export const useFundParticipationOverviewQuery = (investor?: Address) => {
   const result = useTheGraphQuery<FundParticipationOverviewQueryResult, FundParticipationOverviewQueryVariables>(
     FundParticipationOverviewQuery,
     {
-      variables: { investor },
+      variables: { investor: investor && investor.toLowerCase() },
       skip: !investor,
     }
   );
