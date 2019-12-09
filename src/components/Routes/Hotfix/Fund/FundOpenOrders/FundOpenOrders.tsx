@@ -14,7 +14,7 @@ export const FundOpenOrders: React.FC<FundOpenOrdersProps> = ({ address }) => {
   if (query.loading) {
     return (
       <S.Wrapper>
-        <S.Title>Redeem assets</S.Title>
+        <S.Title>Open orders</S.Title>
         <Spinner positioning="centered" />
       </S.Wrapper>
     );
@@ -22,7 +22,7 @@ export const FundOpenOrders: React.FC<FundOpenOrdersProps> = ({ address }) => {
 
   return (
     <S.Wrapper>
-      <S.Title>Open Orders</S.Title>
+      <S.Title>Open orders</S.Title>
       {orders && orders.length > 0 ? (
         <S.Table>
           <thead>
