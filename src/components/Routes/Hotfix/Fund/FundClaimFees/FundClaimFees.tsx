@@ -2,12 +2,13 @@ import React, { FormEvent } from 'react';
 import * as S from './FundClaimFees.styles';
 import { useEnvironment } from '~/hooks/useEnvironment';
 import { useTransaction } from '~/hooks/useTransaction';
-import { useHistory } from 'react-router';
-import { ButtonBlock } from '~/components/Common/Form/ButtonBlock/ButtonBlock';
 import { Accounting, FeeManager } from '@melonproject/melonjs';
 import { SubmitButton } from '~/components/Common/Form/SubmitButton/SubmitButton';
 import { TransactionModal } from '~/components/Common/TransactionModal/TransactionModal';
 import { useFundDetailsQuery } from '~/queries/FundDetails';
+import { Spinner } from '~/components/Common/Spinner/Spinner';
+import { refetchQueries } from '~/utils/refetchQueries';
+import { useOnChainClient } from '~/hooks/useQuery';
 
 export interface ClaimFeesProps {
   address: string;
@@ -16,8 +17,7 @@ export interface ClaimFeesProps {
 export const FundClaimFees: React.FC<ClaimFeesProps> = ({ address }) => {
   const environment = useEnvironment()!;
   const [details, query] = useFundDetailsQuery(address);
-
-  const history = useHistory();
+  const client = useOnChainClient();
 
   const accountingAddress = details && details.routes && details.routes.accounting && details.routes.accounting.address;
   const accounting = new Accounting(environment, accountingAddress);
@@ -27,10 +27,7 @@ export const FundClaimFees: React.FC<ClaimFeesProps> = ({ address }) => {
   const feeManager = new FeeManager(environment, feeManagerAddress);
 
   const transaction = useTransaction(environment, {
-    onFinish: () => {},
-    onAcknowledge: () => {
-      history.push(`/fund/${address}`);
-    },
+    onFinish: () => refetchQueries(client),
   });
 
   const submitAllFees = (event: FormEvent) => {
@@ -47,11 +44,21 @@ export const FundClaimFees: React.FC<ClaimFeesProps> = ({ address }) => {
     transaction.start(tx);
   };
 
+  if (query.loading) {
+    return (
+      <S.Wrapper>
+        <S.Title>Claim fees</S.Title>
+        <Spinner positioning="centered" />
+      </S.Wrapper>
+    );
+  }
+
   return (
     <S.Wrapper>
       <S.Title>Claim fees</S.Title>
-      <p>Claim management fees and performance fees for the fund.</p>
+      {query.loading && <Spinner />}
 
+      <p>Claim management fees and performance fees for the fund.</p>
       <p>Accrued management fee: {feeManagerInfo && feeManagerInfo.managementFeeAmount.dividedBy('1e18').toFixed(6)}</p>
       <p>
         Accrued performance fee: {feeManagerInfo && feeManagerInfo.performanceFeeAmount.dividedBy('1e18').toFixed(6)}
@@ -62,15 +69,11 @@ export const FundClaimFees: React.FC<ClaimFeesProps> = ({ address }) => {
       </p>
 
       <form onSubmit={submitAllFees}>
-        <ButtonBlock>
-          <SubmitButton label="Claim all fees" />
-        </ButtonBlock>
+        <SubmitButton label="Claim all fees" />
       </form>
 
       <form onSubmit={submitManagementFees}>
-        <ButtonBlock>
-          <SubmitButton label="Claim management fees" />
-        </ButtonBlock>
+        <SubmitButton label="Claim management fees" />
       </form>
 
       <TransactionModal transaction={transaction} title="Claim fees" />

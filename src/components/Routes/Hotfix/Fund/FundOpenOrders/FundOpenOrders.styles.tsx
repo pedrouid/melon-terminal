@@ -3,6 +3,7 @@ import { Subtitle } from '~/components/Common/Styles/Styles';
 
 export const Wrapper = styled.div`
   padding: ${props => props.theme.spaceUnits.s};
+  position: relative;
 
   @media (${props => props.theme.mediaQueries.l}) {
     flex: 1;

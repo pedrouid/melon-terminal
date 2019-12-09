@@ -11,6 +11,9 @@ import { TransactionModal } from '~/components/Common/TransactionModal/Transacti
 import { InputField } from '~/components/Common/Form/InputField/InputField';
 import { SubmitButton } from '~/components/Common/Form/SubmitButton/SubmitButton';
 import { useFundDetailsQuery } from '~/queries/FundDetails';
+import { Spinner } from '~/components/Common/Spinner/Spinner';
+import { refetchQueries } from '~/utils/refetchQueries';
+import { useOnChainClient } from '~/hooks/useQuery';
 
 export interface RedeemProps {
   address: string;
@@ -30,11 +33,10 @@ const defaultValues = {
 
 export const FundRedeem: React.FC<RedeemProps> = ({ address }) => {
   const environment = useEnvironment()!;
-  const [fundQueryData, query] = useFundInvestQuery(address);
-  const [_, detailsQuery] = useFundDetailsQuery(address);
+  const [result, query] = useFundInvestQuery(address);
+  const client = useOnChainClient();
 
-  const account = fundQueryData && fundQueryData.account;
-
+  const account = result && result.account;
   const participationAddress = account && account.participation && account.participation.address;
   const hasInvested = account && account.participation && account.participation.hasInvested;
   const shares = account && account.shares;
@@ -42,10 +44,7 @@ export const FundRedeem: React.FC<RedeemProps> = ({ address }) => {
   const participationContract = new Participation(environment, participationAddress);
 
   const transaction = useTransaction(environment, {
-    onFinish: () => {
-      query.refetch();
-      detailsQuery.refetch();
-    },
+    onFinish: () => refetchQueries(client),
   });
 
   const form = useForm<typeof defaultValues>({
@@ -73,9 +72,18 @@ export const FundRedeem: React.FC<RedeemProps> = ({ address }) => {
     shares && form.setValue('shareQuantity', shares.balanceOf.toNumber());
   };
 
+  if (query.loading) {
+    return (
+      <S.Wrapper>
+        <S.Title>Redeem assets</S.Title>
+        <Spinner positioning="centered" />
+      </S.Wrapper>
+    );
+  }
+
   return (
     <S.Wrapper>
-      <S.Title>Redeem</S.Title>
+      <S.Title>Redeem assets</S.Title>
       {hasInvested && shares && (
         <>
           <p>

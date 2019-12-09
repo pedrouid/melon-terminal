@@ -2,13 +2,23 @@ import React from 'react';
 import * as S from './FundOpenOrders.styles';
 import { useFundOpenMakeOrdersQuery } from '~/queries/FundOpenMakeOrders';
 import OpenOrderItem from './OpenOrderItem/OpenOrderItem';
+import { Spinner } from '~/components/Common/Spinner/Spinner';
 
 export interface FundOpenOrdersProps {
   address: string;
 }
 
 export const FundOpenOrders: React.FC<FundOpenOrdersProps> = ({ address }) => {
-  const [orders] = useFundOpenMakeOrdersQuery(address);
+  const [orders, query] = useFundOpenMakeOrdersQuery(address);
+
+  if (query.loading) {
+    return (
+      <S.Wrapper>
+        <S.Title>Redeem assets</S.Title>
+        <Spinner positioning="centered" />
+      </S.Wrapper>
+    );
+  }
 
   return (
     <S.Wrapper>
