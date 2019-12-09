@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useLocation } from 'react-router';
 import { useConnectionDetails } from '~/queries/ConnectionDetails';
+import { hotfix } from '~/config';
 import * as S from './Header.styles';
 
 export const Header: React.FC = () => {
@@ -19,7 +20,7 @@ export const Header: React.FC = () => {
         <S.Account>
           <S.AccountName />
           <S.AccountInfo>
-            {connection && connection.account && (
+            {!hotfix && connection && connection.account && (
               <S.AccountAddress>
                 <Link to="/wallet" title={connection.account.address}>
                   Your wallet

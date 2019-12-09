@@ -68,7 +68,9 @@ function validateGanache() {
 const mainnet = validateDeployment('MAINNET');
 const kovan = validateDeployment('KOVAN');
 const testnet = process.env.NODE_ENV === 'development' && validateDeployment('TESTNET') && validateGanache();
-const empty = path.resolve(__dirname, 'src', 'utils', 'emptyImport');
+
+const root = path.resolve(__dirname, 'src');
+const empty = path.join(root, 'utils', 'emptyImport');
 
 if (!mainnet && !kovan && !testnet) {
   throw new Error('You have to provide at least one deployment. Supported networks: MAINNET, KOVAN, TESTNET.');
@@ -80,14 +82,18 @@ module.exports = override(
   removeModuleScopePlugin(),
   addBabelPlugin(['styled-components', { ssr: false, displayName: true }]),
   addBabelPlugin('@babel/proposal-optional-chaining'),
-  addWebpackAlias(getPathAliases()),
   addWebpackAlias({
     'react-dom': '@hot-loader/react-dom',
     'deployments/mainnet-deployment': mainnet ? path.resolve(process.env.MELON_MAINNET_DEPLOYMENT) : empty,
     'deployments/kovan-deployment': kovan ? path.resolve(process.env.MELON_KOVAN_DEPLOYMENT) : empty,
     'deployments/testnet-deployment': testnet ? path.resolve(process.env.MELON_TESTNET_DEPLOYMENT) : empty,
     'deployments/testnet-accounts': testnet ? path.resolve(process.env.MELON_TESTNET_ACCOUNTS) : empty,
+    // TODO: Remove this again later.
+    ...(process.env.MELON_KYBER_PRICEFEED_HOTFIX && {
+      '~/components/AppRouter': path.join(root, 'components', 'AppRouterHotfix'),
+    }),
   }),
+  addWebpackAlias(getPathAliases()),
   addWebpackPlugin(new webpack.IgnorePlugin(/^scrypt$/)),
   addWebpackPlugin(
     new webpack.ContextReplacementPlugin(/graphql-language-service-interface[\\/]dist$/, new RegExp(`^\\./.*\\.js$`))
@@ -100,6 +106,10 @@ module.exports = override(
   ),
   addWebpackPlugin(
     new webpack.DefinePlugin({
+      // TODO: Remove this again later.
+      'process.env.MELON_KYBER_PRICEFEED_HOTFIX': JSON.stringify(
+        JSON.parse(process.env.MELON_KYBER_PRICEFEED_HOTFIX || 'false')
+      ),
       'process.env.MELON_DEFAULT_PROVIDER': JSON.stringify(process.env.MELON_DEFAULT_PROVIDER),
       'process.env.MELON_MAINNET': JSON.stringify(mainnet),
       'process.env.MELON_KOVAN': JSON.stringify(kovan),

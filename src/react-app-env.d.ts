@@ -25,6 +25,7 @@ declare global {
       MELON_TESTNET_SUBGRAPH: string;
       MELON_TESTNET_PROVIDER: string;
       MELON_DEFAULT_PROVIDER: string;
+      MELON_KYBER_PRICEFEED_HOTFIX: string;
     }
   }
 }

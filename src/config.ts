@@ -9,6 +9,9 @@ export type ConfigMap = {
   [index in NetworkEnum]: Config;
 };
 
+// TODO: Remove this again once the hotfix deployment is not needed anymore.
+export const hotfix = JSON.parse(process.env.MELON_KYBER_PRICEFEED_HOTFIX || 'false');
+
 export const config: ConfigMap = {
   ...(JSON.parse(process.env.MELON_MAINNET) && {
     [NetworkEnum.MAINNET]: {
