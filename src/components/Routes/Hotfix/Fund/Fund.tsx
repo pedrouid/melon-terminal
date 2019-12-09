@@ -3,7 +3,6 @@ import { useRouteMatch } from 'react-router';
 import { useFundExistsQuery } from '~/queries/FundExists';
 import { Spinner } from '~/components/Common/Spinner/Spinner';
 import { FundHeader } from './FundHeader/FundHeader';
-import { FundNavigation } from './FundNavigation/FundNavigation';
 import { FundOpenOrders } from './FundOpenOrders/FundOpenOrders';
 import { FundRedeem } from './FundRedeem/FundRedeem';
 import * as S from './Fund.styles';
