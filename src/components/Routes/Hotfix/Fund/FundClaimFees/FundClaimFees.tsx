@@ -13,7 +13,7 @@ export interface ClaimFeesProps {
   address: string;
 }
 
-export const ClaimFees: React.FC<ClaimFeesProps> = ({ address }) => {
+export const FundClaimFees: React.FC<ClaimFeesProps> = ({ address }) => {
   const environment = useEnvironment()!;
   const [details, query] = useFundDetailsQuery(address);
 
@@ -48,8 +48,8 @@ export const ClaimFees: React.FC<ClaimFeesProps> = ({ address }) => {
   };
 
   return (
-    <S.FundShutdownBody>
-      <h1>Claim fees</h1>
+    <S.Wrapper>
+      <S.Title>Claim fees</S.Title>
       <p>Claim management fees and performance fees for the fund.</p>
 
       <p>Accrued management fee: {feeManagerInfo && feeManagerInfo.managementFeeAmount.dividedBy('1e18').toFixed(6)}</p>
@@ -74,8 +74,6 @@ export const ClaimFees: React.FC<ClaimFeesProps> = ({ address }) => {
       </form>
 
       <TransactionModal transaction={transaction} title="Claim fees" />
-    </S.FundShutdownBody>
+    </S.Wrapper>
   );
 };
-
-export default ClaimFees;

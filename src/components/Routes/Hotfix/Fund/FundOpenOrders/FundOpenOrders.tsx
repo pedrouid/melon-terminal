@@ -1,17 +1,14 @@
 import React from 'react';
 import * as S from './FundOpenOrders.styles';
-import { useEnvironment } from '~/hooks/useEnvironment';
 import { useFundOpenMakeOrdersQuery } from '~/queries/FundOpenMakeOrders';
 import OpenOrderItem from './OpenOrderItem/OpenOrderItem';
-import { useFundDetailsQuery } from '~/queries/FundDetails';
 
 export interface FundOpenOrdersProps {
   address: string;
 }
 
 export const FundOpenOrders: React.FC<FundOpenOrdersProps> = ({ address }) => {
-  const environment = useEnvironment()!;
-  const [orders, query] = useFundOpenMakeOrdersQuery(address);
+  const [orders] = useFundOpenMakeOrdersQuery(address);
 
   return (
     <S.Wrapper>
@@ -39,5 +36,3 @@ export const FundOpenOrders: React.FC<FundOpenOrdersProps> = ({ address }) => {
     </S.Wrapper>
   );
 };
-
-export default FundOpenOrders;

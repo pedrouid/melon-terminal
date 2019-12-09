@@ -28,7 +28,7 @@ const defaultValues = {
   redeemAll: false,
 };
 
-export const Redeem: React.FC<RedeemProps> = ({ address }) => {
+export const FundRedeem: React.FC<RedeemProps> = ({ address }) => {
   const environment = useEnvironment()!;
   const [fundQueryData, query] = useFundInvestQuery(address);
   const [_, detailsQuery] = useFundDetailsQuery(address);
@@ -74,8 +74,8 @@ export const Redeem: React.FC<RedeemProps> = ({ address }) => {
   };
 
   return (
-    <S.FundRedeemBody>
-      <h1>Redeem</h1>
+    <S.Wrapper>
+      <S.Title>Redeem</S.Title>
       {hasInvested && shares && (
         <>
           <p>
@@ -84,7 +84,7 @@ export const Redeem: React.FC<RedeemProps> = ({ address }) => {
             <br />
           </p>
           <FormContext {...form}>
-            <S.FundRedeemForm onSubmit={submit}>
+            <form onSubmit={submit}>
               <InputField
                 id="shareQuantity"
                 name="shareQuantity"
@@ -106,13 +106,11 @@ export const Redeem: React.FC<RedeemProps> = ({ address }) => {
               <label htmlFor="redeemAll">Redeem all shares</label>
 
               <SubmitButton label="Redeem" id="action" />
-            </S.FundRedeemForm>
+            </form>
           </FormContext>
           <TransactionModal transaction={transaction} title="Redeem shares" />
         </>
       )}
-    </S.FundRedeemBody>
+    </S.Wrapper>
   );
 };
-
-export default Redeem;

@@ -14,7 +14,7 @@ export interface ShutdownProps {
   address: string;
 }
 
-export const Shutdown: React.FC<ShutdownProps> = ({ address }) => {
+export const FundShutdown: React.FC<ShutdownProps> = ({ address }) => {
   const environment = useEnvironment()!;
   const client = useOnChainClient();
   const history = useHistory();
@@ -37,8 +37,8 @@ export const Shutdown: React.FC<ShutdownProps> = ({ address }) => {
   };
 
   return (
-    <S.FundShutdownBody>
-      <h1>Shut down fund</h1>
+    <S.Wrapper>
+      <S.Title>Shut down fund</S.Title>
       <p>
         Shutting down your fund closes the fund for new investors and trades will no longer be possible. Investor can
         redeem their shares whenever they want.
@@ -51,8 +51,6 @@ export const Shutdown: React.FC<ShutdownProps> = ({ address }) => {
       </form>
 
       <TransactionModal transaction={transaction} title="Shutdown fund" />
-    </S.FundShutdownBody>
+    </S.Wrapper>
   );
 };
-
-export default Shutdown;

@@ -1,16 +1,14 @@
 import React from 'react';
-import { Switch, Route, useRouteMatch } from 'react-router';
+import { useRouteMatch } from 'react-router';
 import { useFundExistsQuery } from '~/queries/FundExists';
 import { Spinner } from '~/components/Common/Spinner/Spinner';
 import { FundHeader } from './FundHeader/FundHeader';
 import { FundNavigation } from './FundNavigation/FundNavigation';
+import { FundOpenOrders } from './FundOpenOrders/FundOpenOrders';
+import { FundRedeem } from './FundRedeem/FundRedeem';
 import * as S from './Fund.styles';
-
-const NoMatch = React.lazy(() => import('~/components/Routes/NoMatch/NoMatch'));
-const FundRedeem = React.lazy(() => import('./FundRoutes/FundRedeem/FundRedeem'));
-const FundDetails = React.lazy(() => import('./FundRoutes/FundDetails/FundDetails'));
-const FundClaimFees = React.lazy(() => import('./FundRoutes/FundClaimFees/FundClaimFees'));
-const FundShutdown = React.lazy(() => import('./FundRoutes/FundShutdown/FundShutdown'));
+import { FundShutdown } from './FundShutdown/FundShutdown';
+import { FundClaimFees } from './FundClaimFees/FundClaimFees';
 
 export interface FundRouteParams {
   address: string;
@@ -37,27 +35,15 @@ export const Fund: React.FC = () => {
       <S.FundHeader>
         <FundHeader address={match.params.address} />
       </S.FundHeader>
-      <S.FundNavigation>
-        <FundNavigation address={match.params.address} />
-      </S.FundNavigation>
       <S.FundBody>
-        <Switch>
-          <Route path={match.path} exact={true}>
-            <FundDetails address={match.params.address} />
-          </Route>
-          <Route path={`${match.path}/redeem`} exact={true}>
+        <S.FundDetailsContent>
+          <S.FundDetailsLists>
+            <FundOpenOrders address={match.params.address} />
             <FundRedeem address={match.params.address} />
-          </Route>
-          <Route path={`${match.path}/claimfees`} exact={true}>
             <FundClaimFees address={match.params.address} />
-          </Route>
-          <Route path={`${match.path}/shutdown`} exact={true}>
             <FundShutdown address={match.params.address} />
-          </Route>
-          <Route>
-            <NoMatch />
-          </Route>
-        </Switch>
+          </S.FundDetailsLists>
+        </S.FundDetailsContent>
       </S.FundBody>
     </>
   );

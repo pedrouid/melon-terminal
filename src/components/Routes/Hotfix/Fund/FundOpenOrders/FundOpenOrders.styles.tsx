@@ -2,6 +2,8 @@ import styled from 'styled-components';
 import { Subtitle } from '~/components/Common/Styles/Styles';
 
 export const Wrapper = styled.div`
+  padding: ${props => props.theme.spaceUnits.s};
+
   @media (${props => props.theme.mediaQueries.l}) {
     flex: 1;
     border-right: 1px solid rgb(234, 229, 212);
@@ -11,12 +13,12 @@ export const Wrapper = styled.div`
   }
 `;
 
-export const Title = Subtitle;
+export const Title = styled(Subtitle)`
+  margin: 12px 0;
+`;
 
 export const Table = styled.table`
   background-color: ${props => props.theme.otherColors.white};
-  margin-top: ${props => props.theme.spaceUnits.m};
-  margin-bottom: ${props => props.theme.spaceUnits.m};
   width: 100%;
   border-spacing: 0;
   border-collapse: collapse;
@@ -37,6 +39,4 @@ export const HeaderRow = styled.tr`
   border-bottom: 1px solid rgb(234, 229, 212);
 `;
 
-export const NoOpenOrders = styled.div`
-  padding: ${props => props.theme.spaceUnits.s};
-`;
+export const NoOpenOrders = styled.div``;
