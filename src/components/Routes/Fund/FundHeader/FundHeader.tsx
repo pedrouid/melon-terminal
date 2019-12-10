@@ -11,8 +11,8 @@ export interface FundHeaderProps {
 
 export const FundHeader: React.FC<FundHeaderProps> = ({ address }) => {
   const [details, query] = useFundDetailsQuery(address);
-  const fundEtherscanLink = useEtherscanLink(address);
-  const managerEtherscanLink = useEtherscanLink(details && details.manager);
+  const fundEtherscanLink = useEtherscanLink({ address });
+  // const managerEtherscanLink = useEtherscanLink(details && details.manager);
 
   if (query.loading) {
     return <Spinner />;
@@ -25,7 +25,7 @@ export const FundHeader: React.FC<FundHeaderProps> = ({ address }) => {
   const routes = details.routes;
   const accounting = routes && routes.accounting;
   const shares = routes && routes.shares;
-  const manager = details.manager;
+  // const manager = details.manager;
   const creation = details.creationTime;
   const feeManager = routes && routes.feeManager;
   const managementFee = feeManager && feeManager.managementFee;

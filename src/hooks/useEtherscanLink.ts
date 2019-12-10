@@ -1,16 +1,30 @@
+import { useMemo } from 'react';
 import { useEnvironment } from './useEnvironment';
 
-export const useEtherscanLink = (address?: string) => {
+export interface UseEtherscanLinkProps {
+  address?: string;
+  hash?: string;
+}
+
+export const useEtherscanLink = ({ address, hash }: UseEtherscanLinkProps) => {
   const environment = useEnvironment();
   const network = environment && environment.network;
 
-  if (address && network === 'MAINNET') {
-    return `https://etherscan.io/address/${address}`;
-  }
+  const url = useMemo(() => {
+    if (!address && !hash) return null;
 
-  if (address && network === 'KOVAN') {
-    return `https://kovan.etherscan.io/address/${address}`;
-  }
+    const link = address ? `address/${address}` : `tx/${hash}`;
 
-  return null;
+    if (network === 'MAINNET') {
+      return `https://etherscan.io/${link}`;
+    }
+
+    if (network === 'KOVAN') {
+      return `https://kovan.etherscan.io/${link}`;
+    }
+
+    return `https://etherscan.io/${link}`;
+  }, [address, hash]);
+
+  return url;
 };
