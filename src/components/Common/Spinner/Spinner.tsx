@@ -5,7 +5,7 @@ export interface SpinnerProps {
   positioning?: 'overlay' | 'centered';
   icon?: boolean;
   text?: string;
-  size?: 'default' | 'small' | 'large' | 'inflated';
+  size?: 'default' | 'tiny' | 'small' | 'large' | 'inflated';
 }
 
 export const Spinner: React.FC<SpinnerProps> = ({ icon = true, text = false, size = 'default', positioning }) => (

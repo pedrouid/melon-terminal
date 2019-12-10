@@ -68,7 +68,9 @@ function validateGanache() {
 const mainnet = validateDeployment('MAINNET');
 const kovan = validateDeployment('KOVAN');
 const testnet = process.env.NODE_ENV === 'development' && validateDeployment('TESTNET') && validateGanache();
-const empty = path.resolve(__dirname, 'src', 'utils', 'emptyImport');
+
+const root = path.resolve(__dirname, 'src');
+const empty = path.join(root, 'utils', 'emptyImport');
 
 if (!mainnet && !kovan && !testnet) {
   throw new Error('You have to provide at least one deployment. Supported networks: MAINNET, KOVAN, TESTNET.');
@@ -80,7 +82,6 @@ module.exports = override(
   removeModuleScopePlugin(),
   addBabelPlugin(['styled-components', { ssr: false, displayName: true }]),
   addBabelPlugin('@babel/proposal-optional-chaining'),
-  addWebpackAlias(getPathAliases()),
   addWebpackAlias({
     'react-dom': '@hot-loader/react-dom',
     'deployments/mainnet-deployment': mainnet ? path.resolve(process.env.MELON_MAINNET_DEPLOYMENT) : empty,
@@ -88,6 +89,7 @@ module.exports = override(
     'deployments/testnet-deployment': testnet ? path.resolve(process.env.MELON_TESTNET_DEPLOYMENT) : empty,
     'deployments/testnet-accounts': testnet ? path.resolve(process.env.MELON_TESTNET_ACCOUNTS) : empty,
   }),
+  addWebpackAlias(getPathAliases()),
   addWebpackPlugin(new webpack.IgnorePlugin(/^scrypt$/)),
   addWebpackPlugin(
     new webpack.ContextReplacementPlugin(/graphql-language-service-interface[\\/]dist$/, new RegExp(`^\\./.*\\.js$`))

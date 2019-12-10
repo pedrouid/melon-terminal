@@ -19,5 +19,5 @@ export const RequiresFundManager: React.FC<RequireFundManagerProps> = props => {
     return <>{props.children}</>;
   }
 
-  return <></>;
+  return null;
 };

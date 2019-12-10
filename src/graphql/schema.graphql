@@ -58,7 +58,6 @@ type AccountParticipation {
 type AccountShares {
   address: Address!
   balanceOf: BigNumber!
-  totalSupply: BigNumber!
 }
 
 type Request {

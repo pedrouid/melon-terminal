@@ -45,13 +45,17 @@ const sizes = {
     spinner: 100,
     border: 2,
   },
-  large: {
-    spinner: 200,
-    border: 8,
+  tiny: {
+    spinner: 25,
+    border: 1,
   },
   small: {
     spinner: 50,
     border: 1,
+  },
+  large: {
+    spinner: 200,
+    border: 8,
   },
   inflated: {
     spinner: 50,

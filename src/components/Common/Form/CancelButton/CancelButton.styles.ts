@@ -11,6 +11,7 @@ export const CancelButtonWrapper = styled.button`
   min-width: 100%;
   font-family: ${props => props.theme.fontFamilies.primary};
   font-size: ${props => props.theme.fontSizes.m};
+
   &:hover,
   &:focus,
   &:active {
