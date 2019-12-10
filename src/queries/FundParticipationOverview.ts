@@ -13,8 +13,10 @@ interface FundFields {
   gav: string;
   sharePrice: string;
   totalSupply: string;
-  isShutdown: boolean;
   createdAt: number;
+  participation: {
+    id: string;
+  };
   version: {
     id: string;
     name: string;
@@ -28,8 +30,8 @@ export interface Fund {
   sharePrice: string;
   totalSupply: string;
   version: string;
-  status: string;
-  shares: string;
+  versionAddress: string;
+  participationAddress: string;
 }
 
 export interface FundParticipationOverviewQueryResult {
@@ -38,7 +40,6 @@ export interface FundParticipationOverviewQueryResult {
   };
   investor: {
     investments: {
-      shares: string;
       fund: FundFields;
     }[];
   };
@@ -56,7 +57,11 @@ const FundParticipationOverviewQuery = gql`
     sharePrice
     totalSupply
     version {
+      id
       name
+    }
+    participation {
+      id
     }
   }
 
@@ -69,7 +74,6 @@ const FundParticipationOverviewQuery = gql`
 
     investor(id: $investor) {
       investments {
-        shares
         fund {
           ...FundParticipationFragment
         }
@@ -96,8 +100,8 @@ export const useFundParticipationOverviewQuery = (investor?: Address) => {
       sharePrice: weiToString(item.fund.sharePrice, 4),
       totalSupply: weiToString(item.fund.totalSupply, 4),
       version: hexToString(item.fund.version.name),
-      status: item.fund.isShutdown ? 'Not active' : 'Active',
-      shares: weiToString(item.shares, 4),
+      versionAddress: item.fund.version.id,
+      participationAddress: item.fund.participation.id,
     };
 
     return output;
@@ -105,7 +109,6 @@ export const useFundParticipationOverviewQuery = (investor?: Address) => {
 
   const managed = (result && result.data && result.data.fundManager && result.data.fundManager.funds) || [];
   const managedProcessed = managed.map(item => {
-    const invested = investmentsProcessed.find(current => current.address === item.id);
     const output: Fund = {
       address: item.id,
       name: item.name,
@@ -113,8 +116,8 @@ export const useFundParticipationOverviewQuery = (investor?: Address) => {
       sharePrice: weiToString(item.sharePrice, 4),
       totalSupply: weiToString(item.totalSupply, 4),
       version: hexToString(item.version.name),
-      status: item.isShutdown ? 'Not active' : 'Active',
-      shares: invested ? invested.shares : '0.0000',
+      versionAddress: item.version.id,
+      participationAddress: item.participation.id,
     };
 
     return output;

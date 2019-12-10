@@ -7,7 +7,7 @@ export interface HomeHeaderProps {
 }
 
 export const HomeHeader: React.FC<HomeHeaderProps> = ({ address }) => {
-  const etherscanLink = useEtherscanLink(address);
+  const etherscanLink = useEtherscanLink({ address });
 
   return (
     <S.HomeHeader>

@@ -21,11 +21,6 @@ export const AppRouter = () => (
       <Route path="/connect" exact={true}>
         <Connect />
       </Route>
-      <Route path="/fund/:address" exact={true}>
-        <RequiresAccount>
-          <Fund />
-        </RequiresAccount>
-      </Route>
       <Route path="/playground/onchain" exact={true}>
         <RequiresConnection>
           <Playground context={OnChainApollo} bucket="onchain" />

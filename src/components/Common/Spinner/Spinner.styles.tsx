@@ -45,13 +45,17 @@ const sizes = {
     spinner: 100,
     border: 2,
   },
-  large: {
-    spinner: 200,
-    border: 8,
+  tiny: {
+    spinner: 25,
+    border: 1,
   },
   small: {
     spinner: 50,
     border: 1,
+  },
+  large: {
+    spinner: 200,
+    border: 8,
   },
   inflated: {
     spinner: 50,
@@ -109,6 +113,15 @@ export const SpinnerPositioning = styled.div<SpinnerProps>`
         top: 50%;
         left: 50%;
         margin-left: -${size.spinner / 2}px;
+        margin-top: -${size.spinner / 2}px;
+      `;
+    }
+
+    if (props.positioning === 'left') {
+      return css`
+        position: absolute;
+        top: 50%;
+        left: ${props => props.theme.spaceUnits.s};
         margin-top: -${size.spinner / 2}px;
       `;
     }

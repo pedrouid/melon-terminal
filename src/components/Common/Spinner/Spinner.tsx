@@ -2,10 +2,10 @@ import React from 'react';
 import * as S from './Spinner.styles';
 
 export interface SpinnerProps {
-  positioning?: 'overlay' | 'centered';
+  positioning?: 'overlay' | 'centered' | 'left';
   icon?: boolean;
   text?: string;
-  size?: 'default' | 'small' | 'large' | 'inflated';
+  size?: 'default' | 'tiny' | 'small' | 'large' | 'inflated';
 }
 
 export const Spinner: React.FC<SpinnerProps> = ({ icon = true, text = false, size = 'default', positioning }) => (
