@@ -1,5 +1,6 @@
 import React from 'react';
 import * as Rx from 'rxjs';
+import * as R from 'ramda';
 import { Eth } from 'web3-eth';
 import { HttpProvider } from 'web3-providers';
 import {
@@ -9,7 +10,19 @@ import {
   accountsChanged,
   connectionEstablished,
 } from '~/components/Contexts/Connection';
-import { map, expand, concatMap, retryWhen, delay } from 'rxjs/operators';
+import {
+  map,
+  expand,
+  concatMap,
+  retryWhen,
+  delay,
+  take,
+  distinctUntilChanged,
+  share,
+  skip,
+  catchError,
+  tap,
+} from 'rxjs/operators';
 import { networkFromId } from '~/utils/networkFromId';
 
 interface EthResource extends Rx.Unsubscribable {
@@ -28,20 +41,44 @@ const connect = (): Rx.Observable<ConnectionAction> => {
 
   return Rx.using(create, resource => {
     const eth = (resource as EthResource).eth;
-    const enable$ = Rx.defer(async () => {
-      const [id, accounts] = await Promise.all([eth.net.getId(), eth.getAccounts()]);
+    const connect$ = Rx.defer(async () => {
+      const [id, accounts] = await Promise.all([eth.net.getId(), eth.getAccounts().catch(() => [])]);
       const network = networkFromId(id);
-      return connectionEstablished(eth, network, accounts);
-    }).pipe(retryWhen(error => error.pipe(delay(1000))));
-
-    const accounts$ = Rx.EMPTY.pipe(
-      expand(() => Rx.timer(10000).pipe(concatMap(() => eth.getAccounts()))),
-      map(accounts => accountsChanged(accounts))
+      return [network, accounts] as [typeof network, typeof accounts];
+    }).pipe(
+      retryWhen(error => error.pipe(delay(1000))),
+      take(1),
+      share()
     );
 
-    const network$ = Rx.EMPTY.pipe(
-      expand(() => Rx.timer(10000).pipe(concatMap(() => eth.net.getId()))),
-      map(id => networkChanged(networkFromId(id)))
+    const enable$ = connect$.pipe(map(([network, accounts]) => connectionEstablished(eth, network, accounts)));
+
+    const accounts$ = connect$.pipe(
+      map(([, accounts]) => accounts),
+      expand(() =>
+        Rx.timer(1000).pipe(
+          concatMap(() => eth.getAccounts()),
+          catchError(() => Rx.of([]))
+        )
+      ),
+      distinctUntilChanged((a, b) => R.equals(a, b)),
+      map(accounts => accountsChanged(accounts)),
+      skip(1)
+    );
+
+    const network$ = connect$.pipe(
+      map(([network]) => network),
+      expand(() =>
+        Rx.timer(1000).pipe(
+          concatMap(() => eth.net.getId()),
+          map(id => networkFromId(id)),
+          catchError(() => Rx.of(undefined)),
+          tap(network => console.log(network))
+        )
+      ),
+      distinctUntilChanged((a, b) => R.equals(a, b)),
+      map(network => networkChanged(network)),
+      skip(1)
     );
 
     return Rx.concat(enable$, Rx.merge(network$, accounts$));
