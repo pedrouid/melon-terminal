@@ -7,34 +7,39 @@ import { weiToString } from '~/utils/weiToString';
 import { hexToString } from '~/utils/hexToString';
 import { Address } from '@melonproject/melonjs';
 
+interface FundFields {
+  id: string;
+  name: string;
+  gav: string;
+  sharePrice: string;
+  totalSupply: string;
+  isShutdown: boolean;
+  createdAt: number;
+  version: {
+    id: string;
+    name: string;
+  };
+}
+
 export interface Fund {
   name: string;
   address: string;
   inception: string;
   sharePrice: string;
-  shares: string;
   totalSupply: string;
   version: string;
   status: string;
+  shares: string;
 }
 
 export interface FundParticipationOverviewQueryResult {
+  fundManager: {
+    funds: FundFields[];
+  };
   investor: {
     investments: {
       shares: string;
-      fund: {
-        id: string;
-        name: string;
-        gav: string;
-        sharePrice: string;
-        totalSupply: string;
-        isShutdown: boolean;
-        createdAt: number;
-        version: {
-          id: string;
-          name: string;
-        };
-      };
+      fund: FundFields;
     }[];
   };
 }
@@ -44,19 +49,29 @@ export interface FundParticipationOverviewQueryVariables {
 }
 
 const FundParticipationOverviewQuery = gql`
+  fragment FundParticipationFragment on Fund {
+    id
+    name
+    createdAt
+    sharePrice
+    totalSupply
+    version {
+      name
+    }
+  }
+
   query FundParticipationOverviewQuery($investor: ID!) {
+    fundManager(id: $investor) {
+      funds {
+        ...FundParticipationFragment
+      }
+    }
+
     investor(id: $investor) {
       investments {
         shares
         fund {
-          id
-          name
-          createdAt
-          sharePrice
-          totalSupply
-          version {
-            name
-          }
+          ...FundParticipationFragment
         }
       }
     }
@@ -73,7 +88,7 @@ export const useFundParticipationOverviewQuery = (investor?: Address) => {
   );
 
   const investments = (result && result.data && result.data.investor && result.data.investor.investments) || [];
-  const processed = investments.map(item => {
+  const investmentsProcessed = investments.map(item => {
     const output: Fund = {
       address: item.fund.id,
       name: item.fund.name,
@@ -88,5 +103,26 @@ export const useFundParticipationOverviewQuery = (investor?: Address) => {
     return output;
   });
 
-  return [processed, result] as [typeof processed, typeof result];
+  const managed = (result && result.data && result.data.fundManager && result.data.fundManager.funds) || [];
+  const managedProcessed = managed.map(item => {
+    const invested = investmentsProcessed.find(current => current.address === item.id);
+    const output: Fund = {
+      address: item.id,
+      name: item.name,
+      inception: format(new Date(item.createdAt * 1000), 'yyyy/MM/dd hh:mm a'),
+      sharePrice: weiToString(item.sharePrice, 4),
+      totalSupply: weiToString(item.totalSupply, 4),
+      version: hexToString(item.version.name),
+      status: item.isShutdown ? 'Not active' : 'Active',
+      shares: invested ? invested.shares : '0.0000',
+    };
+
+    return output;
+  });
+
+  return [investmentsProcessed, managedProcessed, result] as [
+    typeof investmentsProcessed,
+    typeof managedProcessed,
+    typeof result
+  ];
 };

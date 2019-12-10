@@ -1,10 +1,7 @@
 import styled from 'styled-components';
+import { Subtitle } from '~/components/Common/Styles/Styles';
 
-export const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-`;
+export const Container = styled.div``;
 
 export const ScrollableTable = styled.div`
   overflow-y: auto;
@@ -20,8 +17,9 @@ export const Table = styled.table`
 `;
 
 export const HeaderCell = styled.th`
-  padding: ${props => props.theme.spaceUnits.s};
+  padding: ${props => props.theme.spaceUnits.xxs} ${props => props.theme.spaceUnits.s};
   text-align: left;
+  font-weight: bold;
 `;
 
 export const HeaderRow = styled.tr``;
@@ -44,4 +42,13 @@ export const EmptyRow = styled.tr``;
 export const EmptyCell = styled.td`
   text-align: center;
   padding: 50px;
+`;
+
+export const Group = styled.div`
+  margin-bottom: ${props => props.theme.spaceUnits.xxl};
+`;
+
+export const Title = styled(Subtitle)`
+  margin-left: 0;
+  margin-right: 0;
 `;
