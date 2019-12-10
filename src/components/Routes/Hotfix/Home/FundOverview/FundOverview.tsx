@@ -149,7 +149,7 @@ export const FundOverview: React.FC = () => {
 
   const managedEmpty = !(managed && managed.length);
   const managedRows = !managedEmpty ? (
-    managed.map(fund => <FundOverviewInvestedFund {...fund} key={fund.address} />)
+    managed.map(fund => <FundOverviewManagedFund {...fund} key={fund.address} />)
   ) : (
     <S.EmptyRow>
       <S.EmptyCell colSpan={12}>You do not manage any funds.</S.EmptyCell>
@@ -158,7 +158,7 @@ export const FundOverview: React.FC = () => {
 
   const investedEmpty = !(invested && invested.length);
   const investedRows = !investedEmpty ? (
-    invested.map(fund => <FundOverviewManagedFund {...fund} key={fund.address} />)
+    invested.map(fund => <FundOverviewInvestedFund {...fund} key={fund.address} />)
   ) : (
     <S.EmptyRow>
       <S.EmptyCell colSpan={12}>You don't own any shares in any funds.</S.EmptyCell>
