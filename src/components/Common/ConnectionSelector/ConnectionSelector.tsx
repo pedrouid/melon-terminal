@@ -10,7 +10,6 @@ export const ConnectionSelector: React.FC = () => {
   const [method, setMethod] = useState<string>();
 
   useEffect(() => {
-    console.log(connection.status, connection.method, method);
     if (connection.status === ConnectionStatus.CONNECTED && connection.method === method) {
       history.replace('/');
     }
