@@ -27,6 +27,7 @@ export const HeaderRow = styled.tr``;
 export const BodyCell = styled.td`
   padding: ${props => props.theme.spaceUnits.s};
   position: relative;
+  white-space: nowrap;
 `;
 
 export const BodyRow = styled.tr`

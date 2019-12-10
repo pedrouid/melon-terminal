@@ -24,6 +24,7 @@ export interface ConnectionState {
 export enum ConnectionActionType {
   METHOD_CHANGED,
   CONNECTION_ESTABLISHED,
+  CONNECTION_LOST,
   NETWORK_CHANGED,
   ACCOUNTS_CHANGED,
   DEPLOYMENT_LOADING,
@@ -34,6 +35,7 @@ export enum ConnectionActionType {
 export type ConnectionAction =
   | MethodChanged
   | ConnectionEstablished
+  | ConnectionLost
   | AccountsChanged
   | NetworkChanged
   | DeploymentLoading
@@ -50,6 +52,10 @@ export interface ConnectionEstablished {
   eth: Eth;
   network?: NetworkEnum;
   accounts?: Address[];
+}
+
+export interface ConnectionLost {
+  type: ConnectionActionType.CONNECTION_LOST;
 }
 
 export interface AccountsChanged {
@@ -92,6 +98,10 @@ export function connectionEstablished(eth: Eth, network?: NetworkEnum, accounts?
   return { eth, network, accounts, type: ConnectionActionType.CONNECTION_ESTABLISHED };
 }
 
+export function connectionLost(): ConnectionLost {
+  return { type: ConnectionActionType.CONNECTION_LOST };
+}
+
 export function deploymentLoading(): DeploymentLoading {
   return { type: ConnectionActionType.DEPLOYMENT_LOADING };
 }
@@ -127,6 +137,10 @@ export function reducer(state: ConnectionState, action: ConnectionAction): Conne
 
     case ConnectionActionType.CONNECTION_ESTABLISHED: {
       return { ...state, network: action.network, accounts: action.accounts, eth: action.eth };
+    }
+
+    case ConnectionActionType.CONNECTION_LOST: {
+      return { ...state, network: undefined, accounts: undefined, eth: undefined, method: undefined };
     }
 
     case ConnectionActionType.DEPLOYMENT_LOADING: {

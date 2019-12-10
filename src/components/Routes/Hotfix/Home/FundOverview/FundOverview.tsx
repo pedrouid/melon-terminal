@@ -56,11 +56,11 @@ const FundOverviewInvestedFund: React.FC<Fund> = props => {
       <S.BodyCell>{props.sharePrice}</S.BodyCell>
       <S.BodyCell>
         {loading && <Spinner size="tiny" positioning="left" />}
-        {!loading && supply && supply.toFixed(4)}
+        {!loading && supply && supply.toFixed(8)}
       </S.BodyCell>
       <S.BodyCell>
         {loading && <Spinner size="tiny" positioning="left" />}
-        {!loading && balance && balance.toFixed(4)}
+        {!loading && balance && balance.toFixed(8)}
       </S.BodyCell>
       <S.BodyCell>
         {loading && <Spinner size="tiny" positioning="left" />}
@@ -113,11 +113,11 @@ const FundOverviewManagedFund: React.FC<Fund> = props => {
       <S.BodyCell>{props.sharePrice}</S.BodyCell>
       <S.BodyCell>
         {loading && <Spinner size="tiny" positioning="left" />}
-        {!loading && supply && supply.toFixed(4)}
+        {!loading && supply && supply.toFixed(8)}
       </S.BodyCell>
       <S.BodyCell>
         {loading && <Spinner size="tiny" positioning="left" />}
-        {!loading && balance && balance.toFixed(4)}
+        {!loading && balance && balance.toFixed(8)}
       </S.BodyCell>
       <S.BodyCell>
         {loading && <Spinner size="tiny" positioning="left" />}
@@ -187,7 +187,7 @@ export const FundOverview: React.FC = () => {
       <S.Group>
         <S.Title>Funds with owned shares</S.Title>
         {!investedEmpty && (
-          <p>Redeeming shares will transfer the full amount of your investment back to your wallet.</p>
+          <p>Redeeming shares will transfer the underlying assets of your shares back to your wallet.</p>
         )}
         <S.ScrollableTable>
           <S.Table>

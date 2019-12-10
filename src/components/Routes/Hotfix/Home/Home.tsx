@@ -5,12 +5,15 @@ import { HomeHeader } from './HomeHeader/HomeHeader';
 import { useEnvironment } from '~/hooks/useEnvironment';
 
 export const Home = () => {
-  const environment = useEnvironment()!;
+  const environment = useEnvironment();
+  if (!environment || !environment.account) {
+    return null;
+  }
 
   return (
     <>
       <S.HomeHeader>
-        <HomeHeader address={environment.account!} />
+        <HomeHeader address={environment.account} />
       </S.HomeHeader>
       <S.HomeBody>
         <FundOverview />

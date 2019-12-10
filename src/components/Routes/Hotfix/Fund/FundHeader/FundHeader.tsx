@@ -52,11 +52,11 @@ export const FundHeader: React.FC<FundHeaderProps> = ({ address }) => {
           </S.FundHeaderItem>
           <S.FundHeaderItem>
             <S.FundHeaderItemTitle>Total number of shares</S.FundHeaderItemTitle>
-            {shares && shares.totalSupply && shares.totalSupply.toFixed(4)}
+            {shares && shares.totalSupply && shares.totalSupply.toFixed(8)}
           </S.FundHeaderItem>
           <S.FundHeaderItem>
             <S.FundHeaderItemTitle>Shares owned by you</S.FundHeaderItemTitle>
-            {accountShares && accountShares.balanceOf && accountShares.balanceOf.toFixed(4)}
+            {accountShares && accountShares.balanceOf && accountShares.balanceOf.toFixed(8)}
           </S.FundHeaderItem>
           <S.FundHeaderItem>
             <S.FundHeaderItemTitle>Management fee</S.FundHeaderItemTitle>

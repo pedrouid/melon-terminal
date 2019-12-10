@@ -89,7 +89,7 @@ module.exports = override(
     'deployments/testnet-deployment': testnet ? path.resolve(process.env.MELON_TESTNET_DEPLOYMENT) : empty,
     'deployments/testnet-accounts': testnet ? path.resolve(process.env.MELON_TESTNET_ACCOUNTS) : empty,
     // TODO: Remove this again later.
-    ...(process.env.MELON_KYBER_PRICEFEED_HOTFIX && {
+    ...(JSON.parse(process.env.MELON_KYBER_PRICEFEED_HOTFIX || 'false') && {
       '~/components/AppRouter': path.join(root, 'components', 'AppRouterHotfix'),
     }),
   }),
