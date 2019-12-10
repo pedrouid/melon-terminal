@@ -21,7 +21,6 @@ import {
   share,
   skip,
   catchError,
-  tap,
 } from 'rxjs/operators';
 import { networkFromId } from '~/utils/networkFromId';
 
@@ -72,8 +71,7 @@ const connect = (): Rx.Observable<ConnectionAction> => {
         Rx.timer(1000).pipe(
           concatMap(() => eth.net.getId()),
           map(id => networkFromId(id)),
-          catchError(() => Rx.of(undefined)),
-          tap(network => console.log(network))
+          catchError(() => Rx.of(undefined))
         )
       ),
       distinctUntilChanged((a, b) => R.equals(a, b)),
