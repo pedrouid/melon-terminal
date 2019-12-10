@@ -7,7 +7,7 @@ export interface WalletHeaderProps {
 }
 
 export const WalletHeader: React.FC<WalletHeaderProps> = ({ address }) => {
-  const etherscanLink = useEtherscanLink(address);
+  const etherscanLink = useEtherscanLink({ address });
 
   return (
     <S.WalletHeader>

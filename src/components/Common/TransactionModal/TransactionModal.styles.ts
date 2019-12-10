@@ -20,6 +20,36 @@ export const TransactionModal = styled.div`
   top: ${props => props.theme.spaceUnits.m};
 `;
 
+export const EthGasStation = styled.div`
+  display: flex;
+  justify-content: space-between;
+  width: 300px;
+  margin: 10px 0px 10px 0px;
+`;
+
+export const EthGasStationButton = styled.div`
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 90px;
+  border: 1px solid rgb(0, 0, 0, 0.5);
+`;
+
+export const EthGasStationButtonGwei = styled.span`
+  font-weight: bold;
+`;
+export const EthGasStationButtonText = styled.span`
+  font-size: 10px;
+`;
+
+export const NotificationError = styled.div`
+  background-color: rgb(206, 88, 102);
+  color: white;
+  padding: 10px;
+`;
+
 export const TransactionModalTitle = styled.div`
   font-weight: 700;
   font-size: ${props => props.theme.fontSizes.l};

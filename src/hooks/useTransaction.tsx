@@ -358,7 +358,7 @@ export function useTransaction(environment: Environment, options?: TransactionOp
         executionPending(dispatch);
         const transaction = state.transaction!;
         const opts: SendOptions = {
-          gasPrice: data.gasPrice,
+          gasPrice: `${+data.gasPrice * 10e9}`,
           ...(state.gasLimit && { gas: state.gasLimit }),
           ...(state.amguValue && { amgu: state.amguValue }),
           ...(state.incentiveValue && { incentive: state.incentiveValue }),
@@ -430,7 +430,7 @@ export function useTransaction(environment: Environment, options?: TransactionOp
 
   useEffect(() => {
     form.setValue('gasLimit', `${state.gasLimit || ''}`);
-    form.setValue('gasPrice', `${state.gasPrice || ''}`);
+    form.setValue('gasPrice', `${state.gasPrice ? +state.gasPrice / 10e9 : ''}`);
   }, [state.gasLimit, state.gasPrice]);
 
   return {
