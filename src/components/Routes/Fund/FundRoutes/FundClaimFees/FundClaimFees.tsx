@@ -37,14 +37,14 @@ export const ClaimFees: React.FC<ClaimFeesProps> = ({ address }) => {
     event.preventDefault();
 
     const tx = accounting.triggerRewardAllFees(environment.account!);
-    transaction.start(tx);
+    transaction.start(tx, 'Claim all fees');
   };
 
   const submitManagementFees = (event: FormEvent) => {
     event.preventDefault();
 
     const tx = feeManager.rewardManagementFee(environment.account!);
-    transaction.start(tx);
+    transaction.start(tx, 'Claim management fee');
   };
 
   return (
@@ -73,7 +73,7 @@ export const ClaimFees: React.FC<ClaimFeesProps> = ({ address }) => {
         </ButtonBlock>
       </form>
 
-      <TransactionModal transaction={transaction} title="Claim fees" />
+      <TransactionModal transaction={transaction} />
     </S.FundShutdownBody>
   );
 };

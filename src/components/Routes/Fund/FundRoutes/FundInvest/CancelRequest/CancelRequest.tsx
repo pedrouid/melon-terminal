@@ -36,7 +36,7 @@ export const CancelRequest: React.FC<CancelRequestProps> = props => {
 
   const submit = form.handleSubmit(() => {
     const tx = participationContract.cancelRequest(environment.account!);
-    transaction.start(tx);
+    transaction.start(tx, 'Cancel investment request');
   });
 
   return (
@@ -46,7 +46,7 @@ export const CancelRequest: React.FC<CancelRequestProps> = props => {
           <SubmitButton label="Cancel investment request" id="action" />
         </S.CancelInvestmentForm>
       </FormContext>
-      <TransactionModal transaction={transaction} title="Cancel investment request" />
+      <TransactionModal transaction={transaction} />
     </>
   );
 };

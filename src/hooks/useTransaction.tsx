@@ -20,6 +20,7 @@ export interface TransactionState {
   amguValue?: BigNumber;
   incentiveValue?: BigNumber;
   transaction?: Transaction;
+  name?: string;
   hash?: string;
   receipt?: TransactionReceipt;
   error?: Error;
@@ -61,6 +62,7 @@ type TransactionAction =
 interface TransactionStarted {
   type: TransactionProgress.TRANSACTION_STARTED;
   transaction: Transaction;
+  name: string;
 }
 
 interface TransactionCancelled {
@@ -127,6 +129,7 @@ function reducer(state: TransactionState, action: TransactionAction): Transactio
         ...state,
         progress: TransactionProgress.TRANSACTION_STARTED,
         transaction: action.transaction,
+        name: action.name,
         error: undefined,
         hash: undefined,
         receipt: undefined,
@@ -142,6 +145,7 @@ function reducer(state: TransactionState, action: TransactionAction): Transactio
         ...state,
         progress: TransactionProgress.TRANSACTION_CANCELLED,
         transaction: undefined,
+        name: undefined,
         error: undefined,
         hash: undefined,
         receipt: undefined,
@@ -301,6 +305,7 @@ function executionError(dispatch: React.Dispatch<TransactionAction>, error: Erro
 }
 
 export interface TransactionOptions {
+  onStart?: () => void;
   onFinish?: (receipt: TransactionReceipt) => void;
   onAcknowledge?: (receipt: TransactionReceipt) => void;
   onError?: (error: Error) => void;
@@ -310,7 +315,7 @@ export interface TransactionHookValues<FormValues extends TransactionFormValues 
   state: TransactionState;
   form: FormContextValues<FormValues>;
   submit: (event: React.BaseSyntheticEvent) => Promise<void>;
-  start: (transaction: Transaction) => void;
+  start: (transaction: Transaction, name: string) => void;
   cancel: () => void;
   acknowledge: () => void;
 }
@@ -319,6 +324,7 @@ export function useTransaction(environment: Environment, options?: TransactionOp
   const [state, dispatch] = useReducer(reducer, {
     progress: TransactionProgress.TRANSACTION_WAITING,
     transaction: undefined,
+    name: undefined,
     hash: undefined,
     receipt: undefined,
     error: undefined,
@@ -336,8 +342,8 @@ export function useTransaction(environment: Environment, options?: TransactionOp
     },
   });
 
-  const start = (transaction: Transaction) => {
-    dispatch({ transaction, type: TransactionProgress.TRANSACTION_STARTED });
+  const start = (transaction: Transaction, name: string) => {
+    dispatch({ transaction, name, type: TransactionProgress.TRANSACTION_STARTED });
   };
 
   const cancel = () => {
@@ -350,7 +356,7 @@ export function useTransaction(environment: Environment, options?: TransactionOp
 
   const submit = form.handleSubmit(async data => {
     if (state.error && state.transaction) {
-      return start(state.transaction!);
+      return start(state.transaction!, state.name!);
     }
 
     if (state.transaction) {
@@ -393,6 +399,8 @@ export function useTransaction(environment: Environment, options?: TransactionOp
 
       // Automatically start validation when the modal is opened.
       case TransactionProgress.TRANSACTION_STARTED: {
+        options && options.onStart && options.onStart();
+
         (async () => {
           try {
             validationPending(dispatch);

@@ -42,7 +42,7 @@ export const ExecuteRequest: React.FC<ExecuteRequestProps> = props => {
 
   const submit = form.handleSubmit(() => {
     const tx = participationContract.executeRequestFor(environment.account!, environment.account!);
-    transaction.start(tx);
+    transaction.start(tx, 'Execute investment request');
   });
 
   return (
@@ -52,7 +52,7 @@ export const ExecuteRequest: React.FC<ExecuteRequestProps> = props => {
           <SubmitButton label="Execute investment request" id="action" />
         </S.ExecuteRequestForm>
       </FormContext>
-      <TransactionModal transaction={transaction} title="Execute investment request" />
+      <TransactionModal transaction={transaction} />
     </>
   );
 };

@@ -40,7 +40,7 @@ export const WalletWrapEther: React.FC = () => {
     const token = findToken(environment.deployment, 'WETH')!;
     const weth = new Weth(environment, token.address);
     const tx = weth.deposit(new BigNumber(toWei(`${data.quantity}`)), environment.account!);
-    transaction.start(tx);
+    transaction.start(tx, 'Wrap Ether');
   });
 
   return (
@@ -49,7 +49,7 @@ export const WalletWrapEther: React.FC = () => {
         <WrapEtherForm submit={submit} form={form} label="wrap" />
       </FormContext>
 
-      <TransactionModal transaction={transaction} title="Wrap Ether" />
+      <TransactionModal transaction={transaction} />
     </div>
   );
 };
