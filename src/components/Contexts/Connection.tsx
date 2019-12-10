@@ -19,7 +19,6 @@ export interface ConnectionState {
   accounts?: Address[];
   method?: string;
   error?: Error;
-  status: ConnectionStatus;
 }
 
 export enum ConnectionActionType {
@@ -108,19 +107,26 @@ export function deploymentError(error: Error): DeploymentError {
 export function reducer(state: ConnectionState, action: ConnectionAction): ConnectionState {
   switch (action.type) {
     case ConnectionActionType.METHOD_CHANGED: {
-      return { ...state, network: undefined, deployment: undefined, accounts: undefined, method: action.method };
-    }
-
-    case ConnectionActionType.CONNECTION_ESTABLISHED: {
-      return { ...state, network: action.network, accounts: action.accounts, eth: action.eth };
+      return {
+        ...state,
+        network: undefined,
+        deployment: undefined,
+        accounts: undefined,
+        method: action.method,
+      };
     }
 
     case ConnectionActionType.NETWORK_CHANGED: {
-      return { ...state, deployment: undefined, network: action.network };
+      const deployment = state.network === action.network ? state.deployment : undefined;
+      return { ...state, deployment, network: action.network };
     }
 
     case ConnectionActionType.ACCOUNTS_CHANGED: {
       return { ...state, accounts: action.accounts };
+    }
+
+    case ConnectionActionType.CONNECTION_ESTABLISHED: {
+      return { ...state, network: action.network, accounts: action.accounts, eth: action.eth };
     }
 
     case ConnectionActionType.DEPLOYMENT_LOADING: {
@@ -202,6 +208,18 @@ export const ConnectionProvider: React.FC<ConnectionProviderProps> = props => {
     return () => subscription.unsubscribe();
   }, [state.network]);
 
+  const status = useMemo(() => {
+    if (state.network && state.deployment) {
+      return ConnectionStatus.CONNECTED;
+    }
+
+    if (state.method) {
+      return ConnectionStatus.CONNECTING;
+    }
+
+    return ConnectionStatus.OFFLINE;
+  }, [state.network, state.method, state.deployment]);
+
   // Create the environment once the required values are available.
   const environment = useMemo(() => {
     if (state.eth && state.network && state.deployment) {
@@ -214,8 +232,8 @@ export const ConnectionProvider: React.FC<ConnectionProviderProps> = props => {
 
   const context: ConnectionContext = {
     environment,
+    status,
     method: state.method,
-    status: state.status,
     methods: props.methods,
     switch: (method: string) => dispatch(methodChanged(method)),
   };
