@@ -42,7 +42,7 @@ const FundOverviewInvestedFund: React.FC<Fund> = props => {
   const submit = (event: FormEvent) => {
     event.preventDefault();
     const tx = participationContract.redeem(environment.account!);
-    transaction.start(tx);
+    transaction.start(tx, 'Redeem shares');
   };
 
   return (
@@ -75,7 +75,7 @@ const FundOverviewInvestedFund: React.FC<Fund> = props => {
         )}
         {!loading && balance && balance.isZero() && 'Already redeemed'}
       </S.BodyCell>
-      <TransactionModal transaction={transaction} title="Redeem shares" />
+      <TransactionModal transaction={transaction} />
     </S.BodyRow>
   );
 };
@@ -99,7 +99,7 @@ const FundOverviewManagedFund: React.FC<Fund> = props => {
   const submit = (event: FormEvent) => {
     event.preventDefault();
     const tx = version.shutDownFund(environment.account!, props.address);
-    transaction.start(tx);
+    transaction.start(tx, 'Shutdown fund');
   };
 
   return (
@@ -132,7 +132,7 @@ const FundOverviewManagedFund: React.FC<Fund> = props => {
         )}
         {!loading && shutdown && 'Already shut down'}
       </S.BodyCell>
-      <TransactionModal transaction={transaction} title="Shutdown fund" />
+      <TransactionModal transaction={transaction} />
     </S.BodyRow>
   );
 };

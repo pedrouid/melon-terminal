@@ -32,7 +32,7 @@ export const FundRedeem: React.FC<RedeemProps> = ({ address }) => {
   const submit = (event: FormEvent) => {
     event.preventDefault();
     const tx = participationContract.redeem(environment.account!);
-    transaction.start(tx);
+    transaction.start(tx, 'Redeem shares');
   };
 
   if (query.loading) {
@@ -60,7 +60,7 @@ export const FundRedeem: React.FC<RedeemProps> = ({ address }) => {
       <form onSubmit={submit}>
         <SubmitButton label="Redeem all shares" id="action" />
       </form>
-      <TransactionModal transaction={transaction} title="Redeem shares" />
+      <TransactionModal transaction={transaction} />
     </S.Wrapper>
   );
 };
