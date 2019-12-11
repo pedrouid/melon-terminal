@@ -237,7 +237,7 @@ export const ConnectionProvider: React.FC<ConnectionProviderProps> = props => {
   // Create the environment once the required values are available.
   const environment = useMemo(() => {
     if (state.eth && state.network && state.deployment) {
-      const account = state.accounts && state.accounts[9];
+      const account = state.accounts && state.accounts[0];
       return createEnvironment(state.eth, state.deployment, state.network, account);
     }
 

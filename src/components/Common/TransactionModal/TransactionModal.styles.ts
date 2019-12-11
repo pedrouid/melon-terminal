@@ -18,6 +18,8 @@ export const TransactionModal = styled.div`
   right: ${props => props.theme.spaceUnits.m};
   bottom: ${props => props.theme.spaceUnits.m};
   top: ${props => props.theme.spaceUnits.m};
+  overflow-y: hidden;
+  overflow-x: hidden;
 `;
 
 export const EthGasStation = styled.div`
