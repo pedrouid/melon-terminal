@@ -33,7 +33,7 @@ export const Shutdown: React.FC<ShutdownProps> = ({ address }) => {
     event.preventDefault();
 
     const tx = version.shutDownFund(environment.account!, address);
-    transaction.start(tx);
+    transaction.start(tx, 'Shutdown fund');
   };
 
   return (
@@ -50,7 +50,7 @@ export const Shutdown: React.FC<ShutdownProps> = ({ address }) => {
         </ButtonBlock>
       </form>
 
-      <TransactionModal transaction={transaction} title="Shutdown fund" />
+      <TransactionModal transaction={transaction} />
     </S.FundShutdownBody>
   );
 };

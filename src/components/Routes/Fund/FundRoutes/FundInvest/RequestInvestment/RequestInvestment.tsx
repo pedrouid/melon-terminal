@@ -108,7 +108,7 @@ export const RequestInvestment: React.FC<RequestInvestmentProps> = props => {
             new BigNumber(10).exponentiatedBy(props.holdings![selectedTokenIndex].token.decimals)
           )
         );
-        transaction.start(tx);
+        transaction.start(tx, 'Approve');
         break;
       }
       case 'invest': {
@@ -120,7 +120,7 @@ export const RequestInvestment: React.FC<RequestInvestmentProps> = props => {
           ),
           data.investmentAsset
         );
-        transaction.start(tx);
+        transaction.start(tx, 'Invest');
         break;
       }
     }
@@ -200,7 +200,7 @@ export const RequestInvestment: React.FC<RequestInvestmentProps> = props => {
           <SubmitButton label={action} id="action" />
         </S.RequestInvestmentForm>
       </FormContext>
-      <TransactionModal transaction={transaction} title={action} />
+      <TransactionModal transaction={transaction} />
     </>
   );
 };

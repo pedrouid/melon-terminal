@@ -9,6 +9,7 @@ import { SubmitButton } from '~/components/Common/Form/SubmitButton/SubmitButton
 import { CancelButton } from '~/components/Common/Form/CancelButton/CancelButton';
 import { useEtherscanLink } from '~/hooks/useEtherscanLink';
 import { useEthGasStation, EthGasStationState } from '~/hooks/useEthGasStation';
+import { useEnvironment } from '~/hooks/useEnvironment';
 import * as S from './TransactionModal.styles';
 
 function progressToPercentage(progress: number) {
@@ -29,7 +30,6 @@ function progressToPercentage(progress: number) {
 
 export interface TransactionModalProps extends Partial<ModalProps> {
   transaction: TransactionHookValues;
-  title: string;
 }
 
 export const TransactionModal: React.FC<TransactionModalProps> = ({
@@ -43,8 +43,9 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
     state.progress > TransactionProgress.TRANSACTION_STARTED;
 
   const ethGasStation = useEthGasStation();
-
   const etherscanLink = useEtherscanLink({ hash: state.hash });
+  const environment = useEnvironment();
+  const network = environment && environment.network;
 
   const setGasPrice = (value: number = 0) => {
     form.setValue('gasPrice', value.toString());
@@ -54,7 +55,7 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
     <FormContext {...form}>
       <Modal isOpen={open} {...rest}>
         <S.TransactionModal>
-          <S.TransactionModalTitle>{rest.title}</S.TransactionModalTitle>
+          <S.TransactionModalTitle>{state.name}</S.TransactionModalTitle>
 
           <S.TransactionModalContent>
             <ProgressBar step={4} progress={progressToPercentage(state.progress)} />
@@ -65,22 +66,25 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
               <>
                 {!finished && (
                   <>
-                    {!error && !state.loading && ethGasStation.state === EthGasStationState.SUCCESS && (
-                      <S.EthGasStation>
-                        <S.EthGasStationButton onClick={() => setGasPrice(ethGasStation.fast)}>
-                          <S.EthGasStationButtonGwei>{ethGasStation.fast}</S.EthGasStationButtonGwei>
-                          <S.EthGasStationButtonText>Fast Gas Price</S.EthGasStationButtonText>
-                        </S.EthGasStationButton>
-                        <S.EthGasStationButton onClick={() => setGasPrice(ethGasStation.average)}>
-                          <S.EthGasStationButtonGwei>{ethGasStation.average}</S.EthGasStationButtonGwei>
-                          <S.EthGasStationButtonText>Average Gas Price</S.EthGasStationButtonText>
-                        </S.EthGasStationButton>
-                        <S.EthGasStationButton onClick={() => setGasPrice(ethGasStation.low)}>
-                          <S.EthGasStationButtonGwei>{ethGasStation.low}</S.EthGasStationButtonGwei>
-                          <S.EthGasStationButtonText>Low Gas Price</S.EthGasStationButtonText>
-                        </S.EthGasStationButton>
-                      </S.EthGasStation>
-                    )}
+                    {!error &&
+                      !state.loading &&
+                      ethGasStation.state === EthGasStationState.SUCCESS &&
+                      network === 'MAINNET' && (
+                        <S.EthGasStation>
+                          <S.EthGasStationButton onClick={() => setGasPrice(ethGasStation.fast)}>
+                            <S.EthGasStationButtonGwei>{ethGasStation.fast}</S.EthGasStationButtonGwei>
+                            <S.EthGasStationButtonText>Fast Gas Price</S.EthGasStationButtonText>
+                          </S.EthGasStationButton>
+                          <S.EthGasStationButton onClick={() => setGasPrice(ethGasStation.average)}>
+                            <S.EthGasStationButtonGwei>{ethGasStation.average}</S.EthGasStationButtonGwei>
+                            <S.EthGasStationButtonText>Average Gas Price</S.EthGasStationButtonText>
+                          </S.EthGasStationButton>
+                          <S.EthGasStationButton onClick={() => setGasPrice(ethGasStation.low)}>
+                            <S.EthGasStationButtonGwei>{ethGasStation.low}</S.EthGasStationButtonGwei>
+                            <S.EthGasStationButtonText>Low Gas Price</S.EthGasStationButtonText>
+                          </S.EthGasStationButton>
+                        </S.EthGasStation>
+                      )}
                     <S.TransactionModalForm onSubmit={submit}>
                       {!error && !state.loading && (
                         <>

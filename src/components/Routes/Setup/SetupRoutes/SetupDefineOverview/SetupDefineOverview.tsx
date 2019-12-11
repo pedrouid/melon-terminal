@@ -13,16 +13,23 @@ import { Version } from '@melonproject/melonjs';
 export const SetupDefineOverview: React.FC<Omit<SetupDefinitionProps, 'forward'>> = props => {
   const environment = useEnvironment()!;
   const history = useHistory();
-  const transaction = useTransaction(environment, { onAcknowledge: () => history.push('/setup/transactions') });
+  const transaction = useTransaction(environment, {
+    onAcknowledge: () => {
+      history.push({
+        pathname: '/setup/transactions',
+        state: {
+          start: true,
+        },
+      });
+    },
+  });
 
   const assets = (props.state.assets || []).filter((asset: any) => asset !== false).map((asset: any) => `${asset}`);
   const exchanges = (props.state.exchanges || [])
     .filter((exchange: any) => exchange !== false)
     .map((exchange: any) => `${exchange}`);
 
-  const submit = (event: FormEvent) => {
-    event.preventDefault();
-
+  const createTransaction = () => {
     const address = environment.deployment.melonContracts.version;
     const factory = new Version(environment, address);
 
@@ -50,7 +57,14 @@ export const SetupDefineOverview: React.FC<Omit<SetupDefinitionProps, 'forward'>
         new BigNumber(props.state.performanceFee!).multipliedBy('1e16'),
       ],
     });
-    transaction.start(tx);
+
+    return tx;
+  };
+
+  const submit = (event: FormEvent) => {
+    event.preventDefault();
+    const tx = createTransaction();
+    transaction.start(tx, 'Begin setup');
   };
 
   return (
@@ -71,7 +85,7 @@ export const SetupDefineOverview: React.FC<Omit<SetupDefinitionProps, 'forward'>
         </ButtonBlock>
       </form>
 
-      <TransactionModal transaction={transaction} title="Begin Fund Setup" />
+      <TransactionModal transaction={transaction} />
     </>
   );
 };

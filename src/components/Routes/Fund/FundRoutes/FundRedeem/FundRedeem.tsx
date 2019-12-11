@@ -60,13 +60,13 @@ export const Redeem: React.FC<RedeemProps> = ({ address }) => {
   const submit = form.handleSubmit(async data => {
     if (redeemAll) {
       const tx = participationContract.redeem(environment.account!);
-      transaction.start(tx);
+      transaction.start(tx, 'Redeem all shares');
       return;
     }
 
     const shareQuantity = new BigNumber(data.shareQuantity).times(new BigNumber(10).exponentiatedBy(18));
     const tx = participationContract.redeemQuantity(environment.account!, shareQuantity);
-    transaction.start(tx);
+    transaction.start(tx, 'Redeem shares');
   });
 
   const handleRedeemAllClick = (e: any) => {
@@ -108,7 +108,7 @@ export const Redeem: React.FC<RedeemProps> = ({ address }) => {
               <SubmitButton label="Redeem" id="action" />
             </S.FundRedeemForm>
           </FormContext>
-          <TransactionModal transaction={transaction} title="Redeem shares" />
+          <TransactionModal transaction={transaction} />
         </>
       )}
     </S.FundRedeemBody>

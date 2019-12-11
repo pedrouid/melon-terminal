@@ -37,21 +37,21 @@ export const OpenOrderItem: React.FC<OpenOrderItemProps> = ({ address, order }) 
     // const hub = new Hub(environment, address);
     // const trading = new Trading(environment, (await hub.getRoutes()).trading);
     // const tx = trading.callOnExchange(environment.account!, order.exchange, order.makerAsset);
-    // transaction.start(tx);
+    // transaction.start(tx, 'Remove order');
   });
 
   return (
     <FormContext {...form}>
       <S.BodyRow>
         <S.BodyCell>{makerSymbol && makerSymbol.symbol}</S.BodyCell>
-        <S.BodyCell></S.BodyCell>
+        <S.BodyCell />
         <S.BodyCellRightAlign>{price.toFixed(6)}</S.BodyCellRightAlign>
         <S.BodyCellRightAlign>{makerAmount.toFixed(6)}</S.BodyCellRightAlign>
         <S.BodyCell>
           <form onSubmit={submit}>
             <input type="submit" hidden={!expired} value="Remove" />
           </form>
-          <TransactionModal transaction={transaction} title="Remove order" />
+          <TransactionModal transaction={transaction} />
         </S.BodyCell>
       </S.BodyRow>
     </FormContext>
