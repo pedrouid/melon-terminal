@@ -19,10 +19,13 @@ declare global {
     export interface ProcessEnv {
       MELON_MAINNET: string;
       MELON_MAINNET_SUBGRAPH: string;
+      MELON_MAINNET_DEPLOYMENT?: string;
       MELON_KOVAN: string;
       MELON_KOVAN_SUBGRAPH: string;
+      MELON_KOVAN_DEPLOYMENT?: string;
       MELON_TESTNET: string;
       MELON_TESTNET_SUBGRAPH: string;
+      MELON_TESTNET_DEPLOYMENT?: string;
       MELON_TESTNET_PROVIDER: string;
       MELON_DEFAULT_PROVIDER: string;
     }

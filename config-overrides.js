@@ -14,60 +14,14 @@ const {
   removeModuleScopePlugin,
 } = require('customize-cra');
 
-function getPathAliases() {
-  const { paths, baseUrl } = require('./paths.json').compilerOptions;
-  const aliases = Object.keys(paths).reduce((carry, current) => {
-    const key = current.replace('/*', '');
-    const value = path.resolve(baseUrl, paths[current][0].replace('/*', '').replace('*', ''));
-    return { ...carry, [key]: value };
-  }, {});
-
-  return aliases;
-}
-
-function validateDeployment(name) {
-  const deployment = process.env[`MELON_${name}_DEPLOYMENT`];
-  if (!deployment) {
-    return false;
-  }
-
-  const subgraph = process.env[`MELON_${name}_SUBGRAPH`];
-  if (!subgraph) {
-    return false;
-  }
-
-  try {
-    JSON.parse(fs.readFileSync(deployment, 'utf8'));
-  } catch (e) {
-    throw new Error(`Failed to load ${name} deployment file.`);
-  }
-
-  return true;
-}
-
-function validateGanache() {
-  const provider = process.env.MELON_TESTNET_PROVIDER;
-  if (!provider) {
-    return false;
-  }
-
-  const accounts = process.env.MELON_TESTNET_ACCOUNTS;
-  if (!accounts) {
-    return false;
-  }
-
-  try {
-    JSON.parse(fs.readFileSync(accounts, 'utf8'));
-  } catch (e) {
-    throw new Error(`Failed to load ganache accounts file.`);
-  }
-
-  return true;
-}
-
 const mainnet = validateDeployment('MAINNET');
 const kovan = validateDeployment('KOVAN');
-const testnet = process.env.NODE_ENV === 'development' && validateDeployment('TESTNET') && validateGanache();
+const testnet = process.env.NODE_ENV === 'development' && validateGanache();
+
+const mainnetDeploymentAlias = mainnet && deploymentAlias(process.env.MELON_MAINNET_DEPLOYMENT);
+const kovanDeploymentAlias = kovan && deploymentAlias(process.env.MELON_KOVAN_DEPLOYMENT);
+const testnetDeploymentAlias = testnet && deploymentAlias(process.env.MELON_TESTNET_DEPLOYMENT);
+const testnetAccountsAlias = testnet && deploymentAlias(process.env.MELON_TESTNET_ACCOUNTS);
 
 const root = path.resolve(__dirname, 'src');
 const empty = path.join(root, 'utils', 'emptyImport');
@@ -84,12 +38,12 @@ module.exports = override(
   addBabelPlugin('@babel/proposal-optional-chaining'),
   addWebpackAlias({
     'react-dom': '@hot-loader/react-dom',
-    'deployments/mainnet-deployment': mainnet ? path.resolve(process.env.MELON_MAINNET_DEPLOYMENT) : empty,
-    'deployments/kovan-deployment': kovan ? path.resolve(process.env.MELON_KOVAN_DEPLOYMENT) : empty,
-    'deployments/testnet-deployment': testnet ? path.resolve(process.env.MELON_TESTNET_DEPLOYMENT) : empty,
-    'deployments/testnet-accounts': testnet ? path.resolve(process.env.MELON_TESTNET_ACCOUNTS) : empty,
+    'deployments/mainnet-deployment': mainnetDeploymentAlias || empty,
+    'deployments/kovan-deployment': kovanDeploymentAlias || empty,
+    'deployments/testnet-deployment': testnetDeploymentAlias || empty,
+    'deployments/testnet-accounts': testnetAccountsAlias || empty,
   }),
-  addWebpackAlias(getPathAliases()),
+  addWebpackAlias(pathAliases()),
   addWebpackPlugin(new webpack.IgnorePlugin(/^scrypt$/)),
   addWebpackPlugin(
     new webpack.ContextReplacementPlugin(/graphql-language-service-interface[\\/]dist$/, new RegExp(`^\\./.*\\.js$`))
@@ -108,14 +62,22 @@ module.exports = override(
       'process.env.MELON_TESTNET': JSON.stringify(testnet),
       ...(mainnet && {
         'process.env.MELON_MAINNET_SUBGRAPH': JSON.stringify(process.env.MELON_MAINNET_SUBGRAPH),
+        ...(!mainnetDeploymentAlias && {
+          'process.env.MELON_MAINNET_DEPLOYMENT': JSON.stringify(process.env.MELON_MAINNET_DEPLOYMENT),
+        }),
       }),
       ...(kovan && {
         'process.env.MELON_KOVAN_SUBGRAPH': JSON.stringify(process.env.MELON_KOVAN_SUBGRAPH),
+        ...(!kovanDeploymentAlias && {
+          'process.env.MELON_KOVAN_DEPLOYMENT': JSON.stringify(process.env.MELON_KOVAN_DEPLOYMENT),
+        }),
       }),
       ...(testnet && {
         'process.env.MELON_TESTNET_SUBGRAPH': JSON.stringify(process.env.MELON_TESTNET_SUBGRAPH),
         'process.env.MELON_TESTNET_PROVIDER': JSON.stringify(process.env.MELON_TESTNET_PROVIDER),
-        'process.env.MELON_TESTNET_ACCOUNTS': JSON.stringify(process.env.MELON_TESTNET_ACCOUNTS),
+        ...(!testnetDeploymentAlias && {
+          'process.env.MELON_TESTNET_DEPLOYMENT': JSON.stringify(process.env.MELON_TESTNET_DEPLOYMENT),
+        }),
       }),
     })
   ),
@@ -126,3 +88,94 @@ module.exports = override(
     loader: 'graphql-tag/loader',
   })
 );
+
+function pathAliases() {
+  const { paths, baseUrl } = require('./paths.json').compilerOptions;
+  const aliases = Object.keys(paths).reduce((carry, current) => {
+    const key = current.replace('/*', '');
+    const value = path.resolve(baseUrl, paths[current][0].replace('/*', '').replace('*', ''));
+    return { ...carry, [key]: value };
+  }, {});
+
+  return aliases;
+}
+
+function deploymentAlias(env) {
+  const deploymentFile = path.resolve(env);
+  if (fs.existsSync(deploymentFile)) {
+    JSON.parse(fs.readFileSync(deploymentFile), 'utf8');
+    return deploymentFile;
+  }
+
+  return undefined;
+}
+
+function validateDeployment(name) {
+  const deployment = process.env[`MELON_${name}_DEPLOYMENT`];
+  if (!deployment) {
+    return false;
+  }
+
+  const subgraph = process.env[`MELON_${name}_SUBGRAPH`];
+  if (!subgraph) {
+    return false;
+  }
+
+  if (deployment.startsWith('http://') || deployment.startsWith('https://')) {
+    return true;
+  }
+
+  try {
+    JSON.parse(deployment);
+    return true;
+  } catch {
+    // Nothing to do here.
+  }
+
+  try {
+    const deploymentPath = path.resolve(deployment);
+    if (fs.existsSync(deploymentPath)) {
+      JSON.parse(fs.readFileSync(deploymentPath), 'utf8');
+      return true;
+    }
+  } catch {
+    // Nothing to do here.
+  }
+
+  throw new Error(`Failed to load ${name} deployment.`);
+}
+
+function validateGanache() {
+  if (!validateDeployment('TESTNET')) {
+    return false;
+  }
+
+  const provider = process.env.MELON_TESTNET_PROVIDER;
+  if (!provider) {
+    return false;
+  }
+
+  const accounts = process.env.MELON_TESTNET_ACCOUNTS;
+  if (!accounts) {
+    return false;
+  }
+
+  try {
+    JSON.parse(accounts);
+    return true;
+  } catch {
+    // Nothing to do here.
+  }
+
+  try {
+    const accountsPath = path.resolve(accounts);
+    if (fs.existsSync(accountsPath)) {
+      JSON.parse(fs.readFileSync(accountsPath), 'utf8');
+      return true;
+    }
+  } catch {
+    // Nothing to do here.
+  }
+
+  throw new Error(`Failed to load ganache accounts.`);
+}

@@ -21,3 +21,4 @@ build/
 !.dockerignore
 !.env.defaults
 !.env.schema
+!.env.example
