@@ -27,6 +27,14 @@ function progressToStep(progress: number) {
   return 0;
 }
 
+function loadingStep(progress: number) {
+  if (progress === TransactionProgress.EXECUTION_PENDING || progress === TransactionProgress.EXECUTION_RECEIVED) {
+    return true;
+  }
+
+  return false;
+}
+
 export interface TransactionModalProps extends Partial<ModalProps> {
   transaction: TransactionHookValues;
 }
@@ -58,7 +66,7 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
           <S.TransactionModalTitle>{state.name}</S.TransactionModalTitle>
 
           <S.TransactionModalContent>
-            <ProgressBar step={currentStep}>
+            <ProgressBar step={currentStep} loading={loadingStep(state.progress)}>
               <ProgressBarStep />
               <ProgressBarStep />
               <ProgressBarStep />
@@ -98,9 +106,62 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
                     </>
                   )}
                   {state.error && <S.NotificationError>{state.error.message} </S.NotificationError>}
+                  <S.TransactionModalMessages>
+                    <S.TransactionModalMessagesTable>
+                      <S.TransactionModalMessagesTableBody>
+                        {/* {state.progress && (
+                          <S.TransactionModalMessagesTableRow>
+                            <S.TransactionModalMessagesTableRowLabel>State</S.TransactionModalMessagesTableRowLabel>
+                            <S.TransactionModalMessagesTableRowQuantity>
+                              {state.progress}
+                            </S.TransactionModalMessagesTableRowQuantity>
+                          </S.TransactionModalMessagesTableRow>
+                        )} */}
+                        {state.hash && (
+                          <S.TransactionModalMessagesTableRow>
+                            <S.TransactionModalMessagesTableRowLabel>Hash</S.TransactionModalMessagesTableRowLabel>
+                            <S.TransactionModalMessagesTableRowQuantity>
+                              <a target="_blank" href={etherscanLink || ''}>
+                                {state.hash}
+                              </a>
+                            </S.TransactionModalMessagesTableRowQuantity>
+                          </S.TransactionModalMessagesTableRow>
+                        )}
+                        {state.receipt && (
+                          <S.TransactionModalMessagesTableRow>
+                            <S.TransactionModalMessagesTableRowLabel>
+                              Block number
+                            </S.TransactionModalMessagesTableRowLabel>
+                            <S.TransactionModalMessagesTableRowQuantity>
+                              {state.receipt.blockNumber}
+                            </S.TransactionModalMessagesTableRowQuantity>
+                          </S.TransactionModalMessagesTableRow>
+                        )}
+                        {state.receipt && (
+                          <S.TransactionModalMessagesTableRow>
+                            <S.TransactionModalMessagesTableRowLabel>Gas used</S.TransactionModalMessagesTableRowLabel>
+                            <S.TransactionModalMessagesTableRowQuantity>
+                              {state.receipt.gasUsed}
+                            </S.TransactionModalMessagesTableRowQuantity>
+                          </S.TransactionModalMessagesTableRow>
+                        )}
+                        {state.receipt && (
+                          <S.TransactionModalMessagesTableRow>
+                            <S.TransactionModalMessagesTableRowLabel>
+                              Cumulative gas used
+                            </S.TransactionModalMessagesTableRowLabel>
+                            <S.TransactionModalMessagesTableRowQuantity>
+                              {state.receipt.cumulativeGasUsed}
+                            </S.TransactionModalMessagesTableRowQuantity>
+                          </S.TransactionModalMessagesTableRow>
+                        )}
+                      </S.TransactionModalMessagesTableBody>
+                    </S.TransactionModalMessagesTable>
+                  </S.TransactionModalMessages>
+
                   <S.TransactionModalActions>
                     <S.TransactionModalAction>
-                      <CancelButton disabled={state.loading} label="Cancel" onClick={() => cancel()} />
+                      <CancelButton disabled={true} label="Cancel" onClick={() => cancel()} />
                     </S.TransactionModalAction>
                     {!state.loading && (
                       <S.TransactionModalAction>
@@ -111,57 +172,6 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
                 </S.TransactionModalForm>
               </>
             )}
-
-            <S.TransactionModalMessages>
-              <S.TransactionModalMessagesTable>
-                <S.TransactionModalMessagesTableBody>
-                  {/* {state.progress && (
-                      <S.TransactionModalMessagesTableRow>
-                        <S.TransactionModalMessagesTableRowLabel>State</S.TransactionModalMessagesTableRowLabel>
-                        <S.TransactionModalMessagesTableRowQuantity>
-                          {state.progress}
-                        </S.TransactionModalMessagesTableRowQuantity>
-                      </S.TransactionModalMessagesTableRow>
-                    )} */}
-                  {state.hash && (
-                    <S.TransactionModalMessagesTableRow>
-                      <S.TransactionModalMessagesTableRowLabel>Hash</S.TransactionModalMessagesTableRowLabel>
-                      <S.TransactionModalMessagesTableRowQuantity>
-                        <a target="_blank" href={etherscanLink || ''}>
-                          {state.hash}
-                        </a>
-                      </S.TransactionModalMessagesTableRowQuantity>
-                    </S.TransactionModalMessagesTableRow>
-                  )}
-                  {state.receipt && (
-                    <S.TransactionModalMessagesTableRow>
-                      <S.TransactionModalMessagesTableRowLabel>Block number</S.TransactionModalMessagesTableRowLabel>
-                      <S.TransactionModalMessagesTableRowQuantity>
-                        {state.receipt.blockNumber}
-                      </S.TransactionModalMessagesTableRowQuantity>
-                    </S.TransactionModalMessagesTableRow>
-                  )}
-                  {state.receipt && (
-                    <S.TransactionModalMessagesTableRow>
-                      <S.TransactionModalMessagesTableRowLabel>Gas used</S.TransactionModalMessagesTableRowLabel>
-                      <S.TransactionModalMessagesTableRowQuantity>
-                        {state.receipt.gasUsed}
-                      </S.TransactionModalMessagesTableRowQuantity>
-                    </S.TransactionModalMessagesTableRow>
-                  )}
-                  {state.receipt && (
-                    <S.TransactionModalMessagesTableRow>
-                      <S.TransactionModalMessagesTableRowLabel>
-                        Cumulative gas used
-                      </S.TransactionModalMessagesTableRowLabel>
-                      <S.TransactionModalMessagesTableRowQuantity>
-                        {state.receipt.cumulativeGasUsed}
-                      </S.TransactionModalMessagesTableRowQuantity>
-                    </S.TransactionModalMessagesTableRow>
-                  )}
-                </S.TransactionModalMessagesTableBody>
-              </S.TransactionModalMessagesTable>
-            </S.TransactionModalMessages>
 
             {finished && (
               <S.TransactionModalAction>

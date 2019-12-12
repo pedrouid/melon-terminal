@@ -6,11 +6,15 @@ import * as S from './ProgressBar.styles';
 
 export interface ProgressBarProps {
   step: number;
+  loading: boolean;
 }
 
-export const ProgressBarContext = createContext(0);
+export const ProgressBarContext = createContext({
+  current: 0,
+  loading: false,
+});
 
-export const ProgressBar: React.FC<ProgressBarProps> = ({ step, children }) => {
+export const ProgressBar: React.FC<ProgressBarProps> = ({ step, loading, children }) => {
   const childrenWithProps = React.Children.map(children, (child, index) => {
     if (React.isValidElement(child)) {
       return React.cloneElement<ProgressBarStepProps>(child, {
@@ -33,7 +37,9 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({ step, children }) => {
   return (
     <S.Container>
       <S.BadgeContainer>
-        <ProgressBarContext.Provider value={step}>{childrenWithProps}</ProgressBarContext.Provider>
+        <ProgressBarContext.Provider value={{ loading, current: step }}>
+          {childrenWithProps}
+        </ProgressBarContext.Provider>
       </S.BadgeContainer>
       <S.ProgressBar>
         <S.Progress style={transitions} />
