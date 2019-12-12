@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Modal, { ModalProps } from 'styled-react-modal';
 import { FormContext } from 'react-hook-form';
 import { TransactionHookValues, TransactionProgress } from '~/hooks/useTransaction';
@@ -8,7 +8,6 @@ import { InputField } from '~/components/Common/Form/InputField/InputField';
 import { SubmitButton } from '~/components/Common/Form/SubmitButton/SubmitButton';
 import { CancelButton } from '~/components/Common/Form/CancelButton/CancelButton';
 import { useEtherscanLink } from '~/hooks/useEtherscanLink';
-import { useEthGasStation, EthGasStationState } from '~/hooks/useEthGasStation';
 import { useEnvironment } from '~/hooks/useEnvironment';
 import * as S from './TransactionModal.styles';
 
@@ -42,7 +41,6 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
     state.progress < TransactionProgress.TRANSACTION_ACKNOWLEDGED &&
     state.progress > TransactionProgress.TRANSACTION_STARTED;
 
-  const ethGasStation = useEthGasStation();
   const etherscanLink = useEtherscanLink({ hash: state.hash });
   const environment = useEnvironment();
   const network = environment && environment.network;
@@ -68,25 +66,22 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
             </ProgressBar>
             {!finished && (
               <>
-                {!error &&
-                  !state.loading &&
-                  ethGasStation.state === EthGasStationState.SUCCESS &&
-                  network === 'MAINNET' && (
-                    <S.EthGasStation>
-                      <S.EthGasStationButton onClick={() => setGasPrice(ethGasStation.fast)}>
-                        <S.EthGasStationButtonGwei>{ethGasStation.fast}</S.EthGasStationButtonGwei>
-                        <S.EthGasStationButtonText>Fast Gas Price</S.EthGasStationButtonText>
-                      </S.EthGasStationButton>
-                      <S.EthGasStationButton onClick={() => setGasPrice(ethGasStation.average)}>
-                        <S.EthGasStationButtonGwei>{ethGasStation.average}</S.EthGasStationButtonGwei>
-                        <S.EthGasStationButtonText>Average Gas Price</S.EthGasStationButtonText>
-                      </S.EthGasStationButton>
-                      <S.EthGasStationButton onClick={() => setGasPrice(ethGasStation.low)}>
-                        <S.EthGasStationButtonGwei>{ethGasStation.low}</S.EthGasStationButtonGwei>
-                        <S.EthGasStationButtonText>Low Gas Price</S.EthGasStationButtonText>
-                      </S.EthGasStationButton>
-                    </S.EthGasStation>
-                  )}
+                {!error && !state.loading && state.ethGasStation && network === 'MAINNET' && (
+                  <S.EthGasStation>
+                    <S.EthGasStationButton onClick={() => setGasPrice(state.ethGasStation!.low)}>
+                      <S.EthGasStationButtonGwei>{state.ethGasStation.low}</S.EthGasStationButtonGwei>
+                      <S.EthGasStationButtonText>Low Gas Price</S.EthGasStationButtonText>
+                    </S.EthGasStationButton>
+                    <S.EthGasStationButton onClick={() => setGasPrice(state.ethGasStation!.average)}>
+                      <S.EthGasStationButtonGwei>{state.ethGasStation.average}</S.EthGasStationButtonGwei>
+                      <S.EthGasStationButtonText>Average Gas Price</S.EthGasStationButtonText>
+                    </S.EthGasStationButton>
+                    <S.EthGasStationButton onClick={() => setGasPrice(state.ethGasStation!.fast)}>
+                      <S.EthGasStationButtonGwei>{state.ethGasStation.fast}</S.EthGasStationButtonGwei>
+                      <S.EthGasStationButtonText>Fast Gas Price</S.EthGasStationButtonText>
+                    </S.EthGasStationButton>
+                  </S.EthGasStation>
+                )}
                 <S.TransactionModalForm onSubmit={submit}>
                   {!error && !state.loading && (
                     <>
