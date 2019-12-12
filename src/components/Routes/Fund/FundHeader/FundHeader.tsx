@@ -10,11 +10,11 @@ export interface FundHeaderProps {
 }
 
 export const FundHeader: React.FC<FundHeaderProps> = ({ address }) => {
-  const [details, query] = useFundDetailsQuery(address);
+  const [details, accountDetails, query] = useFundDetailsQuery(address);
   const fundEtherscanLink = useEtherscanLink({ address });
   // const managerEtherscanLink = useEtherscanLink(details && details.manager);
 
-  if (query.loading) {
+  if (!query || query.loading) {
     return <Spinner />;
   }
 
@@ -30,6 +30,7 @@ export const FundHeader: React.FC<FundHeaderProps> = ({ address }) => {
   const feeManager = routes && routes.feeManager;
   const managementFee = feeManager && feeManager.managementFee;
   const performanceFee = feeManager && feeManager.performanceFee;
+  const sharesOwned = accountDetails && accountDetails.shares && accountDetails.shares.balanceOf;
 
   return (
     <>
@@ -48,11 +49,11 @@ export const FundHeader: React.FC<FundHeaderProps> = ({ address }) => {
         <S.FundHeaderInformation>
           <S.FundHeaderItem>
             <S.FundHeaderItemTitle>Share price</S.FundHeaderItemTitle>
-            {accounting && accounting.sharePrice && accounting.sharePrice.toFixed(4)} WETH / share
+            {(accounting && accounting.sharePrice && accounting.sharePrice.toFixed(4)) || 0} WETH / share
           </S.FundHeaderItem>
           <S.FundHeaderItem>
             <S.FundHeaderItemTitle>AUM</S.FundHeaderItemTitle>
-            {accounting && accounting.grossAssetValue && accounting.grossAssetValue.toFixed(4)}
+            {(accounting && accounting.grossAssetValue && accounting.grossAssetValue.toFixed(4)) || 0}
           </S.FundHeaderItem>
           <S.FundHeaderItem>
             <S.FundHeaderItemTitle>Ranking</S.FundHeaderItemTitle>
@@ -68,7 +69,7 @@ export const FundHeader: React.FC<FundHeaderProps> = ({ address }) => {
           </S.FundHeaderItem>
           <S.FundHeaderItem>
             <S.FundHeaderItemTitle>Shares owned by me</S.FundHeaderItemTitle>
-            TODO
+            {sharesOwned && sharesOwned.toFixed(4)}
           </S.FundHeaderItem>
           <S.FundHeaderItem>
             <S.FundHeaderItemTitle>Management fee</S.FundHeaderItemTitle>

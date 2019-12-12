@@ -31,7 +31,7 @@ const defaultValues = {
 export const Redeem: React.FC<RedeemProps> = ({ address }) => {
   const environment = useEnvironment()!;
   const [fundQueryData, query] = useFundInvestQuery(address);
-  const [_, detailsQuery] = useFundDetailsQuery(address);
+  const [_, __, detailsQuery] = useFundDetailsQuery(address);
 
   const account = fundQueryData && fundQueryData.account;
 

@@ -32,7 +32,14 @@ export interface FundDetails {
   };
 }
 
+export interface AccountDetails {
+  shares: {
+    balanceOf: BigNumber;
+  };
+}
+
 export interface FundDetailsQueryResult {
+  account: AccountDetails;
   fund: FundDetails;
 }
 
@@ -42,6 +49,11 @@ export interface FundDetailsQueryVariables {
 
 const FundDetailsQuery = gql`
   query FundDetailsQuery($address: String!) {
+    account {
+      shares(address: $address) {
+        balanceOf
+      }
+    }
     fund(address: $address) {
       name
       manager
@@ -80,5 +92,9 @@ export const useFundDetailsQuery = (address: string) => {
   };
 
   const result = useOnChainQuery<FundDetailsQueryResult, FundDetailsQueryVariables>(FundDetailsQuery, options);
-  return [result.data && result.data.fund, result] as [FundDetails | undefined, typeof result];
+  return [result.data && result.data.fund, result.data && result.data.account, result] as [
+    FundDetails | undefined,
+    AccountDetails | undefined,
+    typeof result
+  ];
 };

@@ -2,9 +2,10 @@ import React from 'react';
 import * as Rx from 'rxjs';
 import { retryWhen, delay } from 'rxjs/operators';
 import { Eth } from 'web3-eth';
+import { HttpProvider } from 'web3-providers';
 import { networkFromId } from '~/utils/networkFromId';
 import { connectionEstablished, ConnectionAction, ConnectionMethod } from '~/components/Contexts/Connection';
-import { HttpProvider } from 'web3-providers';
+import { SubmitButton } from '~/components/Common/Form/SubmitButton/SubmitButton';
 
 interface EthResource extends Rx.Unsubscribable {
   eth: Eth;
@@ -48,7 +49,7 @@ export const Ganache: React.FC<any> = ({ select, active }) => {
   return (
     <div>
       <h2>Ganache</h2>
-      {!active ? <button onClick={() => select()}>Connect</button> : <div>Currently selected</div>}
+      {!active ? <SubmitButton onClick={() => select()} label="Connect" /> : <div>Currently selected</div>}
     </div>
   );
 };
