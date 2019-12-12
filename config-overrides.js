@@ -128,7 +128,7 @@ function validateDeployment(name) {
   try {
     JSON.parse(deployment);
     return true;
-  } catch {
+  } catch (e) {
     // Nothing to do here.
   }
 
@@ -138,7 +138,7 @@ function validateDeployment(name) {
       JSON.parse(fs.readFileSync(deploymentPath), 'utf8');
       return true;
     }
-  } catch {
+  } catch (e) {
     // Nothing to do here.
   }
 
@@ -163,7 +163,7 @@ function validateGanache() {
   try {
     JSON.parse(accounts);
     return true;
-  } catch {
+  } catch (e) {
     // Nothing to do here.
   }
 
@@ -173,7 +173,7 @@ function validateGanache() {
       JSON.parse(fs.readFileSync(accountsPath), 'utf8');
       return true;
     }
-  } catch {
+  } catch (e) {
     // Nothing to do here.
   }
 
