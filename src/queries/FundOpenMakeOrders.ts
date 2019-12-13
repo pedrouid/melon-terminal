@@ -5,6 +5,7 @@ import { useOnChainQuery } from '~/hooks/useQuery';
 import { Address } from '@melonproject/melonjs';
 
 export interface OpenMakeOrder {
+  id: BigNumber;
   expiresAt: Date;
   orderIndex: BigNumber;
   buyAsset: Address;
@@ -35,6 +36,7 @@ const FundOpenMakeOrdersQuery = gql`
       routes {
         trading {
           openMakeOrders {
+            id
             expiresAt
             orderIndex
             buyAsset

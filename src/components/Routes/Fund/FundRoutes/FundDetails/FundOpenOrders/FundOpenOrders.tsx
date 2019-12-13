@@ -21,7 +21,7 @@ export const FundOpenOrders: React.FC<FundOpenOrdersProps> = ({ address }) => {
           <thead>
             <S.HeaderRow>
               <S.HeaderCell>Asset</S.HeaderCell>
-              <S.HeaderCell>Type</S.HeaderCell>
+              <S.HeaderCell>Exchange</S.HeaderCell>
               <S.HeaderCellRightAlign>Price</S.HeaderCellRightAlign>
               <S.HeaderCellRightAlign>Quantity</S.HeaderCellRightAlign>
               <S.HeaderCell>Expired</S.HeaderCell>
