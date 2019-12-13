@@ -43,6 +43,7 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
   ...rest
 }) => {
   const gas = state.ethGasStation;
+  const price = state.defaultGasPrice;
 
   const hash = state.hash;
   const receipt = state.receipt;
@@ -52,6 +53,7 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
   const error = state.error;
   const loading = state.loading;
   const finished = state.progress >= TransactionProgress.EXECUTION_FINISHED;
+  const estimated = state.progress >= TransactionProgress.ESTIMATION_FINISHED;
   const open =
     state.progress < TransactionProgress.TRANSACTION_ACKNOWLEDGED &&
     state.progress > TransactionProgress.TRANSACTION_STARTED;
@@ -78,7 +80,7 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
               <ProgressBarStep />
             </ProgressBar>
 
-            {!finished && gas && (
+            {!finished && estimated && gas && (
               <S.EthGasStation>
                 <S.EthGasStationButton onClick={() => !loading && setGasPrice(gas!.low)} disabled={loading}>
                   <S.EthGasStationButtonGwei>{gas.low}</S.EthGasStationButtonGwei>
@@ -96,7 +98,7 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
             )}
 
             <S.TransactionModalForm onSubmit={submit}>
-              {!finished && (
+              {!finished && !(!estimated && error) && (
                 <>
                   <S.TransactionModalFeeForm>
                     <InputField
@@ -105,7 +107,8 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
                       name="gasPrice"
                       label="Gas Price (GWEI)"
                       step=".01"
-                      disabled={!!loading}
+                      defaultValue={price}
+                      disabled={!!loading && estimated}
                     />
                     {options && options.gas && <div>Gas limit: {options.gas}</div>}
                     {options && options.amgu && <div>AMGU: {options.amgu.toFixed(4)}</div>}
@@ -170,13 +173,13 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
               <S.TransactionModalActions>
                 {!finished && (
                   <S.TransactionModalAction>
-                    <CancelButton label="Cancel" onClick={() => cancel()} />
+                    <CancelButton label={estimated ? 'Cancel' : 'Close'} onClick={() => cancel()} />
                   </S.TransactionModalAction>
                 )}
 
-                {!finished && (
+                {!finished && estimated && (
                   <S.TransactionModalAction>
-                    <SubmitButton label={state.error ? 'Retry' : 'Confirm'} disabled={loading} />
+                    <SubmitButton label={error ? 'Retry' : 'Confirm'} disabled={loading} />
                   </S.TransactionModalAction>
                 )}
 
