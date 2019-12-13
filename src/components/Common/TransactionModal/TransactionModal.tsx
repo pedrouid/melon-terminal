@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import Modal, { ModalProps } from 'styled-react-modal';
 import { FormContext } from 'react-hook-form';
 import { TransactionHookValues, TransactionProgress } from '~/hooks/useTransaction';
@@ -8,7 +8,6 @@ import { InputField } from '~/components/Common/Form/InputField/InputField';
 import { SubmitButton } from '~/components/Common/Form/SubmitButton/SubmitButton';
 import { CancelButton } from '~/components/Common/Form/CancelButton/CancelButton';
 import { useEtherscanLink } from '~/hooks/useEtherscanLink';
-import { useEnvironment } from '~/hooks/useEnvironment';
 import * as S from './TransactionModal.styles';
 
 function progressToStep(progress: number) {
@@ -47,6 +46,7 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
 
   const hash = state.hash;
   const receipt = state.receipt;
+  const options = state.sendOptions;
   const output = !!(hash || receipt);
 
   const error = state.error;
@@ -59,7 +59,7 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
   const etherscanLink = useEtherscanLink({ hash: state.hash });
 
   const setGasPrice = (value: number = 0) => {
-    form.setValue('gasPrice', value.toString());
+    form.setValue('gasPrice', value);
   };
 
   const currentStep = progressToStep(state.progress);
@@ -107,9 +107,9 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
                       step=".01"
                       disabled={!!loading}
                     />
-                    <div>Gas limit: {state.gasLimit}</div>
-                    {state.amguValue && <div>AMGU: {state.amguValue.toFixed()}</div>}
-                    {state.incentiveValue && <div>INCENTIVE: {state.incentiveValue.toFixed()}</div>}
+                    {options && options.gas && <div>Gas limit: {options.gas}</div>}
+                    {options && options.amgu && <div>AMGU: {options.amgu.toFixed(4)}</div>}
+                    {options && options.incentive && <div>INCENTIVE: {options.incentive.toFixed(4)}</div>}
                   </S.TransactionModalFeeForm>
                   <S.TransactionModalMessage>
                     If you do not change the gas price field, the default gas price will be used. If you wish to set the
