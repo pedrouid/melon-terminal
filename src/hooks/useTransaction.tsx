@@ -16,6 +16,7 @@ export interface TransactionFormValues extends FieldValues {
 export interface TransactionState {
   progress: number;
   sendOptions?: SendOptions;
+  defaultGasPrice?: number;
   ethGasStation?: EthGasStation;
   transaction?: Transaction;
   name?: string;
@@ -77,6 +78,7 @@ interface EstimationPending {
 
 interface EstimationFinished {
   type: TransactionProgress.ESTIMATION_FINISHED;
+  defaultGasPrice: number;
   sendOptions: SendOptions;
   ethGasStation?: EthGasStation;
 }
@@ -135,6 +137,7 @@ function reducer(state: TransactionState, action: TransactionAction): Transactio
         error: undefined,
         hash: undefined,
         receipt: undefined,
+        defaultGasPrice: undefined,
         ethGasStation: undefined,
         sendOptions: undefined,
         loading: true,
@@ -149,6 +152,7 @@ function reducer(state: TransactionState, action: TransactionAction): Transactio
         error: undefined,
         hash: undefined,
         receipt: undefined,
+        defaultGasPrice: undefined,
         ethGasStation: undefined,
         sendOptions: undefined,
         loading: false,
@@ -209,6 +213,7 @@ function reducer(state: TransactionState, action: TransactionAction): Transactio
         ...state,
         progress: TransactionProgress.ESTIMATION_FINISHED,
         loading: false,
+        defaultGasPrice: action.defaultGasPrice,
         sendOptions: action.sendOptions,
         ethGasStation: action.ethGasStation,
       };
@@ -272,10 +277,11 @@ function estimationPending(dispatch: React.Dispatch<TransactionAction>) {
 
 function estimationFinished(
   dispatch: React.Dispatch<TransactionAction>,
+  defaultGasPrice: number,
   sendOptions: SendOptions,
   ethGasStation?: EthGasStation
 ) {
-  dispatch({ sendOptions, ethGasStation, type: TransactionProgress.ESTIMATION_FINISHED });
+  dispatch({ defaultGasPrice, sendOptions, ethGasStation, type: TransactionProgress.ESTIMATION_FINISHED });
 }
 
 function estimationError(dispatch: React.Dispatch<TransactionAction>, error: Error) {
@@ -365,7 +371,7 @@ export function useTransaction(environment: Environment, options?: TransactionOp
   };
 
   const submit = form.handleSubmit(async data => {
-    if (!state.transaction) {
+    if (!(state.transaction && state.sendOptions)) {
       return;
     }
 
@@ -435,10 +441,8 @@ export function useTransaction(environment: Environment, options?: TransactionOp
               state.transaction!.prepare(),
             ])!;
 
-            const gas = ethGasStation ? ethGasStation.average : +onChainPrice! / 10e9;
-            form.setValue('gasPrice', gas);
-
-            estimationFinished(dispatch, sendOptions!, ethGasStation);
+            const defaultGasPrice = ethGasStation ? ethGasStation.average : +onChainPrice! / 10e9;
+            estimationFinished(dispatch, defaultGasPrice, sendOptions!, ethGasStation);
           } catch (error) {
             estimationError(dispatch, error);
           }
