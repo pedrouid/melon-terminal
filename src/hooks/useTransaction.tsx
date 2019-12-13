@@ -5,24 +5,18 @@ import { TransactionReceipt } from 'web3-core';
 import { Transaction, SendOptions } from '@melonproject/melonjs';
 import { FormContextValues } from 'react-hook-form/dist/contextTypes';
 import { FieldValues } from 'react-hook-form/dist/types';
-import BigNumber from 'bignumber.js';
 
 import { Environment } from '~/environment';
-import { useEnvironment } from '~/hooks/useEnvironment';
 import { NetworkEnum } from '~/types';
 
 export interface TransactionFormValues extends FieldValues {
-  gasLimit: string;
-  gasPrice: string;
+  gasPrice: number;
 }
 
 export interface TransactionState {
   progress: number;
-  gasLimit?: number;
-  gasPrice?: string;
+  sendOptions?: SendOptions;
   ethGasStation?: EthGasStation;
-  amguValue?: BigNumber;
-  incentiveValue?: BigNumber;
   transaction?: Transaction;
   name?: string;
   hash?: string;
@@ -83,11 +77,8 @@ interface EstimationPending {
 
 interface EstimationFinished {
   type: TransactionProgress.ESTIMATION_FINISHED;
-  limit: number;
-  price: string;
+  sendOptions: SendOptions;
   ethGasStation?: EthGasStation;
-  amgu?: BigNumber;
-  incentive?: BigNumber;
 }
 
 interface EstimationError {
@@ -144,11 +135,8 @@ function reducer(state: TransactionState, action: TransactionAction): Transactio
         error: undefined,
         hash: undefined,
         receipt: undefined,
-        gasPrice: undefined,
         ethGasStation: undefined,
-        gasLimit: undefined,
-        amguValue: undefined,
-        incentiveValue: undefined,
+        sendOptions: undefined,
         loading: true,
       };
 
@@ -161,11 +149,8 @@ function reducer(state: TransactionState, action: TransactionAction): Transactio
         error: undefined,
         hash: undefined,
         receipt: undefined,
-        gasPrice: undefined,
         ethGasStation: undefined,
-        gasLimit: undefined,
-        amguValue: undefined,
-        incentiveValue: undefined,
+        sendOptions: undefined,
         loading: false,
       };
 
@@ -224,11 +209,8 @@ function reducer(state: TransactionState, action: TransactionAction): Transactio
         ...state,
         progress: TransactionProgress.ESTIMATION_FINISHED,
         loading: false,
-        gasPrice: action.price,
+        sendOptions: action.sendOptions,
         ethGasStation: action.ethGasStation,
-        gasLimit: action.limit,
-        amguValue: action.amgu,
-        incentiveValue: action.incentive,
       };
 
     case TransactionProgress.EXECUTION_PENDING: {
@@ -290,13 +272,10 @@ function estimationPending(dispatch: React.Dispatch<TransactionAction>) {
 
 function estimationFinished(
   dispatch: React.Dispatch<TransactionAction>,
-  price: string,
-  limit: number,
-  ethGasStation?: EthGasStation,
-  amgu?: BigNumber,
-  incentive?: BigNumber
+  sendOptions: SendOptions,
+  ethGasStation?: EthGasStation
 ) {
-  dispatch({ limit, price, ethGasStation, amgu, incentive, type: TransactionProgress.ESTIMATION_FINISHED });
+  dispatch({ sendOptions, ethGasStation, type: TransactionProgress.ESTIMATION_FINISHED });
 }
 
 function estimationError(dispatch: React.Dispatch<TransactionAction>, error: Error) {
@@ -371,9 +350,6 @@ export function useTransaction(environment: Environment, options?: TransactionOp
     validationSchema: Yup.object().shape({
       gasPrice: Yup.number(),
     }),
-    defaultValues: {
-      gasPrice: `${state.gasPrice || ''}`,
-    },
   });
 
   const start = (transaction: Transaction, name: string) => {
@@ -398,9 +374,9 @@ export function useTransaction(environment: Environment, options?: TransactionOp
       const transaction = state.transaction!;
       const opts: SendOptions = {
         gasPrice: `${+data.gasPrice * 10e9}`,
-        ...(state.gasLimit && { gas: state.gasLimit }),
-        ...(state.amguValue && { amgu: state.amguValue }),
-        ...(state.incentiveValue && { incentive: state.incentiveValue }),
+        ...(state.sendOptions && state.sendOptions.gas && { gas: state.sendOptions.gas }),
+        ...(state.sendOptions && state.sendOptions.amgu && { amgu: state.sendOptions.amgu }),
+        ...(state.sendOptions && state.sendOptions.incentive && { incentive: state.sendOptions.incentive }),
       };
 
       const receipt = await transaction.send(opts).on('transactionHash', hash => executionReceived(dispatch, hash));
@@ -453,16 +429,16 @@ export function useTransaction(environment: Environment, options?: TransactionOp
         (async () => {
           try {
             estimationPending(dispatch);
-            const [ethGasStation, price, options] = await Promise.all([
+            const [ethGasStation, onChainPrice, sendOptions] = await Promise.all([
               fetchEthGasStation(environment),
               environment.client.getGasPrice(),
               state.transaction!.prepare(),
             ])!;
 
-            const gasPriceFromState = ethGasStation ? ethGasStation.average : +price! / 10e9;
-            form.setValue('gasPrice', `${gasPriceFromState || ''}`);
+            const gas = ethGasStation ? ethGasStation.average : +onChainPrice! / 10e9;
+            form.setValue('gasPrice', gas);
 
-            estimationFinished(dispatch, price!, options!.gas!, ethGasStation, options!.amgu, options!.incentive);
+            estimationFinished(dispatch, sendOptions!, ethGasStation);
           } catch (error) {
             estimationError(dispatch, error);
           }
