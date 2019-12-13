@@ -51,7 +51,6 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
 
   const error = state.error;
   const loading = state.loading;
-  const disabled = !!(loading || error);
   const finished = state.progress >= TransactionProgress.EXECUTION_FINISHED;
   const open =
     state.progress < TransactionProgress.TRANSACTION_ACKNOWLEDGED &&
@@ -79,17 +78,17 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
               <ProgressBarStep />
             </ProgressBar>
 
-            {!finished && !error && gas && (
+            {!finished && gas && (
               <S.EthGasStation>
-                <S.EthGasStationButton onClick={() => !disabled && setGasPrice(gas!.low)} disabled={disabled}>
+                <S.EthGasStationButton onClick={() => !loading && setGasPrice(gas!.low)} disabled={loading}>
                   <S.EthGasStationButtonGwei>{gas.low}</S.EthGasStationButtonGwei>
                   <S.EthGasStationButtonText>Low Gas Price</S.EthGasStationButtonText>
                 </S.EthGasStationButton>
-                <S.EthGasStationButton onClick={() => !disabled && setGasPrice(gas!.average)} disabled={disabled}>
+                <S.EthGasStationButton onClick={() => !loading && setGasPrice(gas!.average)} disabled={loading}>
                   <S.EthGasStationButtonGwei>{gas.average}</S.EthGasStationButtonGwei>
                   <S.EthGasStationButtonText>Average Gas Price</S.EthGasStationButtonText>
                 </S.EthGasStationButton>
-                <S.EthGasStationButton onClick={() => !disabled && setGasPrice(gas!.fast)} disabled={disabled}>
+                <S.EthGasStationButton onClick={() => !loading && setGasPrice(gas!.fast)} disabled={loading}>
                   <S.EthGasStationButtonGwei>{gas.fast}</S.EthGasStationButtonGwei>
                   <S.EthGasStationButtonText>Fast Gas Price</S.EthGasStationButtonText>
                 </S.EthGasStationButton>
@@ -97,7 +96,7 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
             )}
 
             <S.TransactionModalForm onSubmit={submit}>
-              {!finished && !error && (
+              {!finished && (
                 <>
                   <S.TransactionModalFeeForm>
                     <InputField
@@ -106,7 +105,7 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
                       name="gasPrice"
                       label="Gas Price (GWEI)"
                       step=".01"
-                      disabled={disabled}
+                      disabled={!!loading}
                     />
                     <div>Gas limit: {state.gasLimit}</div>
                     {state.amguValue && <div>AMGU: {state.amguValue.toFixed()}</div>}
@@ -125,14 +124,6 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
                 <S.TransactionModalMessages>
                   <S.TransactionModalMessagesTable>
                     <S.TransactionModalMessagesTableBody>
-                      {/* {state.progress && (
-                        <S.TransactionModalMessagesTableRow>
-                          <S.TransactionModalMessagesTableRowLabel>State</S.TransactionModalMessagesTableRowLabel>
-                          <S.TransactionModalMessagesTableRowQuantity>
-                            {state.progress}
-                          </S.TransactionModalMessagesTableRowQuantity>
-                        </S.TransactionModalMessagesTableRow>
-                      )} */}
                       {hash && (
                         <S.TransactionModalMessagesTableRow>
                           <S.TransactionModalMessagesTableRowLabel>Hash</S.TransactionModalMessagesTableRowLabel>
