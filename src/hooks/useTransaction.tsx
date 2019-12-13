@@ -3,10 +3,13 @@ import * as Yup from 'yup';
 import useForm from 'react-hook-form';
 import { TransactionReceipt } from 'web3-core';
 import { Transaction, SendOptions } from '@melonproject/melonjs';
-import { Environment } from '~/environment';
 import { FormContextValues } from 'react-hook-form/dist/contextTypes';
 import { FieldValues } from 'react-hook-form/dist/types';
 import BigNumber from 'bignumber.js';
+
+import { Environment } from '~/environment';
+import { useEnvironment } from '~/hooks/useEnvironment';
+import { NetworkEnum } from '~/types';
 
 export interface TransactionFormValues extends FieldValues {
   gasLimit: string;
@@ -17,6 +20,7 @@ export interface TransactionState {
   progress: number;
   gasLimit?: number;
   gasPrice?: string;
+  ethGasStation?: EthGasStation;
   amguValue?: BigNumber;
   incentiveValue?: BigNumber;
   transaction?: Transaction;
@@ -81,6 +85,7 @@ interface EstimationFinished {
   type: TransactionProgress.ESTIMATION_FINISHED;
   limit: number;
   price: string;
+  ethGasStation?: EthGasStation;
   amgu?: BigNumber;
   incentive?: BigNumber;
 }
@@ -122,6 +127,12 @@ interface ExecutionError {
   error: Error;
 }
 
+export interface EthGasStation {
+  fast: number;
+  low: number;
+  average: number;
+}
+
 function reducer(state: TransactionState, action: TransactionAction): TransactionState {
   switch (action.type) {
     case TransactionProgress.TRANSACTION_STARTED:
@@ -134,6 +145,7 @@ function reducer(state: TransactionState, action: TransactionAction): Transactio
         hash: undefined,
         receipt: undefined,
         gasPrice: undefined,
+        ethGasStation: undefined,
         gasLimit: undefined,
         amguValue: undefined,
         incentiveValue: undefined,
@@ -150,6 +162,7 @@ function reducer(state: TransactionState, action: TransactionAction): Transactio
         hash: undefined,
         receipt: undefined,
         gasPrice: undefined,
+        ethGasStation: undefined,
         gasLimit: undefined,
         amguValue: undefined,
         incentiveValue: undefined,
@@ -212,6 +225,7 @@ function reducer(state: TransactionState, action: TransactionAction): Transactio
         progress: TransactionProgress.ESTIMATION_FINISHED,
         loading: false,
         gasPrice: action.price,
+        ethGasStation: action.ethGasStation,
         gasLimit: action.limit,
         amguValue: action.amgu,
         incentiveValue: action.incentive,
@@ -278,10 +292,11 @@ function estimationFinished(
   dispatch: React.Dispatch<TransactionAction>,
   price: string,
   limit: number,
+  ethGasStation?: EthGasStation,
   amgu?: BigNumber,
   incentive?: BigNumber
 ) {
-  dispatch({ limit, amgu, incentive, price, type: TransactionProgress.ESTIMATION_FINISHED });
+  dispatch({ limit, price, ethGasStation, amgu, incentive, type: TransactionProgress.ESTIMATION_FINISHED });
 }
 
 function estimationError(dispatch: React.Dispatch<TransactionAction>, error: Error) {
@@ -318,6 +333,25 @@ export interface TransactionHookValues<FormValues extends TransactionFormValues 
   start: (transaction: Transaction, name: string) => void;
   cancel: () => void;
   acknowledge: () => void;
+}
+
+async function fetchEthGasStation(environment: Environment) {
+  if (environment.network !== NetworkEnum.MAINNET) {
+    return undefined;
+  }
+
+  try {
+    const result = await fetch('https://ethgasstation.info/json/ethgasAPI.json');
+    const json = await result.json();
+
+    return {
+      fast: json.fast / 10,
+      low: json.safeLow / 10,
+      average: json.average / 10,
+    };
+  } catch (error) {
+    return undefined;
+  }
 }
 
 export function useTransaction(environment: Environment, options?: TransactionOptions) {
@@ -421,12 +455,13 @@ export function useTransaction(environment: Environment, options?: TransactionOp
         (async () => {
           try {
             estimationPending(dispatch);
-            const [price, result] = await Promise.all([
-              await environment.client.getGasPrice(),
-              await state.transaction!.prepare(),
-            ]);
+            const [ethGasStation, price, options] = await Promise.all([
+              fetchEthGasStation(environment),
+              environment.client.getGasPrice(),
+              state.transaction!.prepare(),
+            ])!;
 
-            estimationFinished(dispatch, price, result.gas!, result.amgu, result.incentive);
+            estimationFinished(dispatch, price!, options!.gas!, ethGasStation, options!.amgu, options!.incentive);
           } catch (error) {
             estimationError(dispatch, error);
           }
@@ -437,9 +472,11 @@ export function useTransaction(environment: Environment, options?: TransactionOp
   }, [state.progress]);
 
   useEffect(() => {
+    const gasPriceFromState = state.ethGasStation ? state.ethGasStation.average : +state.gasPrice! / 10e9;
+
     form.setValue('gasLimit', `${state.gasLimit || ''}`);
-    form.setValue('gasPrice', `${state.gasPrice ? +state.gasPrice / 10e9 : ''}`);
-  }, [state.gasLimit, state.gasPrice]);
+    form.setValue('gasPrice', `${gasPriceFromState || ''}`);
+  }, [state.gasLimit, state.gasPrice, state.ethGasStation]);
 
   return {
     state,

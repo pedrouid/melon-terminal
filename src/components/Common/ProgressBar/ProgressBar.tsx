@@ -1,33 +1,39 @@
-import React, { useState } from 'react';
+import React, { createContext } from 'react';
 import { useSpring } from 'react-spring';
 
+import { ProgressBarStepProps } from './ProgressBarStep/ProgressBarStep';
 import * as S from './ProgressBar.styles';
 
 export interface ProgressBarProps {
-  progress: number;
-  step?: number;
+  step: number;
 }
 
-export const ProgressBar: React.FC<ProgressBarProps> = ({ progress, step }) => {
-  const percentage = Math.min(100, Math.max(0, progress));
-  const badges = Array(step).fill(0);
+export const ProgressBarContext = createContext(0);
 
-  const transitions = useSpring({ from: { width: '0%' }, to: { width: `${percentage}%` }, config: { duration: 500 } });
+export const ProgressBar: React.FC<ProgressBarProps> = ({ step, children }) => {
+  const childrenWithProps = React.Children.map(children, (child, index) => {
+    if (React.isValidElement(child)) {
+      return React.cloneElement<ProgressBarStepProps>(child, {
+        ...child.props,
+        step: index || 0,
+      });
+    }
+
+    return null;
+  });
+
+  const percent = children && Array.isArray(children) && children.length ? (100 / (children.length - 1)) * step : 0;
+
+  const transitions = useSpring({
+    from: { width: '0%' },
+    to: { width: `${percent}%` },
+    config: { duration: 500 },
+  });
 
   return (
     <S.Container>
       <S.BadgeContainer>
-        {step &&
-          badges.map((badges: number, index: number) => {
-            const progressStep = (100 / (step - 1)) * index;
-            const selected = percentage >= progressStep;
-
-            return (
-              <S.Badge key={index} selected={selected}>
-                {index}
-              </S.Badge>
-            );
-          })}
+        <ProgressBarContext.Provider value={step}>{childrenWithProps}</ProgressBarContext.Provider>
       </S.BadgeContainer>
       <S.ProgressBar>
         <S.Progress style={transitions} />

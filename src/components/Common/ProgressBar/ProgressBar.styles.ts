@@ -31,21 +31,3 @@ export const BadgeContainer = styled.div`
   z-index: 1;
   justify-content: space-between;
 `;
-
-export const Badge = styled.div`
-  height: 20px;
-  width: 20px;
-  border-radius: 50%;
-  color: white;
-  display: flex;
-  justify-content: center;
-  background-color: rgba(${(props: { selected?: boolean }) => (props.selected ? '0, 116, 217' : '211, 211, 211')});
-  z-index: 1;
-  &:first-child {
-    transform: translateX(-50%);
-  }
-
-  &:last-child {
-    transform: translateX(50%);
-  }
-`;
