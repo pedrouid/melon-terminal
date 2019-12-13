@@ -8,7 +8,6 @@ const Connect = React.lazy(() => import('./Routes/Connect/Connect'));
 const Playground = React.lazy(() => import('./Routes/Playground/Playground'));
 const NoMatch = React.lazy(() => import('./Routes/NoMatch/NoMatch'));
 const Home = React.lazy(() => import('./Routes/Hotfix/Home/Home'));
-const Fund = React.lazy(() => import('./Routes/Hotfix/Fund/Fund'));
 
 export const AppRouter = () => (
   <>
