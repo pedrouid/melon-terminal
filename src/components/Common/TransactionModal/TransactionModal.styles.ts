@@ -29,7 +29,7 @@ export const EthGasStation = styled.div`
   margin: 10px 0px 10px 0px;
 `;
 
-export const EthGasStationButton = styled.div`
+export const EthGasStationButton = styled.button`
   cursor: pointer;
   display: flex;
   flex-direction: column;

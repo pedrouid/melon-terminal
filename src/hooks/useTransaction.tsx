@@ -389,26 +389,24 @@ export function useTransaction(environment: Environment, options?: TransactionOp
   };
 
   const submit = form.handleSubmit(async data => {
-    if (state.error && state.transaction) {
-      return start(state.transaction!, state.name!);
+    if (!state.transaction) {
+      return;
     }
 
-    if (state.transaction) {
-      try {
-        executionPending(dispatch);
-        const transaction = state.transaction!;
-        const opts: SendOptions = {
-          gasPrice: `${+data.gasPrice * 10e9}`,
-          ...(state.gasLimit && { gas: state.gasLimit }),
-          ...(state.amguValue && { amgu: state.amguValue }),
-          ...(state.incentiveValue && { incentive: state.incentiveValue }),
-        };
+    try {
+      executionPending(dispatch);
+      const transaction = state.transaction!;
+      const opts: SendOptions = {
+        gasPrice: `${+data.gasPrice * 10e9}`,
+        ...(state.gasLimit && { gas: state.gasLimit }),
+        ...(state.amguValue && { amgu: state.amguValue }),
+        ...(state.incentiveValue && { incentive: state.incentiveValue }),
+      };
 
-        const receipt = await transaction.send(opts).on('transactionHash', hash => executionReceived(dispatch, hash));
-        executionFinished(dispatch, receipt);
-      } catch (error) {
-        executionError(dispatch, error);
-      }
+      const receipt = await transaction.send(opts).on('transactionHash', hash => executionReceived(dispatch, hash));
+      executionFinished(dispatch, receipt);
+    } catch (error) {
+      executionError(dispatch, error);
     }
   });
 
@@ -461,6 +459,10 @@ export function useTransaction(environment: Environment, options?: TransactionOp
               state.transaction!.prepare(),
             ])!;
 
+            const gasPriceFromState = ethGasStation ? ethGasStation.average : +state.gasPrice! / 10e9;
+            form.setValue('gasLimit', `${options!.gas || ''}`);
+            form.setValue('gasPrice', `${gasPriceFromState || ''}`);
+
             estimationFinished(dispatch, price!, options!.gas!, ethGasStation, options!.amgu, options!.incentive);
           } catch (error) {
             estimationError(dispatch, error);
@@ -470,13 +472,6 @@ export function useTransaction(environment: Environment, options?: TransactionOp
       }
     }
   }, [state.progress]);
-
-  useEffect(() => {
-    const gasPriceFromState = state.ethGasStation ? state.ethGasStation.average : +state.gasPrice! / 10e9;
-
-    form.setValue('gasLimit', `${state.gasLimit || ''}`);
-    form.setValue('gasPrice', `${gasPriceFromState || ''}`);
-  }, [state.gasLimit, state.gasPrice, state.ethGasStation]);
 
   return {
     state,
