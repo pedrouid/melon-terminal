@@ -30,6 +30,9 @@ export interface FundParticipationQueryResult {
     shares: {
       balanceOf: BigNumber;
     };
+    participation: {
+      canCancelRequest: boolean;
+    };
   };
 }
 
@@ -52,6 +55,10 @@ const FundParticipationQuery = gql`
       shares(address: $fund) {
         balanceOf
       }
+
+      participation(address: $fund) {
+        canCancelRequest
+      }
     }
   }
 `;
@@ -68,12 +75,14 @@ export const useFundParticipationQuery = (fund?: Address) => {
   const shutdown = R.pathOr(false, ['data', 'fund', 'isShutDown'], result);
   const supply = R.pathOr(new BigNumber(0), ['data', 'fund', 'routes', 'shares', 'totalSupply'], result);
   const balance = R.pathOr(new BigNumber(0), ['data', 'account', 'shares', 'balanceOf'], result);
+  const cancelable = R.pathOr(false, ['data', 'account', 'participation', 'canCancelRequest'], result);
 
   const data = !result.loading
     ? {
         shutdown,
         supply,
         balance,
+        cancelable,
       }
     : undefined;
 

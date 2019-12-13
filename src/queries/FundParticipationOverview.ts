@@ -12,7 +12,6 @@ interface FundFields {
   name: string;
   gav: string;
   sharePrice: string;
-  totalSupply: string;
   createdAt: number;
   participation: {
     id: string;
@@ -23,12 +22,30 @@ interface FundFields {
   };
 }
 
+interface InvestmentRequestFields {
+  id: string;
+  amount: string;
+  shares: string;
+  requestTimestamp: number;
+  fund: FundFields;
+  asset: {
+    id: string;
+    symbol: string;
+  };
+}
+
+export interface InvestmentRequest extends Fund {
+  requestAsset: string;
+  requestShares: string;
+  requestAmount: string;
+  requestCreatedAt: string;
+}
+
 export interface Fund {
   name: string;
   address: string;
   inception: string;
   sharePrice: string;
-  totalSupply: string;
   version: string;
   versionAddress: string;
   participationAddress: string;
@@ -42,6 +59,7 @@ export interface FundParticipationOverviewQueryResult {
     investments: {
       fund: FundFields;
     }[];
+    investmentRequests: InvestmentRequestFields[];
   };
 }
 
@@ -55,7 +73,6 @@ const FundParticipationOverviewQuery = gql`
     name
     createdAt
     sharePrice
-    totalSupply
     version {
       id
       name
@@ -78,6 +95,20 @@ const FundParticipationOverviewQuery = gql`
           ...FundParticipationFragment
         }
       }
+
+      investmentRequests(where: { status: "PENDING" }) {
+        id
+        amount
+        shares
+        requestTimestamp
+        fund {
+          ...FundParticipationFragment
+        }
+        asset {
+          id
+          symbol
+        }
+      }
     }
   }
 `;
@@ -98,7 +129,26 @@ export const useFundParticipationOverviewQuery = (investor?: Address) => {
       name: item.fund.name,
       inception: format(new Date(item.fund.createdAt * 1000), 'yyyy/MM/dd hh:mm a'),
       sharePrice: weiToString(item.fund.sharePrice, 4),
-      totalSupply: weiToString(item.fund.totalSupply, 4),
+      version: hexToString(item.fund.version.name),
+      versionAddress: item.fund.version.id,
+      participationAddress: item.fund.participation.id,
+    };
+
+    return output;
+  });
+
+  const investmentRequests =
+    (result && result.data && result.data.investor && result.data.investor.investmentRequests) || [];
+  const investmentRequestsProcessed = investmentRequests.map(item => {
+    const output: InvestmentRequest = {
+      address: item.fund.id,
+      name: item.fund.name,
+      inception: format(new Date(item.fund.createdAt * 1000), 'yyyy/MM/dd hh:mm a'),
+      requestCreatedAt: format(new Date(item.requestTimestamp * 1000), 'yyyy/MM/dd hh:mm a'),
+      requestShares: weiToString(item.shares, 4),
+      requestAmount: weiToString(item.amount, 4),
+      requestAsset: item.asset.symbol,
+      sharePrice: weiToString(item.fund.sharePrice, 4),
       version: hexToString(item.fund.version.name),
       versionAddress: item.fund.version.id,
       participationAddress: item.fund.participation.id,
@@ -114,7 +164,6 @@ export const useFundParticipationOverviewQuery = (investor?: Address) => {
       name: item.name,
       inception: format(new Date(item.createdAt * 1000), 'yyyy/MM/dd hh:mm a'),
       sharePrice: weiToString(item.sharePrice, 4),
-      totalSupply: weiToString(item.totalSupply, 4),
       version: hexToString(item.version.name),
       versionAddress: item.version.id,
       participationAddress: item.participation.id,
@@ -123,8 +172,9 @@ export const useFundParticipationOverviewQuery = (investor?: Address) => {
     return output;
   });
 
-  return [investmentsProcessed, managedProcessed, result] as [
+  return [investmentsProcessed, investmentRequestsProcessed, managedProcessed, result] as [
     typeof investmentsProcessed,
+    typeof investmentRequestsProcessed,
     typeof managedProcessed,
     typeof result
   ];

@@ -1,7 +1,7 @@
 import React, { FormEvent } from 'react';
 import { Spinner } from '~/components/Common/Spinner/Spinner';
-import * as S from './FundOverview.styles';
-import { useFundParticipationOverviewQuery, Fund } from '~/queries/FundParticipationOverview';
+import * as S from './Overview.styles';
+import { useFundParticipationOverviewQuery, Fund, InvestmentRequest } from '~/queries/FundParticipationOverview';
 import { useEnvironment } from '~/hooks/useEnvironment';
 import { useFundParticipationQuery } from '~/queries/FundParticipation';
 import { useEtherscanLink } from '~/hooks/useEtherscanLink';
@@ -11,25 +11,57 @@ import { SubmitButton } from '~/components/Common/Form/SubmitButton/SubmitButton
 import { NetworkStatus } from 'apollo-client';
 import { TransactionModal } from '~/components/Common/TransactionModal/TransactionModal';
 
-const headings = [
-  'Name',
-  'Inception',
-  'Version',
-  'Address',
-  'Share price',
-  'Total supply',
-  'Your shares',
-  'Status',
-  'Action',
-];
+const fundHeadings = ['Name', 'Inception', 'Version', 'Address', 'Share price', 'Your shares', 'Status', 'Action'];
+const requestHeadings = ['Fund name', 'Request date', 'Request asset', 'Request amount', 'Requested shares', 'Action'];
 
-const FundOverviewInvestedFund: React.FC<Fund> = props => {
+const OverviewInvestmentRequest: React.FC<InvestmentRequest> = props => {
+  const [result, query] = useFundParticipationQuery(props.address);
+  const link = useEtherscanLink({ address: props.address })!;
+  const loading = query.networkStatus < NetworkStatus.ready && <Spinner size="tiny" positioning="left" />;
+
+  const cancelable = result && result.cancelable;
+  const balance = result && result.balance;
+
+  const environment = useEnvironment()!;
+  const participationContract = new Participation(environment, props.participationAddress);
+
+  const transaction = useTransaction(environment, {
+    onFinish: () => query.refetch(),
+  });
+
+  const submit = (event: FormEvent) => {
+    event.preventDefault();
+    const tx = participationContract.cancelRequest(environment.account!);
+    transaction.start(tx, 'Cancel');
+  };
+
+  return (
+    <S.BodyRow>
+      <S.BodyCell>{props.name}</S.BodyCell>
+      <S.BodyCell>{props.requestCreatedAt}</S.BodyCell>
+      <S.BodyCell>{props.requestAsset}</S.BodyCell>
+      <S.BodyCell>{props.requestAmount}</S.BodyCell>
+      <S.BodyCell>{props.requestShares}</S.BodyCell>
+      <S.BodyCell>
+        {loading && <Spinner size="tiny" positioning="left" />}
+        {!loading && cancelable && (
+          <form onSubmit={submit}>
+            <SubmitButton label="Cancel" />
+          </form>
+        )}
+        {!loading && !cancelable && 'Already cancelled'}
+      </S.BodyCell>
+      <TransactionModal transaction={transaction} />
+    </S.BodyRow>
+  );
+};
+
+const OverviewInvestedFund: React.FC<Fund> = props => {
   const [result, query] = useFundParticipationQuery(props.address);
   const link = useEtherscanLink({ address: props.address })!;
   const loading = query.networkStatus < NetworkStatus.ready && <Spinner size="tiny" positioning="left" />;
 
   const shutdown = result && result.shutdown;
-  const supply = result && result.supply;
   const balance = result && result.balance;
 
   const environment = useEnvironment()!;
@@ -42,7 +74,7 @@ const FundOverviewInvestedFund: React.FC<Fund> = props => {
   const submit = (event: FormEvent) => {
     event.preventDefault();
     const tx = participationContract.redeem(environment.account!);
-    transaction.start(tx, 'Redeem shares');
+    transaction.start(tx, 'Redeem all shares');
   };
 
   return (
@@ -56,10 +88,6 @@ const FundOverviewInvestedFund: React.FC<Fund> = props => {
       <S.BodyCell>{props.sharePrice}</S.BodyCell>
       <S.BodyCell>
         {loading && <Spinner size="tiny" positioning="left" />}
-        {!loading && supply && supply.toFixed(8)}
-      </S.BodyCell>
-      <S.BodyCell>
-        {loading && <Spinner size="tiny" positioning="left" />}
         {!loading && balance && balance.toFixed(8)}
       </S.BodyCell>
       <S.BodyCell>
@@ -70,7 +98,7 @@ const FundOverviewInvestedFund: React.FC<Fund> = props => {
         {loading && <Spinner size="tiny" positioning="left" />}
         {!loading && balance && !balance.isZero() && (
           <form onSubmit={submit}>
-            <SubmitButton label="Redeem" />
+            <SubmitButton label="Redeem all shares" />
           </form>
         )}
         {!loading && balance && balance.isZero() && 'Already redeemed'}
@@ -80,13 +108,12 @@ const FundOverviewInvestedFund: React.FC<Fund> = props => {
   );
 };
 
-const FundOverviewManagedFund: React.FC<Fund> = props => {
+const OverviewManagedFund: React.FC<Fund> = props => {
   const [result, query] = useFundParticipationQuery(props.address);
   const link = useEtherscanLink({ address: props.address })!;
   const loading = query.networkStatus < NetworkStatus.ready;
 
   const shutdown = result && result.shutdown;
-  const supply = result && result.supply;
   const balance = result && result.balance;
 
   const environment = useEnvironment()!;
@@ -113,10 +140,6 @@ const FundOverviewManagedFund: React.FC<Fund> = props => {
       <S.BodyCell>{props.sharePrice}</S.BodyCell>
       <S.BodyCell>
         {loading && <Spinner size="tiny" positioning="left" />}
-        {!loading && supply && supply.toFixed(8)}
-      </S.BodyCell>
-      <S.BodyCell>
-        {loading && <Spinner size="tiny" positioning="left" />}
         {!loading && balance && balance.toFixed(8)}
       </S.BodyCell>
       <S.BodyCell>
@@ -137,31 +160,41 @@ const FundOverviewManagedFund: React.FC<Fund> = props => {
   );
 };
 
-export const FundOverview: React.FC = () => {
+export const Overview: React.FC = () => {
   const environment = useEnvironment()!;
-  const [invested, managed, query] = useFundParticipationOverviewQuery(environment.account);
+  const [invested, requests, managed, query] = useFundParticipationOverviewQuery(environment.account);
 
   if (query.loading) {
     return <Spinner positioning="centered" size="large" />;
   }
 
-  const header = headings.map((heading, index) => <S.HeaderCell key={index}>{heading}</S.HeaderCell>);
-
+  const managedHeader = fundHeadings.map((heading, index) => <S.HeaderCell key={index}>{heading}</S.HeaderCell>);
   const managedEmpty = !(managed && managed.length);
   const managedRows = !managedEmpty ? (
-    managed.map(fund => <FundOverviewManagedFund {...fund} key={fund.address} />)
+    managed.map(fund => <OverviewManagedFund {...fund} key={fund.address} />)
   ) : (
     <S.EmptyRow>
       <S.EmptyCell colSpan={12}>You do not manage any funds.</S.EmptyCell>
     </S.EmptyRow>
   );
 
+  const investedHeader = fundHeadings.map((heading, index) => <S.HeaderCell key={index}>{heading}</S.HeaderCell>);
   const investedEmpty = !(invested && invested.length);
   const investedRows = !investedEmpty ? (
-    invested.map(fund => <FundOverviewInvestedFund {...fund} key={fund.address} />)
+    invested.map(fund => <OverviewInvestedFund {...fund} key={fund.address} />)
   ) : (
     <S.EmptyRow>
       <S.EmptyCell colSpan={12}>You don't own any shares in any funds.</S.EmptyCell>
+    </S.EmptyRow>
+  );
+
+  const requestsHeader = requestHeadings.map((heading, index) => <S.HeaderCell key={index}>{heading}</S.HeaderCell>);
+  const requestsEmpty = !(requests && requests.length);
+  const requestsRows = !requestsEmpty ? (
+    requests.map(request => <OverviewInvestmentRequest {...request} key={request.address} />)
+  ) : (
+    <S.EmptyRow>
+      <S.EmptyCell colSpan={12}>You do not have any pending investment requests.</S.EmptyCell>
     </S.EmptyRow>
   );
 
@@ -178,7 +211,7 @@ export const FundOverview: React.FC = () => {
         <S.ScrollableTable>
           <S.Table>
             <thead>
-              <S.HeaderRow>{header}</S.HeaderRow>
+              <S.HeaderRow>{managedHeader}</S.HeaderRow>
             </thead>
             <tbody>{managedRows}</tbody>
           </S.Table>
@@ -192,9 +225,26 @@ export const FundOverview: React.FC = () => {
         <S.ScrollableTable>
           <S.Table>
             <thead>
-              <S.HeaderRow>{header}</S.HeaderRow>
+              <S.HeaderRow>{investedHeader}</S.HeaderRow>
             </thead>
             <tbody>{investedRows}</tbody>
+          </S.Table>
+        </S.ScrollableTable>
+      </S.Group>
+      <S.Group>
+        <S.Title>Pending investment requests</S.Title>
+        {!requestsEmpty && (
+          <p>
+            Cancelling pending investment requests will transfer the underlying assets of the investment request back to
+            your wallet.
+          </p>
+        )}
+        <S.ScrollableTable>
+          <S.Table>
+            <thead>
+              <S.HeaderRow>{requestsHeader}</S.HeaderRow>
+            </thead>
+            <tbody>{requestsRows}</tbody>
           </S.Table>
         </S.ScrollableTable>
       </S.Group>
