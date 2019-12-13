@@ -6,8 +6,9 @@ import { OpenMakeOrder } from '~/queries/FundOpenMakeOrders';
 import BigNumber from 'bignumber.js';
 import { useTransaction } from '~/hooks/useTransaction';
 import useForm, { FormContext } from 'react-hook-form';
-import { Hub, Trading } from '@melonproject/melonjs';
+import { Hub, Trading, OasisDexTradingAdapter, ZeroExTradingAdapter, MatchingMarket } from '@melonproject/melonjs';
 import { TransactionModal } from '~/components/Common/TransactionModal/TransactionModal';
+import { findExchange } from '~/utils/findExchange';
 
 export interface OpenOrderItemProps {
   address: string;
@@ -26,6 +27,8 @@ export const OpenOrderItem: React.FC<OpenOrderItemProps> = ({ address, order }) 
   const expired = order.expiresAt < new Date();
   const price = takerAmount.dividedBy(makerAmount);
 
+  const exchange = findExchange(environment.deployment, order.exchange);
+
   const transaction = useTransaction(environment, {});
 
   const form = useForm({
@@ -34,22 +37,51 @@ export const OpenOrderItem: React.FC<OpenOrderItemProps> = ({ address, order }) 
   });
 
   const submit = form.handleSubmit(async data => {
-    // const hub = new Hub(environment, address);
-    // const trading = new Trading(environment, (await hub.getRoutes()).trading);
-    // const tx = trading.callOnExchange(environment.account!, order.exchange, order.makerAsset);
-    // transaction.start(tx, 'Remove order');
+    const hub = new Hub(environment, address);
+    const trading = new Trading(environment, (await hub.getRoutes()).trading);
+
+    if (exchange && exchange.name === 'MatchingMarket') {
+      const oasisDex = await OasisDexTradingAdapter.create(trading, exchange.exchange);
+
+      const matchingMarket = new MatchingMarket(environment, exchange.exchange);
+      const offer = await matchingMarket.getOffer(order.id);
+
+      const isActive = await matchingMarket.isActive(order.id);
+      if (isActive) {
+        const args = {
+          id: order.id.toString(),
+          maker: trading.contract.address,
+          makerAsset: offer.makerAsset,
+          takerAsset: order.takerAsset,
+        };
+
+        const tx = oasisDex.cancelOrder(environment.account!, args);
+        transaction.start(tx, 'Cancel order on OasisDex');
+      } else {
+        const tx = trading.sendUpdateAndGetQuantityBeingTraded(environment.account!, order.makerAsset);
+        transaction.start(tx, 'Update and get quantity being traded');
+      }
+    } else {
+      const zeroEx = await ZeroExTradingAdapter.create(trading, order.exchange);
+
+      const args = {
+        orderId: order.id,
+      };
+      const tx = await zeroEx.cancelOrder(environment.account!, args);
+      transaction.start(tx, 'Cancel order on 0x');
+    }
   });
 
   return (
     <FormContext {...form}>
       <S.BodyRow>
         <S.BodyCell>{makerSymbol && makerSymbol.symbol}</S.BodyCell>
-        <S.BodyCell />
+        <S.BodyCell>{exchange && exchange.name}</S.BodyCell>
         <S.BodyCellRightAlign>{price.toFixed(6)}</S.BodyCellRightAlign>
         <S.BodyCellRightAlign>{makerAmount.toFixed(6)}</S.BodyCellRightAlign>
         <S.BodyCell>
           <form onSubmit={submit}>
-            <input type="submit" hidden={!expired} value="Remove" />
+            <input type="submit" hidden={!expired} value="Cancel" />
           </form>
           <TransactionModal transaction={transaction} />
         </S.BodyCell>

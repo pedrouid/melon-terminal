@@ -23,6 +23,7 @@ import {
   catchError,
 } from 'rxjs/operators';
 import { networkFromId } from '~/utils/networkFromId';
+import { SubmitButton } from '~/components/Common/Form/SubmitButton/SubmitButton';
 
 interface EthResource extends Rx.Unsubscribable {
   eth: Eth;
@@ -87,7 +88,7 @@ export const Frame: React.FC<any> = ({ select, active }) => {
   return (
     <div>
       <h2>Frame</h2>
-      {!active ? <button onClick={() => select()}>Connect</button> : <div>Currently selected</div>}
+      {!active ? <SubmitButton onClick={() => select()} label="Connect" /> : <div>Currently selected</div>}
     </div>
   );
 };

@@ -1,7 +1,6 @@
 import React from 'react';
 import * as Rx from 'rxjs';
-import * as R from 'ramda';
-import { map, switchMap, mapTo, concat, distinctUntilChanged } from 'rxjs/operators';
+import { map, switchMap, mapTo } from 'rxjs/operators';
 import { Eth } from 'web3-eth';
 import { networkFromId } from '~/utils/networkFromId';
 import {
@@ -11,6 +10,7 @@ import {
   ConnectionAction,
   ConnectionMethod,
 } from '~/components/Contexts/Connection';
+import { SubmitButton } from '~/components/Common/Form/SubmitButton/SubmitButton';
 
 const connect = (): Rx.Observable<ConnectionAction> => {
   const ethereum = (window as any).ethereum;
@@ -46,7 +46,7 @@ export const MetaMask: React.FC<any> = ({ select, active }) => {
   return (
     <div>
       <h2>Metamask</h2>
-      {!active ? <button onClick={() => select()}>Connect</button> : <div>Currently selected</div>}
+      {!active ? <SubmitButton onClick={() => select()} label="Connect" /> : <div>Currently selected</div>}
     </div>
   );
 };
