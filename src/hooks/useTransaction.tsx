@@ -459,8 +459,7 @@ export function useTransaction(environment: Environment, options?: TransactionOp
               state.transaction!.prepare(),
             ])!;
 
-            const gasPriceFromState = ethGasStation ? ethGasStation.average : +state.gasPrice! / 10e9;
-            form.setValue('gasLimit', `${options!.gas || ''}`);
+            const gasPriceFromState = ethGasStation ? ethGasStation.average : +price! / 10e9;
             form.setValue('gasPrice', `${gasPriceFromState || ''}`);
 
             estimationFinished(dispatch, price!, options!.gas!, ethGasStation, options!.amgu, options!.incentive);
