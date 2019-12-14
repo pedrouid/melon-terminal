@@ -1,4 +1,4 @@
-import React, { FormEvent } from 'react';
+import React, { FormEvent, useState, useEffect, useMemo } from 'react';
 import { Spinner } from '~/components/Common/Spinner/Spinner';
 import * as S from './Overview.styles';
 import { useFundParticipationOverviewQuery, Fund, InvestmentRequest } from '~/queries/FundParticipationOverview';
@@ -6,22 +6,29 @@ import { useEnvironment } from '~/hooks/useEnvironment';
 import { useFundParticipationQuery } from '~/queries/FundParticipation';
 import { useEtherscanLink } from '~/hooks/useEtherscanLink';
 import { useTransaction } from '~/hooks/useTransaction';
-import { Version, Participation } from '@melonproject/melonjs';
+import { Version, Participation, Trading } from '@melonproject/melonjs';
 import { SubmitButton } from '~/components/Common/Form/SubmitButton/SubmitButton';
 import { NetworkStatus } from 'apollo-client';
 import { TransactionModal } from '~/components/Common/TransactionModal/TransactionModal';
 
-const fundHeadings = ['Name', 'Inception', 'Version', 'Address', 'Share price', 'Your shares', 'Status', 'Action'];
-const requestHeadings = ['Fund name', 'Request date', 'Request asset', 'Request amount', 'Requested shares', 'Action'];
+const fundHeadings = ['Name', 'Address', 'Inception', 'Version', 'Status', 'Action'];
+const redeemHeadings = ['Name', 'Address', 'Share price', 'Your shares', 'Locked assets', 'Action'];
+const requestHeadings = [
+  'Fund name',
+  'Address',
+  'Request date',
+  'Request asset',
+  'Request amount',
+  'Requested shares',
+  'Action',
+];
 
 const OverviewInvestmentRequest: React.FC<InvestmentRequest> = props => {
   const [result, query] = useFundParticipationQuery(props.address);
-  const link = useEtherscanLink({ address: props.address })!;
   const loading = query.networkStatus < NetworkStatus.ready && <Spinner size="tiny" positioning="left" />;
 
+  const link = useEtherscanLink({ address: props.address })!;
   const cancelable = result && result.cancelable;
-  const balance = result && result.balance;
-
   const environment = useEnvironment()!;
   const participationContract = new Participation(environment, props.participationAddress);
 
@@ -32,12 +39,15 @@ const OverviewInvestmentRequest: React.FC<InvestmentRequest> = props => {
   const submit = (event: FormEvent) => {
     event.preventDefault();
     const tx = participationContract.cancelRequest(environment.account!);
-    transaction.start(tx, 'Cancel');
+    transaction.start(tx, 'Cancel expired order');
   };
 
   return (
     <S.BodyRow>
       <S.BodyCell>{props.name}</S.BodyCell>
+      <S.BodyCell>
+        <a href={link}>{props.address}</a>
+      </S.BodyCell>
       <S.BodyCell>{props.requestCreatedAt}</S.BodyCell>
       <S.BodyCell>{props.requestAsset}</S.BodyCell>
       <S.BodyCell>{props.requestAmount}</S.BodyCell>
@@ -49,7 +59,7 @@ const OverviewInvestmentRequest: React.FC<InvestmentRequest> = props => {
             <SubmitButton label="Cancel" />
           </form>
         )}
-        {!loading && !cancelable && 'Already cancelled'}
+        {!loading && !cancelable && <S.Good>Already cancelled</S.Good>}
       </S.BodyCell>
       <TransactionModal transaction={transaction} />
     </S.BodyRow>
@@ -57,31 +67,77 @@ const OverviewInvestmentRequest: React.FC<InvestmentRequest> = props => {
 };
 
 const OverviewInvestedFund: React.FC<Fund> = props => {
+  const environment = useEnvironment()!;
   const [result, query] = useFundParticipationQuery(props.address);
   const link = useEtherscanLink({ address: props.address })!;
   const loading = query.networkStatus < NetworkStatus.ready && <Spinner size="tiny" positioning="left" />;
 
+  const manager = environment.account === props.manager;
   const shutdown = result && result.shutdown;
   const balance = result && result.balance;
+  const locked = result && result.lockedAssets;
+  const invested = balance && !balance.isZero();
 
-  const environment = useEnvironment()!;
-  const participationContract = new Participation(environment, props.participationAddress);
-
+  const [acknowledged, setAcknowledged] = useState(false);
   const transaction = useTransaction(environment, {
+    onStart: () => setAcknowledged(false),
     onFinish: () => query.refetch(),
+    onAcknowledge: () => setAcknowledged(true),
   });
+
+  const action = useMemo(() => {
+    if ((manager || shutdown) && locked) {
+      return () => {
+        const trading = new Trading(environment, props.tradingAddress);
+        const tx = trading.returnBatchToVault(environment.account!, props.ownedAssets);
+        transaction.start(tx, 'Return assets to vault');
+      };
+    }
+
+    if (invested && !locked) {
+      return () => {
+        const participation = new Participation(environment, props.participationAddress);
+        const tx = participation.redeem(environment.account!);
+        transaction.start(tx, 'Redeem all shares');
+      };
+    }
+
+    return undefined;
+  }, [props.participationAddress, props.tradingAddress, manager, locked, invested, shutdown]);
+
+  // Start the next transaction whenever the previous one is acknowledged.
+  useEffect(() => {
+    acknowledged && action && action();
+  }, [action, acknowledged]);
 
   const submit = (event: FormEvent) => {
     event.preventDefault();
-    const tx = participationContract.redeem(environment.account!);
-    transaction.start(tx, 'Redeem all shares');
+    action && action();
   };
+
+  const label = useMemo(() => {
+    if ((manager || shutdown) && invested && locked) {
+      return <SubmitButton label="Release and redeem all shares" />;
+    }
+
+    if ((manager || shutdown) && locked) {
+      return <SubmitButton label="Release shares" />;
+    }
+
+    if (invested && !locked) {
+      return <SubmitButton label="Redeem all shares" />;
+    }
+
+    if (invested && locked) {
+      return <S.Bad>Requires fund manager to release shares</S.Bad>;
+    }
+
+    return <S.Good>Already redeemed</S.Good>;
+  }, [manager, balance, locked]);
 
   return (
     <S.BodyRow>
       <S.BodyCell>{props.name}</S.BodyCell>
-      <S.BodyCell>{props.inception}</S.BodyCell>
-      <S.BodyCell>{props.version}</S.BodyCell>
       <S.BodyCell>
         <a href={link}>{props.address}</a>
       </S.BodyCell>
@@ -92,16 +148,12 @@ const OverviewInvestedFund: React.FC<Fund> = props => {
       </S.BodyCell>
       <S.BodyCell>
         {loading && <Spinner size="tiny" positioning="left" />}
-        {!loading && (shutdown ? 'Inactive' : 'Active')}
+        {!loading && (locked ? <S.Bad>Assets locked in trading</S.Bad> : <S.Good>No locked assets</S.Good>)}
       </S.BodyCell>
       <S.BodyCell>
         {loading && <Spinner size="tiny" positioning="left" />}
-        {!loading && balance && !balance.isZero() && (
-          <form onSubmit={submit}>
-            <SubmitButton label="Redeem all shares" />
-          </form>
-        )}
-        {!loading && balance && balance.isZero() && 'Already redeemed'}
+        {!loading && action && <form onSubmit={submit}>{label}</form>}
+        {!loading && !action && label}
       </S.BodyCell>
       <TransactionModal transaction={transaction} />
     </S.BodyRow>
@@ -114,8 +166,6 @@ const OverviewManagedFund: React.FC<Fund> = props => {
   const loading = query.networkStatus < NetworkStatus.ready;
 
   const shutdown = result && result.shutdown;
-  const balance = result && result.balance;
-
   const environment = useEnvironment()!;
   const version = new Version(environment, props.versionAddress);
 
@@ -132,16 +182,11 @@ const OverviewManagedFund: React.FC<Fund> = props => {
   return (
     <S.BodyRow>
       <S.BodyCell>{props.name}</S.BodyCell>
-      <S.BodyCell>{props.inception}</S.BodyCell>
-      <S.BodyCell>{props.version}</S.BodyCell>
       <S.BodyCell>
         <a href={link}>{props.address}</a>
       </S.BodyCell>
-      <S.BodyCell>{props.sharePrice}</S.BodyCell>
-      <S.BodyCell>
-        {loading && <Spinner size="tiny" positioning="left" />}
-        {!loading && balance && balance.toFixed(8)}
-      </S.BodyCell>
+      <S.BodyCell>{props.inception}</S.BodyCell>
+      <S.BodyCell>{props.version}</S.BodyCell>
       <S.BodyCell>
         {loading && <Spinner size="tiny" positioning="left" />}
         {!loading && (shutdown ? 'Inactive' : 'Active')}
@@ -153,7 +198,7 @@ const OverviewManagedFund: React.FC<Fund> = props => {
             <SubmitButton label="Shutdown" />
           </form>
         )}
-        {!loading && shutdown && 'Already shut down'}
+        {!loading && shutdown && <S.Good>Already shut down</S.Good>}
       </S.BodyCell>
       <TransactionModal transaction={transaction} />
     </S.BodyRow>
@@ -178,7 +223,7 @@ export const Overview: React.FC = () => {
     </S.EmptyRow>
   );
 
-  const investedHeader = fundHeadings.map((heading, index) => <S.HeaderCell key={index}>{heading}</S.HeaderCell>);
+  const investedHeader = redeemHeadings.map((heading, index) => <S.HeaderCell key={index}>{heading}</S.HeaderCell>);
   const investedEmpty = !(invested && invested.length);
   const investedRows = !investedEmpty ? (
     invested.map(fund => <OverviewInvestedFund {...fund} key={fund.address} />)

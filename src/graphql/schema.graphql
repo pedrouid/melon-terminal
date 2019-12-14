@@ -130,6 +130,7 @@ type Shares {
 type Trading {
   address: Address!
   openMakeOrders: [OpenMakeOrder!]!
+  lockedAssets: Boolean!
 }
 
 type OpenMakeOrder {

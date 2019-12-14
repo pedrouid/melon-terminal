@@ -1,5 +1,3 @@
-// TODO: Remove this again after the hotfix is no longer needed.
-
 import gql from 'graphql-tag';
 import { format } from 'date-fns';
 import { useTheGraphQuery } from '~/hooks/useQuery';
@@ -13,12 +11,22 @@ interface FundFields {
   gav: string;
   sharePrice: string;
   createdAt: number;
+  manager: string;
   participation: {
+    id: string;
+  };
+  trading: {
     id: string;
   };
   version: {
     id: string;
     name: string;
+  };
+  accounting: {
+    id: string;
+    ownedAssets: {
+      id: string;
+    }[];
   };
 }
 
@@ -49,6 +57,10 @@ export interface Fund {
   version: string;
   versionAddress: string;
   participationAddress: string;
+  tradingAddress: string;
+  accountingAddress: string;
+  ownedAssets: string[];
+  manager: string;
 }
 
 export interface FundParticipationOverviewQueryResult {
@@ -79,6 +91,15 @@ const FundParticipationOverviewQuery = gql`
     }
     participation {
       id
+    }
+    trading {
+      id
+    }
+    accounting {
+      id
+      ownedAssets {
+        id
+      }
     }
   }
 
@@ -132,6 +153,10 @@ export const useFundParticipationOverviewQuery = (investor?: Address) => {
       version: hexToString(item.fund.version.name),
       versionAddress: item.fund.version.id,
       participationAddress: item.fund.participation.id,
+      tradingAddress: item.fund.trading.id,
+      accountingAddress: item.fund.accounting.id,
+      ownedAssets: (item.fund.accounting.ownedAssets || []).map(asset => asset.id),
+      manager: item.fund.manager,
     };
 
     return output;
@@ -152,6 +177,10 @@ export const useFundParticipationOverviewQuery = (investor?: Address) => {
       version: hexToString(item.fund.version.name),
       versionAddress: item.fund.version.id,
       participationAddress: item.fund.participation.id,
+      tradingAddress: item.fund.trading.id,
+      accountingAddress: item.fund.accounting.id,
+      ownedAssets: (item.fund.accounting.ownedAssets || []).map(asset => asset.id),
+      manager: item.fund.manager,
     };
 
     return output;
@@ -167,6 +196,10 @@ export const useFundParticipationOverviewQuery = (investor?: Address) => {
       version: hexToString(item.version.name),
       versionAddress: item.version.id,
       participationAddress: item.participation.id,
+      tradingAddress: item.trading.id,
+      accountingAddress: item.accounting.id,
+      ownedAssets: (item.accounting.ownedAssets || []).map(asset => asset.id),
+      manager: item.manager,
     };
 
     return output;

@@ -49,3 +49,11 @@ export const Title = styled(Subtitle)`
   margin-left: 0;
   margin-right: 0;
 `;
+
+export const Good = styled.span`
+  color: ${props => props.theme.otherColors.green};
+`;
+
+export const Bad = styled.span`
+  color: ${props => props.theme.otherColors.red};
+`;

@@ -22,12 +22,12 @@ export const balanceOf = (context: Context) => {
     }
 
     const instance = new ERC20WithFields(context.environment, token);
-    const [decimals, allowance] = await Promise.all([
+    const [decimals, balance] = await Promise.all([
       instance.getDecimals(context.block),
       instance.getBalanceOf(account, context.block),
     ]);
 
-    return new BigNumber(allowance.dividedBy(new BigNumber(10).exponentiatedBy(decimals)).toFixed());
+    return new BigNumber(balance.dividedBy(new BigNumber(10).exponentiatedBy(decimals)).toFixed());
   };
 };
 

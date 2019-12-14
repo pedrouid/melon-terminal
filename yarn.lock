@@ -2003,10 +2003,10 @@
     "@types/istanbul-reports" "^1.1.1"
     "@types/yargs" "^13.0.0"
 
-"@melonproject/melonjs@^0.0.42":
-  version "0.0.42"
-  resolved "https://registry.yarnpkg.com/@melonproject/melonjs/-/melonjs-0.0.42.tgz#1e6a555b74a0b0a017be5960f49c72eaaab70c18"
-  integrity sha512-xe3HUwDEK3txCVFz3L5kZn79lA8P/LxLN/2mjm8mPOE4br+0dvCzCUtcBkzf3SSjvMIaoBZwkHV79/kkeSdQ1A==
+"@melonproject/melonjs@^0.0.43":
+  version "0.0.43"
+  resolved "https://registry.yarnpkg.com/@melonproject/melonjs/-/melonjs-0.0.43.tgz#ce5867ba8b371a1e5e6764b73360fe8647f2d2d3"
+  integrity sha512-kMwFVhupMv2TF1F/Yd59HH2XXHwFYbNmloS8VX7N6KXLUE3oVhRVo5/P10tSPqDTjlBFAPypSetwARMZnTbipg==
   dependencies:
     "@0x/order-utils" "^9.0.0"
     bignumber.js "^9.0.0"
