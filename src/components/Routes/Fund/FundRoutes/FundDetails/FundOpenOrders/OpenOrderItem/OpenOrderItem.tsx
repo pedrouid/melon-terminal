@@ -49,8 +49,7 @@ export const OpenOrderItem: React.FC<OpenOrderItemProps> = ({ address, order }) 
       const isActive = await matchingMarket.isActive(order.id);
       if (isActive) {
         const args = {
-          id: order.id.toString(),
-          maker: trading.contract.address,
+          id: order.id,
           makerAsset: offer.makerAsset,
           takerAsset: order.takerAsset,
         };
