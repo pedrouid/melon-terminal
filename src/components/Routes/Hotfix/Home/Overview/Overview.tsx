@@ -77,6 +77,10 @@ const OverviewInvestedFund: React.FC<Fund> = props => {
   const loading = query.networkStatus < NetworkStatus.ready;
   const client = useOnChainClient();
 
+  const shutdown = result.shutdown;
+  const balance = result.balance;
+  const locked = !!(result.lockedAssets && result.lockedAssets.length);
+  const invested = balance && !balance.isZero();
   const manager = useMemo(() => {
     if (result && result.manager) {
       return sameAddress(result.manager, environment.account!);
@@ -84,10 +88,6 @@ const OverviewInvestedFund: React.FC<Fund> = props => {
 
     return false;
   }, [environment.account, result && result.manager]);
-  const shutdown = result.shutdown;
-  const balance = result.balance;
-  const locked = result.lockedAssets;
-  const invested = balance && !balance.isZero();
 
   const [acknowledged, setAcknowledged] = useState(false);
   const transaction = useTransaction(environment, {
@@ -101,10 +101,10 @@ const OverviewInvestedFund: React.FC<Fund> = props => {
       return;
     }
 
-    if ((manager || shutdown) && locked) {
+    if ((manager || shutdown) && locked && invested) {
       return () => {
         const trading = new Trading(environment, props.tradingAddress);
-        const tx = trading.returnBatchToVault(environment.account!, props.ownedAssets);
+        const tx = trading.returnBatchToVault(environment.account!, result.lockedAssets);
         transaction.start(tx, 'Return assets to vault');
       };
     }
@@ -118,7 +118,16 @@ const OverviewInvestedFund: React.FC<Fund> = props => {
     }
 
     return undefined;
-  }, [props.participationAddress, props.tradingAddress, manager, locked, invested, shutdown, loading]);
+  }, [
+    props.participationAddress,
+    props.tradingAddress,
+    result.lockedAssets,
+    manager,
+    locked,
+    invested,
+    shutdown,
+    loading,
+  ]);
 
   // Start the next transaction whenever the previous one is acknowledged.
   useEffect(() => {
@@ -131,20 +140,12 @@ const OverviewInvestedFund: React.FC<Fund> = props => {
   };
 
   const label = useMemo(() => {
-    if ((manager || shutdown) && invested && locked) {
-      return <SubmitButton label="Redeem all shares" />;
-    }
-
-    if ((manager || shutdown) && locked) {
-      return <SubmitButton label="Clean fund state" />;
-    }
-
     if (invested && !locked) {
       return <SubmitButton label="Redeem all shares" />;
     }
 
     if (invested && locked) {
-      return <SubmitButton label="Redeem all shares" disabled={true} />;
+      return <SubmitButton label="Redeem all shares" disabled={!(manager || shutdown)} />;
     }
 
     return <S.Good>Already redeemed</S.Good>;
@@ -193,7 +194,7 @@ const OverviewManagedFund: React.FC<Fund> = props => {
 
   const shutdown = result.shutdown;
   const environment = useEnvironment()!;
-  const locked = result.lockedAssets;
+  const locked = !!(result.lockedAssets && result.lockedAssets.length);
 
   const [acknowledged, setAcknowledged] = useState(false);
   const transaction = useTransaction(environment, {
@@ -210,7 +211,7 @@ const OverviewManagedFund: React.FC<Fund> = props => {
     if (locked) {
       return () => {
         const trading = new Trading(environment, props.tradingAddress);
-        const tx = trading.returnBatchToVault(environment.account!, props.ownedAssets);
+        const tx = trading.returnBatchToVault(environment.account!, result.lockedAssets);
         transaction.start(tx, 'Return assets to vault');
       };
     }
@@ -224,7 +225,7 @@ const OverviewManagedFund: React.FC<Fund> = props => {
     }
 
     return undefined;
-  }, [props.versionAddress, props.tradingAddress, locked, shutdown, loading]);
+  }, [props.versionAddress, props.tradingAddress, result.lockedAssets, locked, shutdown, loading]);
 
   // Start the next transaction whenever the previous one is acknowledged.
   useEffect(() => {

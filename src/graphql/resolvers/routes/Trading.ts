@@ -18,7 +18,7 @@ export const openMakeOrders: Resolver<[HubRoutes, Trading]> = async ([, trading]
 
 export const lockedAssets: Resolver<[HubRoutes, Trading]> = async ([routes, trading], _, context) => {
   if (!routes.accounting) {
-    return false;
+    return [];
   }
 
   const accounting = new Accounting(context.environment, routes.accounting);
@@ -31,5 +31,5 @@ export const lockedAssets: Resolver<[HubRoutes, Trading]> = async ([routes, trad
     })
   );
 
-  return !!balances.find(balance => !balance.isZero());
+  return assets.filter((_, index) => !balances[index].isZero());
 };

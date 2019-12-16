@@ -72,7 +72,7 @@ export const useFundParticipationQuery = (fund?: Address) => {
   const shutdown = R.pathOr(false, ['data', 'fund', 'isShutDown'], result);
   const manager = R.pathOr('', ['data', 'fund', 'manager'], result);
   const supply = R.pathOr(new BigNumber(0), ['data', 'fund', 'routes', 'shares', 'totalSupply'], result);
-  const lockedAssets = R.pathOr(false, ['data', 'fund', 'routes', 'trading', 'lockedAssets'], result);
+  const lockedAssets = R.pathOr([], ['data', 'fund', 'routes', 'trading', 'lockedAssets'], result);
   const balance = R.pathOr(new BigNumber(0), ['data', 'account', 'shares', 'balanceOf'], result);
   const cancelable = R.pathOr(false, ['data', 'account', 'participation', 'canCancelRequest'], result);
 
