@@ -16,7 +16,7 @@ export const ProgressBarStep: React.FC<ProgressBarStepProps> = ({ step = 0 }) =>
   return (
     <S.Badge selected={isSelected}>
       {loading && isLoading && <S.BadgeLoader />}
-      <S.BadgeIndex>{step}</S.BadgeIndex>
+      <S.BadgeIndex />
     </S.Badge>
   );
 };
