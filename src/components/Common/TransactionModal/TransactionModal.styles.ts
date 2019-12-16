@@ -101,10 +101,6 @@ export const TransactionModalInputField = styled.input`
   display: inline-block;
 `;
 
-export const TransactionModalMessage = styled.div`
-  margin: 0 0 ${props => props.theme.spaceUnits.m} 0;
-`;
-
 export const TransactionModalActions = styled.div`
   margin-top: ${props => props.theme.spaceUnits.m};
   display: flex;

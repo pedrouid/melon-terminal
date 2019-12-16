@@ -29,7 +29,7 @@ export const shares: Resolver<[Hub, HubRoutes]> = ([_, routes], __, context) => 
 };
 
 export const trading: Resolver<[Hub, HubRoutes]> = ([_, routes], __, context) => {
-  return routes.trading && new Trading(context.environment, routes.trading);
+  return routes.trading && [routes, new Trading(context.environment, routes.trading)];
 };
 
 export const vault: Resolver<[Hub, HubRoutes]> = ([_, routes], __, context) => {
