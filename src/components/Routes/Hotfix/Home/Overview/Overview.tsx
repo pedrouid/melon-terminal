@@ -10,6 +10,7 @@ import { Version, Participation, Trading } from '@melonproject/melonjs';
 import { SubmitButton } from '~/components/Common/Form/SubmitButton/SubmitButton';
 import { NetworkStatus } from 'apollo-client';
 import { TransactionModal } from '~/components/Common/TransactionModal/TransactionModal';
+import { sameAddress } from '@melonproject/melonjs/utils/sameAddress';
 
 const fundHeadings = ['Name', 'Address', 'Inception', 'Version', 'Status', 'Action'];
 const redeemHeadings = ['Name', 'Address', 'Share price', 'Your shares', 'Action'];
@@ -72,7 +73,13 @@ const OverviewInvestedFund: React.FC<Fund> = props => {
   const link = useEtherscanLink({ address: props.address })!;
   const loading = query.networkStatus < NetworkStatus.ready && <Spinner size="tiny" positioning="left" />;
 
-  const manager = environment.account === props.manager;
+  const manager = useMemo(() => {
+    if (result && result.manager) {
+      return sameAddress(result.manager, environment.account!);
+    }
+
+    return false;
+  }, [environment.account, result && result.manager]);
   const shutdown = result && result.shutdown;
   const balance = result && result.balance;
   const locked = result && result.lockedAssets;

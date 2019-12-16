@@ -2,7 +2,7 @@ import React from 'react';
 import * as Rx from 'rxjs';
 import * as R from 'ramda';
 import { Eth } from 'web3-eth';
-import { HttpProvider } from 'web3-providers';
+import { HttpProvider, WebsocketProvider } from 'web3-providers';
 import {
   ConnectionMethod,
   ConnectionAction,
@@ -31,12 +31,12 @@ interface EthResource extends Rx.Unsubscribable {
 
 const connect = (): Rx.Observable<ConnectionAction> => {
   const create = (): EthResource => {
-    const provider = new HttpProvider('http://localhost:1248');
+    const provider = new WebsocketProvider('ws://localhost:1248');
     const eth = new Eth(provider, undefined, {
       transactionConfirmationBlocks: 1,
     });
 
-    return { eth, unsubscribe: () => provider.disconnect() };
+    return { eth, unsubscribe: () => provider.disconnect(1000, '') };
   };
 
   return Rx.using(create, resource => {
