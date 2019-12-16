@@ -9,6 +9,7 @@ import { createSchemaLink, createSchema, createQueryContext } from '~/graphql';
 import { Environment } from '~/environment';
 import { useEnvironment } from '~/hooks/useEnvironment';
 import { config } from '~/config';
+import { useConnectionState } from '~/hooks/useConnectionState';
 
 const createErrorLink = () => {
   return onError(({ graphQLErrors, networkError }) => {
@@ -44,12 +45,22 @@ export const OnChainApollo = createContext<ApolloClient<NormalizedCacheObject>>(
 export const TheGraphApollo = createContext<ApolloClient<NormalizedCacheObject>>(nullClient);
 
 const useOnChainApollo = (environment?: Environment) => {
+  const context = useConnectionState();
+  const minBlock = useRef(context.minBlock);
+  useEffect(() => {
+    minBlock.current = context.minBlock;
+  }, [context.minBlock]);
+
+  const block = useMemo(() => {
+    return () => minBlock.current || 0;
+  }, [minBlock]);
+
   const schema = useMemo(() => {
     return environment && createSchema(environment!);
   }, [environment]);
 
   const apollo = useMemo(() => {
-    const data = schema ? createSchemaLink({ schema, context: createQueryContext(environment!) }) : nullLink;
+    const data = schema ? createSchemaLink({ schema, context: createQueryContext(environment!, block) }) : nullLink;
     const error = createErrorLink();
     const link = ApolloLink.from([error, data]);
     const memory = new InMemoryCache({
@@ -73,7 +84,7 @@ const useOnChainApollo = (environment?: Environment) => {
         },
       },
     });
-  }, [environment, schema]);
+  }, [environment, schema, block]);
 
   const apolloRef = useRef<ApolloClient<NormalizedCacheObject>>();
   useEffect(() => {

@@ -5,6 +5,7 @@ import { config } from '~/config';
 import { Address } from '@melonproject/melonjs';
 import { NetworkEnum, Deployment } from '~/types';
 import { Eth } from 'web3-eth';
+import { TransactionReceipt } from 'web3-core';
 
 export enum ConnectionStatus {
   OFFLINE,
@@ -19,6 +20,7 @@ export interface ConnectionState {
   accounts?: Address[];
   method?: string;
   error?: Error;
+  minBlock?: number;
 }
 
 export enum ConnectionActionType {
@@ -30,6 +32,7 @@ export enum ConnectionActionType {
   DEPLOYMENT_LOADING,
   DEPLOYMENT_LOADED,
   DEPLOYMENT_ERROR,
+  TRANSACTION_SUCCESS,
 }
 
 export type ConnectionAction =
@@ -40,7 +43,13 @@ export type ConnectionAction =
   | NetworkChanged
   | DeploymentLoading
   | DeploymentLoaded
-  | DeploymentError;
+  | DeploymentError
+  | TransactionSuccess;
+
+export interface TransactionSuccess {
+  type: ConnectionActionType.TRANSACTION_SUCCESS;
+  receipt: TransactionReceipt;
+}
 
 export interface MethodChanged {
   type: ConnectionActionType.METHOD_CHANGED;
@@ -114,6 +123,10 @@ export function deploymentError(error: Error): DeploymentError {
   return { error, type: ConnectionActionType.DEPLOYMENT_ERROR };
 }
 
+export function transactionSuccess(receipt: TransactionReceipt): TransactionSuccess {
+  return { receipt, type: ConnectionActionType.TRANSACTION_SUCCESS };
+}
+
 export function reducer(state: ConnectionState, action: ConnectionAction): ConnectionState {
   switch (action.type) {
     case ConnectionActionType.METHOD_CHANGED: {
@@ -122,6 +135,7 @@ export function reducer(state: ConnectionState, action: ConnectionAction): Conne
         network: undefined,
         deployment: undefined,
         accounts: undefined,
+        minBlock: undefined,
         method: action.method,
       };
     }
@@ -155,6 +169,10 @@ export function reducer(state: ConnectionState, action: ConnectionAction): Conne
       return { ...state, deployment: undefined, error: action.error };
     }
 
+    case ConnectionActionType.TRANSACTION_SUCCESS: {
+      return { ...state, minBlock: action.receipt.blockNumber };
+    }
+
     default: {
       throw new Error('Invalid action.');
     }
@@ -164,9 +182,11 @@ export function reducer(state: ConnectionState, action: ConnectionAction): Conne
 export interface ConnectionContext {
   environment?: Environment;
   method?: string;
+  minBlock?: number;
   status: ConnectionStatus;
   methods: ConnectionMethod[];
   switch: (method: string) => void;
+  transaction: (receipt: TransactionReceipt) => void;
 }
 
 export const Connection = createContext<ConnectionContext>({} as ConnectionContext);
@@ -247,9 +267,11 @@ export const ConnectionProvider: React.FC<ConnectionProviderProps> = props => {
   const context: ConnectionContext = {
     environment,
     status,
+    minBlock: state.minBlock,
     method: state.method,
     methods: props.methods,
     switch: (method: string) => dispatch(methodChanged(method)),
+    transaction: (receipt: TransactionReceipt) => dispatch(transactionSuccess(receipt)),
   };
 
   return <Connection.Provider value={context}>{props.children}</Connection.Provider>;

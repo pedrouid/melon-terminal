@@ -37,7 +37,7 @@ const OverviewInvestmentRequest: React.FC<InvestmentRequest> = props => {
   const participationContract = new Participation(environment, props.participationAddress);
 
   const transaction = useTransaction(environment, {
-    onAcknowledge: () => refetchQueries(client),
+    onFinish: () => refetchQueries(client),
   });
 
   const submit = (event: FormEvent) => {
@@ -92,10 +92,8 @@ const OverviewInvestedFund: React.FC<Fund> = props => {
   const [acknowledged, setAcknowledged] = useState(false);
   const transaction = useTransaction(environment, {
     onStart: () => setAcknowledged(false),
-    onAcknowledge: () => {
-      refetchQueries(client);
-      setAcknowledged(true);
-    },
+    onFinish: () => refetchQueries(client),
+    onAcknowledge: () => setAcknowledged(true),
   });
 
   const action = useMemo(() => {
@@ -200,10 +198,8 @@ const OverviewManagedFund: React.FC<Fund> = props => {
   const [acknowledged, setAcknowledged] = useState(false);
   const transaction = useTransaction(environment, {
     onStart: () => setAcknowledged(false),
-    onAcknowledge: () => {
-      refetchQueries(client);
-      setAcknowledged(true);
-    },
+    onFinish: () => refetchQueries(client),
+    onAcknowledge: () => setAcknowledged(true),
   });
 
   const action = useMemo(() => {

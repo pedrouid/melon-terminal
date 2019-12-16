@@ -29,9 +29,9 @@ interface SchemaLinkOptions<TRoot = any, TContext = any> {
   root?: TRoot;
 }
 
-export const createQueryContext = (environment: Environment): ContextCreator => {
+export const createQueryContext = (environment: Environment, minBlock: () => number): ContextCreator => {
   return async () => {
-    const block = await environment.client.getBlockNumber();
+    const block = Math.max(minBlock(), await environment.client.getBlockNumber());
     const context: Context = {
       block,
       environment,

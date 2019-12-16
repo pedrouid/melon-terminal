@@ -8,6 +8,7 @@ import { FieldValues } from 'react-hook-form/dist/types';
 
 import { Environment } from '~/environment';
 import { NetworkEnum } from '~/types';
+import { useConnectionState } from './useConnectionState';
 
 export interface TransactionFormValues extends FieldValues {
   gasPrice: number;
@@ -340,6 +341,7 @@ async function fetchEthGasStation(environment: Environment) {
 }
 
 export function useTransaction(environment: Environment, options?: TransactionOptions) {
+  const connection = useConnectionState();
   const [state, dispatch] = useReducer(reducer, {
     progress: TransactionProgress.TRANSACTION_WAITING,
     transaction: undefined,
@@ -387,7 +389,11 @@ export function useTransaction(environment: Environment, options?: TransactionOp
 
       const tx = transaction.send(opts);
       tx.once('transactionHash', hash => executionReceived(dispatch, hash));
-      tx.once('receipt', receipt => executionFinished(dispatch, receipt));
+      tx.once('receipt', receipt => {
+        connection.transaction(receipt);
+        executionFinished(dispatch, receipt);
+      });
+
       tx.once('error', error => executionError(dispatch, (error as any).error ? (error as any).error : error));
     } catch (error) {
       executionError(dispatch, error);
