@@ -117,11 +117,11 @@ const OverviewInvestedFund: React.FC<Fund> = props => {
 
   const label = useMemo(() => {
     if ((manager || shutdown) && invested && locked) {
-      return <SubmitButton label="Return assets to vault and redeem all shares" />;
+      return <SubmitButton label="Redeem all shares" />;
     }
 
     if ((manager || shutdown) && locked) {
-      return <SubmitButton label="Return assets to vault" />;
+      return <SubmitButton label="Clean fund state" />;
     }
 
     if (invested && !locked) {
@@ -218,11 +218,11 @@ const OverviewManagedFund: React.FC<Fund> = props => {
 
   const label = useMemo(() => {
     if (locked && !shutdown) {
-      return <SubmitButton label="Return assets to vault and shutdown" />;
+      return <SubmitButton label="Shutdown" />;
     }
 
     if (locked && shutdown) {
-      return <SubmitButton label="Return assets to vault" />;
+      return <SubmitButton label="Clean fund state" />;
     }
 
     if (!shutdown && !locked) {
