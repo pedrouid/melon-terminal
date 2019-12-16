@@ -385,8 +385,10 @@ export function useTransaction(environment: Environment, options?: TransactionOp
         ...(state.sendOptions && state.sendOptions.incentive && { incentive: state.sendOptions.incentive }),
       };
 
-      const receipt = await transaction.send(opts).on('transactionHash', hash => executionReceived(dispatch, hash));
-      executionFinished(dispatch, receipt);
+      const tx = transaction.send(opts);
+      tx.once('transactionHash', hash => executionReceived(dispatch, hash));
+      tx.once('receipt', receipt => executionFinished(dispatch, receipt));
+      tx.once('error', error => executionError(dispatch, (error as any).error ? (error as any).error : error));
     } catch (error) {
       executionError(dispatch, error);
     }

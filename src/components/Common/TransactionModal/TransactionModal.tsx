@@ -121,7 +121,7 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
                 </>
               )}
 
-              {error && <S.NotificationError>{error.message} </S.NotificationError>}
+              {error && <S.NotificationError>{error.message}</S.NotificationError>}
 
               {output && (
                 <S.TransactionModalMessages>
