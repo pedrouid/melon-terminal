@@ -1,4 +1,4 @@
-import React, { FormEvent, useState, useEffect, useMemo } from 'react';
+import React, { FormEvent, useState, useEffect, useMemo, useContext } from 'react';
 import { Spinner } from '~/components/Common/Spinner/Spinner';
 import * as S from './Overview.styles';
 import { useFundParticipationOverviewQuery, Fund, InvestmentRequest } from '~/queries/FundParticipationOverview';
@@ -36,7 +36,7 @@ const OverviewInvestmentRequest: React.FC<InvestmentRequest> = props => {
   const participationContract = new Participation(environment, props.participationAddress);
 
   const transaction = useTransaction(environment, {
-    onFinish: () => refetchQueries(client),
+    onAcknowledge: () => refetchQueries(client),
   });
 
   const submit = (event: FormEvent) => {
@@ -85,8 +85,10 @@ const OverviewInvestedFund: React.FC<Fund> = props => {
   const [acknowledged, setAcknowledged] = useState(false);
   const transaction = useTransaction(environment, {
     onStart: () => setAcknowledged(false),
-    onFinish: () => refetchQueries(client),
-    onAcknowledge: () => setAcknowledged(true),
+    onAcknowledge: () => {
+      refetchQueries(client);
+      setAcknowledged(true);
+    },
   });
 
   const action = useMemo(() => {
@@ -187,8 +189,10 @@ const OverviewManagedFund: React.FC<Fund> = props => {
   const [acknowledged, setAcknowledged] = useState(false);
   const transaction = useTransaction(environment, {
     onStart: () => setAcknowledged(false),
-    onFinish: () => refetchQueries(client),
-    onAcknowledge: () => setAcknowledged(true),
+    onAcknowledge: () => {
+      refetchQueries(client);
+      setAcknowledged(true);
+    },
   });
 
   const action = useMemo(() => {
