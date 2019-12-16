@@ -27,7 +27,6 @@ export const HeaderRow = styled.tr``;
 export const BodyCell = styled.td`
   padding: ${props => props.theme.spaceUnits.s};
   position: relative;
-  white-space: nowrap;
 `;
 
 export const BodyRow = styled.tr`
@@ -56,4 +55,11 @@ export const Good = styled.span`
 
 export const Bad = styled.span`
   color: ${props => props.theme.otherColors.red};
+`;
+
+export const Description = styled.span`
+  display: block;
+  margin-top: ${props => props.theme.spaceUnits.s};
+  font-size: ${props => props.theme.fontSizes.m};
+  white-space: ;
 `;

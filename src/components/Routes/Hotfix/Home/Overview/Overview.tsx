@@ -12,7 +12,7 @@ import { NetworkStatus } from 'apollo-client';
 import { TransactionModal } from '~/components/Common/TransactionModal/TransactionModal';
 
 const fundHeadings = ['Name', 'Address', 'Inception', 'Version', 'Status', 'Action'];
-const redeemHeadings = ['Name', 'Address', 'Share price', 'Your shares', 'Locked assets', 'Action'];
+const redeemHeadings = ['Name', 'Address', 'Share price', 'Your shares', 'Action'];
 const requestHeadings = [
   'Fund name',
   'Address',
@@ -117,11 +117,11 @@ const OverviewInvestedFund: React.FC<Fund> = props => {
 
   const label = useMemo(() => {
     if ((manager || shutdown) && invested && locked) {
-      return <SubmitButton label="Release and redeem all shares" />;
+      return <SubmitButton label="Return assets to vault and redeem all shares" />;
     }
 
     if ((manager || shutdown) && locked) {
-      return <SubmitButton label="Release shares" />;
+      return <SubmitButton label="Return assets to vault" />;
     }
 
     if (invested && !locked) {
@@ -129,10 +129,23 @@ const OverviewInvestedFund: React.FC<Fund> = props => {
     }
 
     if (invested && locked) {
-      return <S.Bad>Requires fund manager to release shares</S.Bad>;
+      return <SubmitButton label="Redeem all shares" disabled={true} />;
     }
 
     return <S.Good>Already redeemed</S.Good>;
+  }, [manager, invested, locked]);
+
+  const description = useMemo(() => {
+    if (invested && locked && !manager) {
+      return (
+        <S.Description>
+          Before you can redeem your shares, the fund manager needs to release the assets from Trading back into the
+          Vault.
+        </S.Description>
+      );
+    }
+
+    return undefined;
   }, [manager, balance, locked]);
 
   return (
@@ -148,12 +161,9 @@ const OverviewInvestedFund: React.FC<Fund> = props => {
       </S.BodyCell>
       <S.BodyCell>
         {loading && <Spinner size="tiny" positioning="left" />}
-        {!loading && (locked ? <S.Bad>Assets locked in trading</S.Bad> : <S.Good>No locked assets</S.Good>)}
-      </S.BodyCell>
-      <S.BodyCell>
-        {loading && <Spinner size="tiny" positioning="left" />}
         {!loading && action && <form onSubmit={submit}>{label}</form>}
         {!loading && !action && label}
+        {!loading && description}
       </S.BodyCell>
       <TransactionModal transaction={transaction} />
     </S.BodyRow>
@@ -167,17 +177,60 @@ const OverviewManagedFund: React.FC<Fund> = props => {
 
   const shutdown = result && result.shutdown;
   const environment = useEnvironment()!;
-  const version = new Version(environment, props.versionAddress);
+  const locked = result && result.lockedAssets;
 
+  const [acknowledged, setAcknowledged] = useState(false);
   const transaction = useTransaction(environment, {
+    onStart: () => setAcknowledged(false),
     onFinish: () => query.refetch(),
+    onAcknowledge: () => setAcknowledged(true),
   });
+
+  const action = useMemo(() => {
+    if (locked) {
+      return () => {
+        const trading = new Trading(environment, props.tradingAddress);
+        const tx = trading.returnBatchToVault(environment.account!, props.ownedAssets);
+        transaction.start(tx, 'Return assets to vault');
+      };
+    }
+
+    if (!shutdown) {
+      return () => {
+        const version = new Version(environment, props.versionAddress);
+        const tx = version.shutDownFund(environment.account!, props.address);
+        transaction.start(tx, 'Shutdown fund');
+      };
+    }
+
+    return undefined;
+  }, [props.versionAddress, props.tradingAddress, locked, shutdown]);
+
+  // Start the next transaction whenever the previous one is acknowledged.
+  useEffect(() => {
+    acknowledged && action && action();
+  }, [action, acknowledged]);
 
   const submit = (event: FormEvent) => {
     event.preventDefault();
-    const tx = version.shutDownFund(environment.account!, props.address);
-    transaction.start(tx, 'Shutdown fund');
+    action && action();
   };
+
+  const label = useMemo(() => {
+    if (locked && !shutdown) {
+      return <SubmitButton label="Return assets to vault and shutdown" />;
+    }
+
+    if (locked && shutdown) {
+      return <SubmitButton label="Return assets to vault" />;
+    }
+
+    if (!shutdown && !locked) {
+      return <SubmitButton label="Shutdown" />;
+    }
+
+    return <S.Good>Already shut down</S.Good>;
+  }, [shutdown, locked]);
 
   return (
     <S.BodyRow>
@@ -193,12 +246,8 @@ const OverviewManagedFund: React.FC<Fund> = props => {
       </S.BodyCell>
       <S.BodyCell>
         {loading && <Spinner size="tiny" positioning="left" />}
-        {!loading && !shutdown && (
-          <form onSubmit={submit}>
-            <SubmitButton label="Shutdown" />
-          </form>
-        )}
-        {!loading && shutdown && <S.Good>Already shut down</S.Good>}
+        {!loading && action && <form onSubmit={submit}>{label}</form>}
+        {!loading && !action && label}
       </S.BodyCell>
       <TransactionModal transaction={transaction} />
     </S.BodyRow>
