@@ -99,6 +99,10 @@ const OverviewInvestedFund: React.FC<Fund> = props => {
   });
 
   const action = useMemo(() => {
+    if (loading) {
+      return;
+    }
+
     if ((manager || shutdown) && locked) {
       return () => {
         const trading = new Trading(environment, props.tradingAddress);
@@ -116,7 +120,7 @@ const OverviewInvestedFund: React.FC<Fund> = props => {
     }
 
     return undefined;
-  }, [props.participationAddress, props.tradingAddress, manager, locked, invested, shutdown]);
+  }, [props.participationAddress, props.tradingAddress, manager, locked, invested, shutdown, loading]);
 
   // Start the next transaction whenever the previous one is acknowledged.
   useEffect(() => {
@@ -203,6 +207,10 @@ const OverviewManagedFund: React.FC<Fund> = props => {
   });
 
   const action = useMemo(() => {
+    if (loading) {
+      return;
+    }
+
     if (locked) {
       return () => {
         const trading = new Trading(environment, props.tradingAddress);
@@ -220,7 +228,7 @@ const OverviewManagedFund: React.FC<Fund> = props => {
     }
 
     return undefined;
-  }, [props.versionAddress, props.tradingAddress, locked, shutdown]);
+  }, [props.versionAddress, props.tradingAddress, locked, shutdown, loading]);
 
   // Start the next transaction whenever the previous one is acknowledged.
   useEffect(() => {
