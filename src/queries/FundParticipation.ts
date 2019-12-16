@@ -65,6 +65,7 @@ export const useFundParticipationQuery = (fund?: Address) => {
     {
       variables: { fund },
       skip: !fund,
+      notifyOnNetworkStatusChange: true,
     }
   );
 
