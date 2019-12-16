@@ -114,10 +114,6 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
                     {options && options.amgu && <div>AMGU: {options.amgu.toFixed(4)}</div>}
                     {options && options.incentive && <div>INCENTIVE: {options.incentive.toFixed(4)}</div>}
                   </S.TransactionModalFeeForm>
-                  <S.TransactionModalMessage>
-                    If you do not change the gas price field, the default gas price will be used. If you wish to set the
-                    gas price according to network conditions, please refer to Eth Gas Station.
-                  </S.TransactionModalMessage>
                 </>
               )}
 
