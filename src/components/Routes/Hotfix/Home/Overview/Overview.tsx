@@ -10,6 +10,8 @@ import { Version, Participation, Trading } from '@melonproject/melonjs';
 import { SubmitButton } from '~/components/Common/Form/SubmitButton/SubmitButton';
 import { NetworkStatus } from 'apollo-client';
 import { TransactionModal } from '~/components/Common/TransactionModal/TransactionModal';
+import { refetchQueries } from '~/utils/refetchQueries';
+import { useOnChainClient } from '~/hooks/useQuery';
 
 const fundHeadings = ['Name', 'Address', 'Inception', 'Version', 'Status', 'Action'];
 const redeemHeadings = ['Name', 'Address', 'Share price', 'Your shares', 'Action'];
@@ -25,15 +27,16 @@ const requestHeadings = [
 
 const OverviewInvestmentRequest: React.FC<InvestmentRequest> = props => {
   const [result, query] = useFundParticipationQuery(props.address);
-  const loading = query.networkStatus < NetworkStatus.ready && <Spinner size="tiny" positioning="left" />;
+  const loading = query.networkStatus < NetworkStatus.ready;
+  const client = useOnChainClient();
 
   const link = useEtherscanLink({ address: props.address })!;
-  const cancelable = result && result.cancelable;
+  const cancelable = result.cancelable;
   const environment = useEnvironment()!;
   const participationContract = new Participation(environment, props.participationAddress);
 
   const transaction = useTransaction(environment, {
-    onFinish: () => query.refetch(),
+    onFinish: () => refetchQueries(client),
   });
 
   const submit = (event: FormEvent) => {
@@ -70,18 +73,19 @@ const OverviewInvestedFund: React.FC<Fund> = props => {
   const environment = useEnvironment()!;
   const [result, query] = useFundParticipationQuery(props.address);
   const link = useEtherscanLink({ address: props.address })!;
-  const loading = query.networkStatus < NetworkStatus.ready && <Spinner size="tiny" positioning="left" />;
+  const loading = query.networkStatus < NetworkStatus.ready;
+  const client = useOnChainClient();
 
   const manager = environment.account === props.manager;
-  const shutdown = result && result.shutdown;
-  const balance = result && result.balance;
-  const locked = result && result.lockedAssets;
+  const shutdown = result.shutdown;
+  const balance = result.balance;
+  const locked = result.lockedAssets;
   const invested = balance && !balance.isZero();
 
   const [acknowledged, setAcknowledged] = useState(false);
   const transaction = useTransaction(environment, {
     onStart: () => setAcknowledged(false),
-    onFinish: () => query.refetch(),
+    onFinish: () => refetchQueries(client),
     onAcknowledge: () => setAcknowledged(true),
   });
 
@@ -174,15 +178,16 @@ const OverviewManagedFund: React.FC<Fund> = props => {
   const [result, query] = useFundParticipationQuery(props.address);
   const link = useEtherscanLink({ address: props.address })!;
   const loading = query.networkStatus < NetworkStatus.ready;
+  const client = useOnChainClient();
 
-  const shutdown = result && result.shutdown;
+  const shutdown = result.shutdown;
   const environment = useEnvironment()!;
-  const locked = result && result.lockedAssets;
+  const locked = result.lockedAssets;
 
   const [acknowledged, setAcknowledged] = useState(false);
   const transaction = useTransaction(environment, {
     onStart: () => setAcknowledged(false),
-    onFinish: () => query.refetch(),
+    onFinish: () => refetchQueries(client),
     onAcknowledge: () => setAcknowledged(true),
   });
 
