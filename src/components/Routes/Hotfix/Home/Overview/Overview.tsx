@@ -1,4 +1,4 @@
-import React, { FormEvent, useState, useEffect, useMemo } from 'react';
+import React, { FormEvent, useState, useEffect, useMemo, useContext } from 'react';
 import { Spinner } from '~/components/Common/Spinner/Spinner';
 import * as S from './Overview.styles';
 import { useFundParticipationOverviewQuery, Fund, InvestmentRequest } from '~/queries/FundParticipationOverview';
@@ -11,6 +11,8 @@ import { SubmitButton } from '~/components/Common/Form/SubmitButton/SubmitButton
 import { NetworkStatus } from 'apollo-client';
 import { TransactionModal } from '~/components/Common/TransactionModal/TransactionModal';
 import { sameAddress } from '@melonproject/melonjs/utils/sameAddress';
+import { refetchQueries } from '~/utils/refetchQueries';
+import { useOnChainClient } from '~/hooks/useQuery';
 
 const fundHeadings = ['Name', 'Address', 'Inception', 'Version', 'Status', 'Action'];
 const redeemHeadings = ['Name', 'Address', 'Share price', 'Your shares', 'Action'];
@@ -26,15 +28,16 @@ const requestHeadings = [
 
 const OverviewInvestmentRequest: React.FC<InvestmentRequest> = props => {
   const [result, query] = useFundParticipationQuery(props.address);
-  const loading = query.networkStatus < NetworkStatus.ready && <Spinner size="tiny" positioning="left" />;
+  const loading = query.networkStatus < NetworkStatus.ready;
+  const client = useOnChainClient();
 
   const link = useEtherscanLink({ address: props.address })!;
-  const cancelable = result && result.cancelable;
+  const cancelable = result.cancelable;
   const environment = useEnvironment()!;
   const participationContract = new Participation(environment, props.participationAddress);
 
   const transaction = useTransaction(environment, {
-    onFinish: () => query.refetch(),
+    onAcknowledge: () => refetchQueries(client),
   });
 
   const submit = (event: FormEvent) => {
@@ -71,7 +74,8 @@ const OverviewInvestedFund: React.FC<Fund> = props => {
   const environment = useEnvironment()!;
   const [result, query] = useFundParticipationQuery(props.address);
   const link = useEtherscanLink({ address: props.address })!;
-  const loading = query.networkStatus < NetworkStatus.ready && <Spinner size="tiny" positioning="left" />;
+  const loading = query.networkStatus < NetworkStatus.ready;
+  const client = useOnChainClient();
 
   const manager = useMemo(() => {
     if (result && result.manager) {
@@ -80,16 +84,18 @@ const OverviewInvestedFund: React.FC<Fund> = props => {
 
     return false;
   }, [environment.account, result && result.manager]);
-  const shutdown = result && result.shutdown;
-  const balance = result && result.balance;
-  const locked = result && result.lockedAssets;
+  const shutdown = result.shutdown;
+  const balance = result.balance;
+  const locked = result.lockedAssets;
   const invested = balance && !balance.isZero();
 
   const [acknowledged, setAcknowledged] = useState(false);
   const transaction = useTransaction(environment, {
     onStart: () => setAcknowledged(false),
-    onFinish: () => query.refetch(),
-    onAcknowledge: () => setAcknowledged(true),
+    onAcknowledge: () => {
+      refetchQueries(client);
+      setAcknowledged(true);
+    },
   });
 
   const action = useMemo(() => {
@@ -181,16 +187,19 @@ const OverviewManagedFund: React.FC<Fund> = props => {
   const [result, query] = useFundParticipationQuery(props.address);
   const link = useEtherscanLink({ address: props.address })!;
   const loading = query.networkStatus < NetworkStatus.ready;
+  const client = useOnChainClient();
 
-  const shutdown = result && result.shutdown;
+  const shutdown = result.shutdown;
   const environment = useEnvironment()!;
-  const locked = result && result.lockedAssets;
+  const locked = result.lockedAssets;
 
   const [acknowledged, setAcknowledged] = useState(false);
   const transaction = useTransaction(environment, {
     onStart: () => setAcknowledged(false),
-    onFinish: () => query.refetch(),
-    onAcknowledge: () => setAcknowledged(true),
+    onAcknowledge: () => {
+      refetchQueries(client);
+      setAcknowledged(true);
+    },
   });
 
   const action = useMemo(() => {

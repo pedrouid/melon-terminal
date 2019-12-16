@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 export const SubmitButtonWrapper = styled.button`
   display: block;
@@ -19,4 +19,19 @@ export const SubmitButtonWrapper = styled.button`
   &:active {
     background-color: ${props => props.theme.mainColors.secondaryDark};
   }
+
+  ${props =>
+    !!props.disabled &&
+    css`
+      background-color: ${props => props.theme.otherColors.grey};
+      border-color: ${props => props.theme.otherColors.grey};
+      opacity: 0.75;
+      cursor: default;
+
+      &:hover,
+      &:focus,
+      &:active {
+        background-color: ${props => props.theme.otherColors.grey};
+      }
+    `}
 `;

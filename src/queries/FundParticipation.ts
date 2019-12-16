@@ -76,16 +76,14 @@ export const useFundParticipationQuery = (fund?: Address) => {
   const balance = R.pathOr(new BigNumber(0), ['data', 'account', 'shares', 'balanceOf'], result);
   const cancelable = R.pathOr(false, ['data', 'account', 'participation', 'canCancelRequest'], result);
 
-  const data = !result.loading
-    ? {
-        manager,
-        lockedAssets,
-        shutdown,
-        supply,
-        balance,
-        cancelable,
-      }
-    : undefined;
+  const data = {
+    manager,
+    lockedAssets,
+    shutdown,
+    supply,
+    balance,
+    cancelable,
+  };
 
   return [data, result] as [typeof data, typeof result];
 };
