@@ -3,6 +3,8 @@ import { Subtitle } from '~/components/Common/Styles/Styles';
 
 export const Wrapper = styled.div`
   position: relative;
+  min-height: 200px;
+  overflow: scroll;
   @media (${props => props.theme.mediaQueries.m}) {
     border-right: 1px solid rgb(234, 229, 212);
     border-bottom: none;

@@ -2,6 +2,8 @@ import styled from 'styled-components';
 import { Subtitle } from '~/components/Common/Styles/Styles';
 
 export const Wrapper = styled.div`
+  min-height: 200px;
+  overflow: scroll;
   @media (${props => props.theme.mediaQueries.l}) {
     border-top: none;
   }
