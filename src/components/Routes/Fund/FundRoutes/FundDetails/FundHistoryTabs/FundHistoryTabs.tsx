@@ -1,7 +1,6 @@
 import React from 'react';
 import * as S from './FundHistoryTabs.styles';
 import { FundInvestmentHistoryList } from './FundInvestmentHistoryList/FundInvestmentHistoryList';
-import { FundInvestorsList } from './FundInvestorsList/FundInvestorsList';
 import { TabNavigation } from '~/components/Common/TabNavigation/TabNavigation';
 import { TabNavigationItem } from '~/components/Common/TabNavigation/TabNavigationItem/TabNavigationItem';
 
