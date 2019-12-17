@@ -1,5 +1,4 @@
 import React from 'react';
-import * as S from './OpenOrderItem.styles';
 import { useEnvironment } from '~/hooks/useEnvironment';
 import { findToken } from '~/utils/findToken';
 import { OpenMakeOrder } from '~/queries/FundOpenMakeOrders';
@@ -9,6 +8,7 @@ import useForm, { FormContext } from 'react-hook-form';
 import { Hub, Trading, OasisDexTradingAdapter, ZeroExTradingAdapter, MatchingMarket } from '@melonproject/melonjs';
 import { TransactionModal } from '~/components/Common/TransactionModal/TransactionModal';
 import { findExchange } from '~/utils/findExchange';
+import { BodyCell, BodyCellRightAlign, BodyRow } from '~/components/Common/Table/Table.styles';
 
 export interface OpenOrderItemProps {
   address: string;
@@ -73,18 +73,18 @@ export const OpenOrderItem: React.FC<OpenOrderItemProps> = ({ address, order }) 
 
   return (
     <FormContext {...form}>
-      <S.BodyRow>
-        <S.BodyCell>{makerSymbol && makerSymbol.symbol}</S.BodyCell>
-        <S.BodyCell>{exchange && exchange.name}</S.BodyCell>
-        <S.BodyCellRightAlign>{price.toFixed(6)}</S.BodyCellRightAlign>
-        <S.BodyCellRightAlign>{makerAmount.toFixed(6)}</S.BodyCellRightAlign>
-        <S.BodyCell>
+      <BodyRow>
+        <BodyCell>{makerSymbol && makerSymbol.symbol}</BodyCell>
+        <BodyCell>{exchange && exchange.name}</BodyCell>
+        <BodyCellRightAlign>{price.toFixed(6)}</BodyCellRightAlign>
+        <BodyCellRightAlign>{makerAmount.toFixed(6)}</BodyCellRightAlign>
+        <BodyCell>
           <form onSubmit={submit}>
             <input type="submit" hidden={!expired} value="Cancel" />
           </form>
           <TransactionModal transaction={transaction} />
-        </S.BodyCell>
-      </S.BodyRow>
+        </BodyCell>
+      </BodyRow>
     </FormContext>
   );
 };

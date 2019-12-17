@@ -13,6 +13,7 @@ import {
 import { findToken } from '~/utils/findToken';
 import { useEnvironment } from '~/hooks/useEnvironment';
 import { Environment } from '~/environment';
+import { Table, HeaderCell, HeaderRow, BodyCell, BodyRow, NoEntries } from '~/components/Common/Table/Table.styles';
 
 export interface FundPolicyParametersProps {
   policy: FundPolicy;
@@ -23,17 +24,17 @@ const FundPolicyParameters: React.FC<FundPolicyParametersProps> = props => {
   switch (props.policy.type) {
     case 'MaxConcentration': {
       const policy = props.policy as MaxConcentrationPolicy;
-      return <S.BodyCell>{policy.maxConcentration.dividedBy('1e16').toString()}%</S.BodyCell>;
+      return <BodyCell>{policy.maxConcentration.dividedBy('1e16').toString()}%</BodyCell>;
     }
 
     case 'MaxPositions': {
       const policy = props.policy as MaxPositionsPolicy;
-      return <S.BodyCell>{policy.maxPositions}</S.BodyCell>;
+      return <BodyCell>{policy.maxPositions}</BodyCell>;
     }
 
     case 'PriceTolerance': {
       const policy = props.policy as PriceTolerancePolicy;
-      return <S.BodyCell>{policy.priceTolerance.dividedBy('1e16').toString()}%</S.BodyCell>;
+      return <BodyCell>{policy.priceTolerance.dividedBy('1e16').toString()}%</BodyCell>;
     }
 
     case 'AssetWhitelist': {
@@ -43,7 +44,7 @@ const FundPolicyParameters: React.FC<FundPolicyParametersProps> = props => {
         .sort()
         .join(', ');
 
-      return <S.BodyCell>{addresses}</S.BodyCell>;
+      return <BodyCell>{addresses}</BodyCell>;
     }
 
     case 'AssetBlacklist': {
@@ -53,19 +54,19 @@ const FundPolicyParameters: React.FC<FundPolicyParametersProps> = props => {
         .sort()
         .join(', ');
 
-      return <S.BodyCell>{addresses}</S.BodyCell>;
+      return <BodyCell>{addresses}</BodyCell>;
     }
 
     case 'UserWhitelist': {
-      return <S.BodyCell>Not disclosed</S.BodyCell>;
+      return <BodyCell>Not disclosed</BodyCell>;
     }
 
     case 'CustomPolicy': {
-      return <S.BodyCell>Unknown</S.BodyCell>;
+      return <BodyCell>Unknown</BodyCell>;
     }
 
     default: {
-      return <S.BodyCell>Unknown</S.BodyCell>;
+      return <BodyCell>Unknown</BodyCell>;
     }
   }
 };
@@ -77,32 +78,38 @@ export interface FundPoliciesProps {
 export const FundPolicies: React.FC<FundPoliciesProps> = ({ address }) => {
   const environment = useEnvironment()!;
   const [policies, query] = useFundPoliciesQuery(address);
+
   if (query.loading) {
-    return <Spinner positioning="centered" />;
+    return (
+      <S.Wrapper>
+        <S.Title>Policies</S.Title>
+        <Spinner positioning="centered" />
+      </S.Wrapper>
+    );
   }
 
   return (
     <S.Wrapper>
       <S.Title>Policies</S.Title>
       {policies && policies.length > 0 ? (
-        <S.Table>
+        <Table>
           <thead>
-            <S.HeaderRow>
-              <S.HeaderCell>Name</S.HeaderCell>
-              <S.HeaderCell>Parameter(s)</S.HeaderCell>
-            </S.HeaderRow>
+            <HeaderRow>
+              <HeaderCell>Name</HeaderCell>
+              <HeaderCell>Parameter(s)</HeaderCell>
+            </HeaderRow>
           </thead>
           <tbody>
             {policies.map(policy => (
-              <S.BodyRow key={policy.address}>
-                <S.BodyCell>{policy.identifier}</S.BodyCell>
+              <BodyRow key={policy.address}>
+                <BodyCell>{policy.identifier}</BodyCell>
                 <FundPolicyParameters policy={policy} environment={environment} />
-              </S.BodyRow>
+              </BodyRow>
             ))}
           </tbody>
-        </S.Table>
+        </Table>
       ) : (
-        <S.NoRegisteredPolicies>No registered policies.</S.NoRegisteredPolicies>
+        <NoEntries>No registered policies.</NoEntries>
       )}
     </S.Wrapper>
   );

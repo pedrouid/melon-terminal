@@ -11,6 +11,7 @@ import { TransactionModal } from '~/components/Common/TransactionModal/Transacti
 import { InputField } from '~/components/Common/Form/InputField/InputField';
 import { SubmitButton } from '~/components/Common/Form/SubmitButton/SubmitButton';
 import { useFundDetailsQuery } from '~/queries/FundDetails';
+import { Spinner } from '~/components/Common/Spinner/Spinner';
 
 export interface RedeemProps {
   address: string;
@@ -72,6 +73,14 @@ export const Redeem: React.FC<RedeemProps> = ({ address }) => {
   const handleRedeemAllClick = (e: any) => {
     shares && form.setValue('shareQuantity', shares.balanceOf.toNumber());
   };
+
+  if (query.loading) {
+    return (
+      <S.FundRedeemBody>
+        <Spinner positioning="centered" />
+      </S.FundRedeemBody>
+    );
+  }
 
   return (
     <S.FundRedeemBody>

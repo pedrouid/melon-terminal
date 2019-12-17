@@ -41,3 +41,14 @@ export const BodyRow = styled.tr`
 export const NoEntries = styled.div`
   padding: ${props => props.theme.spaceUnits.s};
 `;
+
+export const BodyRowHover = styled.tr`
+  border-top: 1px solid ${props => props.theme.mainColors.border};
+  cursor: pointer;
+
+  &:hover {
+    background-color: ${props => props.theme.mainColors.primary};
+  }
+
+  border-bottom: 1px dashed rgb(234, 229, 212);
+`;

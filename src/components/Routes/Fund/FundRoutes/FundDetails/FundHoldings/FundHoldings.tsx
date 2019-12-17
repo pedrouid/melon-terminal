@@ -3,6 +3,16 @@ import { Spinner } from '~/components/Common/Spinner/Spinner';
 import { useFundHoldingsQuery } from '~/queries/FundHoldings';
 import * as S from './FundHoldings.styles';
 import BigNumber from 'bignumber.js';
+import {
+  Table,
+  HeaderCell,
+  HeaderCellRightAlign,
+  BodyRowHover,
+  BodyCell,
+  BodyCellRightAlign,
+  BodyRow,
+  NoEntries,
+} from '~/components/Common/Table/Table.styles';
 
 export interface FundHoldingsProps {
   address: string;
@@ -11,7 +21,12 @@ export interface FundHoldingsProps {
 export const FundHoldings: React.FC<FundHoldingsProps> = ({ address }) => {
   const [holdings, query] = useFundHoldingsQuery(address);
   if (query.loading) {
-    return <Spinner positioning="centered" />;
+    return (
+      <S.Wrapper>
+        <S.Title>Holdings</S.Title>
+        <Spinner positioning="centered" />
+      </S.Wrapper>
+    );
   }
 
   const mapped = (holdings || [])
@@ -29,28 +44,28 @@ export const FundHoldings: React.FC<FundHoldingsProps> = ({ address }) => {
   return (
     <S.Wrapper>
       <S.Title>Holdings</S.Title>
-      <S.Table>
+      <Table>
         <thead>
-          <S.HeaderRow>
-            <S.HeaderCell>Asset</S.HeaderCell>
-            <S.HeaderCellRightAlign>Price</S.HeaderCellRightAlign>
-            <S.HeaderCellRightAlign>Balance</S.HeaderCellRightAlign>
-          </S.HeaderRow>
+          <BodyRowHover>
+            <HeaderCell>Asset</HeaderCell>
+            <HeaderCellRightAlign>Price</HeaderCellRightAlign>
+            <HeaderCellRightAlign>Balance</HeaderCellRightAlign>
+          </BodyRowHover>
         </thead>
         <tbody>
           {mapped.map(holding => (
-            <S.BodyRow key={holding.token.address}>
-              <S.BodyCell>
+            <BodyRow key={holding.token.address}>
+              <BodyCell>
                 <S.HoldingSymbol>{holding.token.symbol}</S.HoldingSymbol>
                 <br />
                 <S.HoldingName>{holding.token.name}</S.HoldingName>
-              </S.BodyCell>
-              <S.BodyCellRightAlign>{holding.token.price.toFixed(4)}</S.BodyCellRightAlign>
-              <S.BodyCellRightAlign>{holding.divided.toFixed(4)}</S.BodyCellRightAlign>
-            </S.BodyRow>
+              </BodyCell>
+              <BodyCellRightAlign>{holding.token.price.toFixed(4)}</BodyCellRightAlign>
+              <BodyCellRightAlign>{holding.divided.toFixed(4)}</BodyCellRightAlign>
+            </BodyRow>
           ))}
         </tbody>
-      </S.Table>
+      </Table>
     </S.Wrapper>
   );
 };

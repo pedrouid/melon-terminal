@@ -8,6 +8,7 @@ import { Accounting, FeeManager } from '@melonproject/melonjs';
 import { SubmitButton } from '~/components/Common/Form/SubmitButton/SubmitButton';
 import { TransactionModal } from '~/components/Common/TransactionModal/TransactionModal';
 import { useFundDetailsQuery } from '~/queries/FundDetails';
+import { Spinner } from '~/components/Common/Spinner/Spinner';
 
 export interface ClaimFeesProps {
   address: string;
@@ -15,7 +16,7 @@ export interface ClaimFeesProps {
 
 export const ClaimFees: React.FC<ClaimFeesProps> = ({ address }) => {
   const environment = useEnvironment()!;
-  const [details, query] = useFundDetailsQuery(address);
+  const [details, _, query] = useFundDetailsQuery(address);
 
   const history = useHistory();
 
@@ -46,6 +47,14 @@ export const ClaimFees: React.FC<ClaimFeesProps> = ({ address }) => {
     const tx = feeManager.rewardManagementFee(environment.account!);
     transaction.start(tx, 'Claim management fee');
   };
+
+  if (query.loading) {
+    return (
+      <S.FundShutdownBody>
+        <Spinner positioning="centered" />
+      </S.FundShutdownBody>
+    );
+  }
 
   return (
     <S.FundShutdownBody>
