@@ -17,7 +17,7 @@ export const FullBody = styled.div`
   display: flex;
   flex-direction: column;
   position: relative;
-  min-height: 200px;
+  height: 350px;
 
   @media (${props => props.theme.mediaQueries.l}) {
     flex: 1;
