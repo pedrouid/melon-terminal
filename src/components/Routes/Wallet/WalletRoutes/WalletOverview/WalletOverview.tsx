@@ -9,8 +9,12 @@ export const WalletOverview: React.FC = () => {
   const [balances, query] = useAccountBalancesQuery();
   const [account, fundQuery] = useAccountFundQuery();
 
-  if (query.loading) {
-    return <Spinner positioning="centered" size="large" />;
+  if (query.loading || fundQuery.loading) {
+    return (
+      <S.WalletOverviewBody>
+        <Spinner positioning="centered" size="large" />
+      </S.WalletOverviewBody>
+    );
   }
 
   if (!balances) {
