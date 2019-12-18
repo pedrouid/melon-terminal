@@ -31,7 +31,7 @@ export interface FundInvestmentHistoryQueryVariables {
 const FundInvestmentHistoryQuery = gql`
   query FundDetailsQuery($id: ID!) {
     fund(id: $id) {
-      investmentHistory(orderBy: timestamp) {
+      investmentHistory(orderBy: timestamp, where: { action_not: "Fee allocation" }) {
         id
         asset {
           symbol
