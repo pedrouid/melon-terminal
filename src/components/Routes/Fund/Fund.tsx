@@ -4,6 +4,7 @@ import { useFundExistsQuery } from '~/queries/FundExists';
 import { Spinner } from '~/components/Common/Spinner/Spinner';
 import { FundHeader } from './FundHeader/FundHeader';
 import { FundNavigation } from './FundNavigation/FundNavigation';
+import { FundContextProvider } from '~/components/Contexts/Fund';
 import * as S from './Fund.styles';
 
 const NoMatch = React.lazy(() => import('~/components/Routes/NoMatch/NoMatch'));
@@ -34,7 +35,7 @@ export const Fund: React.FC = () => {
   }
 
   return (
-    <>
+    <FundContextProvider address={match.params.address}>
       <S.FundHeader>
         <FundHeader address={match.params.address} />
       </S.FundHeader>
@@ -63,7 +64,7 @@ export const Fund: React.FC = () => {
           </Route>
         </Switch>
       </S.FundBody>
-    </>
+    </FundContextProvider>
   );
 };
 
