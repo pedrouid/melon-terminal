@@ -19,7 +19,9 @@ interface TransactionPipelineState<T = any | undefined> {
   current?: TransactionPipelineItem<T>;
 }
 
-function useTransactionPipeline<T = any | undefined>(options: TransactionPipelineOptions<T>): TransactionPipelineState<T> {
+function useTransactionPipeline<T = any | undefined>(
+  options: TransactionPipelineOptions<T>
+): TransactionPipelineState<T> {
   const item = options.transactions.reduce((carry, current) => {
     const progress = carry.transaction.state.progress;
     if (progress === TransactionProgress.EXECUTION_FINISHED) {
@@ -102,8 +104,14 @@ export const FundSetup: React.FC = () => {
 
   return (
     <S.FundSetupBody>
-      <SubmitButton type="button" onClick={() => pipeline.current && pipeline.current.transaction.initialize()} label="Test" />
-      {pipeline.current && <TransactionModal transaction={pipeline.current.transaction} label={pipeline.current.name} />}
+      <SubmitButton
+        type="button"
+        onClick={() => pipeline.current && pipeline.current.transaction.initialize()}
+        label="Test"
+      />
+      {pipeline.current && (
+        <TransactionModal transaction={pipeline.current.transaction} label={pipeline.current.name} />
+      )}
     </S.FundSetupBody>
   );
 };
