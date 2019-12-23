@@ -8,6 +8,7 @@ import * as S from './FundSetup.styles';
 
 interface TransactionPipelineOptions<T = any | undefined> {
   transactions: TransactionPipelineItem<T>[];
+  state: () => Promise<any> | any;
 }
 
 interface TransactionPipelineItem<T = any | undefined> {
@@ -42,6 +43,9 @@ export const FundSetup: React.FC = () => {
   const environment = useEnvironment()!;
   const version = environment.deployment.melon.addr.Version;
   const pipeline = useTransactionPipeline({
+    state: async () => {
+
+    },
     transactions: [
       {
         name: 'Create accounting contract',
