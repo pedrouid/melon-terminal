@@ -1,24 +1,16 @@
-import { Deployment, ExchangeConfig } from '~/types';
+import { Deployment } from '~/types';
 import { sameAddress } from '@melonproject/melonjs/utils/sameAddress';
+import { availableExchanges } from './availableExchanges';
 
-export interface NamedExchangeConfig extends ExchangeConfig {
-  name: string;
-}
-
-export function findExchange(deployment: Deployment, which: string): NamedExchangeConfig | undefined {
-  const names = Object.keys(deployment.exchangeConfigs);
-  const exchanges: NamedExchangeConfig[] = Object.values(deployment.exchangeConfigs).map((item, index) => ({
-    ...item,
-    name: names[index],
-  }));
-
+export function findExchange(deployment: Deployment, which: string) {
+  const exchanges = availableExchanges(deployment);
   const address = which.startsWith('0x');
   return exchanges.find(item => {
     if (address && sameAddress(which, item.exchange)) {
       return true;
     }
 
-    if (!address && which === item.name) {
+    if (which === item.name) {
       return true;
     }
 

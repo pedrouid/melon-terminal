@@ -37,7 +37,7 @@ export const allowance: Resolver<string, AllowanceArgs> = async (_, args, contex
 
 export const fund: Resolver<string> = async (manager, _, context) => {
   try {
-    const version = new Version(context.environment, context.environment.deployment.melonContracts.version);
+    const version = new Version(context.environment, context.environment.deployment.melon.addr.Version);
     const address = await version.getManagersToHubs(manager, context.block);
     const hub = new Hub(context.environment, address);
     // Duck typing the hub contract. If we can fetch a creator for the given

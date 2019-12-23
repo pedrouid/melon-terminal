@@ -14,7 +14,8 @@ export const account: Resolver = async (_, __, context) => {
 };
 
 export const prices: Resolver = async (_, __, context) => {
-  const address = context.environment.deployment!.melonContracts.priceSource;
+  // TODO: Make this use the right price feed address and contract.
+  const address = context.environment.deployment!.melon.addr.TestingPriceFeed;
   return new CanonicalPriceFeed(context.environment, address);
 };
 

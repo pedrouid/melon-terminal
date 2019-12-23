@@ -251,5 +251,5 @@ export function useTransaction<T = undefined | any>(
     initialize,
     execute,
     reset,
-  };
+  } as TransactionHookValues<T>;
 }

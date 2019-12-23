@@ -13,6 +13,12 @@ export interface TokenDefinition {
   decimals: number;
 }
 
+export interface ExchangeDefinition {
+  name: string;
+  exchange: string;
+  adapter: string;
+}
+
 export interface Deployment {
   melon: {
     addr: MelonAddresses;

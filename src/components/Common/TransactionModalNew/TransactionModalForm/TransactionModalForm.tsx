@@ -159,8 +159,8 @@ export const TransactionModalForm: React.FC<TransactionModalFormProps> = props =
   }, [started, finished, errored, prices.loading]);
 
   return (
-    <S.TransactionModalForm onSubmit={submit}>
-      <FormContext {...form}>
+    <FormContext {...form}>
+      <S.TransactionModalForm onSubmit={submit}>
         {prepared && !prices.loading && (
           <>
             <S.EthGasStation>
@@ -272,7 +272,7 @@ export const TransactionModalForm: React.FC<TransactionModalFormProps> = props =
         )}
 
         <S.TransactionModalActions>{actions}</S.TransactionModalActions>
-      </FormContext>
-    </S.TransactionModalForm>
+      </S.TransactionModalForm>
+    </FormContext>
   );
 };
