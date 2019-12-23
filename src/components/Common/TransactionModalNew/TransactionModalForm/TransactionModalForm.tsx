@@ -79,7 +79,7 @@ export interface TransactionModalFormProps {
   execute: (price: BigNumber) => void;
 }
 
-export const TransactionModalForm: React.FC<TransactionModalFormProps> = (props) => {
+export const TransactionModalForm: React.FC<TransactionModalFormProps> = props => {
   const hash = props.transaction.hash;
   const receipt = props.transaction.receipt;
   const errored = !!props.transaction.error;
@@ -102,13 +102,19 @@ export const TransactionModalForm: React.FC<TransactionModalFormProps> = (props)
   }, [prices]);
 
   const form = useForm({
-    validationSchema: useMemo(() => object({
-      gasPrice: number().positive().required(),
-    }), []),
+    validationSchema: useMemo(
+      () =>
+        object({
+          gasPrice: number()
+            .positive()
+            .required(),
+        }),
+      []
+    ),
   });
 
   const set = (value: BigNumber) => form.setValue('gasPrice', value.toString());
-  const submit = form.handleSubmit((data) => props.execute(new BigNumber(data.gasPrice).multipliedBy('10e9')));
+  const submit = form.handleSubmit(data => props.execute(new BigNumber(data.gasPrice).multipliedBy('10e9')));
 
   useEffect(() => {
     price && set(price);
@@ -158,20 +164,44 @@ export const TransactionModalForm: React.FC<TransactionModalFormProps> = (props)
         {prepared && !prices.loading && (
           <>
             <S.EthGasStation>
-              <S.EthGasStationButton type="button" onClick={() => set(prices.network!)} disabled={started || prices.network == null}>
-                <S.EthGasStationButtonGwei>{prices.network && prices.network.toString() || 'N/A'}</S.EthGasStationButtonGwei>
+              <S.EthGasStationButton
+                type="button"
+                onClick={() => set(prices.network!)}
+                disabled={started || prices.network == null}
+              >
+                <S.EthGasStationButtonGwei>
+                  {(prices.network && prices.network.toString()) || 'N/A'}
+                </S.EthGasStationButtonGwei>
                 <S.EthGasStationButtonText>Default</S.EthGasStationButtonText>
               </S.EthGasStationButton>
-              <S.EthGasStationButton type="button" onClick={() => set(prices.slow!)} disabled={started || prices.slow == null}>
-                <S.EthGasStationButtonGwei>{prices.slow && prices.slow.toString() || 'N/A'}</S.EthGasStationButtonGwei>
+              <S.EthGasStationButton
+                type="button"
+                onClick={() => set(prices.slow!)}
+                disabled={started || prices.slow == null}
+              >
+                <S.EthGasStationButtonGwei>
+                  {(prices.slow && prices.slow.toString()) || 'N/A'}
+                </S.EthGasStationButtonGwei>
                 <S.EthGasStationButtonText>Slow</S.EthGasStationButtonText>
               </S.EthGasStationButton>
-              <S.EthGasStationButton type="button" onClick={() => set(prices.average!)} disabled={started || prices.average == null}>
-                <S.EthGasStationButtonGwei>{prices.average && prices.average.toString() || 'N/A'}</S.EthGasStationButtonGwei>
+              <S.EthGasStationButton
+                type="button"
+                onClick={() => set(prices.average!)}
+                disabled={started || prices.average == null}
+              >
+                <S.EthGasStationButtonGwei>
+                  {(prices.average && prices.average.toString()) || 'N/A'}
+                </S.EthGasStationButtonGwei>
                 <S.EthGasStationButtonText>Average</S.EthGasStationButtonText>
               </S.EthGasStationButton>
-              <S.EthGasStationButton type="button" onClick={() => set(prices.fast!)} disabled={started || prices.fast == null}>
-                <S.EthGasStationButtonGwei>{prices.fast && prices.fast.toString() || 'N/A'}</S.EthGasStationButtonGwei>
+              <S.EthGasStationButton
+                type="button"
+                onClick={() => set(prices.fast!)}
+                disabled={started || prices.fast == null}
+              >
+                <S.EthGasStationButtonGwei>
+                  {(prices.fast && prices.fast.toString()) || 'N/A'}
+                </S.EthGasStationButtonGwei>
                 <S.EthGasStationButtonText>Fast</S.EthGasStationButtonText>
               </S.EthGasStationButton>
             </S.EthGasStation>
@@ -188,7 +218,9 @@ export const TransactionModalForm: React.FC<TransactionModalFormProps> = (props)
               />
 
               {props.transaction.options?.gas && <div>Gas limit: {props.transaction.options.gas}</div>}
-              {props.transaction.options?.incentive && <div>Incentive: {props.transaction.options.incentive.toFixed(4)}</div>}
+              {props.transaction.options?.incentive && (
+                <div>Incentive: {props.transaction.options.incentive.toFixed(4)}</div>
+              )}
               {props.transaction.options?.amgu && <div>AMGU: {props.transaction.options.amgu.toFixed(4)}</div>}
             </S.TransactionModalFeeForm>
           </>
@@ -202,15 +234,15 @@ export const TransactionModalForm: React.FC<TransactionModalFormProps> = (props)
                   <S.TransactionModalMessagesTableRow>
                     <S.TransactionModalMessagesTableRowLabel>Hash</S.TransactionModalMessagesTableRowLabel>
                     <S.TransactionModalMessagesTableRowQuantity>
-                      <a target="_blank" href={etherscan!}>{hash}</a>
+                      <a target="_blank" href={etherscan!}>
+                        {hash}
+                      </a>
                     </S.TransactionModalMessagesTableRowQuantity>
                   </S.TransactionModalMessagesTableRow>
                 )}
                 {receipt && (
                   <S.TransactionModalMessagesTableRow>
-                    <S.TransactionModalMessagesTableRowLabel>
-                      Block number
-                    </S.TransactionModalMessagesTableRowLabel>
+                    <S.TransactionModalMessagesTableRowLabel>Block number</S.TransactionModalMessagesTableRowLabel>
                     <S.TransactionModalMessagesTableRowQuantity>
                       {receipt.blockNumber}
                     </S.TransactionModalMessagesTableRowQuantity>
@@ -243,4 +275,4 @@ export const TransactionModalForm: React.FC<TransactionModalFormProps> = (props)
       </FormContext>
     </S.TransactionModalForm>
   );
-}
+};

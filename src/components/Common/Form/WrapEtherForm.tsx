@@ -19,7 +19,7 @@ export interface WrapEtherFormProps {
 export const WrapEtherForm: React.FC<WrapEtherFormProps> = props => {
   const account = useAccount();
   if (account.loading) {
-    return <Spinner positioning="centered" />
+    return <Spinner positioning="centered" />;
   }
 
   return (

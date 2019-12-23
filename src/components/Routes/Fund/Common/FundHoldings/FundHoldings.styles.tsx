@@ -8,7 +8,7 @@ export const Wrapper = styled.div`
   background-color: rgb(255, 255, 255);
   flex: 1 0 25%;
   min-width: 250px;
-  
+
   @media (${props => props.theme.mediaQueries.m}) {
     border-right: 1px solid rgb(234, 229, 212);
     border-bottom: none;

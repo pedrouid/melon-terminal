@@ -22,8 +22,14 @@ export const OpenOrderItem: React.FC<OpenOrderItemProps> = ({ address, order, re
   const exchange = useMemo(() => findExchange(environment.deployment, order.exchange), [order.exchange]);
   const makerToken = useMemo(() => findToken(environment.deployment, order.makerAsset)!, [order.makerAsset]);
   const takerToken = useMemo(() => findToken(environment.deployment, order.takerAsset)!, [order.takerAsset]);
-  const makerAmount = useMemo(() => order.makerQuantity.dividedBy(new BigNumber(10).exponentiatedBy(makerToken.decimals)), [order.makerQuantity, makerToken.decimals]);
-  const takerAmount = useMemo(() => order.takerQuantity.dividedBy(new BigNumber(10).exponentiatedBy(takerToken.decimals)), [order.takerQuantity, takerToken.decimals]);
+  const makerAmount = useMemo(
+    () => order.makerQuantity.dividedBy(new BigNumber(10).exponentiatedBy(makerToken.decimals)),
+    [order.makerQuantity, makerToken.decimals]
+  );
+  const takerAmount = useMemo(
+    () => order.takerQuantity.dividedBy(new BigNumber(10).exponentiatedBy(takerToken.decimals)),
+    [order.takerQuantity, takerToken.decimals]
+  );
   const price = useMemo(() => takerAmount.dividedBy(makerAmount), [takerAmount, makerAmount]);
 
   const transaction = useTransaction(environment, {

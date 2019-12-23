@@ -33,7 +33,7 @@ const createErrorLink = () => {
 };
 
 const nullLink = new ApolloLink(
-  () => new Observable<FetchResult>(() => { })
+  () => new Observable<FetchResult>(() => {})
 );
 
 const nullClient = new ApolloClient({
@@ -91,8 +91,8 @@ const useTheGraphApollo = (environment?: Environment) => {
     const subgraph = environment && config[environment.network] && config[environment.network].subgraph;
     const data = subgraph
       ? createHttpLink({
-        uri: subgraph,
-      })
+          uri: subgraph,
+        })
       : nullLink;
 
     const error = createErrorLink();

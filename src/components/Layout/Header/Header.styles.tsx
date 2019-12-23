@@ -53,8 +53,7 @@ export const Account = styled.div`
   }
 `;
 
-export const AccountInfo = styled.div`
-`;
+export const AccountInfo = styled.div``;
 
 const AccountInfoItem = styled.span`
   text-transform: uppercase;
@@ -75,7 +74,7 @@ const AccountInfoItem = styled.span`
 
 export const AccountAddress = AccountInfoItem;
 
-export const AccountFund = AccountInfoItem
+export const AccountFund = AccountInfoItem;
 
 export const AccountNetwork = AccountInfoItem;
 

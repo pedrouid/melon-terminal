@@ -39,23 +39,28 @@ PROTOCOL AND/OR THE UNDERLYING SOFTWARE AND THE USE THEREOF ARE DISCLAIMED.
 export const WalletFundSetup: React.FC = () => {
   const environment = useEnvironment()!;
   const tokens = Object.keys(environment.deployment.tokens.addr);
-  const exchanges = [{
-    name: 'MelonEngine',
-    exchange: environment.deployment.melon.addr.Engine,
-    adapter: environment.deployment.melon.addr.EngineAdapter,
-  }, {
-    name: 'KyberNetwork',
-    adapter: environment.deployment.melon.addr.KyberAdapter,
-    exchange: environment.deployment.kyber.addr.KyberNetwork,
-  }, {
-    name: 'OasisDex',
-    adapter: environment.deployment.melon.addr.OasisDexAdapter,
-    exchange: environment.deployment.oasis.addr.OasisDexExchange,
-  }, {
-    name: 'ZeroEx',
-    adapter: environment.deployment.melon.addr.ZeroExV2Adapter,
-    exchange: environment.deployment.zeroex.addr.ZeroExV2Exchange,
-  }];
+  const exchanges = [
+    {
+      name: 'MelonEngine',
+      exchange: environment.deployment.melon.addr.Engine,
+      adapter: environment.deployment.melon.addr.EngineAdapter,
+    },
+    {
+      name: 'KyberNetwork',
+      adapter: environment.deployment.melon.addr.KyberAdapter,
+      exchange: environment.deployment.kyber.addr.KyberNetwork,
+    },
+    {
+      name: 'OasisDex',
+      adapter: environment.deployment.melon.addr.OasisDexAdapter,
+      exchange: environment.deployment.oasis.addr.OasisDexExchange,
+    },
+    {
+      name: 'ZeroEx',
+      adapter: environment.deployment.melon.addr.ZeroExV2Adapter,
+      exchange: environment.deployment.zeroex.addr.ZeroExV2Exchange,
+    },
+  ];
 
   const validationSchema = Yup.object().shape({
     name: Yup.string().min(1),
@@ -80,13 +85,13 @@ export const WalletFundSetup: React.FC = () => {
     reValidateMode: 'onBlur',
   });
 
-  const submit = form.handleSubmit((data) => transaction.initialize(data));
+  const submit = form.handleSubmit(data => transaction.initialize(data));
   const transaction = useTransaction((values: WalletFundSetupForm) => {
     const factory = new Version(environment, environment.deployment.melon.addr.Version);
     const weth = findToken(environment.deployment, 'WETH');
 
     const assetAddresses = values.assets.map(symbol => findToken(environment.deployment, symbol)!.address);
-    const selectedExchanges = exchanges.filter((item) => values.exchanges.includes(item.name));
+    const selectedExchanges = exchanges.filter(item => values.exchanges.includes(item.name));
     const exchangeAddresses = selectedExchanges.map(exchange => exchange.exchange);
     const adapterAddresses = selectedExchanges.map(exchange => exchange.adapter);
 

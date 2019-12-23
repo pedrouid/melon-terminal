@@ -12,12 +12,7 @@ export interface TransactionModalProps extends Omit<Partial<ModalProps>, 'isOpen
   acknowledge?: (receipt: TransactionReceipt) => void;
 }
 
-export const TransactionModal: React.FC<TransactionModalProps> = ({
-  label,
-  transaction,
-  acknowledge,
-  ...rest
-}) => {
+export const TransactionModal: React.FC<TransactionModalProps> = ({ label, transaction, acknowledge, ...rest }) => {
   const close = () => {
     if (transaction.state.receipt && acknowledge) {
       acknowledge(transaction.state.receipt);
@@ -32,8 +27,15 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
         <S.TransactionModalTitle>{label}</S.TransactionModalTitle>
         <S.TransactionModalContent>
           <TransactionModalProgressBar transaction={transaction.state} />
-          {transaction.state.error && <S.TransactionModalError>{transaction.state.error.message}</S.TransactionModalError>}
-          <TransactionModalForm transaction={transaction.state} execute={transaction.execute} reset={transaction.reset} close={close} />
+          {transaction.state.error && (
+            <S.TransactionModalError>{transaction.state.error.message}</S.TransactionModalError>
+          )}
+          <TransactionModalForm
+            transaction={transaction.state}
+            execute={transaction.execute}
+            reset={transaction.reset}
+            close={close}
+          />
         </S.TransactionModalContent>
       </S.TransactionModal>
     </Modal>

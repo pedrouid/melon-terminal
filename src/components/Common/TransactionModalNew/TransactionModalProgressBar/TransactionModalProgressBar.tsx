@@ -7,7 +7,7 @@ export interface TransactionModalProgressBarProps {
   transaction: TransactionState;
 }
 
-export const TransactionModalProgressBar: React.FC<TransactionModalProgressBarProps> = (props) => {
+export const TransactionModalProgressBar: React.FC<TransactionModalProgressBarProps> = props => {
   const step = useMemo(() => {
     if (props.transaction.progress == null) {
       return 0;

@@ -34,7 +34,11 @@ export const FundHeader: React.FC = () => {
       <S.FundHeader>
         <S.FundHeaderHeadline>
           <S.FundHeaderTitle>{fund?.name}</S.FundHeaderTitle>
-          <S.FundHeaderLinks><a href={link!} title={fund?.address}>View on etherscan</a></S.FundHeaderLinks>
+          <S.FundHeaderLinks>
+            <a href={link!} title={fund?.address}>
+              View on etherscan
+            </a>
+          </S.FundHeaderLinks>
         </S.FundHeaderHeadline>
         <RequiresFundSetupComplete>
           {/* <S.FundHeaderInformation>

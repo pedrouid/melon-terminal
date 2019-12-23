@@ -95,7 +95,7 @@ export const FundSetup: React.FC = () => {
         const factory = new Version(environment, version);
         return factory.completeSetup(environment.account!);
       }),
-    }
+    },
   ]);
 
   return (

@@ -18,6 +18,6 @@ export const FundDetails: React.FC = () => {
       <S.FundDetailsLists>{/*Nothing here for now.*/}</S.FundDetailsLists>
     </S.FundDetailsContent>
   );
-}
+};
 
 export default FundDetails;

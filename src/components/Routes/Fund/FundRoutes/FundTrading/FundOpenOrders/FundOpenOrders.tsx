@@ -39,12 +39,14 @@ export const FundOpenOrders: React.FC<FundOpenOrdersProps> = ({ address }) => {
             </HeaderRow>
           </thead>
           <tbody>
-            {orders.map(order => <OpenOrderItem address={address} order={order} refresh={refresh} key={order.orderIndex.toString()} />)}
+            {orders.map(order => (
+              <OpenOrderItem address={address} order={order} refresh={refresh} key={order.orderIndex.toString()} />
+            ))}
           </tbody>
         </Table>
       ) : (
-          <NoEntries>No open orders</NoEntries>
-        )}
+        <NoEntries>No open orders</NoEntries>
+      )}
     </S.Wrapper>
   );
 };

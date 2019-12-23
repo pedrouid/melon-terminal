@@ -16,13 +16,16 @@ export const Fund = createContext<FundContextValue>({
   loading: true,
 });
 
-export const FundContextProvider: React.FC<FundContextProviderProps> = (props) => {
+export const FundContextProvider: React.FC<FundContextProviderProps> = props => {
   const address = isAddress(props.address) ? toChecksumAddress(props.address) : undefined;
   const [fund, query] = useFundContextQuery({
     variables: address ? { address } : {},
     skip: !address,
   });
 
-  const output = useMemo(() => ({ ...fund, address, exists: !!fund?.name, loading: query.loading }), [fund, query.loading]);
+  const output = useMemo(() => ({ ...fund, address, exists: !!fund?.name, loading: query.loading }), [
+    fund,
+    query.loading,
+  ]);
   return <Fund.Provider value={output}>{props.children}</Fund.Provider>;
 };

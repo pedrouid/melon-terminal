@@ -39,9 +39,7 @@ export const Header: React.FC = () => {
                 {environment ? environment.network : 'OFFLINE'}
               </Link>
             </S.AccountNetwork>
-            {account.eth && (
-              <S.AccountBalance>{account.eth?.toFixed(4)} ETH</S.AccountBalance>
-            )}
+            {account.eth && <S.AccountBalance>{account.eth?.toFixed(4)} ETH</S.AccountBalance>}
           </S.AccountInfo>
         </S.Account>
       </S.Header>
