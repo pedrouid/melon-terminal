@@ -1,7 +1,7 @@
 import gql from 'graphql-tag';
-import * as R from 'ramda';
 import BigNumber from 'bignumber.js';
 import { useOnChainQuery } from '~/hooks/useQuery';
+import { useMemo } from 'react';
 
 export interface AccountParticipation {
   address: string;
@@ -34,50 +34,16 @@ export interface FundInvestRoutes {
   };
 }
 
-export interface FundInvestQueryResult {
-  account: {
-    participation: AccountParticipation;
-    shares: AccountShares;
-  };
-  fund: {
-    routes: FundInvestRoutes;
-  };
-}
-
 export interface FundInvestQueryVariables {
   address: string;
 }
 
 const FundHoldingsQuery = gql`
-  query useFundInvestQuery($address: String!) {
+  query FundInvestQuery($address: String!) {
     account {
       participation(address: $address) {
-        address
-        hasInvested
         investmentRequestState
         canCancelRequest
-      }
-      shares(address: $address) {
-        address
-        balanceOf
-      }
-    }
-    fund(address: $address) {
-      routes {
-        accounting {
-          address
-          holdings {
-            amount
-            shareCostInAsset
-            token {
-              address
-              symbol
-              name
-              price
-              decimals
-            }
-          }
-        }
       }
     }
   }
@@ -88,7 +54,15 @@ export const useFundInvestQuery = (address: string) => {
     variables: { address },
   };
 
-  const result = useOnChainQuery<FundInvestQueryResult, FundInvestQueryVariables>(FundHoldingsQuery, options);
-  const routes = R.path<FundInvestQueryResult>(['data'], result);
-  return [routes, result] as [typeof routes, typeof result];
+  const result = useOnChainQuery<FundInvestQueryVariables>(FundHoldingsQuery, options);
+  const output = useMemo(() => {
+    const participation = result.data?.account?.participation;
+
+    return {
+      investmentRequestState: participation?.investmentRequestState,
+      canCancelRequest: participation?.canCancelRequest,
+    };
+  }, [result.data]);
+
+  return [output, result] as [typeof output, typeof result];
 };

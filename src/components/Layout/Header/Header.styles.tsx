@@ -46,7 +46,6 @@ export const Account = styled.div`
   justify-content: center;
 
   @media (${props => props.theme.mediaQueries.m}) {
-    flex: 1 0 auto;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
@@ -54,17 +53,8 @@ export const Account = styled.div`
   }
 `;
 
-export const AccountName = styled.div`
-  font-weight: ${props => props.theme.fontWeights.bold};
-  font-size: ${props => props.theme.fontSizes.m};
-  margin-bottom: ${props => props.theme.spaceUnits.xxs};
-
-  @media (${props => props.theme.mediaQueries.m}) {
-    margin-bottom: 0;
-  }
+export const AccountInfo = styled.div`
 `;
-
-export const AccountInfo = styled.div``;
 
 const AccountInfoItem = styled.span`
   text-transform: uppercase;
@@ -83,8 +73,10 @@ const AccountInfoItem = styled.span`
   }
 `;
 
-export const AccountAddress = styled(AccountInfoItem)``;
+export const AccountAddress = AccountInfoItem;
 
-export const AccountNetwork = styled(AccountInfoItem)``;
+export const AccountFund = AccountInfoItem
 
-export const AccountBalance = styled(AccountInfoItem)``;
+export const AccountNetwork = AccountInfoItem;
+
+export const AccountBalance = AccountInfoItem;

@@ -1,17 +1,21 @@
 import React from 'react';
-import { Address } from '@melonproject/melonjs';
-import { useFundDetailsQuery } from '~/queries/FundDetails';
+import { useFund } from '~/hooks/useFund';
 
-export interface RequireFundNotShutDownProps {
-  address: Address;
+export interface RequiresFundNotShutDownProps {
+  loader?: React.ReactNode;
+  fallback?: React.ReactNode;
 }
 
-export const RequiresFundNotShutDown: React.FC<RequireFundNotShutDownProps> = props => {
-  const [fund, _] = useFundDetailsQuery(props.address);
+export const RequiresFundNotShutDown: React.FC<RequiresFundNotShutDownProps> = props => {
+  const fund = useFund();
 
-  if (fund && !fund.isShutDown) {
+  if (fund.loading) {
+    return <>{props.loader}</>;
+  }
+
+  if (fund.isShutDown) {
     return <>{props.children}</>;
   }
 
-  return <></>;
+  return <>{props.fallback}</>;
 };

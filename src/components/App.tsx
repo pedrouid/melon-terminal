@@ -9,8 +9,9 @@ import { method as metamask } from './Common/ConnectionSelector/MetaMask/MetaMas
 import { method as frame } from './Common/ConnectionSelector/Frame/Frame';
 import { method as ganache } from './Common/ConnectionSelector/Ganache/Ganache';
 import { Theme, ModalBackground } from './App.styles';
-import { ApolloProvider } from './Contexts/Apollo';
-import { ConnectionProvider } from './Contexts/Connection';
+import { ApolloProvider } from './Contexts/Apollo/Apollo';
+import { ConnectionProvider } from './Contexts/Connection/Connection';
+import { AccountContextProvider } from './Contexts/Account/Account';
 // NOTE: Imported using root relative import to allow overrides with webpack.
 import { AppRouter } from '~/components/AppRouter';
 
@@ -28,15 +29,17 @@ const AppComponent = () => {
       <ModalProvider backgroundComponent={ModalBackground}>
         <ConnectionProvider methods={methods}>
           <ApolloProvider>
-            <Router>
-              <Layout>
-                <ErrorBoundary FallbackComponent={ErrorFallback}>
-                  <Suspense fallback={<Spinner size="large" positioning="overlay" />}>
-                    <AppRouter />
-                  </Suspense>
-                </ErrorBoundary>
-              </Layout>
-            </Router>
+            <AccountContextProvider>
+              <Router>
+                <Layout>
+                  <ErrorBoundary FallbackComponent={ErrorFallback}>
+                    <Suspense fallback={<Spinner size="large" positioning="overlay" />}>
+                      <AppRouter />
+                    </Suspense>
+                  </ErrorBoundary>
+                </Layout>
+              </Router>
+            </AccountContextProvider>
           </ApolloProvider>
         </ConnectionProvider>
       </ModalProvider>

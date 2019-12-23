@@ -9,7 +9,7 @@ import {
   networkChanged,
   accountsChanged,
   connectionEstablished,
-} from '~/components/Contexts/Connection';
+} from '~/components/Contexts/Connection/Connection';
 import {
   map,
   expand,

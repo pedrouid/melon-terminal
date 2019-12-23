@@ -1,10 +1,12 @@
 import React from 'react';
-import { Switch, Route, useRouteMatch } from 'react-router';
-import { useFundExistsQuery } from '~/queries/FundExists';
-import { Spinner } from '~/components/Common/Spinner/Spinner';
+import { Switch, Route, useRouteMatch, Redirect } from 'react-router';
+import { FundContextProvider } from '~/components/Contexts/Fund/Fund';
+import { RequiresFundSetupComplete } from '~/components/Common/Gates/RequiresFundSetupComplete/RequiresFundSetupComplete';
+import { RequiresFundManager } from '~/components/Common/Gates/RequiresFundManager/RequiresFundManager';
+import { RequiresAccount } from '~/components/Common/Gates/RequiresAccount/RequiresAccount';
+import { RequiresFundExists } from '~/components/Common/Gates/RequiresFundExists/RequiresFundExists';
 import { FundHeader } from './FundHeader/FundHeader';
 import { FundNavigation } from './FundNavigation/FundNavigation';
-import { FundContextProvider } from '~/components/Contexts/Fund';
 import * as S from './Fund.styles';
 
 const NoMatch = React.lazy(() => import('~/components/Routes/NoMatch/NoMatch'));
@@ -13,6 +15,8 @@ const FundDetails = React.lazy(() => import('./FundRoutes/FundDetails/FundDetail
 const FundClaimFees = React.lazy(() => import('./FundRoutes/FundClaimFees/FundClaimFees'));
 const FundPolicies = React.lazy(() => import('./FundRoutes/FundPolicies/FundPolicies'));
 const FundShutdown = React.lazy(() => import('./FundRoutes/FundShutdown/FundShutdown'));
+const FundTrading = React.lazy(() => import('./FundRoutes/FundTrading/FundTrading'));
+const FundSetup = React.lazy(() => import('./FundRoutes/FundSetup/FundSetup'));
 
 export interface FundRouteParams {
   address: string;
@@ -20,50 +24,71 @@ export interface FundRouteParams {
 
 export const Fund: React.FC = () => {
   const match = useRouteMatch<FundRouteParams>()!;
-  const [exists, query] = useFundExistsQuery(match.params.address);
-  if (query.loading) {
-    return <Spinner positioning="centered" />;
-  }
-
-  if (!exists) {
-    return (
-      <S.FundNotFound>
-        <h1>Fund not found</h1>
-        <p>The given address {match.params.address} is invalid or is not a fund.</p>
-      </S.FundNotFound>
-    );
-  }
 
   return (
     <FundContextProvider address={match.params.address}>
-      <S.FundHeader>
-        <FundHeader address={match.params.address} />
-      </S.FundHeader>
-      <S.FundNavigation>
-        <FundNavigation address={match.params.address} />
-      </S.FundNavigation>
-      <S.FundBody>
-        <Switch>
-          <Route path={match.path} exact={true}>
-            <FundDetails address={match.params.address} />
-          </Route>
-          <Route path={`${match.path}/invest`} exact={true}>
-            <FundInvest address={match.params.address} />
-          </Route>
-          <Route path={`${match.path}/claimfees`} exact={true}>
-            <FundClaimFees address={match.params.address} />
-          </Route>
-          <Route path={`${match.path}/policies`} exact={true}>
-            <FundPolicies address={match.params.address} />
-          </Route>
-          <Route path={`${match.path}/shutdown`} exact={true}>
-            <FundShutdown address={match.params.address} />
-          </Route>
-          <Route>
-            <NoMatch />
-          </Route>
-        </Switch>
-      </S.FundBody>
+      <RequiresFundExists fallback={<NoMatch />}>
+        <S.FundHeader>
+          <FundHeader />
+        </S.FundHeader>
+        <RequiresFundSetupComplete>
+          <S.FundNavigation>
+            <FundNavigation address={match.params.address} />
+          </S.FundNavigation>
+        </RequiresFundSetupComplete>
+        <S.FundBody>
+          <Switch>
+            <Route path={match.path} exact={true}>
+              <RequiresFundSetupComplete>
+                <FundDetails />
+              </RequiresFundSetupComplete>
+            </Route>
+            <Route path={`${match.path}/invest`} exact={true}>
+              <RequiresAccount fallback={<Redirect to={match.path} />}>
+                <RequiresFundSetupComplete fallback={<Redirect to={match.path} />}>
+                  <FundInvest />
+                </RequiresFundSetupComplete>
+              </RequiresAccount>
+            </Route>
+            <Route path={`${match.path}/claimfees`} exact={true}>
+              <RequiresAccount fallback={<Redirect to={match.path} />}>
+                <RequiresFundSetupComplete fallback={<Redirect to={match.path} />}>
+                  <FundClaimFees />
+                </RequiresFundSetupComplete>
+              </RequiresAccount>
+            </Route>
+            <Route path={`${match.path}/policies`} exact={true}>
+              <RequiresFundManager>
+                <RequiresFundSetupComplete fallback={<Redirect to={match.path} />}>
+                  <FundPolicies address={match.params.address} />
+                </RequiresFundSetupComplete>
+              </RequiresFundManager>
+            </Route>
+            <Route path={`${match.path}/shutdown`} exact={true}>
+              <RequiresFundManager>
+                <RequiresFundSetupComplete fallback={<Redirect to={match.path} />}>
+                  <FundShutdown address={match.params.address} />
+                </RequiresFundSetupComplete>
+              </RequiresFundManager>
+            </Route>
+            <Route path={`${match.path}/trading`} exact={true}>
+              <RequiresFundManager>
+                <RequiresFundSetupComplete fallback={<Redirect to={match.path} />}>
+                  <FundTrading address={match.params.address} />
+                </RequiresFundSetupComplete>
+              </RequiresFundManager>
+            </Route>
+            <Route path={`${match.path}/setup`} exact={true}>
+              <RequiresFundManager>
+                <FundSetup />
+              </RequiresFundManager>
+            </Route>
+            <Route>
+              <NoMatch />
+            </Route>
+          </Switch>
+        </S.FundBody>
+      </RequiresFundExists>
     </FundContextProvider>
   );
 };

@@ -1,25 +1,25 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { Address } from '@melonproject/melonjs';
-import { FundContext } from '~/components/Contexts/Fund';
 import { useEnvironment } from '~/hooks/useEnvironment';
+import { sameAddress } from '@melonproject/melonjs/utils/sameAddress';
+import { useFund } from '~/hooks/useFund';
 
-export interface RequireFundManagerProps {
-  address: Address;
-  loader?: React.ReactElement;
+export interface RequiresFundManagerProps {
+  loader?: React.ReactNode;
   fallback?: React.ReactNode;
 }
 
-export const RequiresFundManager: React.FC<RequireFundManagerProps> = props => {
+export const RequiresFundManager: React.FC<RequiresFundManagerProps> = props => {
   const environment = useEnvironment()!;
-  const fund = useContext(FundContext)!;
+  const fund = useFund();
 
   if (fund.loading) {
-    return props.loader || null;
+    return <>{props.loader}</>;
   }
 
-  if (environment.account && fund.manager! === environment.account) {
+  if (sameAddress(fund.manager, environment.account)) {
     return <>{props.children}</>;
   }
 
-  return <>{props.fallback}</> || null;
+  return <>{props.fallback}</>;
 };

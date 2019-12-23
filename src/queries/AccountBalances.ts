@@ -8,10 +8,6 @@ export interface AccountBalances {
   weth: BigNumber;
 }
 
-export interface AccountBalancesQueryResult {
-  account: AccountBalances;
-}
-
 const AccountBalancesQuery = gql`
   query AccountBalancesQuery {
     account {
@@ -22,6 +18,6 @@ const AccountBalancesQuery = gql`
 `;
 
 export const useAccountBalancesQuery = () => {
-  const result = useOnChainQuery<AccountBalancesQueryResult>(AccountBalancesQuery);
+  const result = useOnChainQuery(AccountBalancesQuery);
   return [result.data && result.data.account, result] as [Maybe<AccountBalances>, typeof result];
 };

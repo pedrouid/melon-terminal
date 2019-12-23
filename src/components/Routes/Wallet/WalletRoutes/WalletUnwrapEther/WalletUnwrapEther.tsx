@@ -24,7 +24,7 @@ export const WalletUnwrapEther: React.FC = () => {
   const environment = useEnvironment()!;
   const client = useOnChainClient();
   const transaction = useTransaction(environment!, {
-    onFinish: () => refetchQueries(client, ['AccountBalancesQuery', 'ConnectionQuery']),
+    onFinish: () => refetchQueries(client, ['AccountContextQuery']),
   });
 
   const form = useForm<typeof defaultValues>({

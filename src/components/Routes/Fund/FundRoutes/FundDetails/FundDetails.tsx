@@ -1,29 +1,23 @@
 import React from 'react';
 import * as S from './FundDetails.styles';
-import FundHoldings from './FundHoldings/FundHoldings';
-import FundPolicies from './FundPolicies/FundPolicies';
-import FundOpenOrders from './FundOpenOrders/FundOpenOrders';
-import FundOrderBook from './FundOrderBook/FundOrderBook';
-import FundTrade from './FundTrade/FundTrade';
-import FundHistoryTabs from './FundHistoryTabs/FundHistoryTabs';
+import { FundPolicies } from './FundPolicies/FundPolicies';
+import { FundHistoryTabs } from './FundHistoryTabs/FundHistoryTabs';
+import { FundHoldings } from '~/components/Routes/Fund/Common/FundHoldings/FundHoldings';
+import { useFund } from '~/hooks/useFund';
 
-export interface FundDetailsProps {
-  address: string;
+export const FundDetails: React.FC = () => {
+  const fund = useFund();
+
+  return (
+    <S.FundDetailsContent>
+      <S.FundDetailsOrder>
+        <FundHoldings address={fund.address!} />
+        <FundPolicies address={fund.address!} />
+        <FundHistoryTabs address={fund.address!} />
+      </S.FundDetailsOrder>
+      <S.FundDetailsLists>{/*Nothing here for now.*/}</S.FundDetailsLists>
+    </S.FundDetailsContent>
+  );
 }
-
-export const FundDetails: React.FC<FundDetailsProps> = ({ address }) => (
-  <S.FundDetailsContent>
-    <S.FundDetailsOrder>
-      <FundHoldings address={address} />
-      <FundOrderBook address={address} />
-      <FundTrade address={address} />
-    </S.FundDetailsOrder>
-    <S.FundDetailsLists>
-      <FundPolicies address={address} />
-      <FundOpenOrders address={address} />
-      <FundHistoryTabs address={address} />
-    </S.FundDetailsLists>
-  </S.FundDetailsContent>
-);
 
 export default FundDetails;

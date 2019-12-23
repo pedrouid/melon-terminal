@@ -16,16 +16,6 @@ export interface OpenMakeOrder {
   exchange: Address;
 }
 
-export interface FundOpenMakeOrdersQueryResult {
-  fund: {
-    routes?: {
-      trading?: {
-        openMakeOrders: OpenMakeOrder[];
-      };
-    };
-  };
-}
-
 export interface FundOpenMakeOrdersQueryVariables {
   address: string;
 }
@@ -57,10 +47,7 @@ export const useFundOpenMakeOrdersQuery = (address: string) => {
     variables: { address },
   };
 
-  const result = useOnChainQuery<FundOpenMakeOrdersQueryResult, FundOpenMakeOrdersQueryVariables>(
-    FundOpenMakeOrdersQuery,
-    options
-  );
+  const result = useOnChainQuery<FundOpenMakeOrdersQueryVariables>(FundOpenMakeOrdersQuery, options);
   const openMakeOrders = R.path<OpenMakeOrder[]>(['data', 'fund', 'routes', 'trading', 'openMakeOrders'], result);
   return [openMakeOrders, result] as [typeof openMakeOrders, typeof result];
 };

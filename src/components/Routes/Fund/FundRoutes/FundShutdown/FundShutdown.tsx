@@ -18,7 +18,7 @@ export const Shutdown: React.FC<ShutdownProps> = ({ address }) => {
   const environment = useEnvironment()!;
   const client = useOnChainClient();
   const history = useHistory();
-  const version = new Version(environment, environment.deployment.melonContracts.version);
+  const version = new Version(environment, environment.deployment.melon.addr.Version);
 
   const transaction = useTransaction(environment, {
     onFinish: () => {

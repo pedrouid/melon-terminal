@@ -36,6 +36,7 @@ module.exports = override(
   removeModuleScopePlugin(),
   addBabelPlugin(['styled-components', { ssr: false, displayName: true }]),
   addBabelPlugin('@babel/proposal-optional-chaining'),
+  addBabelPlugin('@babel/proposal-nullish-coalescing-operator'),
   addWebpackAlias({
     'react-dom': '@hot-loader/react-dom',
     'deployments/mainnet-deployment': mainnetDeploymentAlias || empty,

@@ -4,9 +4,11 @@ import { Environment as BaseEnvironment, Address } from '@melonproject/melonjs';
 import { Eth } from 'web3-eth';
 import { NetworkEnum, Deployment } from './types';
 import { HttpProvider, WebsocketProvider, HttpProviderOptions, WebsocketProviderOptions } from 'web3-providers';
+import { toChecksumAddress } from 'web3-utils';
 
 export function createEnvironment(eth: Eth, deployment: Deployment, network: NetworkEnum, account?: Address) {
-  return new Environment(eth, network, deployment, account, {
+  const address = account && toChecksumAddress(account);
+  return new Environment(eth, network, deployment, address, {
     cache: new LRUCache(500),
   });
 }

@@ -23,7 +23,7 @@ export const useEtherscanLink = ({ address, hash }: UseEtherscanLinkProps) => {
       return `https://kovan.etherscan.io/${link}`;
     }
 
-    return `https://etherscan.io/${link}`;
+    return null;
   }, [address, hash]);
 
   return url;

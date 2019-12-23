@@ -1,5 +1,4 @@
 import gql from 'graphql-tag';
-import * as R from 'ramda';
 import BigNumber from 'bignumber.js';
 import { useOnChainQuery } from '~/hooks/useQuery';
 import { Address } from '@melonproject/melonjs';
@@ -39,14 +38,9 @@ export interface AssetWhitelistPolicy extends FundPolicy {
   assetWhitelist: string[];
 }
 
-export interface FundPoliciesQueryResult {
-  fund?: {
-    routes?: {
-      policyManager?: {
-        policies?: FundPolicy[];
-      };
-    };
-  };
+export interface UserWhitelistPolicy extends FundPolicy {
+  type: 'AssetWhitelist';
+  assetWhitelist: string[];
 }
 
 export interface FundPoliciesQueryVariables {
@@ -94,7 +88,13 @@ export const useFundPoliciesQuery = (address: string) => {
     variables: { address },
   };
 
-  const result = useOnChainQuery<FundPoliciesQueryResult, FundPoliciesQueryVariables>(FundPoliciesQuery, options);
-  const policies = R.pathOr<FundPolicy[]>([], ['data', 'fund', 'routes', 'policyManager', 'policies'], result);
-  return [policies, result] as [typeof policies, typeof result];
+  const result = useOnChainQuery<FundPoliciesQueryVariables>(FundPoliciesQuery, options);
+  const policies = (result.data?.fund?.routes?.policyManager?.policies ?? []).map(item => ({
+    ...item,
+    type: (item as any).type as string,
+    address: item.address!,
+    identifier: item.identifier!,
+  }));
+
+  return [policies, result] as [FundPolicy[], typeof result];
 };

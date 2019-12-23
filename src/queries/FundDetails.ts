@@ -1,8 +1,11 @@
 import gql from 'graphql-tag';
 import BigNumber from 'bignumber.js';
 import { useOnChainQuery } from '~/hooks/useQuery';
+import { QueryHookOptions } from '@apollo/react-hooks';
+import { Schema } from '~/graphql/types';
 
 export interface FundDetails {
+  address: string;
   name: string;
   manager: string;
   creationTime: Date;
@@ -38,13 +41,8 @@ export interface AccountDetails {
   };
 }
 
-export interface FundDetailsQueryResult {
-  account: AccountDetails;
-  fund: FundDetails;
-}
-
 export interface FundDetailsQueryVariables {
-  address: string;
+  address?: string;
 }
 
 const FundDetailsQuery = gql`
@@ -54,7 +52,9 @@ const FundDetailsQuery = gql`
         balanceOf
       }
     }
+
     fund(address: $address) {
+      address
       name
       manager
       creationTime
@@ -84,12 +84,8 @@ const FundDetailsQuery = gql`
   }
 `;
 
-export const useFundDetailsQuery = (address: string) => {
-  const options = {
-    variables: { address },
-  };
-
-  const result = useOnChainQuery<FundDetailsQueryResult, FundDetailsQueryVariables>(FundDetailsQuery, options);
+export const useFundDetailsQuery = (options: QueryHookOptions<Schema, FundDetailsQueryVariables>) => {
+  const result = useOnChainQuery<FundDetailsQueryVariables>(FundDetailsQuery, options);
   return [result.data && result.data.fund, result.data && result.data.account, result] as [
     FundDetails | undefined,
     AccountDetails | undefined,

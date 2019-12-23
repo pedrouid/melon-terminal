@@ -9,14 +9,15 @@ import { SubmitButton } from '~/components/Common/Form/SubmitButton/SubmitButton
 import { TransactionModal } from '~/components/Common/TransactionModal/TransactionModal';
 import { useFundDetailsQuery } from '~/queries/FundDetails';
 import { Spinner } from '~/components/Common/Spinner/Spinner';
+import { useFund } from '~/hooks/useFund';
 
-export interface ClaimFeesProps {
-  address: string;
-}
-
-export const ClaimFees: React.FC<ClaimFeesProps> = ({ address }) => {
+export const ClaimFees: React.FC = () => {
+  const fund = useFund();
   const environment = useEnvironment()!;
-  const [details, _, query] = useFundDetailsQuery(address);
+  const [details, _, query] = useFundDetailsQuery({
+    skip: !fund.address,
+    variables: { address: fund.address },
+  });
 
   const history = useHistory();
 
@@ -28,9 +29,9 @@ export const ClaimFees: React.FC<ClaimFeesProps> = ({ address }) => {
   const feeManager = new FeeManager(environment, feeManagerAddress);
 
   const transaction = useTransaction(environment, {
-    onFinish: () => {},
+    onFinish: () => { },
     onAcknowledge: () => {
-      history.push(`/fund/${address}`);
+      history.push(`/fund/${fund.address!}`);
     },
   });
 
@@ -60,11 +61,8 @@ export const ClaimFees: React.FC<ClaimFeesProps> = ({ address }) => {
     <S.FundShutdownBody>
       <h1>Claim fees</h1>
       <p>Claim management fees and performance fees for the fund.</p>
-
       <p>Accrued management fee: {feeManagerInfo && feeManagerInfo.managementFeeAmount.dividedBy('1e18').toFixed(6)}</p>
-      <p>
-        Accrued performance fee: {feeManagerInfo && feeManagerInfo.performanceFeeAmount.dividedBy('1e18').toFixed(6)}
-      </p>
+      <p>Accrued performance fee: {feeManagerInfo && feeManagerInfo.performanceFeeAmount.dividedBy('1e18').toFixed(6)}</p>
       <p>
         Payout of performance fee possible:{' '}
         {feeManagerInfo && feeManagerInfo.performanceFee && feeManagerInfo.performanceFee.canUpdate}

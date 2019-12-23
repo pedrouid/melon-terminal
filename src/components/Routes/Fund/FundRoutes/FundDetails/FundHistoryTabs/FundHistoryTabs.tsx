@@ -23,5 +23,3 @@ export const FundHistoryTabs: React.FC<FundHistoryTabsProps> = ({ address }) => 
     </S.Wrapper>
   );
 };
-
-export default FundHistoryTabs;
