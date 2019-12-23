@@ -43,9 +43,7 @@ export const FundSetup: React.FC = () => {
   const environment = useEnvironment()!;
   const version = environment.deployment.melon.addr.Version;
   const pipeline = useTransactionPipeline({
-    state: async () => {
-
-    },
+    state: async () => {},
     transactions: [
       {
         name: 'Create accounting contract',

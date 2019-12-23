@@ -1,38 +1,48 @@
+import { encodeFunctionSignature } from '@melonproject/melonjs/utils/encodeFunctionSignature';
+import { ExchangeAdapterAbi } from '@melonproject/melonjs/abis/ExchangeAdapter.abi';
+import { ParticipationAbi } from '@melonproject/melonjs/abis/Participation.abi';
+
 export interface AvailablePolicy {
   id: string;
   name: string;
-  description?: string;
+  signatures: string[];
 }
+
+const tradingSignatures = [
+  encodeFunctionSignature(ExchangeAdapterAbi, 'makeOrder'),
+  encodeFunctionSignature(ExchangeAdapterAbi, 'takeOrder'),
+];
+const investmentSignatures = [encodeFunctionSignature(ParticipationAbi, 'requestInvestment')];
 
 export const availablePolicies: AvailablePolicy[] = [
   {
-    id: 'PriceTolerance:',
-    name: 'Price tolerance (%)',
-    description: 'The higher the tolerance, the greater the risk',
+    id: 'priceTolerance',
+    name: 'Price Tolerance',
+    signatures: [...tradingSignatures],
   },
   {
-    id: 'MaxPositions',
+    id: 'maxPositions',
     name: 'Maximum number of positions',
-    description: 'Higher numbers, greater diversification potential',
+    signatures: [...tradingSignatures, ...investmentSignatures],
   },
   {
-    id: 'MaxConcentration',
-    name: 'Max concentration (%)',
-    description: 'High Diversification <-> High Concentration',
+    id: 'maxConcentration',
+    name: 'Maximum Concentration',
+    signatures: [...tradingSignatures, ...investmentSignatures],
   },
   {
-    id: 'UserWhitelist',
-    name: 'User whitelist',
-    description: 'Investor whitelist (one per line)',
+    id: 'userWhitelist',
+    name: 'User Whitelist',
+    signatures: [...investmentSignatures],
   },
   {
-    id: 'AssetWhitelist',
-    name: 'Asset whitelist',
-    description: 'Whitelisted, investable assets',
+    id: 'assetWhitelist',
+    name: 'Asset Whitelist',
+    signatures: [...tradingSignatures, ...investmentSignatures],
   },
   {
-    id: 'AssetBlacklist',
-    name: 'Asset blacklist',
-    description: 'Blacklisted, investable assets',
+    id: 'assetBlacklist',
+    name: 'Asset Blacklist',
+    signatures: [...tradingSignatures, ...investmentSignatures],
   },
 ];

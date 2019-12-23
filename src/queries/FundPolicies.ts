@@ -9,6 +9,11 @@ export interface FundPolicy {
   type: string;
 }
 
+export interface PolicyManager {
+  address: Address;
+  policies?: FundPolicy[];
+}
+
 export interface CustomPolicy extends FundPolicy {
   type: 'CustomPolicy';
 }
@@ -52,6 +57,7 @@ const FundPoliciesQuery = gql`
     fund(address: $address) {
       routes {
         policyManager {
+          address
           policies {
             type: __typename
             address

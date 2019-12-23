@@ -126,7 +126,6 @@ export interface FundPoliciesProps {
 export const FundPolicies: React.FC<FundPoliciesProps> = ({ address }) => {
   const environment = useEnvironment()!;
   const [policies, query] = useFundPoliciesQuery(address);
-
   if (query.loading) {
     return (
       <S.Wrapper>

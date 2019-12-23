@@ -13,7 +13,7 @@ const NoMatch = React.lazy(() => import('~/components/Routes/NoMatch/NoMatch'));
 const FundInvest = React.lazy(() => import('./FundRoutes/FundInvest/FundInvest'));
 const FundDetails = React.lazy(() => import('./FundRoutes/FundDetails/FundDetails'));
 const FundClaimFees = React.lazy(() => import('./FundRoutes/FundClaimFees/FundClaimFees'));
-const FundPolicies = React.lazy(() => import('./FundRoutes/FundPolicies/FundPolicies'));
+const FundRegisterPolicies = React.lazy(() => import('./FundRoutes/FundRegisterPolicies/FundRegisterPolicies'));
 const FundShutdown = React.lazy(() => import('./FundRoutes/FundShutdown/FundShutdown'));
 const FundTrading = React.lazy(() => import('./FundRoutes/FundTrading/FundTrading'));
 const FundSetup = React.lazy(() => import('./FundRoutes/FundSetup/FundSetup'));
@@ -60,7 +60,7 @@ export const Fund: React.FC = () => {
             <Route path={`${match.path}/policies`} exact={true}>
               <RequiresFundManager>
                 <RequiresFundSetupComplete fallback={<Redirect to={match.path} />}>
-                  <FundPolicies address={match.params.address} />
+                  <FundRegisterPolicies address={match.params.address} />
                 </RequiresFundSetupComplete>
               </RequiresFundManager>
             </Route>
