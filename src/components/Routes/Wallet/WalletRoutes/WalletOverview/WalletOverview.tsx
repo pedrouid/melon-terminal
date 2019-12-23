@@ -1,59 +1,105 @@
 import React from 'react';
-import NoMatch from '~/components/Routes/NoMatch/NoMatch';
 import { Spinner } from '~/components/Common/Spinner/Spinner';
 import * as S from './WalletOverview.styles';
-import { useAccountBalancesQuery } from '~/queries/AccountBalances';
-import { useAccountFundQuery } from '~/queries/AccountFund';
+import { useFundParticipationOverviewQuery } from '~/queries/FundParticipationOverview';
+import { useEnvironment } from '~/hooks/useEnvironment';
+import { WalletOverviewInvestmentRequest } from './WalletOverviewInvestmentRequest/WalletOverviewInvestmentRequest';
+import { WalletOverviewManagedFund } from './WalletOverviewManagedFund/WalletOverviewManagedFund';
+import { WalletOverviewInvestedFund } from './WalletOverviewInvestedFund/WalletOverviewInvestedFund';
+
+const fundHeadings = ['Name', 'Address', 'Inception', 'Version', 'Status'];
+const redeemHeadings = ['Name', 'Address', 'Share price', 'Your shares'];
+const requestHeadings = ['Fund name', 'Address', 'Request date', 'Request asset', 'Request amount', 'Requested shares'];
 
 export const WalletOverview: React.FC = () => {
-  const [balances, query] = useAccountBalancesQuery();
-  const [account, fundQuery] = useAccountFundQuery();
+  const environment = useEnvironment()!;
+  const [invested, requests, managed, query] = useFundParticipationOverviewQuery(environment.account);
 
-  if (query.loading || fundQuery.loading) {
-    return (
-      <S.WalletOverviewBody>
-        <Spinner positioning="centered" size="large" />
-      </S.WalletOverviewBody>
-    );
+  if (query.loading) {
+    return <Spinner positioning="centered" size="large" />;
   }
 
-  if (!balances) {
-    return <NoMatch />;
-  }
+  const managedHeader = fundHeadings.map((heading, index) => <S.HeaderCell key={index}>{heading}</S.HeaderCell>);
+  const managedEmpty = !(managed && managed.length);
+  const managedRows = !managedEmpty ? (
+    managed.map(fund => <WalletOverviewManagedFund {...fund} key={fund.address} />)
+  ) : (
+    <S.EmptyRow>
+      <S.EmptyCell colSpan={12}>You do not manage any funds.</S.EmptyCell>
+    </S.EmptyRow>
+  );
 
-  const fund = account && account.fund;
+  const investedHeader = redeemHeadings.map((heading, index) => <S.HeaderCell key={index}>{heading}</S.HeaderCell>);
+  const investedEmpty = !(invested && invested.length);
+  const investedRows = !investedEmpty ? (
+    invested.map(fund => <WalletOverviewInvestedFund {...fund} key={fund.address} />)
+  ) : (
+    <S.EmptyRow>
+      <S.EmptyCell colSpan={12}>You don't own any shares in any funds.</S.EmptyCell>
+    </S.EmptyRow>
+  );
+
+  const requestsHeader = requestHeadings.map((heading, index) => <S.HeaderCell key={index}>{heading}</S.HeaderCell>);
+  const requestsEmpty = !(requests && requests.length);
+  const requestsRows = !requestsEmpty ? (
+    requests.map(request => <WalletOverviewInvestmentRequest {...request} key={request.address} />)
+  ) : (
+    <S.EmptyRow>
+      <S.EmptyCell colSpan={12}>You do not have any pending investment requests.</S.EmptyCell>
+    </S.EmptyRow>
+  );
 
   return (
-    <S.WalletOverviewBody>
-      <S.WalletOverviewTitle>Balances</S.WalletOverviewTitle>
-      <S.WalletOverviewBalances>
-        {balances.eth && (
-          <S.WalletOverviewBalance>
-            <S.WalletOverviewBalanceLabel>ETH</S.WalletOverviewBalanceLabel>
-            <S.WalletOverviewBalanceValue>{balances.eth.toFixed(8)}</S.WalletOverviewBalanceValue>
-          </S.WalletOverviewBalance>
+    <S.Container>
+      <S.Group>
+        <S.Title>Managed funds</S.Title>
+        {!managedEmpty && (
+          <p>
+            Shutting down your fund closes the fund for new investors and trades will no longer be possible. Investor
+            can redeem their shares whenever they want.
+          </p>
         )}
-        {balances.weth && (
-          <S.WalletOverviewBalance>
-            <S.WalletOverviewBalanceLabel>WETH</S.WalletOverviewBalanceLabel>
-            <S.WalletOverviewBalanceValue>{balances.weth.toFixed(8)}</S.WalletOverviewBalanceValue>
-          </S.WalletOverviewBalance>
+        <S.ScrollableTable>
+          <S.Table>
+            <thead>
+              <S.HeaderRow>{managedHeader}</S.HeaderRow>
+            </thead>
+            <tbody>{managedRows}</tbody>
+          </S.Table>
+        </S.ScrollableTable>
+      </S.Group>
+      <S.Group>
+        <S.Title>Funds with owned shares</S.Title>
+        {!investedEmpty && (
+          <p>Redeeming shares will transfer the underlying assets of your shares back to your wallet.</p>
         )}
-      </S.WalletOverviewBalances>
-      <S.WalletOverviewTitle>Fund</S.WalletOverviewTitle>
-
-      <S.WalletOverviewFundActions>
-        {!fund && <S.WalletOverviewFundAction to="/setup">Setup your fund</S.WalletOverviewFundAction>}
-        {fund && fund.progress !== 'COMPLETE' && (
-          <S.WalletOverviewFundAction to="/setup/transactions">
-            Continue setting up your fund
-          </S.WalletOverviewFundAction>
+        <S.ScrollableTable>
+          <S.Table>
+            <thead>
+              <S.HeaderRow>{investedHeader}</S.HeaderRow>
+            </thead>
+            <tbody>{investedRows}</tbody>
+          </S.Table>
+        </S.ScrollableTable>
+      </S.Group>
+      <S.Group>
+        <S.Title>Pending investment requests</S.Title>
+        {!requestsEmpty && (
+          <p>
+            Cancelling pending investment requests will transfer the underlying assets of the investment request back to
+            your wallet.
+          </p>
         )}
-        {fund && fund.progress === 'COMPLETE' && (
-          <S.WalletOverviewFundAction to={`/fund/${fund.address}`}>Go to your fund</S.WalletOverviewFundAction>
-        )}
-      </S.WalletOverviewFundActions>
-    </S.WalletOverviewBody>
+        <S.ScrollableTable>
+          <S.Table>
+            <thead>
+              <S.HeaderRow>{requestsHeader}</S.HeaderRow>
+            </thead>
+            <tbody>{requestsRows}</tbody>
+          </S.Table>
+        </S.ScrollableTable>
+      </S.Group>
+    </S.Container>
   );
 };
 

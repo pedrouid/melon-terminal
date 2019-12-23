@@ -6,7 +6,6 @@ const rotate = keyframes`
   from {
     transform: rotate(0deg);
   }
-
   to {
     transform: rotate(360deg);
   }
@@ -17,7 +16,6 @@ export const Loader = styled.div`
   &::after {
     border-radius: 50%;
   }
-
   position: absolute;
   top: 0;
   border-style: solid;
@@ -72,7 +70,6 @@ export const Spinner = styled.div<SpinnerProps>`
         width: ${size.spinner}px;
         height: ${size.spinner}px;
       }
-
       ${Loader} {
         border-width: ${size.border}px;
       }
@@ -82,7 +79,6 @@ export const Spinner = styled.div<SpinnerProps>`
 
 export const SpinnerPositioning = styled.div<SpinnerProps>`
   position: relative;
-
   ${props => {
     const size = sizes[props.size || 'default'];
 
@@ -96,7 +92,6 @@ export const SpinnerPositioning = styled.div<SpinnerProps>`
         right: 0;
         height: 100%;
         z-index: 100;
-
         ${Spinner} {
           position: absolute;
           top: 50%;
