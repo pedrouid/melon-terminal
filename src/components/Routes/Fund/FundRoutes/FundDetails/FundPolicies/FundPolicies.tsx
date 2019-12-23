@@ -20,7 +20,7 @@ export interface FundPolicyParametersProps {
   environment: Environment;
 }
 
-const FundPolicyParameters: React.FC<FundPolicyParametersProps> = props => {
+export const FundPolicyParameters: React.FC<FundPolicyParametersProps> = props => {
   switch (props.policy.type) {
     case 'MaxConcentration': {
       const policy = props.policy as MaxConcentrationPolicy;
@@ -77,8 +77,7 @@ export interface FundPoliciesProps {
 
 export const FundPolicies: React.FC<FundPoliciesProps> = ({ address }) => {
   const environment = useEnvironment()!;
-  const [policies, query] = useFundPoliciesQuery(address);
-
+  const [policyManager, query] = useFundPoliciesQuery(address);
   if (query.loading) {
     return (
       <S.Wrapper>
@@ -87,6 +86,8 @@ export const FundPolicies: React.FC<FundPoliciesProps> = ({ address }) => {
       </S.Wrapper>
     );
   }
+
+  const policies = policyManager && policyManager.policies;
 
   return (
     <S.Wrapper>

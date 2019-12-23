@@ -2,7 +2,7 @@ import React, { useEffect, useReducer } from 'react';
 import * as Yup from 'yup';
 import useForm from 'react-hook-form';
 import { TransactionReceipt } from 'web3-core';
-import { Transaction, SendOptions } from '@melonproject/melonjs';
+import { Transaction, SendOptions, Deployment, Contract } from '@melonproject/melonjs';
 import { FormContextValues } from 'react-hook-form/dist/contextTypes';
 import { FieldValues } from 'react-hook-form/dist/types';
 
@@ -315,7 +315,7 @@ export interface TransactionHookValues<FormValues extends TransactionFormValues 
   state: TransactionState;
   form: FormContextValues<FormValues>;
   submit: (event: React.BaseSyntheticEvent) => Promise<void>;
-  start: (transaction: Transaction, name: string) => void;
+  start: <T extends Contract = Contract>(transaction: Transaction | Deployment<T>, name: string) => void;
   cancel: () => void;
   acknowledge: () => void;
 }

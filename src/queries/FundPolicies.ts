@@ -10,6 +10,11 @@ export interface FundPolicy {
   type: string;
 }
 
+export interface PolicyManager {
+  address: Address;
+  policies?: FundPolicy[];
+}
+
 export interface CustomPolicy extends FundPolicy {
   type: 'CustomPolicy';
 }
@@ -42,9 +47,7 @@ export interface AssetWhitelistPolicy extends FundPolicy {
 export interface FundPoliciesQueryResult {
   fund?: {
     routes?: {
-      policyManager?: {
-        policies?: FundPolicy[];
-      };
+      policyManager?: PolicyManager;
     };
   };
 }
@@ -58,6 +61,7 @@ const FundPoliciesQuery = gql`
     fund(address: $address) {
       routes {
         policyManager {
+          address
           policies {
             type: __typename
             address
@@ -95,6 +99,6 @@ export const useFundPoliciesQuery = (address: string) => {
   };
 
   const result = useOnChainQuery<FundPoliciesQueryResult, FundPoliciesQueryVariables>(FundPoliciesQuery, options);
-  const policies = R.pathOr<FundPolicy[]>([], ['data', 'fund', 'routes', 'policyManager', 'policies'], result);
-  return [policies, result] as [typeof policies, typeof result];
+  const policyManager = R.pathOr<PolicyManager>({ address: '' }, ['data', 'fund', 'routes', 'policyManager'], result);
+  return [policyManager, result] as [typeof policyManager, typeof result];
 };
