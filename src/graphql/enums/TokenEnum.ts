@@ -7,10 +7,8 @@ const defaults = {
 
 export function createTokenEnum(environment: Environment): { [key: string]: string } {
   const addresses = environment.deployment.tokens.addr;
-  const symbols = Object.keys(addresses);
-
   return Object.keys(addresses).reduce((carry, current) => {
-    return { ...carry, [(symbols as any)[current]]: addresses[current] };
+    return { ...carry, [current]: addresses[current] };
   }, defaults);
 }
 

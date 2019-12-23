@@ -2,6 +2,7 @@ import React from 'react';
 import BigNumber from 'bignumber.js';
 import * as Yup from 'yup';
 import useForm, { FormContext } from 'react-hook-form';
+import { useHistory } from 'react-router';
 import { Version } from '@melonproject/melonjs';
 import { InputField } from '~/components/Common/Form/InputField/InputField';
 import { SubmitButton } from '~/components/Common/Form/SubmitButton/SubmitButton';
@@ -12,6 +13,7 @@ import { findToken } from '~/utils/findToken';
 import { availableExchanges } from '~/utils/availableExchanges';
 import { availableTokens } from '~/utils/availableTokens';
 import { findExchange } from '~/utils/findExchange';
+import { useAccount } from '~/hooks/useAccount';
 
 export interface WalletFundSetupForm {
   name: string;
@@ -25,6 +27,8 @@ export interface WalletFundSetupForm {
 
 export const WalletFundSetup: React.FC = () => {
   const environment = useEnvironment()!;
+  const history = useHistory();
+  const account = useAccount();
   const tokens = availableTokens(environment.deployment);
   const exchanges = availableExchanges(environment.deployment);
 
@@ -43,36 +47,59 @@ export const WalletFundSetup: React.FC = () => {
       .min(0)
       .max(100),
     performanceFeePeriod: Yup.number().min(0),
+    termsAndConditions: Yup.boolean().oneOf([true]),
   });
 
   const form = useForm<WalletFundSetupForm>({
     validationSchema,
-    mode: 'onSubmit',
-    reValidateMode: 'onBlur',
   });
 
   const submit = form.handleSubmit(data => transaction.initialize(data));
+  const finish = () => {
+    if (!account.fund) {
+      return;
+    }
+
+    history.push(`/fund/${account.fund}/setup`, {
+      start: true,
+    });
+  };
+
   const transaction = useTransaction((values: WalletFundSetupForm) => {
     const factory = new Version(environment, environment.deployment.melon.addr.Version);
-    const weth = findToken(environment.deployment, 'WETH');
 
+    const wethAddress = findToken(environment.deployment, 'WETH')!.address;
     const assetAddresses = values.assets.map(symbol => findToken(environment.deployment, symbol)!.address);
     const selectedExchanges = exchanges.filter(item => findExchange(environment.deployment, item.name));
     const exchangeAddresses = selectedExchanges.map(exchange => exchange.exchange);
     const adapterAddresses = selectedExchanges.map(exchange => exchange.adapter);
 
+    const managementFeeAddress = environment.deployment.melon.addr.ManagementFee;
+    const performanceFeeAddress = environment.deployment.melon.addr.PerformanceFee;
+    const managementFeePeriod = new BigNumber(0);
+    const performanceFeePeriod = new BigNumber(values.performanceFeePeriod).multipliedBy(60 * 60 * 24);
+    const managementFeeRate = new BigNumber(values.managementFee).multipliedBy('1e16');
+    const performanceFeeRate = new BigNumber(values.performanceFee).multipliedBy('1e16');
+
+    console.log({
+      name: values.name,
+      adapters: adapterAddresses,
+      exchanges: exchangeAddresses,
+      fees: [managementFeeAddress, performanceFeeAddress],
+      denominationAsset: wethAddress,
+      defaultAssets: assetAddresses,
+      feePeriods: [managementFeePeriod, performanceFeePeriod],
+      feeRates: [managementFeeRate, performanceFeeRate],
+    });
     return factory.beginSetup(environment.account!, {
       name: values.name,
       adapters: adapterAddresses,
       exchanges: exchangeAddresses,
-      fees: [environment.deployment.melon.addr.ManagementFee, environment.deployment.melon.addr.PerformanceFee],
-      denominationAsset: weth!.address,
+      fees: [managementFeeAddress, performanceFeeAddress],
+      denominationAsset: wethAddress,
       defaultAssets: assetAddresses,
-      feePeriods: [new BigNumber(0), new BigNumber(values.performanceFeePeriod!).multipliedBy(60 * 60 * 24)],
-      feeRates: [
-        new BigNumber(values.managementFee!).multipliedBy('1e16'),
-        new BigNumber(values.performanceFee!).multipliedBy('1e16'),
-      ],
+      feePeriods: [managementFeePeriod, performanceFeePeriod],
+      feeRates: [managementFeeRate, performanceFeeRate],
     });
   });
 
@@ -106,7 +133,7 @@ export const WalletFundSetup: React.FC = () => {
             ))}
           </ul>
 
-          <h3>Allowed Tokens</h3>
+          <h3>Allowed tokens</h3>
           {form.errors.assets && <p>{form.errors.assets.message}</p>}
           <ul>
             {tokens.map((token, index) => (
@@ -126,7 +153,7 @@ export const WalletFundSetup: React.FC = () => {
             ))}
           </ul>
 
-          <h3>Disclaimer for the use of the Melon Protocol</h3>
+          <h3>Disclaimer</h3>
           <p>
             IMPORTANT NOTE: PLEASE READ THE FULL VERSION OF THIS DISCLAIMER CAREFULLY BEFORE USING THE MELON PROTOCOL.
           </p>
@@ -152,7 +179,7 @@ export const WalletFundSetup: React.FC = () => {
         </form>
       </FormContext>
 
-      <TransactionModal transaction={transaction} label="Begin setup" />
+      <TransactionModal transaction={transaction} label="Begin setup" acknowledge={() => finish()} />
     </>
   );
 };

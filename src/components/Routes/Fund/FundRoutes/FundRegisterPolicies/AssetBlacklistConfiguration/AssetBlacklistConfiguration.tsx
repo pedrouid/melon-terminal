@@ -9,6 +9,7 @@ import { Deployment, AssetBlacklist } from '@melonproject/melonjs';
 
 import { AvailablePolicy } from '~/utils/availablePolicies';
 import { AssetBlacklistBytecode } from '@melonproject/melonjs/abis/AssetBlacklist.bin';
+import { availableTokens } from '~/utils/availableTokens';
 
 interface AssetBlacklistConfigurationForm {
   assetBlacklist: string[];
@@ -22,8 +23,7 @@ export interface AssetBlacklistConfigurationProps {
 
 export const AssetBlacklistConfiguration: React.FC<AssetBlacklistConfigurationProps> = props => {
   const environment = useEnvironment()!;
-
-  const tokens = environment.deployment.thirdPartyContracts.tokens;
+  const tokens = availableTokens(environment.deployment);
 
   const validationSchema = Yup.object().shape({
     assetBlacklist: Yup.array<string>()

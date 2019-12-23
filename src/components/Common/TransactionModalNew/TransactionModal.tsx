@@ -1,6 +1,5 @@
 import React from 'react';
 import Modal, { ModalProps } from 'styled-react-modal';
-import { TransactionReceipt } from 'web3-core';
 import { TransactionHookValues } from '~/hooks/useTransactionNew';
 import { TransactionModalProgressBar } from './TransactionModalProgressBar/TransactionModalProgressBar';
 import { TransactionModalForm } from './TransactionModalForm/TransactionModalForm';
@@ -9,13 +8,13 @@ import * as S from './TransactionModal.styles';
 export interface TransactionModalProps extends Omit<Partial<ModalProps>, 'isOpen'> {
   label: string;
   transaction: TransactionHookValues;
-  acknowledge?: (receipt: TransactionReceipt) => void;
+  acknowledge?: () => void;
 }
 
 export const TransactionModal: React.FC<TransactionModalProps> = ({ label, transaction, acknowledge, ...rest }) => {
   const close = () => {
-    if (transaction.state.receipt && acknowledge) {
-      acknowledge(transaction.state.receipt);
+    if (acknowledge) {
+      acknowledge();
     }
 
     transaction.reset();

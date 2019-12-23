@@ -1,5 +1,6 @@
 {
   "private": true,
+  "name": "melon-manager-interface",
   "author": "Avantgarde Finance <team@avantgarde.finance>",
   "homepage": "https://melonprotocol.com",
   "publishConfig": {
@@ -20,7 +21,7 @@
     "prebuild": "yarn clean",
     "storybook": "start-storybook --config-dir src/storybook/config",
     "storybook:build": "build-storybook --config-dir src/storybook/config --output-dir build/storybook",
-    "start": "cross-env TSC_WATCHFILE=UseFsEventsWithFallbackDynamicPolling react-app-rewired start",
+    "start": "react-app-rewired start",
     "build": "react-app-rewired build",
     "test": "react-app-rewired test",
     "lint": "tslint --project .",
@@ -85,7 +86,6 @@
     "@types/styled-react-modal": "^1.2.0",
     "@types/yup": "^0.26.24",
     "babel-plugin-styled-components": "^1.10.6",
-    "cross-env": "^6.0.3",
     "customize-cra": "^0.8.0",
     "dotenv-defaults": "^1.0.2",
     "husky": "^3.0.9",

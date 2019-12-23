@@ -102,5 +102,7 @@ export const useFundPoliciesQuery = (address: string) => {
     identifier: item.identifier!,
   }));
 
-  return [policies, result] as [FundPolicy[], typeof result];
+  const manager = result.data?.fund?.routes?.participation?.address;
+
+  return [policies, manager, result] as [typeof policies, typeof manager, typeof result];
 };

@@ -1,7 +1,7 @@
 import { Address } from '@melonproject/melonjs';
 import BigNumber from 'bignumber.js';
 
-enum NetworkEnum {
+export enum NetworkEnum {
   MAINNET = 'MAINNET',
   KOVAN = 'KOVAN',
   TESTNET = 'TESTNET',
@@ -9,7 +9,7 @@ enum NetworkEnum {
   INVALID = 'INVALID',
 }
 
-enum SetupProgressEnum {
+export enum SetupProgressEnum {
   BEGIN = 'BEGIN',
   ACCOUNTING = 'ACCOUNTING',
   FEE_MANAGER = 'FEE_MANAGER',
@@ -21,7 +21,7 @@ enum SetupProgressEnum {
   COMPLETE = 'COMPLETE',
 }
 
-enum InvestmentRequestStateEnum {
+export enum InvestmentRequestStateEnum {
   VALID = 'VALID',
   EXPIRED = 'EXPIRED',
   WAITING = 'WAITING',

@@ -23,7 +23,7 @@ interface FundPolicyDetailsProps {
   environment: Environment;
 }
 
-const FundPolicyDetails: React.FC<FundPolicyDetailsProps> = props => {
+export const FundPolicyDetails: React.FC<FundPolicyDetailsProps> = props => {
   const link = useEtherscanLink({ address: props.policy.address })!;
 
   // TODO: Instead, move each of these into its own component so we can properly use hooks for each.
@@ -125,7 +125,7 @@ export interface FundPoliciesProps {
 
 export const FundPolicies: React.FC<FundPoliciesProps> = ({ address }) => {
   const environment = useEnvironment()!;
-  const [policies, query] = useFundPoliciesQuery(address);
+  const [policies, _, query] = useFundPoliciesQuery(address);
   if (query.loading) {
     return (
       <S.Wrapper>

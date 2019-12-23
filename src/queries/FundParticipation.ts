@@ -4,28 +4,6 @@ import { useOnChainQuery } from '~/hooks/useQuery';
 import { Address } from '@melonproject/melonjs';
 import BigNumber from 'bignumber.js';
 
-export interface FundParticipationQueryResult {
-  fund: {
-    isShutDown: boolean;
-    routes: {
-      shares: {
-        totalSupply: BigNumber;
-      };
-      trading: {
-        lockedAssets: boolean;
-      };
-    };
-  };
-  account: {
-    shares: {
-      balanceOf: BigNumber;
-    };
-    participation: {
-      canCancelRequest: boolean;
-    };
-  };
-}
-
 export interface FundParticipationQueryVariables {
   fund?: Address;
 }
@@ -56,14 +34,11 @@ const FundParticipationQuery = gql`
 `;
 
 export const useFundParticipationQuery = (fund?: Address) => {
-  const result = useOnChainQuery<FundParticipationQueryResult, FundParticipationQueryVariables>(
-    FundParticipationQuery,
-    {
-      variables: { fund },
-      skip: !fund,
-      notifyOnNetworkStatusChange: true,
-    }
-  );
+  const result = useOnChainQuery<FundParticipationQueryVariables>(FundParticipationQuery, {
+    variables: { fund },
+    skip: !fund,
+    notifyOnNetworkStatusChange: true,
+  });
 
   const shutdown = R.pathOr(false, ['data', 'fund', 'isShutDown'], result);
   const manager = R.pathOr('', ['data', 'fund', 'manager'], result);

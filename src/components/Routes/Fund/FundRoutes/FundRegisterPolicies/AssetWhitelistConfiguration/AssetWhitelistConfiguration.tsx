@@ -9,6 +9,7 @@ import { Deployment, AssetWhitelist } from '@melonproject/melonjs';
 
 import { AvailablePolicy } from '~/utils/availablePolicies';
 import { AssetWhitelistBytecode } from '@melonproject/melonjs/abis/AssetWhitelist.bin';
+import { availableTokens } from '~/utils/availableTokens';
 
 interface AssetWhitelistConfigurationForm {
   assetWhitelist: string[];
@@ -23,7 +24,7 @@ export interface AssetWhitelistConfigurationProps {
 export const AssetWhitelistConfiguration: React.FC<AssetWhitelistConfigurationProps> = props => {
   const environment = useEnvironment()!;
 
-  const tokens = environment.deployment.thirdPartyContracts.tokens;
+  const tokens = availableTokens(environment.deployment);
 
   const validationSchema = Yup.object().shape({
     assetWhitelist: Yup.array<string>()

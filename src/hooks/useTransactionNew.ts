@@ -2,7 +2,7 @@ import React, { useReducer } from 'react';
 import BigNumber from 'bignumber.js';
 import { TransactionReceipt } from 'web3-core';
 import { Transaction, SendOptions } from '@melonproject/melonjs';
-import { Environment } from '~/environment';
+import { useOnChainQueryRefetcher } from './useOnChainQueryRefetcher';
 
 export interface TransactionState {
   progress?: TransactionProgress;
@@ -205,10 +205,10 @@ export interface TransactionHookValues<T = undefined | any> {
 export function useTransaction<T = undefined | any>(
   create: (values: T) => Promise<Transaction<TransactionReceipt>> | Transaction<TransactionReceipt>
 ): TransactionHookValues<T> {
+  const refetch = useOnChainQueryRefetcher();
   const [state, dispatch] = useReducer(reducer, initialState);
 
   const reset = () => resetTransaction(dispatch);
-
   const initialize = async (values: T) => {
     if (state.progress != null) {
       throw new Error('The transaction has already been initialized.');
@@ -240,6 +240,10 @@ export function useTransaction<T = undefined | any>(
       };
 
       const receipt = await transaction.send(opts).once('transactionHash', hash => executionReceived(dispatch, hash));
+
+      // TODO: Find a better way for this than doing a full refetch of the entire current window state.
+      await refetch();
+
       executionFinished(dispatch, receipt);
     } catch (error) {
       executionError(dispatch, error);

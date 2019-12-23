@@ -4,7 +4,7 @@ import * as S from './FundRegisterPolicies.styles';
 import { availablePolicies, AvailablePolicy } from '~/utils/availablePolicies';
 import { useEnvironment } from '~/hooks/useEnvironment';
 import { useFundPoliciesQuery } from '~/queries/FundPolicies';
-import { FundPolicyParameters } from '../FundDetails/FundPolicies/FundPolicies';
+import { FundPolicyDetails } from '../FundDetails/FundPolicies/FundPolicies';
 import {
   PolicyManager,
   PriceTolerance,
@@ -31,18 +31,16 @@ export interface RegisterPoliciesProps {
 export const RegisterPolicies: React.FC<RegisterPoliciesProps> = ({ address }) => {
   const environment = useEnvironment()!;
   const [selectedPolicy, setSelectedPolicy] = useState<AvailablePolicy>();
-
-  const [policyManager, query] = useFundPoliciesQuery(address);
+  const [policies, manager, query] = useFundPoliciesQuery(address);
 
   const transaction = useTransaction(environment, {
     onAcknowledge: receipt => {
       if (receipt.contractAddress && selectedPolicy) {
-        const manager = new PolicyManager(environment, policyManager.address);
-
+        const contract = new PolicyManager(environment, manager);
         const signatures = selectedPolicy.signatures;
         const addresses = R.range(0, selectedPolicy.signatures.length || 0).map(() => receipt.contractAddress!);
 
-        const tx = manager.batchRegisterPolicies(environment.account!, signatures, addresses);
+        const tx = contract.batchRegisterPolicies(environment.account!, signatures, addresses);
         transaction.start(tx, `Register ${selectedPolicy.name} policy`);
       }
     },
@@ -52,8 +50,6 @@ export const RegisterPolicies: React.FC<RegisterPoliciesProps> = ({ address }) =
       }
     },
   });
-
-  const policies = policyManager && policyManager.policies;
 
   const startTransaction = (
     tx: Deployment<PriceTolerance | MaxPositions | MaxConcentration | UserWhitelist | AssetWhitelist | AssetBlacklist>,
@@ -81,52 +77,52 @@ export const RegisterPolicies: React.FC<RegisterPoliciesProps> = ({ address }) =
         </ul>
         <p>&nbsp;</p>
 
-        {policyManager && selectedPolicy && selectedPolicy.id === 'priceTolerance' && (
+        {manager && selectedPolicy && selectedPolicy.id === 'priceTolerance' && (
           <PriceToleranceConfiguration
-            policyManager={policyManager.address}
+            policyManager={manager}
             policy={selectedPolicy}
             startTransaction={startTransaction}
-          ></PriceToleranceConfiguration>
+          />
         )}
 
-        {policyManager && selectedPolicy && selectedPolicy.id === 'maxPositions' && (
+        {manager && selectedPolicy && selectedPolicy.id === 'maxPositions' && (
           <MaxPositionsConfiguration
-            policyManager={policyManager.address}
+            policyManager={manager}
             policy={selectedPolicy}
             startTransaction={startTransaction}
-          ></MaxPositionsConfiguration>
+          />
         )}
 
-        {policyManager && selectedPolicy && selectedPolicy.id === 'maxConcentration' && (
+        {manager && selectedPolicy && selectedPolicy.id === 'maxConcentration' && (
           <MaxConcentrationConfiguration
-            policyManager={policyManager.address}
+            policyManager={manager}
             policy={selectedPolicy}
             startTransaction={startTransaction}
-          ></MaxConcentrationConfiguration>
+          />
         )}
 
-        {policyManager && selectedPolicy && selectedPolicy.id === 'userWhitelist' && (
+        {manager && selectedPolicy && selectedPolicy.id === 'userWhitelist' && (
           <UserWhitelistConfiguration
-            policyManager={policyManager.address}
+            policyManager={manager}
             policy={selectedPolicy}
             startTransaction={startTransaction}
-          ></UserWhitelistConfiguration>
+          />
         )}
 
-        {policyManager && selectedPolicy && selectedPolicy.id === 'assetWhitelist' && (
+        {manager && selectedPolicy && selectedPolicy.id === 'assetWhitelist' && (
           <AssetWhitelistConfiguration
-            policyManager={policyManager.address}
+            policyManager={manager}
             policy={selectedPolicy}
             startTransaction={startTransaction}
-          ></AssetWhitelistConfiguration>
+          />
         )}
 
-        {policyManager && selectedPolicy && selectedPolicy.id === 'assetBlacklist' && (
+        {manager && selectedPolicy && selectedPolicy.id === 'assetBlacklist' && (
           <AssetBlacklistConfiguration
-            policyManager={policyManager.address}
+            policyManager={manager}
             policy={selectedPolicy}
             startTransaction={startTransaction}
-          ></AssetBlacklistConfiguration>
+          />
         )}
 
         <p>&nbsp;</p>
@@ -142,10 +138,7 @@ export const RegisterPolicies: React.FC<RegisterPoliciesProps> = ({ address }) =
             </thead>
             <tbody>
               {policies.map(policy => (
-                <S.BodyRow key={policy.address}>
-                  <S.BodyCell>{policy.identifier}</S.BodyCell>
-                  <FundPolicyParameters policy={policy} environment={environment} />
-                </S.BodyRow>
+                <FundPolicyDetails key={policy.address} policy={policy} environment={environment} />
               ))}
             </tbody>
           </S.Table>
