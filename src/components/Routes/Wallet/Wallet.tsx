@@ -8,12 +8,12 @@ import { useAccountAddressQuery } from '~/queries/AccountAddress';
 
 const NoMatch = React.lazy(() => import('~/components/Routes/NoMatch/NoMatch'));
 const WalletOverview = React.lazy(() => import('./WalletRoutes/WalletOverview/WalletOverview'));
-const WalletUnwrapEther = React.lazy(() => import('./WalletRoutes/WalletUnwrapEther/WalletUnwrapEther'));
-const WalletWrapEther = React.lazy(() => import('./WalletRoutes/WalletWrapEther/WalletWrapEther'));
+const WalletWeth = React.lazy(() => import('./WalletRoutes/WalletWeth/WalletWeth'));
 
 export const Wallet: React.FC = () => {
   const match = useRouteMatch()!;
   const [address, query] = useAccountAddressQuery();
+
   if (query.loading) {
     return <Spinner />;
   }
@@ -35,11 +35,8 @@ export const Wallet: React.FC = () => {
           <Route path={match.path} exact={true}>
             <WalletOverview />
           </Route>
-          <Route path={`${match.path}/wrap`} exact={true}>
-            <WalletWrapEther />
-          </Route>
-          <Route path={`${match.path}/unwrap`} exact={true}>
-            <WalletUnwrapEther />
+          <Route path={`${match.path}/weth`} exact={true}>
+            <WalletWeth />
           </Route>
           <Route>
             <NoMatch />

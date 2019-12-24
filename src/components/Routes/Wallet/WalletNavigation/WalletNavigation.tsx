@@ -7,11 +7,8 @@ export const WalletNavigation: React.FC = () => {
       <S.WalletNavigationLink to="/wallet" exact={true} activeClassName="active">
         Overview
       </S.WalletNavigationLink>
-      <S.WalletNavigationLink to="/wallet/wrap" exact={true} activeClassName="active">
-        Wrap Ether
-      </S.WalletNavigationLink>
-      <S.WalletNavigationLink to="/wallet/unwrap" exact={true} activeClassName="active">
-        Unwrap Ether
+      <S.WalletNavigationLink to="/wallet/weth" exact={true} activeClassName="active">
+        WETH
       </S.WalletNavigationLink>
     </S.WalletNavigation>
   );

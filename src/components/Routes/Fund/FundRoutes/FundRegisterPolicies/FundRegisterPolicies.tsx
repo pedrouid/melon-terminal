@@ -86,7 +86,7 @@ export const RegisterPolicies: React.FC<RegisterPoliciesProps> = ({ address }) =
             policyManager={policyManager.address}
             policy={selectedPolicy}
             startTransaction={startTransaction}
-          ></PriceToleranceConfiguration>
+          />
         )}
 
         {policyManager && selectedPolicy && selectedPolicy.id === 'maxPositions' && (
@@ -94,7 +94,7 @@ export const RegisterPolicies: React.FC<RegisterPoliciesProps> = ({ address }) =
             policyManager={policyManager.address}
             policy={selectedPolicy}
             startTransaction={startTransaction}
-          ></MaxPositionsConfiguration>
+          />
         )}
 
         {policyManager && selectedPolicy && selectedPolicy.id === 'maxConcentration' && (
@@ -102,7 +102,7 @@ export const RegisterPolicies: React.FC<RegisterPoliciesProps> = ({ address }) =
             policyManager={policyManager.address}
             policy={selectedPolicy}
             startTransaction={startTransaction}
-          ></MaxConcentrationConfiguration>
+          />
         )}
 
         {policyManager && selectedPolicy && selectedPolicy.id === 'userWhitelist' && (
@@ -110,7 +110,7 @@ export const RegisterPolicies: React.FC<RegisterPoliciesProps> = ({ address }) =
             policyManager={policyManager.address}
             policy={selectedPolicy}
             startTransaction={startTransaction}
-          ></UserWhitelistConfiguration>
+          />
         )}
 
         {policyManager && selectedPolicy && selectedPolicy.id === 'assetWhitelist' && (
@@ -118,7 +118,7 @@ export const RegisterPolicies: React.FC<RegisterPoliciesProps> = ({ address }) =
             policyManager={policyManager.address}
             policy={selectedPolicy}
             startTransaction={startTransaction}
-          ></AssetWhitelistConfiguration>
+          />
         )}
 
         {policyManager && selectedPolicy && selectedPolicy.id === 'assetBlacklist' && (
@@ -126,7 +126,7 @@ export const RegisterPolicies: React.FC<RegisterPoliciesProps> = ({ address }) =
             policyManager={policyManager.address}
             policy={selectedPolicy}
             startTransaction={startTransaction}
-          ></AssetBlacklistConfiguration>
+          />
         )}
 
         <p>&nbsp;</p>
