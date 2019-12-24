@@ -82,6 +82,7 @@ export const FundSetup: React.FC = () => {
   const version = environment.deployment.melon.addr.Version;
   const [progress] = useFundSetupStateQuery(fund.address);
 
+  console.log(progress);
   const pipeline = useTransactionPipeline({
     state: progress,
     transactions: [
