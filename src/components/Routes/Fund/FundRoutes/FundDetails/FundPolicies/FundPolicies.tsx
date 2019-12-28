@@ -9,14 +9,17 @@ import {
   FundPolicy,
   AssetWhitelistPolicy,
   AssetBlacklistPolicy,
-  CustomPolicy,
-  UserWhitelistPolicy,
 } from '~/queries/FundPolicies';
-import { findToken } from '~/utils/findToken';
 import { useEnvironment } from '~/hooks/useEnvironment';
 import { Environment } from '~/environment';
-import { Table, HeaderCell, HeaderRow, BodyCell, BodyRow, NoEntries } from '~/components/Common/Table/Table.styles';
-import { useEtherscanLink } from '~/hooks/useEtherscanLink';
+import { Table, HeaderCell, HeaderRow, NoEntries } from '~/components/Common/Table/Table.styles';
+import { MaxConcentration } from './MaxConcentration/MaxConcentration';
+import { CustomPolicy } from './CustomPolicy/CustomPolicy';
+import { MaxPositions } from './MaxPositions/MaxPositions';
+import { PriceTolerance } from './PriceTolerance/PriceTolerance';
+import { AssetWhitelist } from './AssetWhitelist/AssetWhitelist';
+import { AssetBlacklist } from './AssetBlacklist/AssetBlacklist';
+import { UserWhitelist } from './UserWhitelist/UserWhitelist';
 
 interface FundPolicyDetailsProps {
   policy: FundPolicy;
@@ -24,93 +27,34 @@ interface FundPolicyDetailsProps {
 }
 
 export const FundPolicyDetails: React.FC<FundPolicyDetailsProps> = props => {
-  const link = useEtherscanLink({ address: props.policy.address })!;
-
   // TODO: Instead, move each of these into its own component so we can properly use hooks for each.
   switch (props.policy.type) {
     case 'MaxConcentration': {
-      const policy = props.policy as MaxConcentrationPolicy;
-
-      return (
-        <BodyRow>
-          <BodyCell>{link ? <a href={link}>{policy.identifier}</a> : policy.identifier}</BodyCell>
-          <BodyCell>{policy.maxConcentration.dividedBy('1e16').toString()}%</BodyCell>
-        </BodyRow>
-      );
+      return <MaxConcentration policy={props.policy as MaxConcentrationPolicy} />;
     }
 
     case 'MaxPositions': {
-      const policy = props.policy as MaxPositionsPolicy;
-
-      return (
-        <BodyRow>
-          <BodyCell>{link ? <a href={link}>{policy.identifier}</a> : policy.identifier}</BodyCell>
-          <BodyCell>{policy.maxPositions}</BodyCell>;
-        </BodyRow>
-      );
+      return <MaxPositions policy={props.policy as MaxPositionsPolicy} />;
     }
 
     case 'PriceTolerance': {
-      const policy = props.policy as PriceTolerancePolicy;
-
-      return (
-        <BodyRow>
-          <BodyCell>{link ? <a href={link}>{policy.identifier}</a> : policy.identifier}</BodyCell>
-          <BodyCell>{policy.priceTolerance.dividedBy('1e16').toString()}%</BodyCell>
-        </BodyRow>
-      );
+      return <PriceTolerance policy={props.policy as PriceTolerancePolicy} />;
     }
 
     case 'AssetWhitelist': {
-      const policy = props.policy as AssetWhitelistPolicy;
-      const addresses = policy.assetWhitelist
-        .map(asset => findToken(props.environment.deployment, asset)!.symbol)
-        .sort()
-        .join(', ');
-
-      return (
-        <BodyRow>
-          <BodyCell>{link ? <a href={link}>{policy.identifier}</a> : policy.identifier}</BodyCell>
-          <BodyCell>{addresses}</BodyCell>
-        </BodyRow>
-      );
+      return <AssetWhitelist policy={props.policy as AssetWhitelistPolicy} environment={props.environment} />;
     }
 
     case 'AssetBlacklist': {
-      const policy = props.policy as AssetBlacklistPolicy;
-      const addresses = policy.assetBlacklist
-        .map(asset => findToken(props.environment.deployment, asset)!.symbol)
-        .sort()
-        .join(', ');
-
-      return (
-        <BodyRow>
-          <BodyCell>{link ? <a href={link}>{policy.identifier}</a> : policy.identifier}</BodyCell>
-          <BodyCell>{addresses}</BodyCell>
-        </BodyRow>
-      );
+      return <AssetBlacklist policy={props.policy as AssetBlacklistPolicy} environment={props.environment} />;
     }
 
     case 'UserWhitelist': {
-      const policy = props.policy as UserWhitelistPolicy;
-
-      return (
-        <BodyRow>
-          <BodyCell>{link ? <a href={link}>{policy.identifier}</a> : policy.identifier}</BodyCell>
-          <BodyCell>Not disclosed</BodyCell>
-        </BodyRow>
-      );
+      return <UserWhitelist />;
     }
 
     case 'CustomPolicy': {
-      const policy = props.policy as CustomPolicy;
-
-      return (
-        <BodyRow>
-          <BodyCell>{link ? <a href={link}>{policy.identifier}</a> : policy.identifier}</BodyCell>
-          <BodyCell>Unknown</BodyCell>;
-        </BodyRow>
-      );
+      return <CustomPolicy />;
     }
 
     default: {
@@ -153,8 +97,8 @@ export const FundPolicies: React.FC<FundPoliciesProps> = ({ address }) => {
           </tbody>
         </Table>
       ) : (
-        <NoEntries>No registered policies.</NoEntries>
-      )}
+          <NoEntries>No registered policies.</NoEntries>
+        )}
     </S.Wrapper>
   );
 };
