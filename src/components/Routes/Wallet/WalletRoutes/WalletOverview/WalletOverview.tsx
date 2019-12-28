@@ -7,9 +7,9 @@ import { WalletOverviewInvestmentRequest } from './WalletOverviewInvestmentReque
 import { WalletOverviewManagedFund } from './WalletOverviewManagedFund/WalletOverviewManagedFund';
 import { WalletOverviewInvestedFund } from './WalletOverviewInvestedFund/WalletOverviewInvestedFund';
 
-const fundHeadings = ['Name', 'Address', 'Inception', 'Version', 'Status'];
-const redeemHeadings = ['Name', 'Address', 'Share price', 'Your shares'];
-const requestHeadings = ['Fund name', 'Address', 'Request date', 'Request asset', 'Request amount', 'Requested shares'];
+const fundHeadings = ['Name', 'Inception', 'AUM [ETH]', 'Share price', 'Change', '# shares', 'Version', 'Status'];
+const redeemHeadings = ['Name', 'Inception', 'AUM [ETH]', 'Share price', 'Change', '# shares', 'Version', 'Status'];
+const requestHeadings = ['Fund name', 'Request date', 'Request asset', 'Request amount', 'Requested shares'];
 
 export const WalletOverview: React.FC = () => {
   const environment = useEnvironment()!;

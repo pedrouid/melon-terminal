@@ -1,5 +1,6 @@
 import gql from 'graphql-tag';
 import { format } from 'date-fns';
+import BigNumber from 'bignumber.js';
 import { useTheGraphQuery } from '~/hooks/useQuery';
 import { weiToString } from '~/utils/weiToString';
 import { hexToString } from '~/utils/hexToString';
@@ -10,6 +11,8 @@ interface FundFields {
   name: string;
   gav: string;
   sharePrice: string;
+  totalSupply: string;
+  isShutdown: boolean;
   createdAt: number;
   manager: string;
   participation: {
@@ -28,6 +31,11 @@ interface FundFields {
       id: string;
     }[];
   };
+  calculationsHistory: {
+    id: string;
+    sharePrice: string;
+    timestamp: string;
+  }[];
 }
 
 interface InvestmentRequestFields {
@@ -49,10 +57,18 @@ export interface InvestmentRequest extends Fund {
   requestCreatedAt: string;
 }
 
+export interface SharePriceChange {
+  color: string;
+  prefix: string;
+  dailyReturn: number;
+}
+
 export interface Fund {
   name: string;
   address: string;
   inception: string;
+  gav?: string;
+  isShutDown?: boolean;
   sharePrice: string;
   version: string;
   versionAddress: string;
@@ -61,6 +77,29 @@ export interface Fund {
   accountingAddress: string;
   ownedAssets: string[];
   manager: string;
+  change?: SharePriceChange;
+  shares?: string;
+}
+
+export interface SharePrice {
+  sharePrice: string;
+}
+
+function calculateChangeFromSharePrice(current?: SharePrice, previous?: SharePrice): SharePriceChange {
+  if (current && previous) {
+    const bnCurrent = new BigNumber(current.sharePrice);
+    const bnPrevious = new BigNumber(previous.sharePrice);
+
+    const returnSinceLastPriceUpdate = bnCurrent.dividedBy(bnPrevious).toNumber() - 1;
+    const dailyReturn = 100 * returnSinceLastPriceUpdate;
+
+    const color = dailyReturn > 0 ? 'green' : dailyReturn < 0 ? 'red' : 'grey';
+    const prefix = dailyReturn > 0 ? '+' : '';
+
+    return { color, prefix, dailyReturn };
+  }
+
+  return { color: 'primary', prefix: '', dailyReturn: 0 };
 }
 
 export interface FundParticipationOverviewQueryResult {
@@ -85,6 +124,14 @@ const FundParticipationOverviewQuery = gql`
     name
     createdAt
     sharePrice
+    gav
+    totalSupply
+    isShutdown
+    calculationsHistory(orderBy: timestamp, orderDirection: desc, first: 2) {
+      id
+      sharePrice
+      timestamp
+    }
     version {
       id
       name
@@ -154,6 +201,13 @@ export const useFundParticipationOverviewQuery = (investor?: Address) => {
       accountingAddress: item.fund.accounting.id,
       ownedAssets: (item.fund.accounting.ownedAssets || []).map(asset => asset.id),
       manager: item.fund.manager,
+      gav: weiToString(item.fund.gav, 4),
+      change: calculateChangeFromSharePrice(
+        item.fund.calculationsHistory[0] || 0,
+        item.fund.calculationsHistory[1] || 0
+      ),
+      shares: weiToString(item.fund.totalSupply, 4),
+      isShutDown: item.fund.isShutdown,
     };
 
     return output;
@@ -197,6 +251,10 @@ export const useFundParticipationOverviewQuery = (investor?: Address) => {
       accountingAddress: item.accounting.id,
       ownedAssets: (item.accounting.ownedAssets || []).map(asset => asset.id),
       manager: item.manager,
+      gav: weiToString(item.gav, 4),
+      change: calculateChangeFromSharePrice(item.calculationsHistory[0] || 0, item.calculationsHistory[1] || 0),
+      shares: weiToString(item.totalSupply, 4),
+      isShutDown: item.isShutdown,
     };
 
     return output;
