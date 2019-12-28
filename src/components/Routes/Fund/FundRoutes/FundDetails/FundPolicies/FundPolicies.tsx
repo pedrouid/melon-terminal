@@ -10,10 +10,16 @@ import {
   AssetWhitelistPolicy,
   AssetBlacklistPolicy,
 } from '~/queries/FundPolicies';
-import { findToken } from '~/utils/findToken';
 import { useEnvironment } from '~/hooks/useEnvironment';
 import { Environment } from '~/environment';
 import { Table, HeaderCell, HeaderRow, BodyCell, BodyRow, NoEntries } from '~/components/Common/Table/Table.styles';
+import { MaxConcentration } from './MaxConcentration/MaxConcentration';
+import { CustomPolicy } from './CustomPolicy/CustomPolicy';
+import { MaxPositions } from './MaxPositions/MaxPositions';
+import { PriceTolerance } from './PriceTolerance/PriceTolerance';
+import { AssetWhitelist } from './AssetWhitelist/AssetWhitelist';
+import { AssetBlacklist } from './AssetBlacklist/AssetBlacklist';
+import { UserWhitelist } from './UserWhitelist/UserWhitelist';
 
 export interface FundPolicyParametersProps {
   policy: FundPolicy;
@@ -23,46 +29,31 @@ export interface FundPolicyParametersProps {
 export const FundPolicyParameters: React.FC<FundPolicyParametersProps> = props => {
   switch (props.policy.type) {
     case 'MaxConcentration': {
-      const policy = props.policy as MaxConcentrationPolicy;
-      return <BodyCell>{policy.maxConcentration.dividedBy('1e16').toString()}%</BodyCell>;
+      return <MaxConcentration policy={props.policy as MaxConcentrationPolicy} />;
     }
 
     case 'MaxPositions': {
-      const policy = props.policy as MaxPositionsPolicy;
-      return <BodyCell>{policy.maxPositions}</BodyCell>;
+      return <MaxPositions policy={props.policy as MaxPositionsPolicy} />;
     }
 
     case 'PriceTolerance': {
-      const policy = props.policy as PriceTolerancePolicy;
-      return <BodyCell>{policy.priceTolerance.dividedBy('1e16').toString()}%</BodyCell>;
+      return <PriceTolerance policy={props.policy as PriceTolerancePolicy} />;
     }
 
     case 'AssetWhitelist': {
-      const policy = props.policy as AssetWhitelistPolicy;
-      const addresses = policy.assetWhitelist
-        .map(asset => findToken(props.environment.deployment, asset)!.symbol)
-        .sort()
-        .join(', ');
-
-      return <BodyCell>{addresses}</BodyCell>;
+      return <AssetWhitelist policy={props.policy as AssetWhitelistPolicy} environment={props.environment} />;
     }
 
     case 'AssetBlacklist': {
-      const policy = props.policy as AssetBlacklistPolicy;
-      const addresses = policy.assetBlacklist
-        .map(asset => findToken(props.environment.deployment, asset)!.symbol)
-        .sort()
-        .join(', ');
-
-      return <BodyCell>{addresses}</BodyCell>;
+      return <AssetBlacklist policy={props.policy as AssetBlacklistPolicy} environment={props.environment} />;
     }
 
     case 'UserWhitelist': {
-      return <BodyCell>Not disclosed</BodyCell>;
+      return <UserWhitelist />;
     }
 
     case 'CustomPolicy': {
-      return <BodyCell>Unknown</BodyCell>;
+      return <CustomPolicy />;
     }
 
     default: {
