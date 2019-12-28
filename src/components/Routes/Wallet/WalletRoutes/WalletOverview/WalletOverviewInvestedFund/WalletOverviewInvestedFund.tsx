@@ -1,28 +1,21 @@
 import React from 'react';
-import { Spinner } from '~/components/Common/Spinner/Spinner';
+import { useHistory } from 'react-router';
 import { Fund } from '~/queries/FundParticipationOverview';
-import { useFundParticipationQuery } from '~/queries/FundParticipation';
-import { useEtherscanLink } from '~/hooks/useEtherscanLink';
-import { NetworkStatus } from 'apollo-client';
 import { BodyCell, BodyRow } from '~/components/Common/Table/Table.styles';
 
 export const WalletOverviewInvestedFund: React.FC<Fund> = props => {
-  const [result, query] = useFundParticipationQuery(props.address);
-  const link = useEtherscanLink({ address: props.address })!;
-  const loading = query.networkStatus < NetworkStatus.ready;
-  const balance = result.balance;
+  const history = useHistory();
 
   return (
-    <BodyRow>
+    <BodyRow onClick={() => history.push(`/fund/${props.address}`)}>
       <BodyCell>{props.name}</BodyCell>
-      <BodyCell>
-        <a href={link}>{props.address}</a>
-      </BodyCell>
+      <BodyCell>{props.inception}</BodyCell>
+      <BodyCell>{props.gav}</BodyCell>
       <BodyCell>{props.sharePrice}</BodyCell>
-      <BodyCell>
-        {loading && <Spinner size="tiny" />}
-        {!loading && balance && balance.toFixed(8)}
-      </BodyCell>
+      <BodyCell>{props.change?.dailyReturn.toFixed(2)}</BodyCell>
+      <BodyCell>{props.shares}</BodyCell>
+      <BodyCell>{props.version}</BodyCell>
+      <BodyCell>{props.isShutDown ? 'Inactive' : 'Active'}</BodyCell>
     </BodyRow>
   );
 };

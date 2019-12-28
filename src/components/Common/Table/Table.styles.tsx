@@ -36,6 +36,10 @@ export const BodyCellRightAlign = styled.td`
 export const BodyRow = styled.tr`
   border-top: 1px solid ${props => props.theme.mainColors.border};
   border-bottom: 1px dashed rgb(234, 229, 212);
+  cursor: pointer;
+  &:hover {
+    background-color: ${props => props.theme.mainColors.primary};
+  }
 `;
 
 export const NoEntries = styled.div`

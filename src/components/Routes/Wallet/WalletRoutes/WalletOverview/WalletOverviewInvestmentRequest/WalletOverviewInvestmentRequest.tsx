@@ -1,17 +1,14 @@
 import React from 'react';
+import { useHistory } from 'react-router';
 import { InvestmentRequest } from '~/queries/FundParticipationOverview';
-import { useEtherscanLink } from '~/hooks/useEtherscanLink';
 import { BodyCell, BodyRow } from '~/components/Common/Table/Table.styles';
 
 export const WalletOverviewInvestmentRequest: React.FC<InvestmentRequest> = props => {
-  const link = useEtherscanLink({ address: props.address })!;
+  const history = useHistory();
 
   return (
-    <BodyRow>
+    <BodyRow onClick={() => history.push(`/fund/${props.address}`)}>
       <BodyCell>{props.name}</BodyCell>
-      <BodyCell>
-        <a href={link}>{props.address}</a>
-      </BodyCell>
       <BodyCell>{props.requestCreatedAt}</BodyCell>
       <BodyCell>{props.requestAsset}</BodyCell>
       <BodyCell>{props.requestAmount}</BodyCell>
