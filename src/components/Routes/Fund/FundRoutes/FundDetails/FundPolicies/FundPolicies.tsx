@@ -97,8 +97,8 @@ export const FundPolicies: React.FC<FundPoliciesProps> = ({ address }) => {
           </tbody>
         </Table>
       ) : (
-          <NoEntries>No registered policies.</NoEntries>
-        )}
+        <NoEntries>No registered policies.</NoEntries>
+      )}
     </S.Wrapper>
   );
 };
