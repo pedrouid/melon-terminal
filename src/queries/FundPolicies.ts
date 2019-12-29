@@ -1,5 +1,4 @@
 import gql from 'graphql-tag';
-import * as R from 'ramda';
 import BigNumber from 'bignumber.js';
 import { useOnChainQuery } from '~/hooks/useQuery';
 import { Address } from '@melonproject/melonjs';
@@ -99,6 +98,6 @@ export const useFundPoliciesQuery = (address: string) => {
   };
 
   const result = useOnChainQuery<FundPoliciesQueryResult, FundPoliciesQueryVariables>(FundPoliciesQuery, options);
-  const policyManager = R.pathOr<PolicyManager>({ address: '' }, ['data', 'fund', 'routes', 'policyManager'], result);
+  const policyManager = result.data?.fund?.routes?.policyManager ?? { address: '' };
   return [policyManager, result] as [typeof policyManager, typeof result];
 };

@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import * as R from 'ramda';
 import * as S from './FundRegisterPolicies.styles';
 import { availablePolicies } from '~/utils/availablePolicies';
 import { useEnvironment } from '~/hooks/useEnvironment';
@@ -41,7 +40,7 @@ export const RegisterPolicies: React.FC<RegisterPoliciesProps> = ({ address }) =
         const manager = new PolicyManager(environment, policyManager.address);
 
         const signatures = selectedPolicy.signatures;
-        const addresses = R.range(0, selectedPolicy.signatures.length || 0).map(() => receipt.contractAddress!);
+        const addresses = Array(selectedPolicy.signatures.length).map(() => receipt.contractAddress!);
 
         const tx = manager.batchRegisterPolicies(environment.account!, signatures, addresses);
         transaction.start(tx, `Register ${selectedPolicy.name} policy`);

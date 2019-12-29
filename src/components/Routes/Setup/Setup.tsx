@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import * as R from 'ramda';
+import { mergeDeepLeft } from 'ramda';
 import { useRouteMatch, Switch, Route, useHistory, Redirect } from 'react-router';
 import { SetupStepNavigation } from './SetupStepNavigation/SetupStepNavigation';
 import { SetupDefineFund } from './SetupRoutes/SetupDefineFund/SetupDefineFund';
@@ -34,7 +34,7 @@ export const Setup: React.FC = () => {
   const [state, set] = useState<SetupDefinitionState>({});
 
   const forward = (path: string) => (data: SetupDefinitionState) => {
-    set(R.mergeDeepLeft(state, data || {}));
+    set(mergeDeepLeft(state, data || {}));
     history.push(path);
   };
 

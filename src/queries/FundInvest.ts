@@ -1,5 +1,4 @@
 import gql from 'graphql-tag';
-import * as R from 'ramda';
 import BigNumber from 'bignumber.js';
 import { useOnChainQuery } from '~/hooks/useQuery';
 
@@ -89,6 +88,5 @@ export const useFundInvestQuery = (address: string) => {
   };
 
   const result = useOnChainQuery<FundInvestQueryResult, FundInvestQueryVariables>(FundHoldingsQuery, options);
-  const routes = R.path<FundInvestQueryResult>(['data'], result);
-  return [routes, result] as [typeof routes, typeof result];
+  return [result.data, result] as [typeof result.data, typeof result];
 };

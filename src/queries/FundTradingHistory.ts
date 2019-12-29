@@ -1,5 +1,4 @@
 import gql from 'graphql-tag';
-import * as R from 'ramda';
 import { useTheGraphQuery } from '~/hooks/useQuery';
 import BigNumber from 'bignumber.js';
 
@@ -27,7 +26,11 @@ export interface Trade {
 }
 
 export interface FundTradingHistoryQueryResult {
-  trades: Trade[];
+  fund?: {
+    trading?: {
+      calls?: Trade[];
+    };
+  };
 }
 
 export interface FundTradingHistoryQueryVariables {
@@ -70,10 +73,12 @@ export const useFundTradingHistoryQuery = (address: string) => {
   const options = {
     variables: { address },
   };
+
   const result = useTheGraphQuery<FundTradingHistoryQueryResult, FundTradingHistoryQueryVariables>(
     FundTradingHistoryQuery,
     options
   );
-  const openMakeOrders = R.path<Trade[]>(['data', 'fund', 'trading', 'calls'], result);
+
+  const openMakeOrders = result.data?.fund?.trading?.calls ?? [];
   return [openMakeOrders, result] as [typeof openMakeOrders, typeof result];
 };

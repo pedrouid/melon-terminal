@@ -1,6 +1,6 @@
 import React from 'react';
 import * as Rx from 'rxjs';
-import * as R from 'ramda';
+import { equals } from 'ramda';
 import { Eth } from 'web3-eth';
 import { HttpProvider } from 'web3-providers';
 import {
@@ -61,7 +61,7 @@ const connect = (): Rx.Observable<ConnectionAction> => {
           catchError(() => Rx.of([]))
         )
       ),
-      distinctUntilChanged((a, b) => R.equals(a, b)),
+      distinctUntilChanged((a, b) => equals(a, b)),
       map(accounts => accountsChanged(accounts)),
       skip(1)
     );
@@ -75,7 +75,7 @@ const connect = (): Rx.Observable<ConnectionAction> => {
           catchError(() => Rx.of(undefined))
         )
       ),
-      distinctUntilChanged((a, b) => R.equals(a, b)),
+      distinctUntilChanged((a, b) => equals(a, b)),
       map(network => networkChanged(network)),
       skip(1)
     );

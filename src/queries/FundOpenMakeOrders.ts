@@ -1,5 +1,4 @@
 import gql from 'graphql-tag';
-import * as R from 'ramda';
 import BigNumber from 'bignumber.js';
 import { useOnChainQuery } from '~/hooks/useQuery';
 import { Address } from '@melonproject/melonjs';
@@ -61,6 +60,7 @@ export const useFundOpenMakeOrdersQuery = (address: string) => {
     FundOpenMakeOrdersQuery,
     options
   );
-  const openMakeOrders = R.path<OpenMakeOrder[]>(['data', 'fund', 'routes', 'trading', 'openMakeOrders'], result);
+
+  const openMakeOrders = result.data?.fund.routes?.trading?.openMakeOrders ?? [];
   return [openMakeOrders, result] as [typeof openMakeOrders, typeof result];
 };

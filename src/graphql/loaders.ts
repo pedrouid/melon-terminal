@@ -1,5 +1,5 @@
-import * as R from 'ramda';
 import BigNumber from 'bignumber.js';
+import { memoizeWith } from 'ramda';
 import { fromWei } from 'web3-utils';
 import { Address, Accounting, ERC20WithFields } from '@melonproject/melonjs';
 import { Context } from '.';
@@ -49,7 +49,7 @@ export const allowance = (context: Context) => {
 };
 
 export const accountingCalculations = (context: Context) => {
-  return R.memoizeWith(
+  return memoizeWith(
     (accounting: Accounting) => accounting.contract.address,
     (accounting: Accounting) => {
       return accounting.getCalculationResults(context.block);

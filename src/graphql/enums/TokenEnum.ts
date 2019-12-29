@@ -1,16 +1,14 @@
-import * as R from 'ramda';
 import gql from 'graphql-tag';
-import { TokenDefinition } from '~/types';
 import { Environment } from '~/environment';
 
 const defaults = {
   ETH: 'ETH',
 };
 
-export function createTokenEnum(environment: Environment) {
-  const tokens = R.pathOr<TokenDefinition[]>([], ['thirdPartyContracts', 'tokens'], environment!.deployment!);
-  return tokens.reduce((carry, current) => {
-    return { ...carry, [current.symbol]: current.address };
+export function createTokenEnum(environment: Environment): { [key: string]: string } {
+  const addresses = environment.deployment.tokens.addr;
+  return Object.keys(addresses).reduce((carry, current) => {
+    return { ...carry, [current]: addresses[current] };
   }, defaults);
 }
 
