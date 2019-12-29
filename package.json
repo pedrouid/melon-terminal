@@ -1,5 +1,6 @@
 {
   "private": true,
+  "name": "melon-manager-interface",
   "author": "Avantgarde Finance <team@avantgarde.finance>",
   "homepage": "https://melonprotocol.com",
   "publishConfig": {
