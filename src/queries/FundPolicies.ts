@@ -43,14 +43,6 @@ export interface AssetWhitelistPolicy extends FundPolicy {
   assetWhitelist: string[];
 }
 
-export interface FundPoliciesQueryResult {
-  fund?: {
-    routes?: {
-      policyManager?: PolicyManager;
-    };
-  };
-}
-
 export interface FundPoliciesQueryVariables {
   address: string;
 }
@@ -97,7 +89,8 @@ export const useFundPoliciesQuery = (address: string) => {
     variables: { address },
   };
 
-  const result = useOnChainQuery<FundPoliciesQueryResult, FundPoliciesQueryVariables>(FundPoliciesQuery, options);
-  const policyManager = result.data?.fund?.routes?.policyManager ?? { address: '' };
-  return [policyManager, result] as [typeof policyManager, typeof result];
+  const result = useOnChainQuery<FundPoliciesQueryVariables>(FundPoliciesQuery, options);
+  const output = result.data?.fund?.routes?.policyManager as PolicyManager;
+
+  return [output, result] as [typeof output, typeof result];
 };

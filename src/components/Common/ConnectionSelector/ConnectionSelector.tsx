@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useConnectionState } from '~/hooks/useConnectionState';
 import * as S from './ConnectionSelector.styles';
 import { useHistory } from 'react-router';
-import { ConnectionStatus } from '~/components/Contexts/Connection';
+import { ConnectionStatus } from '~/components/Contexts/Connection/Connection';
 
 export const ConnectionSelector: React.FC = () => {
   const history = useHistory();

@@ -4,7 +4,7 @@ import { retryWhen, delay } from 'rxjs/operators';
 import { Eth } from 'web3-eth';
 import { HttpProvider } from 'web3-providers';
 import { networkFromId } from '~/utils/networkFromId';
-import { connectionEstablished, ConnectionAction, ConnectionMethod } from '~/components/Contexts/Connection';
+import { connectionEstablished, ConnectionAction, ConnectionMethod } from '~/components/Contexts/Connection/Connection';
 import { SubmitButton } from '~/components/Common/Form/SubmitButton/SubmitButton';
 
 interface EthResource extends Rx.Unsubscribable {

@@ -1,5 +1,5 @@
-import React, { createContext, useReducer, useEffect, useMemo } from 'react';
 import * as Rx from 'rxjs';
+import React, { createContext, useReducer, useEffect, useMemo } from 'react';
 import { Environment, createEnvironment } from '~/environment';
 import { config } from '~/config';
 import { Address, DeploymentOutput } from '@melonproject/melonjs';

@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { Address } from '@melonproject/melonjs';
-import { FundContext } from '~/components/Contexts/Fund';
+import { Fund } from '~/components/Contexts/Fund/Fund';
 import { useEnvironment } from '~/hooks/useEnvironment';
 
 export interface RequireFundManagerProps {
@@ -11,7 +11,7 @@ export interface RequireFundManagerProps {
 
 export const RequiresFundManager: React.FC<RequireFundManagerProps> = props => {
   const environment = useEnvironment()!;
-  const fund = useContext(FundContext)!;
+  const fund = useContext(Fund)!;
 
   if (fund.loading) {
     return props.loader || null;

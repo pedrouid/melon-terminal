@@ -11,7 +11,6 @@ import {
   BodyCell,
   BodyCellRightAlign,
   BodyRow,
-  NoEntries,
 } from '~/components/Common/Table/Table.styles';
 
 export interface FundHoldingsProps {
@@ -32,7 +31,7 @@ export const FundHoldings: React.FC<FundHoldingsProps> = ({ address }) => {
   const mapped = (holdings || [])
     .filter(holding => holding && holding.token)
     .map(holding => {
-      const decimals = holding.token.decimals;
+      const decimals = holding.token?.decimals;
       const amount = holding.amount;
 
       return {
@@ -54,14 +53,14 @@ export const FundHoldings: React.FC<FundHoldingsProps> = ({ address }) => {
         </thead>
         <tbody>
           {mapped.map(holding => (
-            <BodyRow key={holding.token.address}>
+            <BodyRow key={holding.token?.address}>
               <BodyCell>
-                <S.HoldingSymbol>{holding.token.symbol}</S.HoldingSymbol>
+                <S.HoldingSymbol>{holding.token?.symbol}</S.HoldingSymbol>
                 <br />
-                <S.HoldingName>{holding.token.name}</S.HoldingName>
+                <S.HoldingName>{holding.token?.name}</S.HoldingName>
               </BodyCell>
-              <BodyCellRightAlign>{holding.token.price.toFixed(4)}</BodyCellRightAlign>
-              <BodyCellRightAlign>{holding.divided.toFixed(4)}</BodyCellRightAlign>
+              <BodyCellRightAlign>{holding.token?.price?.toFixed(4)}</BodyCellRightAlign>
+              <BodyCellRightAlign>{holding.divided?.toFixed(4)}</BodyCellRightAlign>
             </BodyRow>
           ))}
         </tbody>

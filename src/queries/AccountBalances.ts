@@ -1,15 +1,10 @@
 import BigNumber from 'bignumber.js';
 import gql from 'graphql-tag';
 import { useOnChainQuery } from '~/hooks/useQuery';
-import { Maybe } from '~/types';
 
 export interface AccountBalances {
   eth: BigNumber;
   weth: BigNumber;
-}
-
-export interface AccountBalancesQueryResult {
-  account: AccountBalances;
 }
 
 const AccountBalancesQuery = gql`
@@ -22,6 +17,11 @@ const AccountBalancesQuery = gql`
 `;
 
 export const useAccountBalancesQuery = () => {
-  const result = useOnChainQuery<AccountBalancesQueryResult>(AccountBalancesQuery);
-  return [result.data && result.data.account, result] as [Maybe<AccountBalances>, typeof result];
+  const result = useOnChainQuery(AccountBalancesQuery);
+  const output: AccountBalances = {
+    weth: (result.data?.account as any)?.weth,
+    eth: (result.data?.account as any)?.eth,
+  };
+
+  return [output, result] as [typeof output, typeof result];
 };

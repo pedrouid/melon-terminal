@@ -56,11 +56,7 @@ export const useFundOpenMakeOrdersQuery = (address: string) => {
     variables: { address },
   };
 
-  const result = useOnChainQuery<FundOpenMakeOrdersQueryResult, FundOpenMakeOrdersQueryVariables>(
-    FundOpenMakeOrdersQuery,
-    options
-  );
-
-  const openMakeOrders = result.data?.fund.routes?.trading?.openMakeOrders ?? [];
+  const result = useOnChainQuery<FundOpenMakeOrdersQueryVariables>(FundOpenMakeOrdersQuery, options);
+  const openMakeOrders = (result.data?.fund?.routes?.trading?.openMakeOrders ?? []) as OpenMakeOrder[];
   return [openMakeOrders, result] as [typeof openMakeOrders, typeof result];
 };

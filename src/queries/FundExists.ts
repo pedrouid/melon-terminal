@@ -1,12 +1,6 @@
 import gql from 'graphql-tag';
 import { useOnChainQuery } from '~/hooks/useQuery';
 
-export interface FundExistsQueryResult {
-  fund?: {
-    address: string;
-  };
-}
-
 export interface FundExistsQueryVariables {
   address: string;
 }
@@ -24,6 +18,6 @@ export const useFundExistsQuery = (address: string) => {
     variables: { address },
   };
 
-  const result = useOnChainQuery<FundExistsQueryResult, FundExistsQueryVariables>(FundExistsQuery, options);
+  const result = useOnChainQuery<FundExistsQueryVariables>(FundExistsQuery, options);
   return [result.data && !!result.data.fund, result] as [boolean | undefined, typeof result];
 };

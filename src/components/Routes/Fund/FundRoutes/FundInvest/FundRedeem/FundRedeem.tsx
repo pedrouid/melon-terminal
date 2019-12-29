@@ -70,8 +70,8 @@ export const Redeem: React.FC<RedeemProps> = ({ address }) => {
     transaction.start(tx, 'Redeem shares');
   });
 
-  const handleRedeemAllClick = (e: any) => {
-    shares && form.setValue('shareQuantity', shares.balanceOf.toNumber());
+  const handleRedeemAllClick = () => {
+    shares && shares.balanceOf && form.setValue('shareQuantity', shares!.balanceOf!.toNumber());
   };
 
   if (query.loading) {
@@ -88,7 +88,7 @@ export const Redeem: React.FC<RedeemProps> = ({ address }) => {
       {hasInvested && shares && (
         <>
           <p>
-            You own {shares.balanceOf.toString()} shares!
+            You own {shares?.balanceOf?.toString()} shares!
             <br />
             <br />
           </p>
@@ -101,7 +101,7 @@ export const Redeem: React.FC<RedeemProps> = ({ address }) => {
                 type="number"
                 step="any"
                 min="0"
-                max={shares.balanceOf.toString()}
+                max={shares?.balanceOf?.toString()}
                 disabled={redeemAll}
               />
 

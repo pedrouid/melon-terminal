@@ -31,13 +31,12 @@ export interface RegisterPoliciesProps {
 export const RegisterPolicies: React.FC<RegisterPoliciesProps> = ({ address }) => {
   const environment = useEnvironment()!;
   const [selectedPolicy, setSelectedPolicy] = useState<PolicyDefinition>();
-
   const [policyManager, query] = useFundPoliciesQuery(address);
 
   const transaction = useTransaction(environment, {
     onAcknowledge: receipt => {
       if (receipt.contractAddress && selectedPolicy) {
-        const manager = new PolicyManager(environment, policyManager.address);
+        const manager = new PolicyManager(environment, policyManager!.address);
 
         const signatures = selectedPolicy.signatures;
         const addresses = Array.from(Array(selectedPolicy.signatures.length).keys()).map(
@@ -55,8 +54,7 @@ export const RegisterPolicies: React.FC<RegisterPoliciesProps> = ({ address }) =
     },
   });
 
-  const policies = policyManager && policyManager.policies;
-
+  const policies = policyManager?.policies || [];
   const startTransaction = (
     tx: Deployment<PriceTolerance | MaxPositions | MaxConcentration | UserWhitelist | AssetWhitelist | AssetBlacklist>,
     name: string
@@ -85,7 +83,7 @@ export const RegisterPolicies: React.FC<RegisterPoliciesProps> = ({ address }) =
 
         {policyManager && selectedPolicy && selectedPolicy.id === 'priceTolerance' && (
           <PriceToleranceConfiguration
-            policyManager={policyManager.address}
+            policyManager={policyManager.address!}
             policy={selectedPolicy}
             startTransaction={startTransaction}
           />
@@ -93,7 +91,7 @@ export const RegisterPolicies: React.FC<RegisterPoliciesProps> = ({ address }) =
 
         {policyManager && selectedPolicy && selectedPolicy.id === 'maxPositions' && (
           <MaxPositionsConfiguration
-            policyManager={policyManager.address}
+            policyManager={policyManager.address!}
             policy={selectedPolicy}
             startTransaction={startTransaction}
           />
@@ -101,7 +99,7 @@ export const RegisterPolicies: React.FC<RegisterPoliciesProps> = ({ address }) =
 
         {policyManager && selectedPolicy && selectedPolicy.id === 'maxConcentration' && (
           <MaxConcentrationConfiguration
-            policyManager={policyManager.address}
+            policyManager={policyManager.address!}
             policy={selectedPolicy}
             startTransaction={startTransaction}
           />
@@ -109,7 +107,7 @@ export const RegisterPolicies: React.FC<RegisterPoliciesProps> = ({ address }) =
 
         {policyManager && selectedPolicy && selectedPolicy.id === 'userWhitelist' && (
           <UserWhitelistConfiguration
-            policyManager={policyManager.address}
+            policyManager={policyManager.address!}
             policy={selectedPolicy}
             startTransaction={startTransaction}
           />
@@ -117,7 +115,7 @@ export const RegisterPolicies: React.FC<RegisterPoliciesProps> = ({ address }) =
 
         {policyManager && selectedPolicy && selectedPolicy.id === 'assetWhitelist' && (
           <AssetWhitelistConfiguration
-            policyManager={policyManager.address}
+            policyManager={policyManager.address!}
             policy={selectedPolicy}
             startTransaction={startTransaction}
           />
@@ -125,7 +123,7 @@ export const RegisterPolicies: React.FC<RegisterPoliciesProps> = ({ address }) =
 
         {policyManager && selectedPolicy && selectedPolicy.id === 'assetBlacklist' && (
           <AssetBlacklistConfiguration
-            policyManager={policyManager.address}
+            policyManager={policyManager.address!}
             policy={selectedPolicy}
             startTransaction={startTransaction}
           />
@@ -133,8 +131,8 @@ export const RegisterPolicies: React.FC<RegisterPoliciesProps> = ({ address }) =
 
         <p>&nbsp;</p>
 
-        <h3>Active policies (0)</h3>
-        {policies && policies.length > 0 ? (
+        <h3>Active policies ({policies.length})</h3>
+        {policies.length ? (
           <S.Table>
             <thead>
               <S.HeaderRow>

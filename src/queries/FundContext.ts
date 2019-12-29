@@ -44,11 +44,6 @@ export interface AccountDetails {
   };
 }
 
-export interface FundContextQueryResult {
-  account: AccountDetails;
-  fund: FundContext;
-}
-
 export interface FundContextQueryVariables {
   address: string;
 }
@@ -95,8 +90,7 @@ export const useFundContextQuery = (address: string) => {
     variables: { address },
   };
 
-  const result = useOnChainQuery<FundContextQueryResult, FundContextQueryVariables>(FundContextQuery, options);
-
+  const result = useOnChainQuery<FundContextQueryVariables>(FundContextQuery, options);
   const fund = result.data?.fund;
   const account = result.data?.account;
 
@@ -104,8 +98,7 @@ export const useFundContextQuery = (address: string) => {
     name: fund?.name,
     manager: fund?.manager,
     isShutDown: fund?.isShutDown,
-
-    balanceOf: account?.shares.balanceOf,
+    balanceOf: account?.shares?.balanceOf,
   };
 
   return [processed, result] as [FundContextProcessed | undefined, typeof result];

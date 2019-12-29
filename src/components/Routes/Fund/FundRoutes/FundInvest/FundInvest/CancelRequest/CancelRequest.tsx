@@ -6,24 +6,20 @@ import useForm, { FormContext } from 'react-hook-form';
 import { Participation } from '@melonproject/melonjs';
 import { TransactionModal } from '~/components/Common/TransactionModal/TransactionModal';
 import { SubmitButton } from '~/components/Common/Form/SubmitButton/SubmitButton';
-import { AccountParticipation, AccountShares } from '~/queries/FundInvest';
+import { Account } from '~/graphql/types';
+import { useOnChainQueryRefetcher } from '~/hooks/useOnChainQueryRefetcher';
 
 export interface CancelRequestProps {
   address: string;
-  account: {
-    participation: AccountParticipation;
-    shares: AccountShares;
-  };
-  fundQuery: any;
+  account: Account;
 }
 
 export const CancelRequest: React.FC<CancelRequestProps> = props => {
   const environment = useEnvironment()!;
+  const refetch = useOnChainQueryRefetcher();
 
   const transaction = useTransaction(environment, {
-    onAcknowledge: () => {
-      props.fundQuery.refetch();
-    },
+    onAcknowledge: () => refetch(),
   });
 
   const participationAddress = props.account && props.account.participation && props.account.participation.address;

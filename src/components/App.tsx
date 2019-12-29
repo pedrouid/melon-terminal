@@ -9,8 +9,8 @@ import { method as metamask } from './Common/ConnectionSelector/MetaMask/MetaMas
 import { method as frame } from './Common/ConnectionSelector/Frame/Frame';
 import { method as ganache } from './Common/ConnectionSelector/Ganache/Ganache';
 import { Theme, ModalBackground } from './App.styles';
-import { ApolloProvider } from './Contexts/Apollo';
-import { ConnectionProvider } from './Contexts/Connection';
+import { ApolloProvider } from './Contexts/Apollo/Apollo';
+import { ConnectionProvider } from './Contexts/Connection/Connection';
 // NOTE: Imported using root relative import to allow overrides with webpack.
 import { AppRouter } from '~/components/AppRouter';
 

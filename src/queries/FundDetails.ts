@@ -38,11 +38,6 @@ export interface AccountDetails {
   };
 }
 
-export interface FundDetailsQueryResult {
-  account: AccountDetails;
-  fund: FundDetails;
-}
-
 export interface FundDetailsQueryVariables {
   address: string;
 }
@@ -89,7 +84,7 @@ export const useFundDetailsQuery = (address: string) => {
     variables: { address },
   };
 
-  const result = useOnChainQuery<FundDetailsQueryResult, FundDetailsQueryVariables>(FundDetailsQuery, options);
+  const result = useOnChainQuery<FundDetailsQueryVariables>(FundDetailsQuery, options);
   return [result.data && result.data.fund, result.data && result.data.account, result] as [
     FundDetails | undefined,
     AccountDetails | undefined,

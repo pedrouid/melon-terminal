@@ -1,6 +1,6 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
-import { OnChainApollo, TheGraphApollo } from './Contexts/Apollo';
+import { OnChainApollo, TheGraphApollo } from './Contexts/Apollo/Apollo';
 import { RequiresAccount } from './Common/Gates/RequiresAccount/RequiresAccount';
 import { RequiresConnection } from './Common/Gates/RequiresConnection/RequiresConnection';
 

@@ -9,7 +9,7 @@ import {
   connectionEstablished,
   ConnectionAction,
   ConnectionMethod,
-} from '~/components/Contexts/Connection';
+} from '~/components/Contexts/Connection/Connection';
 import { SubmitButton } from '~/components/Common/Form/SubmitButton/SubmitButton';
 
 const connect = (): Rx.Observable<ConnectionAction> => {

@@ -4,7 +4,7 @@ import { useFundExistsQuery } from '~/queries/FundExists';
 import { Spinner } from '~/components/Common/Spinner/Spinner';
 import { FundHeader } from './FundHeader/FundHeader';
 import { FundNavigation } from './FundNavigation/FundNavigation';
-import { FundContextProvider } from '~/components/Contexts/Fund';
+import { FundContextProvider } from '~/components/Contexts/Fund/Fund';
 import * as S from './Fund.styles';
 
 const NoMatch = React.lazy(() => import('~/components/Routes/NoMatch/NoMatch'));

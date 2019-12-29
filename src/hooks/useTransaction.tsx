@@ -5,7 +5,6 @@ import { TransactionReceipt } from 'web3-core';
 import { Transaction, SendOptions, Deployment, Contract } from '@melonproject/melonjs';
 import { FormContextValues } from 'react-hook-form/dist/contextTypes';
 import { FieldValues } from 'react-hook-form/dist/types';
-
 import { Environment } from '~/environment';
 import { NetworkEnum } from '~/types';
 

@@ -1,33 +1,23 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import * as S from './RequestInvestment.styles';
 import BigNumber from 'bignumber.js';
-
 import * as Yup from 'yup';
 import { useEnvironment } from '~/hooks/useEnvironment';
 import { useTransaction } from '~/hooks/useTransaction';
 import useForm, { FormContext } from 'react-hook-form';
-import { Participation, StandardToken, Hub } from '@melonproject/melonjs';
+import { Participation, StandardToken } from '@melonproject/melonjs';
 import { TransactionModal } from '~/components/Common/TransactionModal/TransactionModal';
 import { InputField } from '~/components/Common/Form/InputField/InputField';
 import { SubmitButton } from '~/components/Common/Form/SubmitButton/SubmitButton';
 import { useAccountAllowanceQuery } from '~/queries/AccountAllowance';
-import {
-  AccountParticipation,
-  AccountShares,
-  FundInvestHolding,
-  FundInvestQueryResult,
-  FundInvestQueryVariables,
-} from '~/queries/FundInvest';
-import { QueryResult } from '@apollo/react-common';
+import { Holding, Account } from '~/graphql/types';
+import { useOnChainQueryRefetcher } from '~/hooks/useOnChainQueryRefetcher';
+import * as S from './RequestInvestment.styles';
+import { sameAddress } from '@melonproject/melonjs/utils/sameAddress';
 
 export interface RequestInvestmentProps {
   address: string;
-  holdings?: FundInvestHolding[];
-  account: {
-    participation: AccountParticipation;
-    shares: AccountShares;
-  };
-  fundQuery: QueryResult<FundInvestQueryResult, FundInvestQueryVariables>;
+  holdings?: Holding[];
+  account: Account;
 }
 
 const validationSchema = Yup.object().shape({
@@ -48,23 +38,17 @@ const defaultValues = {
 
 export const RequestInvestment: React.FC<RequestInvestmentProps> = props => {
   const environment = useEnvironment()!;
-
+  const refetch = useOnChainQueryRefetcher();
   const [selectedTokenIndex, setSelectedTokenIndex] = useState(0);
 
-  const [allowance, allowanceQuery] = useAccountAllowanceQuery(
-    props.holdings && props.holdings[selectedTokenIndex].token.address,
-    props.account && props.account.participation.address
-  );
+  const account = props.account;
+  const participation = account?.participation?.address;
+  const holding = props.holdings && props.holdings[selectedTokenIndex];
+  const [allowance] = useAccountAllowanceQuery(holding?.token?.address, participation);
 
   const transaction = useTransaction(environment, {
-    onAcknowledge: () => {
-      allowanceQuery.refetch();
-      props.fundQuery.refetch();
-    },
+    onAcknowledge: () => refetch(),
   });
-
-  const participationAddress = props.account && props.account.participation && props.account.participation.address;
-  const participationContract = new Participation(environment, participationAddress);
 
   const form = useForm<typeof defaultValues>({
     defaultValues,
@@ -86,13 +70,14 @@ export const RequestInvestment: React.FC<RequestInvestmentProps> = props => {
   }, [allowance, investmentAmount]);
 
   useEffect(() => {
-    props.holdings && form.setValue('investmentAsset', props.holdings[selectedTokenIndex].token.address);
+    holding && form.setValue('investmentAsset', holding!.token!.address!);
 
     const calculatedInvestmentAmount =
-      props.holdings &&
+      holding &&
       new BigNumber(requestedShares)
-        .multipliedBy(props.holdings[selectedTokenIndex].shareCostInAsset)
-        .dividedBy(new BigNumber(10).exponentiatedBy(props.holdings![selectedTokenIndex].token.decimals));
+        .multipliedBy(holding!.shareCostInAsset!)
+        .dividedBy(new BigNumber(10).exponentiatedBy(holding!.token!.decimals!));
+
     form.setValue('investmentAmount', (calculatedInvestmentAmount && calculatedInvestmentAmount!.toNumber()) || 1);
   }, [selectedTokenIndex]);
 
@@ -103,23 +88,22 @@ export const RequestInvestment: React.FC<RequestInvestmentProps> = props => {
       case 'approve': {
         const tx = investmentToken.approve(
           environment.account!,
-          props.account.participation.address,
-          new BigNumber(data.investmentAmount).times(
-            new BigNumber(10).exponentiatedBy(props.holdings![selectedTokenIndex].token.decimals)
-          )
+          participation!,
+          new BigNumber(data.investmentAmount).times(new BigNumber(10).exponentiatedBy(holding!.token!.decimals!))
         );
         transaction.start(tx, 'Approve');
         break;
       }
+
       case 'invest': {
-        const tx = participationContract.requestInvestment(
+        const contract = new Participation(environment, participation);
+        const tx = contract.requestInvestment(
           environment.account!,
           new BigNumber(data.requestedShares).times(new BigNumber(10).exponentiatedBy(18)),
-          new BigNumber(data.investmentAmount).times(
-            new BigNumber(10).exponentiatedBy(props.holdings![selectedTokenIndex].token.decimals)
-          ),
+          new BigNumber(data.investmentAmount).times(new BigNumber(10).exponentiatedBy(holding!.token!.decimals!)),
           data.investmentAsset
         );
+
         transaction.start(tx, 'Invest');
         break;
       }
@@ -127,27 +111,27 @@ export const RequestInvestment: React.FC<RequestInvestmentProps> = props => {
   });
 
   const handleTokenChange = (e: any) => {
-    const index = props.holdings && props.holdings.map(token => token.token.address).indexOf(e.target.value);
+    const index = props.holdings && props.holdings.map(token => token!.token!.address).indexOf(e.target.value);
     setSelectedTokenIndex(index || 0);
   };
 
   const handleRequestedSharesChange = (e: any) => {
-    const token = props.holdings && props.holdings.find(token => token.token.address === investmentAsset);
+    const token = props.holdings && props.holdings.find(token => sameAddress(token!.token!.address, investmentAsset));
     const calculatedInvestmentAmount =
       token &&
       new BigNumber(requestedShares)
-        .multipliedBy(token.shareCostInAsset)
-        .dividedBy(new BigNumber(10).exponentiatedBy(token.token.decimals));
+        .multipliedBy(token!.shareCostInAsset!)
+        .dividedBy(new BigNumber(10).exponentiatedBy(token!.token!.decimals!));
     form.setValue('investmentAmount', (calculatedInvestmentAmount && calculatedInvestmentAmount!.toNumber()) || 1);
   };
 
   const handleInvestmentAmountChange = (e: any) => {
-    const token = props.holdings && props.holdings.find(token => token.token.address === investmentAsset);
+    const token = props.holdings && props.holdings.find(token => sameAddress(token!.token!.address, investmentAsset));
     const calculatedRequestedShares =
       token &&
       new BigNumber(investmentAmount)
-        .multipliedBy(new BigNumber(10).exponentiatedBy(token.token.decimals))
-        .dividedBy(token.shareCostInAsset);
+        .multipliedBy(new BigNumber(10).exponentiatedBy(token!.token!.decimals!))
+        .dividedBy(token!.shareCostInAsset!);
     form.setValue('requestedShares', (calculatedRequestedShares && calculatedRequestedShares!.toNumber()) || 1);
   };
 
@@ -171,8 +155,8 @@ export const RequestInvestment: React.FC<RequestInvestmentProps> = props => {
               {props.holdings &&
                 props.holdings.map(holding => {
                   return (
-                    <option value={holding.token.address!} key={holding.token.address}>
-                      {holding.token.symbol}
+                    <option value={holding!.token!.address!} key={holding!.token!.address!}>
+                      {holding!.token!.symbol!}
                     </option>
                   );
                 })}

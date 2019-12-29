@@ -13,16 +13,6 @@ export interface FundHolding {
   };
 }
 
-export interface FundHoldingsQueryResult {
-  fund: {
-    routes?: {
-      accounting?: {
-        holdings: FundHolding[];
-      };
-    };
-  };
-}
-
 export interface FundHoldingsQueryVariables {
   address: string;
 }
@@ -53,7 +43,7 @@ export const useFundHoldingsQuery = (address: string) => {
     variables: { address },
   };
 
-  const result = useOnChainQuery<FundHoldingsQueryResult, FundHoldingsQueryVariables>(FundHoldingsQuery, options);
-  const holdings = result.data?.fund.routes?.accounting?.holdings ?? [];
+  const result = useOnChainQuery<FundHoldingsQueryVariables>(FundHoldingsQuery, options);
+  const holdings = result.data?.fund?.routes?.accounting?.holdings ?? [];
   return [holdings, result] as [typeof holdings, typeof result];
 };

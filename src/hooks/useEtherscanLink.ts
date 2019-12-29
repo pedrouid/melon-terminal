@@ -11,10 +11,11 @@ export const useEtherscanLink = ({ address, hash }: UseEtherscanLinkProps) => {
   const network = environment && environment.network;
 
   const url = useMemo(() => {
-    if (!address && !hash) return null;
+    if (!address && !hash) {
+      return null;
+    }
 
     const link = address ? `address/${address}` : `tx/${hash}`;
-
     if (network === 'MAINNET') {
       return `https://etherscan.io/${link}`;
     }
@@ -23,7 +24,7 @@ export const useEtherscanLink = ({ address, hash }: UseEtherscanLinkProps) => {
       return `https://kovan.etherscan.io/${link}`;
     }
 
-    return `https://etherscan.io/${link}`;
+    return null;
   }, [address, hash]);
 
   return url;

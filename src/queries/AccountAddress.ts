@@ -3,12 +3,6 @@ import { Address } from '@melonproject/melonjs';
 import { useOnChainQuery } from '~/hooks/useQuery';
 import { Maybe } from '~/types';
 
-export interface AccountAddressQueryResult {
-  account?: {
-    address: Address;
-  };
-}
-
 export interface AccountAddressQueryVariables {
   address: Address;
 }
@@ -22,6 +16,6 @@ const AccountAddressQuery = gql`
 `;
 
 export const useAccountAddressQuery = () => {
-  const result = useOnChainQuery<AccountAddressQueryResult, AccountAddressQueryVariables>(AccountAddressQuery);
+  const result = useOnChainQuery<AccountAddressQueryVariables>(AccountAddressQuery);
   return [result.data && result.data.account && result.data.account.address, result] as [Maybe<Address>, typeof result];
 };

@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { Connection } from '~/components/Contexts/Connection';
+import { Connection } from '~/components/Contexts/Connection/Connection';
 
 export function useEnvironment() {
   const context = useContext(Connection);

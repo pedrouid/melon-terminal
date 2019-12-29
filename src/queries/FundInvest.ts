@@ -1,47 +1,5 @@
 import gql from 'graphql-tag';
-import BigNumber from 'bignumber.js';
 import { useOnChainQuery } from '~/hooks/useQuery';
-
-export interface AccountParticipation {
-  address: string;
-  hasInvested: boolean;
-  investmentRequestState: string;
-  canCancelRequest: boolean;
-}
-
-export interface AccountShares {
-  address: string;
-  balanceOf: BigNumber;
-}
-
-export interface FundInvestHolding {
-  amount: BigNumber;
-  shareCostInAsset: BigNumber;
-  token: {
-    address: string;
-    symbol: string;
-    name: string;
-    price: BigNumber;
-    decimals: number;
-  };
-}
-
-export interface FundInvestRoutes {
-  accounting: {
-    address: string;
-    holdings: FundInvestHolding[];
-  };
-}
-
-export interface FundInvestQueryResult {
-  account: {
-    participation: AccountParticipation;
-    shares: AccountShares;
-  };
-  fund: {
-    routes: FundInvestRoutes;
-  };
-}
 
 export interface FundInvestQueryVariables {
   address: string;
@@ -87,6 +45,6 @@ export const useFundInvestQuery = (address: string) => {
     variables: { address },
   };
 
-  const result = useOnChainQuery<FundInvestQueryResult, FundInvestQueryVariables>(FundHoldingsQuery, options);
+  const result = useOnChainQuery<FundInvestQueryVariables>(FundHoldingsQuery, options);
   return [result.data, result] as [typeof result.data, typeof result];
 };

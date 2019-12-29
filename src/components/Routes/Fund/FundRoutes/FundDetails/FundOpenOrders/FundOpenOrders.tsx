@@ -37,7 +37,7 @@ export const FundOpenOrders: React.FC<FundOpenOrdersProps> = ({ address }) => {
           </thead>
           <tbody>
             {orders.map(order => {
-              return <OpenOrderItem address={address} order={order} key={order.orderIndex.toString()} />;
+              return <OpenOrderItem address={address} order={order} key={order.orderIndex?.toString()} />;
             })}
           </tbody>
         </Table>
