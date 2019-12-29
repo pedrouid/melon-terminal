@@ -1,16 +1,13 @@
 import React from 'react';
 import * as Yup from 'yup';
 import * as S from './UserWhitelistConfiguration.styles';
-
 import useForm, { FormContext } from 'react-hook-form';
 import { SubmitButton } from '~/components/Common/Form/SubmitButton/SubmitButton';
 import { useEnvironment } from '~/hooks/useEnvironment';
 import { Deployment, UserWhitelist } from '@melonproject/melonjs';
-
-import { AvailablePolicy } from '~/utils/availablePolicies';
-import { BigNumber } from 'bignumber.js';
 import { UserWhitelistBytecode } from '@melonproject/melonjs/abis/UserWhitelist.bin';
 import { TextareaField } from '~/components/Common/Form/TextareaField/TextareaField';
+import { PolicyDefinition } from '~/types';
 
 interface UserWhitelistConfigurationForm {
   userWhitelist: string;
@@ -18,7 +15,7 @@ interface UserWhitelistConfigurationForm {
 
 export interface UserWhitelistConfigurationProps {
   policyManager: string;
-  policy: AvailablePolicy;
+  policy: PolicyDefinition;
   startTransaction: (tx: Deployment<UserWhitelist>, name: string) => void;
 }
 

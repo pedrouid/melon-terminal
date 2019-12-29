@@ -6,93 +6,150 @@ export enum NetworkEnum {
   'KOVAN' = 'KOVAN',
 }
 
-export interface Deployment {
-  meta: DeploymentMetadata;
-  exchangeConfigs: { [key: string]: ExchangeConfig };
-  melonContracts: MelonContracts;
-  thirdPartyContracts: ThirdPartyContracts;
-}
-
-export interface DeploymentMetadata {
-  deployer: string;
-  timestamp: string;
-  track: string;
-  version: string;
-  chain: number;
-  description?: string;
-}
-
-export interface Factories {
-  accountingFactory: string;
-  feeManagerFactory: string;
-  participationFactory: string;
-  policyManagerFactory: string;
-  sharesFactory: string;
-  tradingFactory: string;
-  vaultFactory: string;
-}
-
-export interface MelonContracts {
-  priceSource: string;
-  engine: string;
-  version: string;
-  ranking: string;
-  registry: string;
-  factories: Factories;
-  adapters: {
-    kyberAdapter: string;
-    zeroExAdapter: string;
-    ethfinexAdapter: string;
-    matchingMarketAdapter?: string;
-    matchingMarketAccessor?: string;
-    engineAdapter?: string;
-  };
-  policies: {
-    priceTolerance: string;
-    userWhitelist: string;
-  };
-  fees: {
-    managementFee: string;
-    performanceFee: string;
-  };
+export interface PolicyDefinition {
+  id: string;
+  name: string;
+  signatures: string[];
 }
 
 export interface TokenDefinition {
+  symbol: string;
+  name: string;
   address: string;
   decimals: number;
-  symbol: string;
-  name?: string;
-  reserveMin?: number;
 }
 
-export interface ExchangeConfig {
+export interface ExchangeDefinition {
+  name: string;
   exchange: string;
   adapter: string;
-  takesCustody: boolean;
 }
 
-export interface ThirdPartyContracts {
-  tokens: TokenDefinition[];
-  exchanges: {
-    kyber: KyberEnvironment;
-    matchingMarket: string;
-    zeroEx: string;
-    ethfinex: string | EthfinexEnvironment;
+export interface Deployment {
+  melon: {
+    addr: MelonAddresses;
+    conf: MelonConfig;
+  };
+  kyber: {
+    addr: KyberAddresses;
+    conf: KyberConfig;
+  };
+  ethfinex: {
+    addr: EthfinexAddresses;
+    conf: EthfinexConfig;
+  };
+  oasis: {
+    addr: OasisDexAddresses;
+    conf: OasisDexConfig;
+  };
+  zeroex: {
+    addr: ZeroExAddresses;
+    conf: ZeroExConfig;
+  };
+  tokens: {
+    addr: TokenAddresses;
+    conf: TokenConfig;
   };
 }
 
-export interface KyberEnvironment {
-  conversionRates: string;
-  kyberNetwork: string;
-  kyberNetworkProxy: string;
+interface MelonAddresses {
+  EthfinexAdapter: string;
+  KyberAdapter: string;
+  MatchingMarketAdapter: string;
+  MatchingMarketAccessor: string;
+  ZeroExV2Adapter: string;
+  EngineAdapter: string;
+  PriceTolerance: string;
+  UserWhitelist: string;
+  ManagementFee: string;
+  AccountingFactory: string;
+  FeeManagerFactory: string;
+  ParticipationFactory: string;
+  PolicyManagerFactory: string;
+  SharesFactory: string;
+  TradingFactory: string;
+  VaultFactory: string;
+  PerformanceFee: string;
+  Registry: string;
+  Engine: string;
+  Version: string;
+  TestingPriceFeed?: string;
+  KyberPriceFeed?: string;
 }
 
-export interface EthfinexEnvironment {
-  exchange: string;
-  wrapperRegistryEFX: string;
-  wrapperPairs: {
-    token: string;
-    wrapper: string;
-  }[];
-  erc20proxy: string;
+interface MelonConfig {
+  priceTolerance: number;
+  userWhitelist: string[];
+  registryOwner: string;
+  engineDelay: number;
+  maxSpread: number;
+  versionOwner: string;
+  initialMGM: string;
+  versionName: string;
+  exchangeTakesCustody: {
+    oasis: boolean;
+    kyber: boolean;
+    zeroex: boolean;
+    ethfinex: boolean;
+    engine: boolean;
+  };
+}
+
+interface KyberAddresses {
+  KGT: string;
+  ConversionRates: string;
+  KyberReserve: string;
+  KyberNetwork: string;
+  KyberNetworkProxy: string;
+  KyberWhiteList: string;
+  ExpectedRate: string;
+  FeeBurner: string;
+}
+
+interface KyberConfig {}
+
+interface OasisDexAddresses {
+  MatchingMarket: string;
+}
+
+interface OasisDexConfig {
+  closeTime: number;
+  quoteToken: string;
+}
+
+interface EthfinexAddresses {
+  ZeroExV2Exchange: string;
+  WrapperRegistryEFX: string;
+  WrapperLockEth: string;
+  'W-MLN': string;
+  'W-BAT': string;
+  'W-DAI': string;
+  'W-DGX': string;
+  'W-EUR': string;
+  'W-KNC': string;
+  'W-MKR': string;
+  'W-REP': string;
+  'W-ZRX': string;
+}
+
+interface EthfinexConfig {}
+
+interface ZeroExAddresses {
+  Exchange: string;
+  ERC20Proxy: string;
+}
+
+interface ZeroExConfig {}
+
+interface TokenAddresses {
+  [key: string]: string;
+}
+
+interface TokenConfig {
+  [key: string]: TokenConfigItem;
+}
+
+interface TokenConfigItem {
+  name: string;
+  decimals: number;
 }

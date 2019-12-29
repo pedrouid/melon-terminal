@@ -1,15 +1,13 @@
 import { Resolver } from '~/graphql';
 import { Version, Hub, Participation, Shares } from '@melonproject/melonjs';
 import BigNumber from 'bignumber.js';
+import { versionContract } from '~/utils/deploymentContracts';
+import { Environment } from '~/environment';
 
 export const address: Resolver<string> = address => address;
 
 interface BalanceArgs {
   token: string;
-}
-
-interface FundArgs {
-  address: string;
 }
 
 interface AllowanceArgs {
@@ -37,7 +35,7 @@ export const allowance: Resolver<string, AllowanceArgs> = async (_, args, contex
 
 export const fund: Resolver<string> = async (manager, _, context) => {
   try {
-    const version = new Version(context.environment, context.environment.deployment.melonContracts.version);
+    const version = versionContract(context.environment);
     const address = await version.getManagersToHubs(manager, context.block);
     const hub = new Hub(context.environment, address);
     // Duck typing the hub contract. If we can fetch a creator for the given

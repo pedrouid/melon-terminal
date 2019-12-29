@@ -1,48 +1,56 @@
 import { encodeFunctionSignature } from '@melonproject/melonjs/utils/encodeFunctionSignature';
 import { ExchangeAdapterAbi } from '@melonproject/melonjs/abis/ExchangeAdapter.abi';
 import { ParticipationAbi } from '@melonproject/melonjs/abis/Participation.abi';
+import { PolicyDefinition } from '~/types';
 
-export interface AvailablePolicy {
-  id: string;
-  name: string;
-  signatures: string[];
-}
-
-const tradingSignatures = [
+export const tradingSignatures = [
   encodeFunctionSignature(ExchangeAdapterAbi, 'makeOrder'),
   encodeFunctionSignature(ExchangeAdapterAbi, 'takeOrder'),
 ];
-const investmentSignatures = [encodeFunctionSignature(ParticipationAbi, 'requestInvestment')];
 
-export const availablePolicies: AvailablePolicy[] = [
-  {
-    id: 'priceTolerance',
-    name: 'Price Tolerance',
-    signatures: [...tradingSignatures],
-  },
-  {
-    id: 'maxPositions',
-    name: 'Maximum number of positions',
-    signatures: [...tradingSignatures, ...investmentSignatures],
-  },
-  {
-    id: 'maxConcentration',
-    name: 'Maximum Concentration',
-    signatures: [...tradingSignatures, ...investmentSignatures],
-  },
-  {
-    id: 'userWhitelist',
-    name: 'User Whitelist',
-    signatures: [...investmentSignatures],
-  },
-  {
-    id: 'assetWhitelist',
-    name: 'Asset Whitelist',
-    signatures: [...tradingSignatures, ...investmentSignatures],
-  },
-  {
-    id: 'assetBlacklist',
-    name: 'Asset Blacklist',
-    signatures: [...tradingSignatures, ...investmentSignatures],
-  },
+export const investmentSignatures = [encodeFunctionSignature(ParticipationAbi, 'requestInvestment')];
+
+export const priceTolerance: PolicyDefinition = {
+  id: 'priceTolerance',
+  name: 'Price Tolerance',
+  signatures: [...tradingSignatures],
+};
+
+export const maxPositions: PolicyDefinition = {
+  id: 'maxPositions',
+  name: 'Maximum number of positions',
+  signatures: [...tradingSignatures, ...investmentSignatures],
+};
+
+export const maxConcentration: PolicyDefinition = {
+  id: 'maxConcentration',
+  name: 'Maximum Concentration',
+  signatures: [...tradingSignatures, ...investmentSignatures],
+};
+
+export const userWhitelist: PolicyDefinition = {
+  id: 'userWhitelist',
+  name: 'User Whitelist',
+  signatures: [...investmentSignatures],
+};
+
+export const assetWhitelist: PolicyDefinition = {
+  id: 'assetWhitelist',
+  name: 'Asset Whitelist',
+  signatures: [...tradingSignatures, ...investmentSignatures],
+};
+
+export const assetBlacklist: PolicyDefinition = {
+  id: 'assetBlacklist',
+  name: 'Asset Blacklist',
+  signatures: [...tradingSignatures, ...investmentSignatures],
+};
+
+export const availablePolicies = [
+  priceTolerance,
+  maxPositions,
+  maxConcentration,
+  userWhitelist,
+  assetWhitelist,
+  assetBlacklist,
 ];

@@ -7,6 +7,8 @@ import { SubmitButton } from '~/components/Common/Form/SubmitButton/SubmitButton
 import { ButtonBlock } from '~/components/Common/Form/ButtonBlock/ButtonBlock';
 import { CancelButton } from '~/components/Common/Form/CancelButton/CancelButton';
 import { useEnvironment } from '~/hooks/useEnvironment';
+import { availableExchanges } from '~/utils/availableExchanges';
+import { availableTokens } from '~/utils/availableTokens';
 
 export interface SetupDefineFundForm {
   name: string;
@@ -16,8 +18,8 @@ export interface SetupDefineFundForm {
 
 export const SetupDefineFund: React.FC<SetupDefinitionProps> = props => {
   const environment = useEnvironment()!;
-  const exchanges = Object.keys(environment.deployment.exchangeConfigs);
-  const tokens = environment.deployment.thirdPartyContracts.tokens;
+  const exchanges = availableExchanges(environment.deployment);
+  const tokens = availableTokens(environment.deployment);
 
   const validationSchema = Yup.object().shape({
     name: Yup.string().min(1),
@@ -46,16 +48,15 @@ export const SetupDefineFund: React.FC<SetupDefinitionProps> = props => {
           {form.errors.exchanges && <p>{form.errors.exchanges.message}</p>}
           <ul>
             {exchanges.map((exchange, index) => (
-              <li key={exchange}>
+              <li key={exchange.name}>
                 <input
                   id={`exchanges[${index}]`}
                   type="checkbox"
                   name={`exchanges[${index}]`}
-                  value={exchange}
-                  key={exchange}
+                  value={exchange.name}
                   ref={form.register}
                 />
-                <label htmlFor={`exchanges[${index}]`}>{exchange}</label>
+                <label htmlFor={`exchanges[${index}]`}>{exchange.name}</label>
               </li>
             ))}
           </ul>
@@ -69,7 +70,6 @@ export const SetupDefineFund: React.FC<SetupDefinitionProps> = props => {
                   type="checkbox"
                   name={`assets[${index}]`}
                   value={token.symbol}
-                  key={token.symbol}
                   ref={form.register}
                 />
                 <label htmlFor={`assets[${index}]`}>{token.symbol}</label>

@@ -1,14 +1,13 @@
 import React from 'react';
 import * as Yup from 'yup';
 import * as S from './AssetBlacklistConfiguration.styles';
-
 import useForm, { FormContext } from 'react-hook-form';
 import { SubmitButton } from '~/components/Common/Form/SubmitButton/SubmitButton';
 import { useEnvironment } from '~/hooks/useEnvironment';
 import { Deployment, AssetBlacklist } from '@melonproject/melonjs';
-
-import { AvailablePolicy } from '~/utils/availablePolicies';
 import { AssetBlacklistBytecode } from '@melonproject/melonjs/abis/AssetBlacklist.bin';
+import { PolicyDefinition } from '~/types';
+import { availableTokens } from '~/utils/availableTokens';
 
 interface AssetBlacklistConfigurationForm {
   assetBlacklist: string[];
@@ -16,14 +15,13 @@ interface AssetBlacklistConfigurationForm {
 
 export interface AssetBlacklistConfigurationProps {
   policyManager: string;
-  policy: AvailablePolicy;
+  policy: PolicyDefinition;
   startTransaction: (tx: Deployment<AssetBlacklist>, name: string) => void;
 }
 
 export const AssetBlacklistConfiguration: React.FC<AssetBlacklistConfigurationProps> = props => {
   const environment = useEnvironment()!;
-
-  const tokens = environment.deployment.thirdPartyContracts.tokens;
+  const tokens = availableTokens(environment.deployment);
 
   const validationSchema = Yup.object().shape({
     assetBlacklist: Yup.array<string>()

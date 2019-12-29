@@ -1,13 +1,13 @@
 import * as S from './SubmitButton.styles';
 import React from 'react';
 
-export interface SubmitButtonProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'type'> {
+export interface SubmitButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   label: string;
 }
 
 export const SubmitButton: React.FC<SubmitButtonProps> = ({ label, ...rest }) => {
   return (
-    <S.SubmitButtonWrapper {...rest} type="submit">
+    <S.SubmitButtonWrapper type="submit" {...rest}>
       {label}
     </S.SubmitButtonWrapper>
   );

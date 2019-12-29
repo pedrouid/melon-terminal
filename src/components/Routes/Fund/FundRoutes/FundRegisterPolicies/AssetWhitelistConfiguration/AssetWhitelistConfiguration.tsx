@@ -1,14 +1,13 @@
 import React from 'react';
 import * as Yup from 'yup';
 import * as S from './AssetWhitelistConfiguration.styles';
-
 import useForm, { FormContext } from 'react-hook-form';
 import { SubmitButton } from '~/components/Common/Form/SubmitButton/SubmitButton';
 import { useEnvironment } from '~/hooks/useEnvironment';
 import { Deployment, AssetWhitelist } from '@melonproject/melonjs';
-
-import { AvailablePolicy } from '~/utils/availablePolicies';
 import { AssetWhitelistBytecode } from '@melonproject/melonjs/abis/AssetWhitelist.bin';
+import { PolicyDefinition } from '~/types';
+import { availableTokens } from '~/utils/availableTokens';
 
 interface AssetWhitelistConfigurationForm {
   assetWhitelist: string[];
@@ -16,14 +15,13 @@ interface AssetWhitelistConfigurationForm {
 
 export interface AssetWhitelistConfigurationProps {
   policyManager: string;
-  policy: AvailablePolicy;
+  policy: PolicyDefinition;
   startTransaction: (tx: Deployment<AssetWhitelist>, name: string) => void;
 }
 
 export const AssetWhitelistConfiguration: React.FC<AssetWhitelistConfigurationProps> = props => {
   const environment = useEnvironment()!;
-
-  const tokens = environment.deployment.thirdPartyContracts.tokens;
+  const tokens = availableTokens(environment.deployment);
 
   const validationSchema = Yup.object().shape({
     assetWhitelist: Yup.array<string>()

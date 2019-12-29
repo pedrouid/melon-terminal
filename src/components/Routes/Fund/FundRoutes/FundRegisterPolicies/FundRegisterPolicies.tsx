@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import * as R from 'ramda';
 import * as S from './FundRegisterPolicies.styles';
-import { availablePolicies, AvailablePolicy } from '~/utils/availablePolicies';
+import { availablePolicies } from '~/utils/availablePolicies';
 import { useEnvironment } from '~/hooks/useEnvironment';
 import { useFundPoliciesQuery } from '~/queries/FundPolicies';
 import { FundPolicyParameters } from '../FundDetails/FundPolicies/FundPolicies';
@@ -23,6 +23,7 @@ import { MaxConcentrationConfiguration } from './MaxConcentrationConfiguration/M
 import { UserWhitelistConfiguration } from './UserWhitelistConfiguration/UserWhitelistConfiguration';
 import { AssetWhitelistConfiguration } from './AssetWhitelistConfiguration/AssetWhitelistConfiguration';
 import { AssetBlacklistConfiguration } from './AssetBlacklistConfiguration/AssetBlacklistConfiguration';
+import { PolicyDefinition } from '~/types';
 
 export interface RegisterPoliciesProps {
   address: string;
@@ -30,7 +31,7 @@ export interface RegisterPoliciesProps {
 
 export const RegisterPolicies: React.FC<RegisterPoliciesProps> = ({ address }) => {
   const environment = useEnvironment()!;
-  const [selectedPolicy, setSelectedPolicy] = useState<AvailablePolicy>();
+  const [selectedPolicy, setSelectedPolicy] = useState<PolicyDefinition>();
 
   const [policyManager, query] = useFundPoliciesQuery(address);
 

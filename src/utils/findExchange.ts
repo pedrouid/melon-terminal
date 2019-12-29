@@ -1,23 +1,19 @@
 import { Deployment } from '~/types';
 import { sameAddress } from '@melonproject/melonjs/utils/sameAddress';
+import { availableExchanges } from './availableExchanges';
 
 export function findExchange(deployment: Deployment, which: string) {
-  const exchanges = deployment.exchangeConfigs;
-  const exchangeNames = Object.keys(exchanges);
-
+  const exchanges = availableExchanges(deployment);
   const address = which.startsWith('0x');
-
-  const exchange = exchangeNames.find(name => {
-    if (exchanges[name].exchange === which) {
+  return exchanges.find(item => {
+    if (address && sameAddress(which, item.exchange)) {
       return true;
     }
 
-    if (address && sameAddress(which, exchanges[name].exchange)) {
+    if (which === item.name) {
       return true;
     }
 
     return false;
   });
-
-  return exchange && { ...exchanges[exchange], name: exchange };
 }

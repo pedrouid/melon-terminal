@@ -1,5 +1,6 @@
 import { Resolver } from '~/graphql';
-import { Hub, CanonicalPriceFeed } from '@melonproject/melonjs';
+import { Hub } from '@melonproject/melonjs';
+import { priceFeedContract } from '~/utils/deploymentContracts';
 
 export const block: Resolver = (_, __, context) => {
   return context.loaders.block(context.block);
@@ -14,8 +15,7 @@ export const account: Resolver = async (_, __, context) => {
 };
 
 export const prices: Resolver = async (_, __, context) => {
-  const address = context.environment.deployment!.melonContracts.priceSource;
-  return new CanonicalPriceFeed(context.environment, address);
+  return priceFeedContract(context.environment);
 };
 
 export const fund: Resolver = async (_, args, context) => {

@@ -1,16 +1,14 @@
 import React from 'react';
 import * as Yup from 'yup';
 import * as S from './MaxConcentrationConfiguration.styles';
-
 import useForm, { FormContext } from 'react-hook-form';
 import { SubmitButton } from '~/components/Common/Form/SubmitButton/SubmitButton';
 import { InputField } from '~/components/Common/Form/InputField/InputField';
 import { useEnvironment } from '~/hooks/useEnvironment';
 import { MaxConcentration, Deployment } from '@melonproject/melonjs';
 import { MaxConcentrationBytecode } from '@melonproject/melonjs/abis/MaxConcentration.bin';
-
-import { AvailablePolicy } from '~/utils/availablePolicies';
 import { BigNumber } from 'bignumber.js';
+import { PolicyDefinition } from '~/types';
 
 interface MaxConcentrationConfigurationForm {
   maxConcentration: number;
@@ -18,7 +16,7 @@ interface MaxConcentrationConfigurationForm {
 
 export interface MaxConcentrationConfigurationProps {
   policyManager: string;
-  policy: AvailablePolicy;
+  policy: PolicyDefinition;
   startTransaction: (tx: Deployment<MaxConcentration>, name: string) => void;
 }
 

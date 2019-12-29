@@ -1,5 +1,6 @@
 import { Resolver } from '~/graphql';
-import { Hub, Version } from '@melonproject/melonjs';
+import { Hub } from '@melonproject/melonjs';
+import { versionContract } from '~/utils/deploymentContracts';
 
 enum SetupProgress {
   BEGIN = 'BEGIN',
@@ -21,7 +22,7 @@ export const creationTime: Resolver<Hub> = (hub, _, context) => hub.getCreationT
 export const isShutDown: Resolver<Hub> = (hub, _, context) => hub.isShutDown(context.block);
 export const routes: Resolver<Hub> = async (hub, _, context) => [hub, await hub.getRoutes(context.block)];
 export const progress: Resolver<Hub> = async (hub, _, context) => {
-  const version = new Version(context.environment, context.environment.deployment.melonContracts.version);
+  const version = versionContract(context.environment);
   if (await version.isInstance(hub.contract.address, context.block)) {
     return SetupProgress.COMPLETE;
   }

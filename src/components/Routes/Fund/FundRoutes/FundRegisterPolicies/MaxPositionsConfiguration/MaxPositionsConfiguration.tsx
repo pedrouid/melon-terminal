@@ -1,15 +1,13 @@
 import React from 'react';
 import * as Yup from 'yup';
 import * as S from './MaxPositionsConfiguration.styles';
-
 import useForm, { FormContext } from 'react-hook-form';
 import { SubmitButton } from '~/components/Common/Form/SubmitButton/SubmitButton';
 import { InputField } from '~/components/Common/Form/InputField/InputField';
 import { useEnvironment } from '~/hooks/useEnvironment';
 import { MaxPositions, Deployment } from '@melonproject/melonjs';
 import { MaxPositionsBytecode } from '@melonproject/melonjs/abis/MaxPositions.bin';
-
-import { AvailablePolicy } from '~/utils/availablePolicies';
+import { PolicyDefinition } from '~/types';
 
 interface MaxPositionsConfigurationForm {
   maxPositions: number;
@@ -17,7 +15,7 @@ interface MaxPositionsConfigurationForm {
 
 export interface MaxPositionsConfigurationProps {
   policyManager: string;
-  policy: AvailablePolicy;
+  policy: PolicyDefinition;
   startTransaction: (tx: Deployment<MaxPositions>, name: string) => void;
 }
 

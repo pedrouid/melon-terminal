@@ -11,6 +11,7 @@ import { Spinner } from '~/components/Common/Spinner/Spinner';
 import { NoMatch } from '~/components/Routes/NoMatch/NoMatch';
 import { useHistory } from 'react-router';
 import { NetworkStatus } from 'apollo-client';
+import { versionContract } from '~/utils/deploymentContracts';
 
 interface TransactionPipelineItem {
   previous: string;
@@ -28,7 +29,8 @@ export const SetupTransactions: React.FC = props => {
   const environment = useEnvironment()!;
   const history = useHistory();
 
-  const factory = useMemo(() => new Version(environment, environment.deployment.melonContracts.version), [environment]);
+  // TODO: This should use the version contract address of the fund that is being created.
+  const factory = useMemo(() => versionContract(environment), [environment]);
   const pipeline: TransactionPipeline = useMemo(
     () => ({
       BEGIN: {

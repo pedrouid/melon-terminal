@@ -7,8 +7,7 @@ import { InputField } from '~/components/Common/Form/InputField/InputField';
 import { useEnvironment } from '~/hooks/useEnvironment';
 import { PriceTolerance, Deployment } from '@melonproject/melonjs';
 import { PriceToleranceBytecode } from '@melonproject/melonjs/abis/PriceTolerance.bin';
-
-import { AvailablePolicy } from '~/utils/availablePolicies';
+import { PolicyDefinition } from '~/types';
 
 interface PriceToleranceConfigurationForm {
   priceTolerance: number;
@@ -16,7 +15,7 @@ interface PriceToleranceConfigurationForm {
 
 export interface PriceToleranceConfigurationProps {
   policyManager: string;
-  policy: AvailablePolicy;
+  policy: PolicyDefinition;
   startTransaction: (tx: Deployment<PriceTolerance>, name: string) => void;
 }
 

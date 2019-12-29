@@ -1,7 +1,7 @@
 import { NetworkEnum } from '~/types';
 import { config } from '~/config';
 
-export const networkFromId = (id?: number): NetworkEnum | undefined => {
+export function networkFromId(id?: number): NetworkEnum | undefined {
   if (id === 1 && !!config[NetworkEnum.MAINNET]) {
     return NetworkEnum.MAINNET;
   }
@@ -13,4 +13,4 @@ export const networkFromId = (id?: number): NetworkEnum | undefined => {
   if (id === 4 && !!config[NetworkEnum.TESTNET]) {
     return NetworkEnum.TESTNET;
   }
-};
+}

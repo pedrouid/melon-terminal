@@ -8,7 +8,9 @@ import { SubmitButton } from '~/components/Common/Form/SubmitButton/SubmitButton
 import { useTransaction } from '~/hooks/useTransaction';
 import { useEnvironment } from '~/hooks/useEnvironment';
 import { useHistory } from 'react-router';
-import { Version } from '@melonproject/melonjs';
+import { versionContract } from '~/utils/deploymentContracts';
+import { findToken } from '~/utils/findToken';
+import { findExchange } from '~/utils/findExchange';
 
 export const SetupDefineOverview: React.FC<Omit<SetupDefinitionProps, 'forward'>> = props => {
   const environment = useEnvironment()!;
@@ -30,20 +32,27 @@ export const SetupDefineOverview: React.FC<Omit<SetupDefinitionProps, 'forward'>
     .map((exchange: any) => `${exchange}`);
 
   const createTransaction = () => {
-    const address = environment.deployment.melonContracts.version;
-    const factory = new Version(environment, address);
+    const factory = versionContract(environment);
+    const weth = findToken(environment.deployment, 'WETH');
+    const exchangeAddresses = exchanges.map(name => findExchange(environment.deployment, name)!.exchange);
+    const adapterAddresses = exchanges.map(name => findExchange(environment.deployment, name)!.adapter);
+    const managementFeeAddress = environment.deployment.melon.addr.ManagementFee;
+    const performanceFeeAddress = environment.deployment.melon.addr.PerformanceFee;
+    const assetAddresses = assets.map(symbol => findToken(environment.deployment, symbol)!.address);
 
-    const tokens = environment.deployment.thirdPartyContracts.tokens;
-    const weth = tokens.find(token => token.symbol && token.symbol === 'WETH');
-
-    const exchangeConfig = environment.deployment.exchangeConfigs;
-    const exchangeAddresses = exchanges.map(exchange => exchangeConfig[exchange].exchange);
-    const adapterAddresses = exchanges.map(exchange => exchangeConfig[exchange].adapter);
-
-    const managementFeeAddress = environment.deployment.melonContracts.fees.managementFee;
-    const performanceFeeAddress = environment.deployment.melonContracts.fees.performanceFee;
-    const assetAddresses = assets.map(symbol => tokens.find(token => token.symbol === symbol)!.address);
-
+    console.log({
+      name: props.state.name!,
+      adapters: adapterAddresses,
+      exchanges: exchangeAddresses,
+      fees: [managementFeeAddress, performanceFeeAddress],
+      denominationAsset: weth!.address,
+      defaultAssets: assetAddresses,
+      feePeriods: [new BigNumber(0), new BigNumber(props.state.performanceFeePeriod!).multipliedBy(60 * 60 * 24)],
+      feeRates: [
+        new BigNumber(props.state.managementFee!).multipliedBy('1e16'),
+        new BigNumber(props.state.performanceFee!).multipliedBy('1e16'),
+      ],
+    });
     const tx = factory.beginSetup(environment.account!, {
       name: props.state.name!,
       adapters: adapterAddresses,
