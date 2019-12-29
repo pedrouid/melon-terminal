@@ -24,41 +24,35 @@ export const WalletOverview: React.FC = () => {
   const managedRows = !managedEmpty ? (
     managed.map(fund => <WalletOverviewManagedFund {...fund} key={fund.address} />)
   ) : (
-    <S.EmptyRow>
-      <S.EmptyCell colSpan={12}>You do not manage any funds.</S.EmptyCell>
-    </S.EmptyRow>
-  );
+      <S.EmptyRow>
+        <S.EmptyCell colSpan={12}>You do not manage any funds.</S.EmptyCell>
+      </S.EmptyRow>
+    );
 
   const investedHeader = redeemHeadings.map((heading, index) => <S.HeaderCell key={index}>{heading}</S.HeaderCell>);
   const investedEmpty = !(invested && invested.length);
   const investedRows = !investedEmpty ? (
     invested.map(fund => <WalletOverviewInvestedFund {...fund} key={fund.address} />)
   ) : (
-    <S.EmptyRow>
-      <S.EmptyCell colSpan={12}>You don't own any shares in any funds.</S.EmptyCell>
-    </S.EmptyRow>
-  );
+      <S.EmptyRow>
+        <S.EmptyCell colSpan={12}>You don't own any shares in any funds.</S.EmptyCell>
+      </S.EmptyRow>
+    );
 
   const requestsHeader = requestHeadings.map((heading, index) => <S.HeaderCell key={index}>{heading}</S.HeaderCell>);
   const requestsEmpty = !(requests && requests.length);
   const requestsRows = !requestsEmpty ? (
     requests.map(request => <WalletOverviewInvestmentRequest {...request} key={request.address} />)
   ) : (
-    <S.EmptyRow>
-      <S.EmptyCell colSpan={12}>You do not have any pending investment requests.</S.EmptyCell>
-    </S.EmptyRow>
-  );
+      <S.EmptyRow>
+        <S.EmptyCell colSpan={12}>You do not have any pending investment requests.</S.EmptyCell>
+      </S.EmptyRow>
+    );
 
   return (
     <S.Container>
       <S.Group>
         <S.Title>Managed funds</S.Title>
-        {!managedEmpty && (
-          <p>
-            Shutting down your fund closes the fund for new investors and trades will no longer be possible. Investor
-            can redeem their shares whenever they want.
-          </p>
-        )}
         <S.ScrollableTable>
           <S.Table>
             <thead>
@@ -70,9 +64,6 @@ export const WalletOverview: React.FC = () => {
       </S.Group>
       <S.Group>
         <S.Title>Funds with owned shares</S.Title>
-        {!investedEmpty && (
-          <p>Redeeming shares will transfer the underlying assets of your shares back to your wallet.</p>
-        )}
         <S.ScrollableTable>
           <S.Table>
             <thead>
@@ -84,12 +75,6 @@ export const WalletOverview: React.FC = () => {
       </S.Group>
       <S.Group>
         <S.Title>Pending investment requests</S.Title>
-        {!requestsEmpty && (
-          <p>
-            Cancelling pending investment requests will transfer the underlying assets of the investment request back to
-            your wallet.
-          </p>
-        )}
         <S.ScrollableTable>
           <S.Table>
             <thead>
