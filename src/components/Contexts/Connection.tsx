@@ -2,8 +2,8 @@ import React, { createContext, useReducer, useEffect, useMemo } from 'react';
 import * as Rx from 'rxjs';
 import { Environment, createEnvironment } from '~/environment';
 import { config } from '~/config';
-import { Address } from '@melonproject/melonjs';
-import { NetworkEnum, Deployment } from '~/types';
+import { Address, DeploymentOutput } from '@melonproject/melonjs';
+import { NetworkEnum } from '~/types';
 import { Eth } from 'web3-eth';
 
 export enum ConnectionStatus {
@@ -13,7 +13,7 @@ export enum ConnectionStatus {
 }
 
 export interface ConnectionState {
-  deployment?: Deployment;
+  deployment?: DeploymentOutput;
   eth?: Eth;
   network?: NetworkEnum;
   accounts?: Address[];
@@ -74,7 +74,7 @@ export interface DeploymentLoading {
 
 export interface DeploymentLoaded {
   type: ConnectionActionType.DEPLOYMENT_LOADED;
-  deployment: Deployment;
+  deployment: DeploymentOutput;
 }
 
 export interface DeploymentError {
@@ -106,7 +106,7 @@ export function deploymentLoading(): DeploymentLoading {
   return { type: ConnectionActionType.DEPLOYMENT_LOADING };
 }
 
-export function deploymentLoaded(deployment: Deployment): DeploymentLoaded {
+export function deploymentLoaded(deployment: DeploymentOutput): DeploymentLoaded {
   return { deployment, type: ConnectionActionType.DEPLOYMENT_LOADED };
 }
 

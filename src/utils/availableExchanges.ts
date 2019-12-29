@@ -1,6 +1,7 @@
-import { Deployment, ExchangeDefinition } from '~/types';
+import { ExchangeDefinition } from '~/types';
+import { DeploymentOutput } from '@melonproject/melonjs';
 
-export function availableExchanges(deployment: Deployment): ExchangeDefinition[] {
+export function availableExchanges(deployment: DeploymentOutput): ExchangeDefinition[] {
   const exchanges = [
     deployment.melon && {
       name: 'MelonEngine',

@@ -1,6 +1,7 @@
-import { Deployment, TokenDefinition } from '~/types';
+import { TokenDefinition } from '~/types';
+import { DeploymentOutput } from '@melonproject/melonjs';
 
-export function availableTokens(deployment: Deployment): TokenDefinition[] {
+export function availableTokens(deployment: DeploymentOutput): TokenDefinition[] {
   const symbols = Object.keys(deployment.tokens.addr);
   const tokens = symbols.map(symbol => ({
     symbol,

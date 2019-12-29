@@ -1,8 +1,9 @@
-import { NetworkEnum, Deployment } from './types';
+import { NetworkEnum } from './types';
+import { DeploymentOutput } from '@melonproject/melonjs';
 
 export interface Config {
   subgraph: string;
-  deployment: () => Promise<Deployment>;
+  deployment: () => Promise<DeploymentOutput>;
 }
 
 export type ConfigMap = {

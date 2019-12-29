@@ -1,8 +1,8 @@
-import { Deployment } from '~/types';
 import { sameAddress } from '@melonproject/melonjs/utils/sameAddress';
 import { availableExchanges } from './availableExchanges';
+import { DeploymentOutput } from '@melonproject/melonjs';
 
-export function findExchange(deployment: Deployment, which: string) {
+export function findExchange(deployment: DeploymentOutput, which: string) {
   const exchanges = availableExchanges(deployment);
   const address = which.startsWith('0x');
   return exchanges.find(item => {
