@@ -40,7 +40,9 @@ export const RegisterPolicies: React.FC<RegisterPoliciesProps> = ({ address }) =
         const manager = new PolicyManager(environment, policyManager.address);
 
         const signatures = selectedPolicy.signatures;
-        const addresses = Array(selectedPolicy.signatures.length).map(() => receipt.contractAddress!);
+        const addresses = Array.from(Array(selectedPolicy.signatures.length).keys()).map(
+          () => receipt.contractAddress!
+        );
 
         const tx = manager.batchRegisterPolicies(environment.account!, signatures, addresses);
         transaction.start(tx, `Register ${selectedPolicy.name} policy`);

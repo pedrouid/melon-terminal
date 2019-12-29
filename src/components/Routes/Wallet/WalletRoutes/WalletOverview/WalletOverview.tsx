@@ -24,30 +24,30 @@ export const WalletOverview: React.FC = () => {
   const managedRows = !managedEmpty ? (
     managed.map(fund => <WalletOverviewManagedFund {...fund} key={fund.address} />)
   ) : (
-      <S.EmptyRow>
-        <S.EmptyCell colSpan={12}>You do not manage any funds.</S.EmptyCell>
-      </S.EmptyRow>
-    );
+    <S.EmptyRow>
+      <S.EmptyCell colSpan={12}>You do not manage any funds.</S.EmptyCell>
+    </S.EmptyRow>
+  );
 
   const investedHeader = redeemHeadings.map((heading, index) => <S.HeaderCell key={index}>{heading}</S.HeaderCell>);
   const investedEmpty = !(invested && invested.length);
   const investedRows = !investedEmpty ? (
     invested.map(fund => <WalletOverviewInvestedFund {...fund} key={fund.address} />)
   ) : (
-      <S.EmptyRow>
-        <S.EmptyCell colSpan={12}>You don't own any shares in any funds.</S.EmptyCell>
-      </S.EmptyRow>
-    );
+    <S.EmptyRow>
+      <S.EmptyCell colSpan={12}>You don't own any shares in any funds.</S.EmptyCell>
+    </S.EmptyRow>
+  );
 
   const requestsHeader = requestHeadings.map((heading, index) => <S.HeaderCell key={index}>{heading}</S.HeaderCell>);
   const requestsEmpty = !(requests && requests.length);
   const requestsRows = !requestsEmpty ? (
     requests.map(request => <WalletOverviewInvestmentRequest {...request} key={request.address} />)
   ) : (
-      <S.EmptyRow>
-        <S.EmptyCell colSpan={12}>You do not have any pending investment requests.</S.EmptyCell>
-      </S.EmptyRow>
-    );
+    <S.EmptyRow>
+      <S.EmptyCell colSpan={12}>You do not have any pending investment requests.</S.EmptyCell>
+    </S.EmptyRow>
+  );
 
   return (
     <S.Container>

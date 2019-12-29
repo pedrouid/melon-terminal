@@ -25,5 +25,5 @@ export function availableExchanges(deployment: DeploymentOutput): ExchangeDefini
     },
   ];
 
-  return exchanges.filter(value => !!value);
+  return exchanges.filter(value => !!(value && value.exchange && value.adapter));
 }
