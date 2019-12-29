@@ -9,8 +9,7 @@ import { useTransaction } from '~/hooks/useTransaction';
 import { useEnvironment } from '~/hooks/useEnvironment';
 import { useHistory } from 'react-router';
 import { versionContract } from '~/utils/deploymentContracts';
-import { findToken } from '~/utils/findToken';
-import { findExchange } from '~/utils/findExchange';
+import { findExchange, findToken } from '@melonproject/melonjs';
 
 export const SetupDefineOverview: React.FC<Omit<SetupDefinitionProps, 'forward'>> = props => {
   const environment = useEnvironment()!;
@@ -40,19 +39,6 @@ export const SetupDefineOverview: React.FC<Omit<SetupDefinitionProps, 'forward'>
     const performanceFeeAddress = environment.deployment.melon.addr.PerformanceFee;
     const assetAddresses = assets.map(symbol => findToken(environment.deployment, symbol)!.address);
 
-    console.log({
-      name: props.state.name!,
-      adapters: adapterAddresses,
-      exchanges: exchangeAddresses,
-      fees: [managementFeeAddress, performanceFeeAddress],
-      denominationAsset: weth!.address,
-      defaultAssets: assetAddresses,
-      feePeriods: [new BigNumber(0), new BigNumber(props.state.performanceFeePeriod!).multipliedBy(60 * 60 * 24)],
-      feeRates: [
-        new BigNumber(props.state.managementFee!).multipliedBy('1e16'),
-        new BigNumber(props.state.performanceFee!).multipliedBy('1e16'),
-      ],
-    });
     const tx = factory.beginSetup(environment.account!, {
       name: props.state.name!,
       adapters: adapterAddresses,

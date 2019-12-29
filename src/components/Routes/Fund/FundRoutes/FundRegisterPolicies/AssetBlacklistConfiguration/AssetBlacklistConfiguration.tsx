@@ -4,10 +4,8 @@ import * as S from './AssetBlacklistConfiguration.styles';
 import useForm, { FormContext } from 'react-hook-form';
 import { SubmitButton } from '~/components/Common/Form/SubmitButton/SubmitButton';
 import { useEnvironment } from '~/hooks/useEnvironment';
-import { Deployment, AssetBlacklist } from '@melonproject/melonjs';
+import { Deployment, AssetBlacklist, PolicyDefinition, availableTokens } from '@melonproject/melonjs';
 import { AssetBlacklistBytecode } from '@melonproject/melonjs/abis/AssetBlacklist.bin';
-import { PolicyDefinition } from '~/types';
-import { availableTokens } from '~/utils/availableTokens';
 
 interface AssetBlacklistConfigurationForm {
   assetBlacklist: string[];

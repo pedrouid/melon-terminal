@@ -1,13 +1,19 @@
 import React from 'react';
 import { useEnvironment } from '~/hooks/useEnvironment';
-import { findToken } from '~/utils/findToken';
 import { OpenMakeOrder } from '~/queries/FundOpenMakeOrders';
 import BigNumber from 'bignumber.js';
 import { useTransaction } from '~/hooks/useTransaction';
 import useForm, { FormContext } from 'react-hook-form';
-import { Hub, Trading, OasisDexTradingAdapter, ZeroExTradingAdapter, MatchingMarket } from '@melonproject/melonjs';
+import {
+  Hub,
+  Trading,
+  OasisDexTradingAdapter,
+  ZeroExTradingAdapter,
+  MatchingMarket,
+  findExchange,
+  findToken,
+} from '@melonproject/melonjs';
 import { TransactionModal } from '~/components/Common/TransactionModal/TransactionModal';
-import { findExchange } from '~/utils/findExchange';
 import { BodyCell, BodyCellRightAlign, BodyRow } from '~/components/Common/Table/Table.styles';
 
 export interface OpenOrderItemProps {

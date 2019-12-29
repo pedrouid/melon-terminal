@@ -5,9 +5,8 @@ import useForm, { FormContext } from 'react-hook-form';
 import { SubmitButton } from '~/components/Common/Form/SubmitButton/SubmitButton';
 import { InputField } from '~/components/Common/Form/InputField/InputField';
 import { useEnvironment } from '~/hooks/useEnvironment';
-import { MaxPositions, Deployment } from '@melonproject/melonjs';
+import { MaxPositions, Deployment, PolicyDefinition } from '@melonproject/melonjs';
 import { MaxPositionsBytecode } from '@melonproject/melonjs/abis/MaxPositions.bin';
-import { PolicyDefinition } from '~/types';
 
 interface MaxPositionsConfigurationForm {
   maxPositions: number;

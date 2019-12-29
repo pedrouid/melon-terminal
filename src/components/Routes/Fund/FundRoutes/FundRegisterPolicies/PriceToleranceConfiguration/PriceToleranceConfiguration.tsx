@@ -5,9 +5,8 @@ import useForm, { FormContext } from 'react-hook-form';
 import { SubmitButton } from '~/components/Common/Form/SubmitButton/SubmitButton';
 import { InputField } from '~/components/Common/Form/InputField/InputField';
 import { useEnvironment } from '~/hooks/useEnvironment';
-import { PriceTolerance, Deployment } from '@melonproject/melonjs';
+import { PriceTolerance, Deployment, PolicyDefinition } from '@melonproject/melonjs';
 import { PriceToleranceBytecode } from '@melonproject/melonjs/abis/PriceTolerance.bin';
-import { PolicyDefinition } from '~/types';
 
 interface PriceToleranceConfigurationForm {
   priceTolerance: number;

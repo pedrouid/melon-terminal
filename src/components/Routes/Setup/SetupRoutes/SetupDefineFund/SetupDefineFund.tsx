@@ -7,8 +7,7 @@ import { SubmitButton } from '~/components/Common/Form/SubmitButton/SubmitButton
 import { ButtonBlock } from '~/components/Common/Form/ButtonBlock/ButtonBlock';
 import { CancelButton } from '~/components/Common/Form/CancelButton/CancelButton';
 import { useEnvironment } from '~/hooks/useEnvironment';
-import { availableExchanges } from '~/utils/availableExchanges';
-import { availableTokens } from '~/utils/availableTokens';
+import { availableExchanges, availableTokens } from '@melonproject/melonjs';
 
 export interface SetupDefineFundForm {
   name: string;

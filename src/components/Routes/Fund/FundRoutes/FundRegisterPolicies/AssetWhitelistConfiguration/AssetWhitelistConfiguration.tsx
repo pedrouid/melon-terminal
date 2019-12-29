@@ -4,10 +4,8 @@ import * as S from './AssetWhitelistConfiguration.styles';
 import useForm, { FormContext } from 'react-hook-form';
 import { SubmitButton } from '~/components/Common/Form/SubmitButton/SubmitButton';
 import { useEnvironment } from '~/hooks/useEnvironment';
-import { Deployment, AssetWhitelist } from '@melonproject/melonjs';
+import { Deployment, AssetWhitelist, availableTokens, PolicyDefinition } from '@melonproject/melonjs';
 import { AssetWhitelistBytecode } from '@melonproject/melonjs/abis/AssetWhitelist.bin';
-import { PolicyDefinition } from '~/types';
-import { availableTokens } from '~/utils/availableTokens';
 
 interface AssetWhitelistConfigurationForm {
   assetWhitelist: string[];

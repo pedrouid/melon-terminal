@@ -5,7 +5,7 @@ import { SubmitButton } from '~/components/Common/Form/SubmitButton/SubmitButton
 import { useTransaction } from '~/hooks/useTransaction';
 import { TransactionReceipt } from 'web3-core';
 import { useEnvironment } from '~/hooks/useEnvironment';
-import { Version, Transaction } from '@melonproject/melonjs';
+import { Transaction } from '@melonproject/melonjs';
 import { useAccountFundQuery } from '~/queries/AccountFund';
 import { Spinner } from '~/components/Common/Spinner/Spinner';
 import { NoMatch } from '~/components/Routes/NoMatch/NoMatch';

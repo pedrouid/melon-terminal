@@ -1,8 +1,8 @@
 import React from 'react';
 import { AssetWhitelistPolicy } from '~/queries/FundPolicies';
 import { BodyCell } from '~/components/Common/Table/Table.styles';
-import { findToken } from '~/utils/findToken';
 import { Environment } from '~/environment';
+import { findToken } from '@melonproject/melonjs';
 
 interface AssetWhitelistProps {
   policy: AssetWhitelistPolicy;

@@ -1,10 +1,7 @@
 import { fromWei } from 'web3-utils';
-import { Accounting } from '@melonproject/melonjs';
+import { Accounting, TokenDefinition, findToken } from '@melonproject/melonjs';
 import { Resolver } from '~/graphql';
-import { findToken } from '~/utils/findToken';
-import { TokenDefinition } from '~/types';
 import BigNumber from 'bignumber.js';
-import { share } from 'rxjs/operators';
 
 export const address: Resolver<Accounting> = accounting => accounting.contract.address;
 export const sharePrice: Resolver<Accounting> = async (accounting, _, context) => {

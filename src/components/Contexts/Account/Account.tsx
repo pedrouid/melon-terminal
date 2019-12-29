@@ -19,5 +19,6 @@ export const AccountContextProvider: React.FC = props => {
     query.loading,
     environment?.account,
   ]);
+
   return <Account.Provider value={output}>{props.children}</Account.Provider>;
 };

@@ -5,10 +5,9 @@ import useForm, { FormContext } from 'react-hook-form';
 import { SubmitButton } from '~/components/Common/Form/SubmitButton/SubmitButton';
 import { InputField } from '~/components/Common/Form/InputField/InputField';
 import { useEnvironment } from '~/hooks/useEnvironment';
-import { MaxConcentration, Deployment } from '@melonproject/melonjs';
+import { MaxConcentration, Deployment, PolicyDefinition } from '@melonproject/melonjs';
 import { MaxConcentrationBytecode } from '@melonproject/melonjs/abis/MaxConcentration.bin';
 import { BigNumber } from 'bignumber.js';
-import { PolicyDefinition } from '~/types';
 
 interface MaxConcentrationConfigurationForm {
   maxConcentration: number;

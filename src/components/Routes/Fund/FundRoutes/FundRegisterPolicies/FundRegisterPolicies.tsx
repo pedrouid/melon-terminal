@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import * as S from './FundRegisterPolicies.styles';
-import { availablePolicies } from '~/utils/availablePolicies';
 import { useEnvironment } from '~/hooks/useEnvironment';
 import { useFundPoliciesQuery } from '~/queries/FundPolicies';
 import { FundPolicyParameters } from '../FundDetails/FundPolicies/FundPolicies';
@@ -13,6 +12,8 @@ import {
   UserWhitelist,
   AssetWhitelist,
   AssetBlacklist,
+  PolicyDefinition,
+  availablePolicies,
 } from '@melonproject/melonjs';
 import { useTransaction } from '~/hooks/useTransaction';
 import { TransactionModal } from '~/components/Common/TransactionModal/TransactionModal';
@@ -22,7 +23,6 @@ import { MaxConcentrationConfiguration } from './MaxConcentrationConfiguration/M
 import { UserWhitelistConfiguration } from './UserWhitelistConfiguration/UserWhitelistConfiguration';
 import { AssetWhitelistConfiguration } from './AssetWhitelistConfiguration/AssetWhitelistConfiguration';
 import { AssetBlacklistConfiguration } from './AssetBlacklistConfiguration/AssetBlacklistConfiguration';
-import { PolicyDefinition } from '~/types';
 
 export interface RegisterPoliciesProps {
   address: string;
