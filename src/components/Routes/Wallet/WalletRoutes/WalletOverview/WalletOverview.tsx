@@ -6,14 +6,15 @@ import { useEnvironment } from '~/hooks/useEnvironment';
 import { WalletOverviewInvestmentRequest } from './WalletOverviewInvestmentRequest/WalletOverviewInvestmentRequest';
 import { WalletOverviewManagedFund } from './WalletOverviewManagedFund/WalletOverviewManagedFund';
 import { WalletOverviewInvestedFund } from './WalletOverviewInvestedFund/WalletOverviewInvestedFund';
+import { useAccount } from '~/hooks/useAccount';
 
 const fundHeadings = ['Name', 'Inception', 'AUM [ETH]', 'Share price', 'Change', '# shares', 'Version', 'Status'];
 const redeemHeadings = ['Name', 'Inception', 'AUM [ETH]', 'Share price', 'Change', '# shares', 'Version', 'Status'];
 const requestHeadings = ['Fund name', 'Request date', 'Request asset', 'Request amount', 'Requested shares'];
 
 export const WalletOverview: React.FC = () => {
-  const environment = useEnvironment()!;
-  const [invested, requests, managed, query] = useFundParticipationOverviewQuery(environment.account);
+  const account = useAccount();
+  const [invested, requests, managed, query] = useFundParticipationOverviewQuery(account.address);
 
   if (query.loading) {
     return <Spinner positioning="centered" size="large" />;

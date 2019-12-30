@@ -2,6 +2,7 @@ import gql from 'graphql-tag';
 import { useOnChainQuery } from '~/hooks/useQuery';
 import { Maybe } from '~/types';
 import { Address } from '@melonproject/melonjs';
+import { useAccount } from '~/hooks/useAccount';
 
 export interface AccountFund {
   fund: {
@@ -12,13 +13,13 @@ export interface AccountFund {
   };
 }
 
-export interface AccountFundQueryResult {
-  account: AccountFund;
+interface AccountFundQueryVariables {
+  account?: string;
 }
 
 const AccountFundQuery = gql`
-  query AccountFundQuery {
-    account {
+  query AccountFundQuery($address: Address!) {
+    account(address: $address) {
       fund {
         address
         name
@@ -30,6 +31,11 @@ const AccountFundQuery = gql`
 `;
 
 export const useAccountFundQuery = () => {
-  const result = useOnChainQuery<AccountFundQueryResult>(AccountFundQuery);
+  const account = useAccount();
+  const result = useOnChainQuery<AccountFundQueryVariables>(AccountFundQuery, {
+    skip: !account.address,
+    variables: { account: account.address },
+  });
+
   return [result.data && result.data.account, result] as [Maybe<AccountFund>, typeof result];
 };

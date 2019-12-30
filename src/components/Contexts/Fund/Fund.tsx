@@ -8,7 +8,7 @@ export interface FundContextValue extends FundContext {
   exists?: boolean;
 }
 
-export interface FundContextProviderProps {
+export interface FundProviderProps {
   address: string;
 }
 
@@ -16,7 +16,7 @@ export const Fund = createContext<FundContextValue>({
   loading: true,
 });
 
-export const FundContextProvider: React.FC<FundContextProviderProps> = props => {
+export const FundProvider: React.FC<FundProviderProps> = props => {
   const address = isAddress(props.address) ? toChecksumAddress(props.address) : undefined;
   const [fund, query] = useFundContextQuery({
     variables: address ? { address } : {},

@@ -5,10 +5,11 @@ import { onError } from 'apollo-link-error';
 import { createHttpLink } from 'apollo-link-http';
 import { InMemoryCache, NormalizedCacheObject } from 'apollo-cache-inmemory';
 import { ApolloProvider as BaseApolloProvider } from '@apollo/react-hooks';
-import { createSchemaLink, createSchema, createQueryContext } from '~/graphql';
-import { Environment } from '~/environment';
+import { createSchemaLink, createSchema, createQueryContext } from '@melonproject/melongql';
 import { useEnvironment } from '~/hooks/useEnvironment';
 import { config } from '~/config';
+import { DeployedEnvironment } from '@melonproject/melonjs';
+import { NetworkEnum } from '~/types';
 
 const createErrorLink = () => {
   return onError(({ graphQLErrors, networkError }) => {
@@ -44,7 +45,7 @@ const nullClient = new ApolloClient({
 export const OnChainApollo = createContext<ApolloClient<NormalizedCacheObject>>(nullClient);
 export const TheGraphApollo = createContext<ApolloClient<NormalizedCacheObject>>(nullClient);
 
-const useOnChainApollo = (environment?: Environment) => {
+const useOnChainApollo = (environment?: DeployedEnvironment) => {
   const schema = useMemo(() => {
     return environment && createSchema(environment!);
   }, [environment]);
@@ -86,9 +87,11 @@ const useOnChainApollo = (environment?: Environment) => {
   return apollo;
 };
 
-const useTheGraphApollo = (environment?: Environment) => {
+const useTheGraphApollo = (environment?: DeployedEnvironment) => {
   const client = useMemo(() => {
-    const subgraph = environment && config[environment.network] && config[environment.network].subgraph;
+    // TODO: Fix network enum.
+    const network = (environment?.network as any) as undefined | NetworkEnum;
+    const subgraph = network && config[network] && config[network].subgraph;
     const data = subgraph
       ? createHttpLink({
           uri: subgraph,

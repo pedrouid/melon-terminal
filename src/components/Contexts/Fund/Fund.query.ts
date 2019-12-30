@@ -31,12 +31,12 @@ const FundContextQuery = gql`
 export const useFundContextQuery = (options: OnChainQueryHookOptions<FundContextQueryVariables>) => {
   const result = useOnChainQuery<FundContextQueryVariables>(FundContextQuery, options);
   const fund = result.data?.fund;
-  const processed = {
+  const output: FundContext = {
     name: fund?.name,
     manager: fund?.manager,
     progress: fund?.progress,
     isShutDown: fund?.isShutDown,
   };
 
-  return [processed, result] as [FundContext, typeof result];
+  return [output, result] as [typeof output, typeof result];
 };

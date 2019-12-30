@@ -9,6 +9,7 @@ import { TransactionModal } from '~/components/Common/TransactionModal/Transacti
 import { refetchQueries } from '~/utils/refetchQueries';
 import { useOnChainClient } from '~/hooks/useQuery';
 import { Hub, Version } from '@melonproject/melonjs';
+import { useAccount } from '~/hooks/useAccount';
 
 export interface ShutdownProps {
   address: string;
@@ -16,6 +17,7 @@ export interface ShutdownProps {
 
 export const Shutdown: React.FC<ShutdownProps> = ({ address }) => {
   const environment = useEnvironment()!;
+  const account = useAccount();
   const client = useOnChainClient();
   const history = useHistory();
 
@@ -31,7 +33,7 @@ export const Shutdown: React.FC<ShutdownProps> = ({ address }) => {
   const submit = async () => {
     const hub = new Hub(environment, address);
     const version = new Version(environment, await hub.getFundVersion());
-    const tx = version.shutDownFund(environment.account!, address);
+    const tx = version.shutDownFund(account.address!, address);
     transaction.start(tx, 'Shutdown fund');
   };
 

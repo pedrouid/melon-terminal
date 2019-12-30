@@ -5,7 +5,7 @@ import { OperationVariables, QueryResult } from '@apollo/react-common';
 import { DocumentNode } from 'graphql';
 import { NormalizedCacheObject } from 'apollo-cache-inmemory';
 import { TheGraphApollo, OnChainApollo } from '~/components/Contexts/Apollo/Apollo';
-import { Schema } from '~/graphql/types';
+import { Schema } from '@melonproject/melongql';
 
 export type QueryHookOptions<TData = any, TVariables = OperationVariables> = BaseQueryHookOptions<TData, TVariables>;
 export type OnChainQueryHookOptions<TVariables = OperationVariables> = QueryHookOptions<Schema, TVariables>;

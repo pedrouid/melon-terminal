@@ -1,10 +1,9 @@
 import React from 'react';
-import { useEnvironment } from '~/hooks/useEnvironment';
-import * as S from './RequiresNoFund.styles';
 import { useAccountFundQuery } from '~/queries/AccountFund';
+import * as S from './RequiresNoFund.styles';
 
 export const RequiresNoFund: React.FC = props => {
-  const [account, accountQuery] = useAccountFundQuery();
+  const [account] = useAccountFundQuery();
 
   if (account && account.fund && account.fund.progress === 'COMPLETE') {
     return (

@@ -18,12 +18,12 @@ export const FundNavigation: React.FC<FundNavigationProps> = ({ address }) => {
           Invest &amp; Redeem
         </S.FundNavigationLink>
       </S.FundNavigationAll>
-      <RequiresFundManager address={address} fallback={null}>
+      <RequiresFundManager fallback={null}>
         <S.FundNavigationManager>
           <S.FundNavigationLink to={`/fund/${address}/claimfees`} exact={true} activeClassName="active">
             Claim Fees
           </S.FundNavigationLink>
-          <RequiresFundNotShutDown address={address}>
+          <RequiresFundNotShutDown>
             <S.FundNavigationLink to={`/fund/${address}/policies`} exact={true} activeClassName="active">
               Add policies
             </S.FundNavigationLink>

@@ -6,6 +6,7 @@ import { SubmitButton } from '~/components/Common/Form/SubmitButton/SubmitButton
 import { useEnvironment } from '~/hooks/useEnvironment';
 import { Deployment, AssetBlacklist, PolicyDefinition, availableTokens } from '@melonproject/melonjs';
 import { AssetBlacklistBytecode } from '@melonproject/melonjs/abis/AssetBlacklist.bin';
+import { useAccount } from '~/hooks/useAccount';
 
 interface AssetBlacklistConfigurationForm {
   assetBlacklist: string[];
@@ -19,6 +20,7 @@ export interface AssetBlacklistConfigurationProps {
 
 export const AssetBlacklistConfiguration: React.FC<AssetBlacklistConfigurationProps> = props => {
   const environment = useEnvironment()!;
+  const account = useAccount();
   const tokens = availableTokens(environment.deployment);
 
   const validationSchema = Yup.object().shape({
@@ -34,7 +36,7 @@ export const AssetBlacklistConfiguration: React.FC<AssetBlacklistConfigurationPr
   });
 
   const submit = form.handleSubmit(async data => {
-    const tx = AssetBlacklist.deploy(environment, AssetBlacklistBytecode, environment!.account!, data.assetBlacklist);
+    const tx = AssetBlacklist.deploy(environment, AssetBlacklistBytecode, account.address!, data.assetBlacklist);
     props.startTransaction(tx, 'Deploy AssetBlacklist Contract');
   });
 

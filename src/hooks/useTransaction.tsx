@@ -2,10 +2,9 @@ import React, { useEffect, useReducer } from 'react';
 import * as Yup from 'yup';
 import useForm from 'react-hook-form';
 import { TransactionReceipt } from 'web3-core';
-import { Transaction, SendOptions, Deployment, Contract } from '@melonproject/melonjs';
+import { Transaction, SendOptions, Deployment, Contract, DeployedEnvironment } from '@melonproject/melonjs';
 import { FormContextValues } from 'react-hook-form/dist/contextTypes';
 import { FieldValues } from 'react-hook-form/dist/types';
-import { Environment } from '~/environment';
 import { NetworkEnum } from '~/types';
 
 export interface TransactionFormValues extends FieldValues {
@@ -319,8 +318,10 @@ export interface TransactionHookValues<FormValues extends TransactionFormValues 
   acknowledge: () => void;
 }
 
-async function fetchEthGasStation(environment: Environment) {
-  if (environment.network !== NetworkEnum.MAINNET) {
+async function fetchEthGasStation(environment: DeployedEnvironment) {
+  // TODO: Fix network enum.
+  const network = (environment.network as any) as NetworkEnum;
+  if (network !== NetworkEnum.MAINNET) {
     return undefined;
   }
 
@@ -338,7 +339,7 @@ async function fetchEthGasStation(environment: Environment) {
   }
 }
 
-export function useTransaction(environment: Environment, options?: TransactionOptions) {
+export function useTransaction(environment: DeployedEnvironment, options?: TransactionOptions) {
   const [state, dispatch] = useReducer(reducer, {
     progress: TransactionProgress.TRANSACTION_WAITING,
     transaction: undefined,

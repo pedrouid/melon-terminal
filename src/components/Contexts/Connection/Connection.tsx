@@ -1,8 +1,8 @@
 import * as Rx from 'rxjs';
 import React, { createContext, useReducer, useEffect, useMemo } from 'react';
-import { Environment, createEnvironment } from '~/environment';
+import { createEnvironment } from '~/environment';
 import { config } from '~/config';
-import { Address, DeploymentOutput } from '@melonproject/melonjs';
+import { Address, DeploymentOutput, DeployedEnvironment } from '@melonproject/melonjs';
 import { NetworkEnum } from '~/types';
 import { Eth } from 'web3-eth';
 
@@ -162,7 +162,8 @@ export function reducer(state: ConnectionState, action: ConnectionAction): Conne
 }
 
 export interface ConnectionContext {
-  environment?: Environment;
+  environment?: DeployedEnvironment;
+  account?: string;
   method?: string;
   status: ConnectionStatus;
   methods: ConnectionMethod[];
@@ -237,16 +238,20 @@ export const ConnectionProvider: React.FC<ConnectionProviderProps> = props => {
   // Create the environment once the required values are available.
   const environment = useMemo(() => {
     if (state.eth && state.network && state.deployment) {
-      const account = state.accounts && state.accounts[0];
-      return createEnvironment(state.eth, state.deployment, state.network, account);
+      return createEnvironment(state.eth, state.deployment, state.network);
     }
 
     return undefined;
-  }, [state.eth, state.network, state.accounts, state.deployment]);
+  }, [state.eth, state.network, state.deployment]);
+
+  const account = useMemo(() => {
+    return state.accounts && state.accounts[0];
+  }, [state.accounts]);
 
   const context: ConnectionContext = {
     environment,
     status,
+    account,
     method: state.method,
     methods: props.methods,
     switch: (method: string) => dispatch(methodChanged(method)),

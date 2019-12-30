@@ -1,6 +1,7 @@
 import gql from 'graphql-tag';
 import BigNumber from 'bignumber.js';
 import { useOnChainQuery } from '~/hooks/useQuery';
+import { useAccount } from '~/hooks/useAccount';
 
 export interface FundDetails {
   name: string;
@@ -39,17 +40,18 @@ export interface AccountDetails {
 }
 
 export interface FundDetailsQueryVariables {
-  address: string;
+  fund: string;
+  account?: string;
 }
 
 const FundDetailsQuery = gql`
-  query FundDetailsQuery($address: String!) {
-    account {
-      shares(address: $address) {
+  query FundDetailsQuery($account: Address!, $fund: Address!) {
+    account(address: $account) {
+      shares(address: $fund) {
         balanceOf
       }
     }
-    fund(address: $address) {
+    fund(address: $fund) {
       name
       manager
       creationTime
@@ -79,9 +81,11 @@ const FundDetailsQuery = gql`
   }
 `;
 
-export const useFundDetailsQuery = (address: string) => {
+export const useFundDetailsQuery = (fund: string) => {
+  const account = useAccount();
   const options = {
-    variables: { address },
+    skip: !account.address,
+    variables: { fund, account: account.address },
   };
 
   const result = useOnChainQuery<FundDetailsQueryVariables>(FundDetailsQuery, options);

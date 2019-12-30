@@ -7,6 +7,7 @@ import { InputField } from '~/components/Common/Form/InputField/InputField';
 import { useEnvironment } from '~/hooks/useEnvironment';
 import { PriceTolerance, Deployment, PolicyDefinition } from '@melonproject/melonjs';
 import { PriceToleranceBytecode } from '@melonproject/melonjs/abis/PriceTolerance.bin';
+import { useAccount } from '~/hooks/useAccount';
 
 interface PriceToleranceConfigurationForm {
   priceTolerance: number;
@@ -20,6 +21,7 @@ export interface PriceToleranceConfigurationProps {
 
 export const PriceToleranceConfiguration: React.FC<PriceToleranceConfigurationProps> = props => {
   const environment = useEnvironment()!;
+  const account = useAccount();
 
   const validationSchema = Yup.object().shape({
     priceTolerance: Yup.number()
@@ -35,7 +37,7 @@ export const PriceToleranceConfiguration: React.FC<PriceToleranceConfigurationPr
   });
 
   const submit = form.handleSubmit(async data => {
-    const tx = PriceTolerance.deploy(environment, PriceToleranceBytecode, environment!.account!, data.priceTolerance!);
+    const tx = PriceTolerance.deploy(environment, PriceToleranceBytecode, account.address!, data.priceTolerance!);
     props.startTransaction(tx, 'Deploy PriceTolerance Contract');
   });
 

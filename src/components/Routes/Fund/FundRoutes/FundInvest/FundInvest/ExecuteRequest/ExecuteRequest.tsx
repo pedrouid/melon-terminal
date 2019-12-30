@@ -5,8 +5,9 @@ import { useTransaction } from '~/hooks/useTransaction';
 import { Participation } from '@melonproject/melonjs';
 import { TransactionModal } from '~/components/Common/TransactionModal/TransactionModal';
 import { SubmitButton } from '~/components/Common/Form/SubmitButton/SubmitButton';
-import { Account } from '~/graphql/types';
+import { Account } from '@melonproject/melongql';
 import { useOnChainQueryRefetcher } from '~/hooks/useOnChainQueryRefetcher';
+import { useAccount } from '~/hooks/useAccount';
 import * as S from './ExecuteRequest.styles';
 
 export interface ExecuteRequestProps {
@@ -16,6 +17,7 @@ export interface ExecuteRequestProps {
 
 export const ExecuteRequest: React.FC<ExecuteRequestProps> = props => {
   const environment = useEnvironment()!;
+  const account = useAccount();
   const refetch = useOnChainQueryRefetcher();
   const transaction = useTransaction(environment, {
     onAcknowledge: () => refetch(),
@@ -28,7 +30,7 @@ export const ExecuteRequest: React.FC<ExecuteRequestProps> = props => {
 
   const submit = form.handleSubmit(() => {
     const contract = new Participation(environment, props.account.participation!.address!);
-    const tx = contract.executeRequestFor(environment.account!, environment.account!);
+    const tx = contract.executeRequestFor(account.address!, account.address!);
     transaction.start(tx, 'Execute investment request');
   });
 

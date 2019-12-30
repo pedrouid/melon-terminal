@@ -8,6 +8,7 @@ import { useEnvironment } from '~/hooks/useEnvironment';
 import { MaxConcentration, Deployment, PolicyDefinition } from '@melonproject/melonjs';
 import { MaxConcentrationBytecode } from '@melonproject/melonjs/abis/MaxConcentration.bin';
 import { BigNumber } from 'bignumber.js';
+import { useAccount } from '~/hooks/useAccount';
 
 interface MaxConcentrationConfigurationForm {
   maxConcentration: number;
@@ -21,6 +22,7 @@ export interface MaxConcentrationConfigurationProps {
 
 export const MaxConcentrationConfiguration: React.FC<MaxConcentrationConfigurationProps> = props => {
   const environment = useEnvironment()!;
+  const account = useAccount();
 
   const validationSchema = Yup.object().shape({
     maxConcentration: Yup.number()
@@ -39,7 +41,7 @@ export const MaxConcentrationConfiguration: React.FC<MaxConcentrationConfigurati
     const tx = MaxConcentration.deploy(
       environment,
       MaxConcentrationBytecode,
-      environment!.account!,
+      account.address!,
       new BigNumber(data.maxConcentration!).times(new BigNumber('1e16'))
     );
     props.startTransaction(tx, 'Deploy MaxConcentration Contract');

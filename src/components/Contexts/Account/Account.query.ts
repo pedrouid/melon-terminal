@@ -8,9 +8,13 @@ export interface AccountContext {
   weth?: BigNumber;
 }
 
+export interface AccountContextQueryVariables {
+  address?: string;
+}
+
 const AccountContextQuery = gql`
-  query AccountContextQuery {
-    account {
+  query AccountContextQuery($address: Address!) {
+    account(address: $address) {
       eth: balance(token: ETH)
       weth: balance(token: WETH)
       fund {
@@ -20,8 +24,12 @@ const AccountContextQuery = gql`
   }
 `;
 
-export const useAccountContextQuery = () => {
-  const result = useOnChainQuery(AccountContextQuery);
+export const useAccountContextQuery = (address?: string) => {
+  const result = useOnChainQuery<AccountContextQueryVariables>(AccountContextQuery, {
+    skip: !address,
+    variables: { address },
+  });
+
   const account = result.data?.account;
   const output: AccountContext = {
     fund: account?.fund?.address,
@@ -29,5 +37,5 @@ export const useAccountContextQuery = () => {
     weth: (account as any)?.weth as BigNumber,
   };
 
-  return [output, result] as [AccountContext, typeof result];
+  return [output, result] as [typeof output, typeof result];
 };

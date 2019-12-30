@@ -15,6 +15,7 @@ import {
 } from '@melonproject/melonjs';
 import { TransactionModal } from '~/components/Common/TransactionModal/TransactionModal';
 import { BodyCell, BodyCellRightAlign, BodyRow } from '~/components/Common/Table/Table.styles';
+import { useAccount } from '~/hooks/useAccount';
 
 export interface OpenOrderItemProps {
   address: string;
@@ -23,6 +24,7 @@ export interface OpenOrderItemProps {
 
 export const OpenOrderItem: React.FC<OpenOrderItemProps> = ({ address, order }) => {
   const environment = useEnvironment()!;
+  const account = useAccount();
 
   const makerSymbol = findToken(environment.deployment, order.makerAsset)!;
   const takerSymbol = findToken(environment.deployment, order.takerAsset)!;
@@ -60,10 +62,10 @@ export const OpenOrderItem: React.FC<OpenOrderItemProps> = ({ address, order }) 
           takerAsset: order.takerAsset,
         };
 
-        const tx = oasisDex.cancelOrder(environment.account!, args);
+        const tx = oasisDex.cancelOrder(account.address!, args);
         transaction.start(tx, 'Cancel order on OasisDex');
       } else {
-        const tx = trading.sendUpdateAndGetQuantityBeingTraded(environment.account!, order.makerAsset);
+        const tx = trading.sendUpdateAndGetQuantityBeingTraded(account.address!, order.makerAsset);
         transaction.start(tx, 'Update and get quantity being traded');
       }
     } else {
@@ -72,7 +74,7 @@ export const OpenOrderItem: React.FC<OpenOrderItemProps> = ({ address, order }) 
       const args = {
         orderId: order.id,
       };
-      const tx = await zeroEx.cancelOrder(environment.account!, args);
+      const tx = await zeroEx.cancelOrder(account.address!, args);
       transaction.start(tx, 'Cancel order on 0x');
     }
   });

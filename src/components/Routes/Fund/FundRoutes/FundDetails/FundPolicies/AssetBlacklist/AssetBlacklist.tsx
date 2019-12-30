@@ -1,12 +1,11 @@
 import React from 'react';
 import { AssetBlacklistPolicy } from '~/queries/FundPolicies';
 import { BodyCell } from '~/components/Common/Table/Table.styles';
-import { Environment } from '~/environment';
-import { findToken } from '@melonproject/melonjs';
+import { findToken, DeployedEnvironment } from '@melonproject/melonjs';
 
 interface AssetBlacklistProps {
   policy: AssetBlacklistPolicy;
-  environment: Environment;
+  environment: DeployedEnvironment;
 }
 
 export const AssetBlacklist: React.FC<AssetBlacklistProps> = ({ policy, environment }) => {

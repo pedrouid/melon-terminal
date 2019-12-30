@@ -1,12 +1,11 @@
 import React from 'react';
 import { AssetWhitelistPolicy } from '~/queries/FundPolicies';
 import { BodyCell } from '~/components/Common/Table/Table.styles';
-import { Environment } from '~/environment';
-import { findToken } from '@melonproject/melonjs';
+import { findToken, DeployedEnvironment } from '@melonproject/melonjs';
 
 interface AssetWhitelistProps {
   policy: AssetWhitelistPolicy;
-  environment: Environment;
+  environment: DeployedEnvironment;
 }
 
 export const AssetWhitelist: React.FC<AssetWhitelistProps> = ({ policy, environment }) => {

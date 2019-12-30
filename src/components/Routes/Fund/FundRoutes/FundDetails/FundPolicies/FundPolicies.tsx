@@ -11,7 +11,6 @@ import {
   AssetBlacklistPolicy,
 } from '~/queries/FundPolicies';
 import { useEnvironment } from '~/hooks/useEnvironment';
-import { Environment } from '~/environment';
 import { Table, HeaderCell, HeaderRow, BodyCell, BodyRow, NoEntries } from '~/components/Common/Table/Table.styles';
 import { MaxConcentration } from './MaxConcentration/MaxConcentration';
 import { CustomPolicy } from './CustomPolicy/CustomPolicy';
@@ -20,10 +19,11 @@ import { PriceTolerance } from './PriceTolerance/PriceTolerance';
 import { AssetWhitelist } from './AssetWhitelist/AssetWhitelist';
 import { AssetBlacklist } from './AssetBlacklist/AssetBlacklist';
 import { UserWhitelist } from './UserWhitelist/UserWhitelist';
+import { DeployedEnvironment } from '@melonproject/melonjs';
 
 export interface FundPolicyParametersProps {
   policy: FundPolicy;
-  environment: Environment;
+  environment: DeployedEnvironment;
 }
 
 export const FundPolicyParameters: React.FC<FundPolicyParametersProps> = props => {

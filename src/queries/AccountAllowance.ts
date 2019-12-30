@@ -8,21 +8,22 @@ export interface AccountAllowance {
 }
 
 const AccountAllowanceQuery = gql`
-  query AccountBalancesQuery($token: String, $spender: String) {
-    account {
+  query AccountBalancesQuery($account: Address!, $spender: Address!, $token: String!) {
+    account(address: $address) {
       balance(token: $token)
       allowance(token: $token, spender: $spender)
     }
   }
 `;
 
-export const useAccountAllowanceQuery = (token?: string, spender?: string) => {
+export const useAccountAllowanceQuery = (account?: string, token?: string, spender?: string) => {
   const result = useOnChainQuery(AccountAllowanceQuery, {
     variables: {
       token,
       spender,
+      account,
     },
-    skip: !(token && spender),
+    skip: !(token && spender && account),
   });
 
   return [result.data && result.data.account, result] as [AccountAllowance, typeof result];

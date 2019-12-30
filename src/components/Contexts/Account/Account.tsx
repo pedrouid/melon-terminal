@@ -1,6 +1,7 @@
 import React, { createContext, useMemo } from 'react';
 import { useEnvironment } from '~/hooks/useEnvironment';
 import { useAccountContextQuery, AccountContext } from './Account.query';
+import { useConnectionState } from '~/hooks/useConnectionState';
 
 export interface AccountContextValue extends AccountContext {
   loading: boolean;
@@ -11,13 +12,13 @@ export const Account = createContext<AccountContextValue>({
   loading: true,
 });
 
-export const AccountContextProvider: React.FC = props => {
-  const environment = useEnvironment();
-  const [account, query] = useAccountContextQuery();
-  const output = useMemo(() => ({ ...account, address: environment?.account, loading: query.loading }), [
+export const AccountProvider: React.FC = props => {
+  const connection = useConnectionState();
+  const [account, query] = useAccountContextQuery(connection.account);
+  const output = useMemo(() => ({ ...account, address: connection.account, loading: query.loading }), [
     account,
     query.loading,
-    environment?.account,
+    connection.account,
   ]);
 
   return <Account.Provider value={output}>{props.children}</Account.Provider>;

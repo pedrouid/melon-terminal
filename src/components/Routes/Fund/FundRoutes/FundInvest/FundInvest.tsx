@@ -13,7 +13,7 @@ export interface FundInvestProps {
 export const FundInvest: React.FC<FundInvestProps> = ({ address }) => {
   return (
     <S.Wrapper>
-      <RequiresFundNotShutDown address={address}>
+      <RequiresFundNotShutDown>
         <Invest address={address} />
       </RequiresFundNotShutDown>
       <Redeem address={address} />

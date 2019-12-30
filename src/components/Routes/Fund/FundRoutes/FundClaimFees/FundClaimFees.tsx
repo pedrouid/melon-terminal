@@ -9,6 +9,7 @@ import { SubmitButton } from '~/components/Common/Form/SubmitButton/SubmitButton
 import { TransactionModal } from '~/components/Common/TransactionModal/TransactionModal';
 import { useFundDetailsQuery } from '~/queries/FundDetails';
 import { Spinner } from '~/components/Common/Spinner/Spinner';
+import { useAccount } from '~/hooks/useAccount';
 
 export interface ClaimFeesProps {
   address: string;
@@ -16,6 +17,7 @@ export interface ClaimFeesProps {
 
 export const ClaimFees: React.FC<ClaimFeesProps> = ({ address }) => {
   const environment = useEnvironment()!;
+  const account = useAccount();
   const [details, _, query] = useFundDetailsQuery(address);
 
   const history = useHistory();
@@ -37,14 +39,14 @@ export const ClaimFees: React.FC<ClaimFeesProps> = ({ address }) => {
   const submitAllFees = (event: FormEvent) => {
     event.preventDefault();
 
-    const tx = accounting.triggerRewardAllFees(environment.account!);
+    const tx = accounting.triggerRewardAllFees(account.address!);
     transaction.start(tx, 'Claim all fees');
   };
 
   const submitManagementFees = (event: FormEvent) => {
     event.preventDefault();
 
-    const tx = feeManager.rewardManagementFee(environment.account!);
+    const tx = feeManager.rewardManagementFee(account.address!);
     transaction.start(tx, 'Claim management fee');
   };
 

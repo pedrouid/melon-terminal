@@ -23,6 +23,7 @@ import { MaxConcentrationConfiguration } from './MaxConcentrationConfiguration/M
 import { UserWhitelistConfiguration } from './UserWhitelistConfiguration/UserWhitelistConfiguration';
 import { AssetWhitelistConfiguration } from './AssetWhitelistConfiguration/AssetWhitelistConfiguration';
 import { AssetBlacklistConfiguration } from './AssetBlacklistConfiguration/AssetBlacklistConfiguration';
+import { useAccount } from '~/hooks/useAccount';
 
 export interface RegisterPoliciesProps {
   address: string;
@@ -30,6 +31,7 @@ export interface RegisterPoliciesProps {
 
 export const RegisterPolicies: React.FC<RegisterPoliciesProps> = ({ address }) => {
   const environment = useEnvironment()!;
+  const account = useAccount()!;
   const [selectedPolicy, setSelectedPolicy] = useState<PolicyDefinition>();
   const [policyManager, query] = useFundPoliciesQuery(address);
 
@@ -43,7 +45,7 @@ export const RegisterPolicies: React.FC<RegisterPoliciesProps> = ({ address }) =
           () => receipt.contractAddress!
         );
 
-        const tx = manager.batchRegisterPolicies(environment.account!, signatures, addresses);
+        const tx = manager.batchRegisterPolicies(account.address!, signatures, addresses);
         transaction.start(tx, `Register ${selectedPolicy.name} policy`);
       }
     },

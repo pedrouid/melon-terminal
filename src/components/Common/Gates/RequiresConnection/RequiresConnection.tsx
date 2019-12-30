@@ -1,9 +1,16 @@
 import React from 'react';
 import { useEnvironment } from '~/hooks/useEnvironment';
+import { ConnectionSelector } from '~/components/Common/ConnectionSelector/ConnectionSelector';
 import * as S from './RequiresConnection.styles';
-import { ConnectionSelector } from '../../ConnectionSelector/ConnectionSelector';
 
-export const RequiresConnection: React.FC = props => {
+// TODO: Finish this.
+
+export interface RequiresConnectionProps {
+  // loader?: React.ReactElement;
+  // fallback?: React.ReactNode;
+}
+
+export const RequiresConnection: React.FC<RequiresConnectionProps> = props => {
   const environment = useEnvironment();
   if (environment) {
     return <>{props.children}</>;

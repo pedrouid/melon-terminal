@@ -1,12 +1,14 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useLocation } from 'react-router';
-import { useConnectionDetails } from '~/queries/ConnectionDetails';
+import { useAccount } from '~/hooks/useAccount';
+import { useEnvironment } from '~/hooks/useEnvironment';
 import * as S from './Header.styles';
 
 export const Header: React.FC = () => {
+  const environment = useEnvironment();
   const location = useLocation();
-  const [connection] = useConnectionDetails();
+  const account = useAccount();
 
   return (
     <S.HeaderPosition>
@@ -17,23 +19,27 @@ export const Header: React.FC = () => {
           </Link>
         </S.LogoContainer>
         <S.Account>
-          <S.AccountName />
           <S.AccountInfo>
-            {connection && connection.account && (
+            {account.fund && (
+              <S.AccountFund>
+                <Link to={`/fund/${account.fund}`} title={account.fund}>
+                  Your fund
+                </Link>
+              </S.AccountFund>
+            )}
+            {account.address && (
               <S.AccountAddress>
-                <Link to="/wallet" title={connection.account.address}>
+                <Link to="/wallet" title={account.address}>
                   Your wallet
                 </Link>
               </S.AccountAddress>
             )}
             <S.AccountNetwork>
               <Link to={{ pathname: '/connect', state: { redirect: location } }} title="Change connection method">
-                {connection ? connection.network : 'OFFLINE'}
+                {environment ? environment.network : 'OFFLINE'}
               </Link>
             </S.AccountNetwork>
-            {connection && connection.account && (
-              <S.AccountBalance>{connection.account.balanceEth.toFixed(4)} ETH</S.AccountBalance>
-            )}
+            {account.eth && <S.AccountBalance>{account.eth?.toFixed(4)} ETH</S.AccountBalance>}
           </S.AccountInfo>
         </S.Account>
       </S.Header>

@@ -6,6 +6,7 @@ import { SubmitButton } from '~/components/Common/Form/SubmitButton/SubmitButton
 import { useEnvironment } from '~/hooks/useEnvironment';
 import { Deployment, AssetWhitelist, availableTokens, PolicyDefinition } from '@melonproject/melonjs';
 import { AssetWhitelistBytecode } from '@melonproject/melonjs/abis/AssetWhitelist.bin';
+import { useAccount } from '~/hooks/useAccount';
 
 interface AssetWhitelistConfigurationForm {
   assetWhitelist: string[];
@@ -19,6 +20,7 @@ export interface AssetWhitelistConfigurationProps {
 
 export const AssetWhitelistConfiguration: React.FC<AssetWhitelistConfigurationProps> = props => {
   const environment = useEnvironment()!;
+  const account = useAccount();
   const tokens = availableTokens(environment.deployment);
 
   const validationSchema = Yup.object().shape({
@@ -34,7 +36,7 @@ export const AssetWhitelistConfiguration: React.FC<AssetWhitelistConfigurationPr
   });
 
   const submit = form.handleSubmit(async data => {
-    const tx = AssetWhitelist.deploy(environment, AssetWhitelistBytecode, environment!.account!, data.assetWhitelist);
+    const tx = AssetWhitelist.deploy(environment, AssetWhitelistBytecode, account.address!, data.assetWhitelist);
     props.startTransaction(tx, 'Deploy AssetWhitelist Contract');
   });
 

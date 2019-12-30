@@ -1,20 +1,18 @@
 import React from 'react';
-import * as S from './WalletHeader.styles';
 import { useEtherscanLink } from '~/hooks/useEtherscanLink';
+import { useAccount } from '~/hooks/useAccount';
+import * as S from './WalletHeader.styles';
 
-export interface WalletHeaderProps {
-  address: string;
-}
-
-export const WalletHeader: React.FC<WalletHeaderProps> = ({ address }) => {
-  const etherscanLink = useEtherscanLink({ address });
+export const WalletHeader: React.FC = () => {
+  const account = useAccount();
+  const etherscanLink = useEtherscanLink({ address: account.address });
 
   return (
     <S.WalletHeader>
       <S.WalletHeaderHeadline>
         <S.WalletHeaderTitle>Your wallet</S.WalletHeaderTitle>
         <S.WalletHeaderLinks>
-          <a href={etherscanLink!}>{address}</a>
+          <a href={etherscanLink!}>{account.address!}</a>
         </S.WalletHeaderLinks>
       </S.WalletHeaderHeadline>
     </S.WalletHeader>

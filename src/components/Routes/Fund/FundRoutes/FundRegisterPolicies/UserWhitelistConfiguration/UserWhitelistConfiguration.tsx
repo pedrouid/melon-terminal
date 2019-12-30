@@ -7,6 +7,7 @@ import { useEnvironment } from '~/hooks/useEnvironment';
 import { Deployment, UserWhitelist, PolicyDefinition } from '@melonproject/melonjs';
 import { UserWhitelistBytecode } from '@melonproject/melonjs/abis/UserWhitelist.bin';
 import { TextareaField } from '~/components/Common/Form/TextareaField/TextareaField';
+import { useAccount } from '~/hooks/useAccount';
 
 interface UserWhitelistConfigurationForm {
   userWhitelist: string;
@@ -20,6 +21,7 @@ export interface UserWhitelistConfigurationProps {
 
 export const UserWhitelistConfiguration: React.FC<UserWhitelistConfigurationProps> = props => {
   const environment = useEnvironment()!;
+  const account = useAccount();
 
   const validationSchema = Yup.object().shape({
     userWhitelist: Yup.string(),
@@ -33,7 +35,7 @@ export const UserWhitelistConfiguration: React.FC<UserWhitelistConfigurationProp
 
   const submit = form.handleSubmit(async data => {
     const whitelistedUsers = data.userWhitelist!.replace(/^\s+|\s+$/g, '').split('\n');
-    const tx = UserWhitelist.deploy(environment, UserWhitelistBytecode, environment!.account!, whitelistedUsers);
+    const tx = UserWhitelist.deploy(environment, UserWhitelistBytecode, account.address!, whitelistedUsers);
     props.startTransaction(tx, 'Deploy UserWhitelist Contract');
   });
 

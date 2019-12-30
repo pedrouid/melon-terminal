@@ -1,7 +1,6 @@
-import { KyberPriceFeed, Version } from '@melonproject/melonjs';
-import { Environment } from '~/environment';
+import { KyberPriceFeed, Version, DeployedEnvironment } from '@melonproject/melonjs';
 
-export function priceFeedContract(environment: Environment) {
+export function priceFeedContract(environment: DeployedEnvironment) {
   const addresses = environment.deployment.melon.addr;
   if (addresses.TestingPriceFeed) {
     return new KyberPriceFeed(environment, addresses.TestingPriceFeed);
@@ -14,6 +13,6 @@ export function priceFeedContract(environment: Environment) {
   throw new Error('Missing price feed address');
 }
 
-export function versionContract(environment: Environment) {
+export function versionContract(environment: DeployedEnvironment) {
   return new Version(environment, environment.deployment.melon.addr.Version);
 }

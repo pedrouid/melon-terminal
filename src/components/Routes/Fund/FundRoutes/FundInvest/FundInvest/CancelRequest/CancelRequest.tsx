@@ -6,8 +6,9 @@ import useForm, { FormContext } from 'react-hook-form';
 import { Participation } from '@melonproject/melonjs';
 import { TransactionModal } from '~/components/Common/TransactionModal/TransactionModal';
 import { SubmitButton } from '~/components/Common/Form/SubmitButton/SubmitButton';
-import { Account } from '~/graphql/types';
+import { Account } from '@melonproject/melongql';
 import { useOnChainQueryRefetcher } from '~/hooks/useOnChainQueryRefetcher';
+import { useAccount } from '~/hooks/useAccount';
 
 export interface CancelRequestProps {
   address: string;
@@ -16,6 +17,7 @@ export interface CancelRequestProps {
 
 export const CancelRequest: React.FC<CancelRequestProps> = props => {
   const environment = useEnvironment()!;
+  const account = useAccount();
   const refetch = useOnChainQueryRefetcher();
 
   const transaction = useTransaction(environment, {
@@ -31,7 +33,7 @@ export const CancelRequest: React.FC<CancelRequestProps> = props => {
   });
 
   const submit = form.handleSubmit(() => {
-    const tx = participationContract.cancelRequest(environment.account!);
+    const tx = participationContract.cancelRequest(account.address!);
     transaction.start(tx, 'Cancel investment request');
   });
 

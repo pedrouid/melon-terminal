@@ -10,6 +10,7 @@ import { refetchQueries } from '~/utils/refetchQueries';
 import { WrapEtherForm } from '~/components/Common/Form/WrapEtherForm';
 import { useEnvironment } from '~/hooks/useEnvironment';
 import { useOnChainClient } from '~/hooks/useQuery';
+import { useAccount } from '~/hooks/useAccount';
 
 const validationSchema = Yup.object().shape({
   quantity: Yup.mixed<number>(),
@@ -21,6 +22,7 @@ const defaultValues = {
 
 export const WalletUnwrapEther: React.FC = () => {
   const environment = useEnvironment()!;
+  const account = useAccount();
   const client = useOnChainClient();
   const transaction = useTransaction(environment!, {
     onFinish: () => refetchQueries(client, ['AccountBalancesQuery', 'ConnectionQuery']),
@@ -36,7 +38,7 @@ export const WalletUnwrapEther: React.FC = () => {
   const submit = form.handleSubmit(async data => {
     const token = findToken(environment.deployment, 'WETH')!;
     const weth = new Weth(environment, token.address);
-    const tx = weth.withdraw(new BigNumber(toWei(data.quantity)), environment.account!);
+    const tx = weth.withdraw(new BigNumber(toWei(data.quantity)), account.address!);
     transaction.start(tx, 'Unwrap Ether');
   });
 

@@ -9,10 +9,11 @@ import { TransactionModal } from '~/components/Common/TransactionModal/Transacti
 import { InputField } from '~/components/Common/Form/InputField/InputField';
 import { SubmitButton } from '~/components/Common/Form/SubmitButton/SubmitButton';
 import { useAccountAllowanceQuery } from '~/queries/AccountAllowance';
-import { Holding, Account } from '~/graphql/types';
+import { Holding, Account } from '@melonproject/melongql';
 import { useOnChainQueryRefetcher } from '~/hooks/useOnChainQueryRefetcher';
 import * as S from './RequestInvestment.styles';
 import { sameAddress } from '@melonproject/melonjs/utils/sameAddress';
+import { useAccount } from '~/hooks/useAccount';
 
 export interface RequestInvestmentProps {
   address: string;
@@ -38,13 +39,13 @@ const defaultValues = {
 
 export const RequestInvestment: React.FC<RequestInvestmentProps> = props => {
   const environment = useEnvironment()!;
+  const account = useAccount();
   const refetch = useOnChainQueryRefetcher();
   const [selectedTokenIndex, setSelectedTokenIndex] = useState(0);
 
-  const account = props.account;
-  const participation = account?.participation?.address;
+  const participation = props.account?.participation?.address;
   const holding = props.holdings && props.holdings[selectedTokenIndex];
-  const [allowance] = useAccountAllowanceQuery(holding?.token?.address, participation);
+  const [allowance] = useAccountAllowanceQuery(account.address, holding?.token?.address, participation);
 
   const transaction = useTransaction(environment, {
     onAcknowledge: () => refetch(),
@@ -87,7 +88,7 @@ export const RequestInvestment: React.FC<RequestInvestmentProps> = props => {
     switch (action) {
       case 'approve': {
         const tx = investmentToken.approve(
-          environment.account!,
+          account.address!,
           participation!,
           new BigNumber(data.investmentAmount).times(new BigNumber(10).exponentiatedBy(holding!.token!.decimals!))
         );
@@ -98,7 +99,7 @@ export const RequestInvestment: React.FC<RequestInvestmentProps> = props => {
       case 'invest': {
         const contract = new Participation(environment, participation);
         const tx = contract.requestInvestment(
-          environment.account!,
+          account.address!,
           new BigNumber(data.requestedShares).times(new BigNumber(10).exponentiatedBy(18)),
           new BigNumber(data.investmentAmount).times(new BigNumber(10).exponentiatedBy(holding!.token!.decimals!)),
           data.investmentAsset

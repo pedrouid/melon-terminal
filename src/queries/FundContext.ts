@@ -1,6 +1,7 @@
 import gql from 'graphql-tag';
 import BigNumber from 'bignumber.js';
 import { useOnChainQuery } from '~/hooks/useQuery';
+import { useAccount } from '~/hooks/useAccount';
 
 export interface FundContext {
   name: string;
@@ -45,17 +46,18 @@ export interface AccountDetails {
 }
 
 export interface FundContextQueryVariables {
-  address: string;
+  fund: string;
+  account?: string;
 }
 
 const FundContextQuery = gql`
-  query FundDetailsQuery($address: String!) {
-    account {
-      shares(address: $address) {
+  query FundDetailsQuery($account: Address!, $fund: String!) {
+    account(address: $account) {
+      shares(address: $fund) {
         balanceOf
       }
     }
-    fund(address: $address) {
+    fund(address: $fund) {
       name
       manager
       creationTime
@@ -85,20 +87,19 @@ const FundContextQuery = gql`
   }
 `;
 
-export const useFundContextQuery = (address: string) => {
+export const useFundContextQuery = (fund: string) => {
+  const account = useAccount();
   const options = {
-    variables: { address },
+    skip: !account.address,
+    variables: { fund, account: account.address },
   };
 
   const result = useOnChainQuery<FundContextQueryVariables>(FundContextQuery, options);
-  const fund = result.data?.fund;
-  const account = result.data?.account;
-
   const processed = {
-    name: fund?.name,
-    manager: fund?.manager,
-    isShutDown: fund?.isShutDown,
-    balanceOf: account?.shares?.balanceOf,
+    name: result.data?.fund?.name,
+    manager: result.data?.fund?.manager,
+    isShutDown: result.data?.fund?.isShutDown,
+    balanceOf: result.data?.account?.shares?.balanceOf,
   };
 
   return [processed, result] as [FundContextProcessed | undefined, typeof result];

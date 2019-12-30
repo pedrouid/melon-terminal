@@ -5,8 +5,7 @@ import { useAccountFundQuery } from '~/queries/AccountFund';
 
 export const RequiresFundParametersDefined: React.FC = props => {
   const environment = useEnvironment();
-
-  const [account, accountQuery] = useAccountFundQuery();
+  const [account] = useAccountFundQuery();
 
   if (environment && account && account.fund) {
     return <>{props.children}</>;

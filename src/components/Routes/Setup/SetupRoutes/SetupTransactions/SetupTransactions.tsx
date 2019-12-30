@@ -12,6 +12,7 @@ import { NoMatch } from '~/components/Routes/NoMatch/NoMatch';
 import { useHistory } from 'react-router';
 import { NetworkStatus } from 'apollo-client';
 import { versionContract } from '~/utils/deploymentContracts';
+import { useAccount } from '~/hooks/useAccount';
 
 interface TransactionPipelineItem {
   previous: string;
@@ -27,6 +28,7 @@ interface TransactionPipeline {
 export const SetupTransactions: React.FC = props => {
   const [result, query] = useAccountFundQuery();
   const environment = useEnvironment()!;
+  const account = useAccount();
   const history = useHistory();
 
   // TODO: This should use the version contract address of the fund that is being created.
@@ -37,55 +39,55 @@ export const SetupTransactions: React.FC = props => {
         name: 'Create Accounting Contract',
         previous: 'The main fund contract has been created.',
         next: 'We are now going to create the Accounting Contract (responsible for calculating share price, NAV, etc.)',
-        transaction: () => factory.createAccounting(environment.account!),
+        transaction: () => factory.createAccounting(account.address!),
       },
       ACCOUNTING: {
         name: 'Create Fee Manager Contract',
         previous: 'The Accounting Contract has been created.',
         next: 'We are now going to create the Fee Manager contract (responsible for calculating fees)',
-        transaction: () => factory.createFeeManager(environment.account!),
+        transaction: () => factory.createFeeManager(account.address!),
       },
       FEE_MANAGER: {
         name: 'Create Participation Contract',
         previous: 'The Fee Manager Contract has been created.',
         next:
           'We are now going to create the Participation Contract (responsible for allowing investors into the fund)',
-        transaction: () => factory.createParticipation(environment.account!),
+        transaction: () => factory.createParticipation(account.address!),
       },
       PARTICIPATION: {
         name: 'Create Policy Manager Contract',
         previous: 'The Participation Contract has been created.',
         next:
           'We are now going to create the Policy Manager Contract (responsible for managing risk management and compliance policies)',
-        transaction: () => factory.createPolicyManager(environment.account!),
+        transaction: () => factory.createPolicyManager(account.address!),
       },
       POLICY_MANAGER: {
         previous: 'The Policy Manager Contract has been created.',
         name: 'Create Shares Contract',
         next: 'We are now going to create the Shares Contract (responsible for creating fund shares)',
-        transaction: () => factory.createShares(environment.account!),
+        transaction: () => factory.createShares(account.address!),
       },
       SHARES: {
         previous: 'The Shares Contract has been created.',
         name: 'Create Trading Contract',
         next: 'We are now going to create the Trading Contract (responsible for all trading activities of the fund)',
-        transaction: () => factory.createTrading(environment.account!),
+        transaction: () => factory.createTrading(account.address!),
       },
       TRADING: {
         previous: 'The Trading Contract has been created.',
         name: 'Create Vault Contract',
         next: 'We are now going to create the Vault Contract (responsible for securely storing all assets)',
-        transaction: () => factory.createVault(environment.account!),
+        transaction: () => factory.createVault(account.address!),
       },
       VAULT: {
         previous: 'The Vault Contract has been created.',
         name: 'Complete Setup',
         next: 'We are now going to complete the fund setup (setting permissions, etc.)',
-        transaction: () => factory.completeSetup(environment.account!),
+        transaction: () => factory.completeSetup(account.address!),
       },
       COMPLETE: {
         previous: 'The fund setup has been completed.',
-        transaction: () => factory.completeSetup(environment.account!),
+        transaction: () => factory.completeSetup(account.address!),
       },
     }),
     [factory, environment]

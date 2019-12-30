@@ -7,6 +7,7 @@ import { InputField } from '~/components/Common/Form/InputField/InputField';
 import { useEnvironment } from '~/hooks/useEnvironment';
 import { MaxPositions, Deployment, PolicyDefinition } from '@melonproject/melonjs';
 import { MaxPositionsBytecode } from '@melonproject/melonjs/abis/MaxPositions.bin';
+import { useAccount } from '~/hooks/useAccount';
 
 interface MaxPositionsConfigurationForm {
   maxPositions: number;
@@ -20,6 +21,7 @@ export interface MaxPositionsConfigurationProps {
 
 export const MaxPositionsConfiguration: React.FC<MaxPositionsConfigurationProps> = props => {
   const environment = useEnvironment()!;
+  const account = useAccount();
 
   const validationSchema = Yup.object().shape({
     maxPositions: Yup.number()
@@ -34,7 +36,7 @@ export const MaxPositionsConfiguration: React.FC<MaxPositionsConfigurationProps>
   });
 
   const submit = form.handleSubmit(async data => {
-    const tx = MaxPositions.deploy(environment, MaxPositionsBytecode, environment!.account!, data.maxPositions!);
+    const tx = MaxPositions.deploy(environment, MaxPositionsBytecode, account.address!, data.maxPositions!);
     props.startTransaction(tx, 'Deploy MaxPositions Contract');
   });
 

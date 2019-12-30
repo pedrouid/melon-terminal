@@ -1,11 +1,23 @@
 import React from 'react';
-import { useEnvironment } from '~/hooks/useEnvironment';
+import { ConnectionSelector } from '~/components/Common/ConnectionSelector/ConnectionSelector';
+import { useAccount } from '~/hooks/useAccount';
 import * as S from './RequiresAccount.styles';
-import { ConnectionSelector } from '../../ConnectionSelector/ConnectionSelector';
 
-export const RequiresAccount: React.FC = props => {
-  const environment = useEnvironment();
-  if (environment && environment.account) {
+// TODO: Finish this.
+
+export interface RequiresAccountProps {
+  loader?: React.ReactElement;
+  // fallback?: React.ReactNode;
+}
+
+export const RequiresAccount: React.FC<RequiresAccountProps> = props => {
+  const account = useAccount();
+
+  if (account.loading) {
+    return props.loader || null;
+  }
+
+  if (account && account.address) {
     return <>{props.children}</>;
   }
 
