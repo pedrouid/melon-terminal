@@ -20,7 +20,7 @@ export const ExecuteRequest: React.FC<ExecuteRequestProps> = props => {
   const account = useAccount();
   const refetch = useOnChainQueryRefetcher();
   const transaction = useTransaction(environment, {
-    onAcknowledge: () => refetch(),
+    onFinish: () => refetch(),
   });
 
   const form = useForm({

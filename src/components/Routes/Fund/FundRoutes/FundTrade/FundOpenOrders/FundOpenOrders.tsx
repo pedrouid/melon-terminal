@@ -15,7 +15,7 @@ export const FundOpenOrders: React.FC<FundOpenOrdersProps> = ({ address }) => {
   if (query.loading) {
     return (
       <S.Wrapper>
-        <S.Title>Open Orders</S.Title>
+        <S.Title>Open orders</S.Title>
         <Spinner />
       </S.Wrapper>
     );
@@ -23,7 +23,7 @@ export const FundOpenOrders: React.FC<FundOpenOrdersProps> = ({ address }) => {
 
   return (
     <S.Wrapper>
-      <S.Title>Open Orders</S.Title>
+      <S.Title>Open orders</S.Title>
       {orders && orders.length > 0 ? (
         <Table>
           <thead>
@@ -42,8 +42,8 @@ export const FundOpenOrders: React.FC<FundOpenOrdersProps> = ({ address }) => {
           </tbody>
         </Table>
       ) : (
-        <NoEntries>No open orders</NoEntries>
-      )}
+          <NoEntries>No open orders</NoEntries>
+        )}
     </S.Wrapper>
   );
 };

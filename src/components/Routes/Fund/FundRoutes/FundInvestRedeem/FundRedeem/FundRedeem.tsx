@@ -13,6 +13,7 @@ import { useFundDetailsQuery } from '~/queries/FundDetails';
 import { Spinner } from '~/components/Common/Spinner/Spinner';
 import { useAccount } from '~/hooks/useAccount';
 import * as S from './FundRedeem.styles';
+import { useOnChainQueryRefetcher } from '~/hooks/useOnChainQueryRefetcher';
 
 export interface FundRedeemProps {
   address: string;
@@ -33,8 +34,8 @@ const defaultValues = {
 export const FundRedeem: React.FC<FundRedeemProps> = ({ address }) => {
   const environment = useEnvironment()!;
   const account = useAccount();
+  const refetch = useOnChainQueryRefetcher();
   const [result, query] = useFundInvestQuery(address);
-  const [_, __, detailsQuery] = useFundDetailsQuery(address);
 
   const participationAddress = result?.account?.participation?.address;
   const hasInvested = result?.account?.participation?.hasInvested;
@@ -43,10 +44,7 @@ export const FundRedeem: React.FC<FundRedeemProps> = ({ address }) => {
   const participationContract = new Participation(environment, participationAddress);
 
   const transaction = useTransaction(environment, {
-    onFinish: () => {
-      query.refetch();
-      detailsQuery.refetch();
-    },
+    onFinish: () => refetch(),
   });
 
   const form = useForm<typeof defaultValues>({

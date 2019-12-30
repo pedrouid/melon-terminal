@@ -48,7 +48,7 @@ export const RequestInvestment: React.FC<RequestInvestmentProps> = props => {
   const [allowance] = useAccountAllowanceQuery(account.address, holding?.token?.address, participation);
 
   const transaction = useTransaction(environment, {
-    onAcknowledge: () => refetch(),
+    onFinish: () => refetch(),
   });
 
   const form = useForm<typeof defaultValues>({

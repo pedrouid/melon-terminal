@@ -24,6 +24,7 @@ import { UserWhitelistConfiguration } from './UserWhitelistConfiguration/UserWhi
 import { AssetWhitelistConfiguration } from './AssetWhitelistConfiguration/AssetWhitelistConfiguration';
 import { AssetBlacklistConfiguration } from './AssetBlacklistConfiguration/AssetBlacklistConfiguration';
 import { useAccount } from '~/hooks/useAccount';
+import { useOnChainQueryRefetcher } from '~/hooks/useOnChainQueryRefetcher';
 
 export interface RegisterPoliciesProps {
   address: string;
@@ -32,8 +33,9 @@ export interface RegisterPoliciesProps {
 export const RegisterPolicies: React.FC<RegisterPoliciesProps> = ({ address }) => {
   const environment = useEnvironment()!;
   const account = useAccount()!;
+  const refetch = useOnChainQueryRefetcher();
   const [selectedPolicy, setSelectedPolicy] = useState<PolicyDefinition>();
-  const [policyManager, query] = useFundPoliciesQuery(address);
+  const [policyManager] = useFundPoliciesQuery(address);
 
   const transaction = useTransaction(environment, {
     onAcknowledge: receipt => {
@@ -49,11 +51,7 @@ export const RegisterPolicies: React.FC<RegisterPoliciesProps> = ({ address }) =
         transaction.start(tx, `Register ${selectedPolicy.name} policy`);
       }
     },
-    onFinish: receipt => {
-      if (!receipt.contractAddress) {
-        query.refetch();
-      }
-    },
+    onFinish: () => refetch(),
   });
 
   const policies = policyManager?.policies || [];
@@ -152,8 +150,8 @@ export const RegisterPolicies: React.FC<RegisterPoliciesProps> = ({ address }) =
             </tbody>
           </S.Table>
         ) : (
-          <S.NoRegisteredPolicies>No registered policies.</S.NoRegisteredPolicies>
-        )}
+            <S.NoRegisteredPolicies>No registered policies.</S.NoRegisteredPolicies>
+          )}
       </S.FundPoliciesBody>
 
       <TransactionModal transaction={transaction} />

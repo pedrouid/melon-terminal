@@ -11,12 +11,15 @@ import { useHistory } from 'react-router';
 import { versionContract } from '~/utils/deploymentContracts';
 import { findExchange, findToken } from '@melonproject/melonjs';
 import { useAccount } from '~/hooks/useAccount';
+import { useOnChainQueryRefetcher } from '~/hooks/useOnChainQueryRefetcher';
 
 export const SetupDefineOverview: React.FC<Omit<SetupDefinitionProps, 'forward'>> = props => {
   const environment = useEnvironment()!;
   const account = useAccount();
   const history = useHistory();
+  const refetch = useOnChainQueryRefetcher();
   const transaction = useTransaction(environment, {
+    onFinish: () => refetch(),
     onAcknowledge: () => {
       history.push({
         pathname: '/setup/transactions',

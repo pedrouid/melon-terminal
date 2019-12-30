@@ -10,6 +10,7 @@ import { refetchQueries } from '~/utils/refetchQueries';
 import { useOnChainClient } from '~/hooks/useQuery';
 import { Hub, Version } from '@melonproject/melonjs';
 import { useAccount } from '~/hooks/useAccount';
+import { useOnChainQueryRefetcher } from '~/hooks/useOnChainQueryRefetcher';
 
 export interface ShutdownProps {
   address: string;
@@ -18,13 +19,11 @@ export interface ShutdownProps {
 export const Shutdown: React.FC<ShutdownProps> = ({ address }) => {
   const environment = useEnvironment()!;
   const account = useAccount();
-  const client = useOnChainClient();
   const history = useHistory();
+  const refetch = useOnChainQueryRefetcher();
 
   const transaction = useTransaction(environment, {
-    onFinish: () => {
-      refetchQueries(client, ['FundDetailsQuery']);
-    },
+    onFinish: () => refetch(),
     onAcknowledge: () => {
       history.push(`/fund/${address}`);
     },

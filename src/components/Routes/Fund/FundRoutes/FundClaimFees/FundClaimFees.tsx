@@ -10,6 +10,7 @@ import { TransactionModal } from '~/components/Common/TransactionModal/Transacti
 import { useFundDetailsQuery } from '~/queries/FundDetails';
 import { Spinner } from '~/components/Common/Spinner/Spinner';
 import { useAccount } from '~/hooks/useAccount';
+import { useOnChainQueryRefetcher } from '~/hooks/useOnChainQueryRefetcher';
 
 export interface ClaimFeesProps {
   address: string;
@@ -18,6 +19,7 @@ export interface ClaimFeesProps {
 export const ClaimFees: React.FC<ClaimFeesProps> = ({ address }) => {
   const environment = useEnvironment()!;
   const account = useAccount();
+  const refetch = useOnChainQueryRefetcher();
   const [details, _, query] = useFundDetailsQuery(address);
 
   const history = useHistory();
@@ -30,7 +32,7 @@ export const ClaimFees: React.FC<ClaimFeesProps> = ({ address }) => {
   const feeManager = new FeeManager(environment, feeManagerAddress);
 
   const transaction = useTransaction(environment, {
-    onFinish: () => {},
+    onFinish: () => refetch(),
     onAcknowledge: () => {
       history.push(`/fund/${address}`);
     },

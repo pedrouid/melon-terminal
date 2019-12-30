@@ -3,7 +3,6 @@ import { useEnvironment } from '~/hooks/useEnvironment';
 import { OpenMakeOrder } from '~/queries/FundOpenMakeOrders';
 import BigNumber from 'bignumber.js';
 import { useTransaction } from '~/hooks/useTransaction';
-import useForm, { FormContext } from 'react-hook-form';
 import {
   Hub,
   Trading,
@@ -16,6 +15,8 @@ import {
 import { TransactionModal } from '~/components/Common/TransactionModal/TransactionModal';
 import { BodyCell, BodyCellRightAlign, BodyRow } from '~/components/Common/Table/Table.styles';
 import { useAccount } from '~/hooks/useAccount';
+import { SubmitButton } from '~/components/Common/Form/SubmitButton/SubmitButton';
+import { useOnChainQueryRefetcher } from '~/hooks/useOnChainQueryRefetcher';
 
 export interface OpenOrderItemProps {
   address: string;
@@ -34,17 +35,13 @@ export const OpenOrderItem: React.FC<OpenOrderItemProps> = ({ address, order }) 
 
   const expired = order.expiresAt < new Date();
   const price = takerAmount.dividedBy(makerAmount);
-
   const exchange = findExchange(environment.deployment, order.exchange);
-
-  const transaction = useTransaction(environment, {});
-
-  const form = useForm({
-    mode: 'onSubmit',
-    reValidateMode: 'onBlur',
+  const refetch = useOnChainQueryRefetcher();
+  const transaction = useTransaction(environment, {
+    onFinish: () => refetch(),
   });
 
-  const submit = form.handleSubmit(async data => {
+  const submit = async () => {
     const hub = new Hub(environment, address);
     const trading = new Trading(environment, (await hub.getRoutes()).trading);
 
@@ -63,7 +60,7 @@ export const OpenOrderItem: React.FC<OpenOrderItemProps> = ({ address, order }) 
         };
 
         const tx = oasisDex.cancelOrder(account.address!, args);
-        transaction.start(tx, 'Cancel order on OasisDex');
+        transaction.start(tx, 'Cancel order');
       } else {
         const tx = trading.sendUpdateAndGetQuantityBeingTraded(account.address!, order.makerAsset);
         transaction.start(tx, 'Update and get quantity being traded');
@@ -75,25 +72,21 @@ export const OpenOrderItem: React.FC<OpenOrderItemProps> = ({ address, order }) 
         orderId: order.id,
       };
       const tx = await zeroEx.cancelOrder(account.address!, args);
-      transaction.start(tx, 'Cancel order on 0x');
+      transaction.start(tx, 'Cancel order');
     }
-  });
+  };
 
   return (
-    <FormContext {...form}>
-      <BodyRow>
-        <BodyCell>{makerSymbol && makerSymbol.symbol}</BodyCell>
-        <BodyCell>{exchange && exchange.name}</BodyCell>
-        <BodyCellRightAlign>{price.toFixed(6)}</BodyCellRightAlign>
-        <BodyCellRightAlign>{makerAmount.toFixed(6)}</BodyCellRightAlign>
-        <BodyCell>
-          <form onSubmit={submit}>
-            <input type="submit" hidden={!expired} value="Cancel" />
-          </form>
-          <TransactionModal transaction={transaction} />
-        </BodyCell>
-      </BodyRow>
-    </FormContext>
+    <BodyRow>
+      <BodyCell>{makerSymbol && makerSymbol.symbol}</BodyCell>
+      <BodyCell>{exchange && exchange.name}</BodyCell>
+      <BodyCellRightAlign>{price.toFixed(6)}</BodyCellRightAlign>
+      <BodyCellRightAlign>{makerAmount.toFixed(6)}</BodyCellRightAlign>
+      <BodyCell>
+        {expired && <SubmitButton type="button" label="Cancel" onClick={() => submit()} />}
+        <TransactionModal transaction={transaction} />
+      </BodyCell>
+    </BodyRow>
   );
 };
 

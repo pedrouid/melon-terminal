@@ -13,6 +13,7 @@ import { useHistory } from 'react-router';
 import { NetworkStatus } from 'apollo-client';
 import { versionContract } from '~/utils/deploymentContracts';
 import { useAccount } from '~/hooks/useAccount';
+import { useOnChainQueryRefetcher } from '~/hooks/useOnChainQueryRefetcher';
 
 interface TransactionPipelineItem {
   previous: string;
@@ -99,9 +100,10 @@ export const SetupTransactions: React.FC = props => {
   const next = useMemo(() => step && step.transaction && step.transaction(), [step]);
 
   const [acknowledged, setAcknowledged] = useState(!!(history.location.state && history.location.state.start));
+  const refetch = useOnChainQueryRefetcher();
   const transaction = useTransaction(environment, {
     onStart: () => setAcknowledged(false),
-    onFinish: () => query.refetch(),
+    onFinish: () => refetch(),
     onAcknowledge: () => setAcknowledged(true),
   });
 

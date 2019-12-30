@@ -21,7 +21,7 @@ export const CancelRequest: React.FC<CancelRequestProps> = props => {
   const refetch = useOnChainQueryRefetcher();
 
   const transaction = useTransaction(environment, {
-    onAcknowledge: () => refetch(),
+    onFinish: () => refetch(),
   });
 
   const participationAddress = props.account && props.account.participation && props.account.participation.address;

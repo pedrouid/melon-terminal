@@ -6,12 +6,11 @@ import { toWei } from 'web3-utils';
 import { Weth, findToken } from '@melonproject/melonjs';
 import { useTransaction } from '~/hooks/useTransaction';
 import { TransactionModal } from '~/components/Common/TransactionModal/TransactionModal';
-import { refetchQueries } from '~/utils/refetchQueries';
 import { WrapEtherForm } from '~/components/Common/Form/WrapEtherForm';
-import { useOnChainClient } from '~/hooks/useQuery';
 import { useEnvironment } from '~/hooks/useEnvironment';
 import { useAccount } from '~/hooks/useAccount';
 import * as S from './WalletWrapEther.styles';
+import { useOnChainQueryRefetcher } from '~/hooks/useOnChainQueryRefetcher';
 
 const validationSchema = Yup.object().shape({
   quantity: Yup.number()
@@ -26,9 +25,9 @@ const defaultValues = {
 export const WalletWrapEther: React.FC = () => {
   const environment = useEnvironment()!;
   const account = useAccount();
-  const client = useOnChainClient();
+  const refetch = useOnChainQueryRefetcher();
   const transaction = useTransaction(environment, {
-    onFinish: () => refetchQueries(client, ['AccountBalancesQuery', 'ConnectionQuery']),
+    onFinish: () => refetch(),
   });
 
   const form = useForm<typeof defaultValues>({
