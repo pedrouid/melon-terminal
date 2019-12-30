@@ -35,10 +35,9 @@ export const BodyCellRightAlign = styled.td`
 
 export const BodyRow = styled.tr`
   border-top: 1px solid ${props => props.theme.mainColors.border};
-  border-bottom: 1px dashed rgb(234, 229, 212);
-  cursor: pointer;
-  &:hover {
-    background-color: ${props => props.theme.mainColors.primary};
+
+  &:not(:last-child) {
+    border-bottom: 1px dashed rgb(234, 229, 212);
   }
 `;
 
@@ -50,9 +49,11 @@ export const BodyRowHover = styled.tr`
   border-top: 1px solid ${props => props.theme.mainColors.border};
   cursor: pointer;
 
+  &:not(:last-child) {
+    border-bottom: 1px dashed rgb(234, 229, 212);
+  }
+
   &:hover {
     background-color: ${props => props.theme.mainColors.primary};
   }
-
-  border-bottom: 1px dashed rgb(234, 229, 212);
 `;

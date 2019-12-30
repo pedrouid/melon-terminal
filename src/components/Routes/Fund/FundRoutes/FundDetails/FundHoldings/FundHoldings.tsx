@@ -7,10 +7,10 @@ import {
   Table,
   HeaderCell,
   HeaderCellRightAlign,
-  BodyRowHover,
   BodyCell,
   BodyCellRightAlign,
   BodyRow,
+  HeaderRow,
 } from '~/components/Common/Table/Table.styles';
 
 export interface FundHoldingsProps {
@@ -23,7 +23,7 @@ export const FundHoldings: React.FC<FundHoldingsProps> = ({ address }) => {
     return (
       <S.Wrapper>
         <S.Title>Holdings</S.Title>
-        <Spinner positioning="centered" />
+        <Spinner />
       </S.Wrapper>
     );
   }
@@ -45,11 +45,11 @@ export const FundHoldings: React.FC<FundHoldingsProps> = ({ address }) => {
       <S.Title>Holdings</S.Title>
       <Table>
         <thead>
-          <BodyRowHover>
+          <HeaderRow>
             <HeaderCell>Asset</HeaderCell>
             <HeaderCellRightAlign>Price</HeaderCellRightAlign>
             <HeaderCellRightAlign>Balance</HeaderCellRightAlign>
-          </BodyRowHover>
+          </HeaderRow>
         </thead>
         <tbody>
           {mapped.map(holding => (

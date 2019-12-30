@@ -8,11 +8,12 @@ import { FundProvider } from '~/components/Contexts/Fund/Fund';
 import * as S from './Fund.styles';
 
 const NoMatch = React.lazy(() => import('~/components/Routes/NoMatch/NoMatch'));
-const FundInvest = React.lazy(() => import('./FundRoutes/FundInvest/FundInvest'));
+const FundInvestRedeem = React.lazy(() => import('./FundRoutes/FundInvestRedeem/FundInvestRedeem'));
 const FundDetails = React.lazy(() => import('./FundRoutes/FundDetails/FundDetails'));
 const FundClaimFees = React.lazy(() => import('./FundRoutes/FundClaimFees/FundClaimFees'));
 const FundRegisterPolicies = React.lazy(() => import('./FundRoutes/FundRegisterPolicies/FundRegisterPolicies'));
 const FundShutdown = React.lazy(() => import('./FundRoutes/FundShutdown/FundShutdown'));
+const FundTrade = React.lazy(() => import('./FundRoutes/FundTrade/FundTrade'));
 
 export interface FundRouteParams {
   address: string;
@@ -27,10 +28,10 @@ export const Fund: React.FC = () => {
 
   if (!exists) {
     return (
-      <S.FundNotFound>
+      <S.FundBody>
         <h1>Fund not found</h1>
         <p>The given address {match.params.address} is invalid or is not a fund.</p>
-      </S.FundNotFound>
+      </S.FundBody>
     );
   }
 
@@ -42,28 +43,29 @@ export const Fund: React.FC = () => {
       <S.FundNavigation>
         <FundNavigation address={match.params.address} />
       </S.FundNavigation>
-      <S.FundBody>
-        <Switch>
-          <Route path={match.path} exact={true}>
-            <FundDetails address={match.params.address} />
-          </Route>
-          <Route path={`${match.path}/invest`} exact={true}>
-            <FundInvest address={match.params.address} />
-          </Route>
-          <Route path={`${match.path}/claimfees`} exact={true}>
-            <FundClaimFees address={match.params.address} />
-          </Route>
-          <Route path={`${match.path}/policies`} exact={true}>
-            <FundRegisterPolicies address={match.params.address} />
-          </Route>
-          <Route path={`${match.path}/shutdown`} exact={true}>
-            <FundShutdown address={match.params.address} />
-          </Route>
-          <Route>
-            <NoMatch />
-          </Route>
-        </Switch>
-      </S.FundBody>
+      <Switch>
+        <Route path={match.path} exact={true}>
+          <FundDetails address={match.params.address} />
+        </Route>
+        <Route path={`${match.path}/invest`} exact={true}>
+          <FundInvestRedeem address={match.params.address} />
+        </Route>
+        <Route path={`${match.path}/claimfees`} exact={true}>
+          <FundClaimFees address={match.params.address} />
+        </Route>
+        <Route path={`${match.path}/policies`} exact={true}>
+          <FundRegisterPolicies address={match.params.address} />
+        </Route>
+        <Route path={`${match.path}/trade`} exact={true}>
+          <FundTrade address={match.params.address} />
+        </Route>
+        <Route path={`${match.path}/shutdown`} exact={true}>
+          <FundShutdown address={match.params.address} />
+        </Route>
+        <Route>
+          <NoMatch />
+        </Route>
+      </Switch>
     </FundProvider>
   );
 };

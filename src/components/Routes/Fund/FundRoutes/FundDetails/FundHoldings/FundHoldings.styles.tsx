@@ -3,15 +3,7 @@ import { Subtitle } from '~/components/Common/Styles/Styles';
 
 export const Wrapper = styled.div`
   position: relative;
-  height: 350px;
-  overflow: auto;
-  @media (${props => props.theme.mediaQueries.m}) {
-    border-right: 1px solid rgb(234, 229, 212);
-    border-bottom: none;
-  }
-  background-color: rgb(255, 255, 255);
-  flex: 1 0 25%;
-  min-width: 250px;
+  margin-bottom: ${props => props.theme.spaceUnits.xxl};
 `;
 
 export const Title = Subtitle;

@@ -6,16 +6,21 @@ export interface RequireFundNotShutDownProps {
   fallback?: React.ReactNode;
 }
 
-export const RequiresFundNotShutDown: React.FC<RequireFundNotShutDownProps> = props => {
+export const RequiresFundNotShutDown: React.FC<RequireFundNotShutDownProps> = ({
+  loader,
+  children,
+  fallback = true,
+}) => {
   const fund = useFund();
 
   if (fund.loading) {
-    return props.loader || null;
+    return loader || null;
   }
 
   if (fund && !fund.isShutDown) {
-    return <>{props.children}</>;
+    return <>{children}</>;
   }
 
-  return <></>;
+  const output = fallback === true ? 'This fund is already shut down.' : fallback;
+  return <>{output || null}</>;
 };

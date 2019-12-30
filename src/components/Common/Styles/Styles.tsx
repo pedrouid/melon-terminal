@@ -17,7 +17,7 @@ export const FullBody = styled.div`
   display: flex;
   flex-direction: column;
   position: relative;
-  height: 350px;
+  min-height: 350px;
 
   @media (${props => props.theme.mediaQueries.l}) {
     flex: 1;
@@ -60,7 +60,6 @@ export const PrimaryButton = styled.button`
 `;
 
 export const Subtitle = styled.h3`
-  margin: 12px;
   font-size: 1.125rem;
   position: relative;
 `;

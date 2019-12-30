@@ -1,29 +1,17 @@
 import React from 'react';
-import * as S from './FundDetails.styles';
 import FundHoldings from './FundHoldings/FundHoldings';
 import FundPolicies from './FundPolicies/FundPolicies';
-import FundOpenOrders from './FundOpenOrders/FundOpenOrders';
-import FundOrderBook from './FundOrderBook/FundOrderBook';
-import FundTrade from './FundTrade/FundTrade';
-import FundHistoryTabs from './FundHistoryTabs/FundHistoryTabs';
+import * as S from './FundDetails.styles';
 
 export interface FundDetailsProps {
   address: string;
 }
 
 export const FundDetails: React.FC<FundDetailsProps> = ({ address }) => (
-  <S.FundDetailsContent>
-    <S.FundDetailsOrder>
-      <FundHoldings address={address} />
-      <FundOrderBook address={address} />
-      <FundTrade address={address} />
-    </S.FundDetailsOrder>
-    <S.FundDetailsLists>
-      <FundPolicies address={address} />
-      <FundOpenOrders address={address} />
-      <FundHistoryTabs address={address} />
-    </S.FundDetailsLists>
-  </S.FundDetailsContent>
+  <S.FundDetailsBody>
+    <FundHoldings address={address} />
+    <FundPolicies address={address} />
+  </S.FundDetailsBody>
 );
 
 export default FundDetails;

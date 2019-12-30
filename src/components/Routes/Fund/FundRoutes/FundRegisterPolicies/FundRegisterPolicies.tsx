@@ -65,7 +65,7 @@ export const RegisterPolicies: React.FC<RegisterPoliciesProps> = ({ address }) =
   return (
     <>
       <S.FundPoliciesBody>
-        <h1>Risk Profile</h1>
+        <h1>Risk profile</h1>
         <p>Configure the risk management profile of your fund and the rules to be enforced by the smart contracts.</p>
         <p>&nbsp;</p>
 

@@ -79,6 +79,8 @@ export const Spinner = styled.div<SpinnerProps>`
 
 export const SpinnerPositioning = styled.div<SpinnerProps>`
   position: relative;
+  margin: ${props => props.theme.spaceUnits.xxl} auto;
+
   ${props => {
     const size = sizes[props.size || 'default'];
 

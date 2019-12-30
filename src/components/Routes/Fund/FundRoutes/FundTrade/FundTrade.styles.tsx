@@ -1,3 +1,3 @@
 import { PaddedBody } from '~/components/Common/Styles/Styles';
 
-export const FundDetailsBody = PaddedBody;
+export const FundTradeBody = PaddedBody;

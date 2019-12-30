@@ -73,7 +73,7 @@ export const FundPolicies: React.FC<FundPoliciesProps> = ({ address }) => {
     return (
       <S.Wrapper>
         <S.Title>Policies</S.Title>
-        <Spinner positioning="centered" />
+        <Spinner />
       </S.Wrapper>
     );
   }

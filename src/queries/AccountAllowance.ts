@@ -9,7 +9,7 @@ export interface AccountAllowance {
 
 const AccountAllowanceQuery = gql`
   query AccountBalancesQuery($account: Address!, $spender: Address!, $token: String!) {
-    account(address: $address) {
+    account(address: $account) {
       balance(token: $token)
       allowance(token: $token, spender: $spender)
     }

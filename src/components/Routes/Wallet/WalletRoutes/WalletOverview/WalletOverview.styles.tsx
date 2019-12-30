@@ -35,7 +35,4 @@ export const Group = styled.div`
   margin-bottom: ${props => props.theme.spaceUnits.xxl};
 `;
 
-export const Title = styled(Subtitle)`
-  margin-left: 0;
-  margin-right: 0;
-`;
+export const Title = Subtitle;

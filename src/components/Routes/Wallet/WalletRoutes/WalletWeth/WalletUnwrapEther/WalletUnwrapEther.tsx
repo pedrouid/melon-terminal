@@ -11,6 +11,7 @@ import { WrapEtherForm } from '~/components/Common/Form/WrapEtherForm';
 import { useEnvironment } from '~/hooks/useEnvironment';
 import { useOnChainClient } from '~/hooks/useQuery';
 import { useAccount } from '~/hooks/useAccount';
+import * as S from './WalletUnwrapEther.styles';
 
 const validationSchema = Yup.object().shape({
   quantity: Yup.mixed<number>(),
@@ -43,13 +44,14 @@ export const WalletUnwrapEther: React.FC = () => {
   });
 
   return (
-    <div>
+    <S.Wrapper>
+      <S.Title>Unwrap Ether</S.Title>
       <FormContext {...form}>
         <WrapEtherForm submit={submit} form={form} label="unwrap" />
       </FormContext>
 
       <TransactionModal transaction={transaction} />
-    </div>
+    </S.Wrapper>
   );
 };
 

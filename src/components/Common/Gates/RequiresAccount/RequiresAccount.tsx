@@ -1,30 +1,22 @@
 import React from 'react';
-import { ConnectionSelector } from '~/components/Common/ConnectionSelector/ConnectionSelector';
 import { useAccount } from '~/hooks/useAccount';
-import * as S from './RequiresAccount.styles';
-
-// TODO: Finish this.
 
 export interface RequiresAccountProps {
   loader?: React.ReactElement;
-  // fallback?: React.ReactNode;
+  fallback?: React.ReactNode;
 }
 
-export const RequiresAccount: React.FC<RequiresAccountProps> = props => {
+export const RequiresAccount: React.FC<RequiresAccountProps> = ({ loader, children, fallback = true }) => {
   const account = useAccount();
 
   if (account.loading) {
-    return props.loader || null;
+    return loader || null;
   }
 
   if (account && account.address) {
-    return <>{props.children}</>;
+    return <>{children}</>;
   }
 
-  return (
-    <S.RequiresAccountBody>
-      <h1>You have to be logged in to see this page.</h1>
-      <ConnectionSelector />
-    </S.RequiresAccountBody>
-  );
+  const output = fallback === true ? 'You have to be logged in to see this page.' : fallback;
+  return <>{output || null}</>;
 };

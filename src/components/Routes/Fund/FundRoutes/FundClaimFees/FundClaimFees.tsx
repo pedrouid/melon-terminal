@@ -52,17 +52,16 @@ export const ClaimFees: React.FC<ClaimFeesProps> = ({ address }) => {
 
   if (query.loading) {
     return (
-      <S.FundShutdownBody>
-        <Spinner positioning="centered" />
-      </S.FundShutdownBody>
+      <S.FundClaimFeesBody>
+        <Spinner />
+      </S.FundClaimFeesBody>
     );
   }
 
   return (
-    <S.FundShutdownBody>
+    <S.FundClaimFeesBody>
       <h1>Claim fees</h1>
       <p>Claim management fees and performance fees for the fund.</p>
-
       <p>Accrued management fee: {feeManagerInfo && feeManagerInfo.managementFeeAmount.dividedBy('1e18').toFixed(6)}</p>
       <p>
         Accrued performance fee: {feeManagerInfo && feeManagerInfo.performanceFeeAmount.dividedBy('1e18').toFixed(6)}
@@ -85,7 +84,7 @@ export const ClaimFees: React.FC<ClaimFeesProps> = ({ address }) => {
       </form>
 
       <TransactionModal transaction={transaction} />
-    </S.FundShutdownBody>
+    </S.FundClaimFeesBody>
   );
 };
 

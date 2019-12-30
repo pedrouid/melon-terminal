@@ -18,8 +18,8 @@ interface AccountFundQueryVariables {
 }
 
 const AccountFundQuery = gql`
-  query AccountFundQuery($address: Address!) {
-    account(address: $address) {
+  query AccountFundQuery($account: Address!) {
+    account(address: $account) {
       fund {
         address
         name

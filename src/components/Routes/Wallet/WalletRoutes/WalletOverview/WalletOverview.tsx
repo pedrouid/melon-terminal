@@ -2,7 +2,6 @@ import React from 'react';
 import { Spinner } from '~/components/Common/Spinner/Spinner';
 import * as S from './WalletOverview.styles';
 import { useFundParticipationOverviewQuery } from '~/queries/FundParticipationOverview';
-import { useEnvironment } from '~/hooks/useEnvironment';
 import { WalletOverviewInvestmentRequest } from './WalletOverviewInvestmentRequest/WalletOverviewInvestmentRequest';
 import { WalletOverviewManagedFund } from './WalletOverviewManagedFund/WalletOverviewManagedFund';
 import { WalletOverviewInvestedFund } from './WalletOverviewInvestedFund/WalletOverviewInvestedFund';
