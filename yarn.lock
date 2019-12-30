@@ -2057,21 +2057,6 @@
     web3-providers "^2.0.0-alpha.1"
     web3-utils "^2.0.0-alpha.1"
 
-"@melonproject/melonjs@^0.0.52":
-  version "0.0.52"
-  resolved "https://registry.yarnpkg.com/@melonproject/melonjs/-/melonjs-0.0.52.tgz#2a07d5cb8aadecddb4ce036296fb51025d308efa"
-  integrity sha512-VWKTZK21tMDH9Lr6Fi9FIrMB0QDXR9vz4bq2oEgDsbzaVURovRTEeLetANGDBYGMkrX+oAESu+ylbpYoIShRjg==
-  dependencies:
-    "@0x/order-utils" "^9.0.0"
-    bignumber.js "^9.0.0"
-    web3 "^2.0.0-alpha.1"
-    web3-core "^2.0.0-alpha.1"
-    web3-eth "^2.0.0-alpha.1"
-    web3-eth-abi "^2.0.0-alpha.1"
-    web3-eth-contract "^2.0.0-alpha.1"
-    web3-providers "^2.0.0-alpha.1"
-    web3-utils "^2.0.0-alpha.1"
-
 "@melonproject/melonjs@^0.0.53":
   version "0.0.53"
   resolved "https://registry.yarnpkg.com/@melonproject/melonjs/-/melonjs-0.0.53.tgz#d911cf5a8e60c7e8ee1ee66ff03ac5d47bc6a489"
@@ -2617,12 +2602,6 @@
     "@types/events" "*"
     "@types/minimatch" "*"
     "@types/node" "*"
-
-"@types/graphql-iso-date@^3.3.3":
-  version "3.3.3"
-  resolved "https://registry.yarnpkg.com/@types/graphql-iso-date/-/graphql-iso-date-3.3.3.tgz#a368aa7370512a9cc87a5035c3701949ed7db9e2"
-  dependencies:
-    graphql "^14.5.3"
 
 "@types/history@*":
   version "4.7.3"
@@ -6998,7 +6977,7 @@ graphql-tools@^4.0.6:
     iterall "^1.1.3"
     uuid "^3.1.0"
 
-graphql@^14.5.3, graphql@^14.5.4, graphql@^14.5.8:
+graphql@^14.5.4, graphql@^14.5.8:
   version "14.5.8"
   resolved "https://registry.yarnpkg.com/graphql/-/graphql-14.5.8.tgz#504f3d3114cb9a0a3f359bbbcf38d9e5bf6a6b3c"
   dependencies:
