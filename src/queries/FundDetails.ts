@@ -41,12 +41,12 @@ export interface AccountDetails {
 
 export interface FundDetailsQueryVariables {
   fund: string;
-  account?: string;
+  account?: string | boolean;
 }
 
 const FundDetailsQuery = gql`
-  query FundDetailsQuery($account: Address!, $fund: Address!) {
-    account(address: $account) {
+  query FundDetailsQuery($account: Address, $fund: Address!) {
+    account(address: $account) @include(if: $account) {
       shares(address: $fund) {
         balanceOf
       }
@@ -84,8 +84,7 @@ const FundDetailsQuery = gql`
 export const useFundDetailsQuery = (fund: string) => {
   const account = useAccount();
   const options = {
-    skip: !account.address,
-    variables: { fund, account: account.address },
+    variables: { fund, account: account.address || false },
   };
 
   const result = useOnChainQuery<FundDetailsQueryVariables>(FundDetailsQuery, options);
