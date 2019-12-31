@@ -7,7 +7,7 @@ export interface FundTradeProps {
   address: string;
 }
 
-export const FundTrade: React.FC<FundTradeProps> = (props) => {
+export const FundTrade: React.FC<FundTradeProps> = props => {
   return (
     <S.FundTradeBody>
       <FundOpenOrders address={props.address} />

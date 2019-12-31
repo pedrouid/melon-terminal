@@ -150,8 +150,8 @@ export const RegisterPolicies: React.FC<RegisterPoliciesProps> = ({ address }) =
             </tbody>
           </S.Table>
         ) : (
-            <S.NoRegisteredPolicies>No registered policies.</S.NoRegisteredPolicies>
-          )}
+          <S.NoRegisteredPolicies>No registered policies.</S.NoRegisteredPolicies>
+        )}
       </S.FundPoliciesBody>
 
       <TransactionModal transaction={transaction} />
