@@ -73,10 +73,8 @@ export const Setup: React.FC = () => {
             </RequiresFundSetupNotStarted>
           </Route>
           <Route path={`${match.path}/finish`} exact={true}>
-            <RequiresFundSetupNotStarted>
-              <SetupStepNavigation prefix={match.path} />
-              <SetupDefineOverview state={state} back={back(`${match.path}/terms-and-conditions`)} />
-            </RequiresFundSetupNotStarted>
+            <SetupStepNavigation prefix={match.path} />
+            <SetupDefineOverview state={state} back={back(`${match.path}/terms-and-conditions`)} />
           </Route>
           <Route path={`${match.path}/transactions`} exact={true}>
             <RequiresFundParametersDefined>
