@@ -245,7 +245,7 @@ export const ConnectionProvider: React.FC<ConnectionProviderProps> = props => {
   }, [state.eth, state.network, state.deployment]);
 
   const account = useMemo(() => {
-    return state.accounts && state.accounts[8];
+    return state.accounts && state.accounts[0];
   }, [state.accounts]);
 
   const context: ConnectionContext = {
