@@ -10,7 +10,8 @@ import {
   ConnectionAction,
   ConnectionMethod,
 } from '~/components/Contexts/Connection/Connection';
-import { SubmitButton } from '~/components/Common/Form/SubmitButton/SubmitButton';
+import { Title } from '~/storybook/components/Title/Title';
+import { Button } from '~/storybook/components/Button/Button';
 
 const connect = (): Rx.Observable<ConnectionAction> => {
   const ethereum = (window as any).ethereum;
@@ -44,10 +45,10 @@ const connect = (): Rx.Observable<ConnectionAction> => {
 
 export const MetaMask: React.FC<any> = ({ select, active }) => {
   return (
-    <div>
-      <h2>Metamask</h2>
-      {!active ? <SubmitButton onClick={() => select()} label="Connect" /> : <div>Currently selected</div>}
-    </div>
+    <>
+      <Title>Metamask</Title>
+      {!active ? <Button onClick={() => select()}>Connect</Button> : <span>Currently selected</span>}
+    </>
   );
 };
 

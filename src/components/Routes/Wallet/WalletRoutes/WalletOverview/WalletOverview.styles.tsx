@@ -1,15 +1,4 @@
 import styled from 'styled-components';
-import { Subtitle } from '~/components/Common/Styles/Styles';
-
-export const Container = styled.div``;
-
-export const ScrollableTable = styled.div`
-  overflow-y: auto;
-  border: 1px solid ${props => props.theme.mainColors.border};
-  margin-top: ${props => props.theme.spaceUnits.m};
-  margin-bottom: ${props => props.theme.spaceUnits.m};
-  width: 100%;
-`;
 
 export const Table = styled.table`
   width: 100%;
@@ -34,5 +23,3 @@ export const EmptyCell = styled.td`
 export const Group = styled.div`
   margin-bottom: ${props => props.theme.spaceUnits.xxl};
 `;
-
-export const Title = Subtitle;

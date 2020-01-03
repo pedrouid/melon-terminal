@@ -1,15 +1,15 @@
 import React from 'react';
 import { ConnectionSelector } from '~/components/Common/ConnectionSelector/ConnectionSelector';
-import * as S from './Connect.styles';
+
+import { Container } from '~/storybook/components/Container/Container';
+import { Title } from '~/storybook/components/Title/Title';
 
 export const Connect = () => {
   return (
-    <>
-      <S.Connect>
-        <h1>Select your preferred connection method</h1>
-        <ConnectionSelector />
-      </S.Connect>
-    </>
+    <Container>
+      <Title>Select your preferred connection method</Title>
+      <ConnectionSelector />
+    </Container>
   );
 };
 

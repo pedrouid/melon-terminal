@@ -5,6 +5,8 @@ import { Spinner } from '~/components/Common/Spinner/Spinner';
 import { useFundDetailsQuery } from '~/queries/FundDetails';
 import * as S from './FundHeader.styles';
 
+import { Title } from '~/storybook/components/Title/Title';
+
 export interface FundHeaderProps {
   address: string;
 }
@@ -37,7 +39,7 @@ export const FundHeader: React.FC<FundHeaderProps> = ({ address }) => {
       {details.isShutDown && <S.FundHeaderShutDown>This fund is shutdown</S.FundHeaderShutDown>}
       <S.FundHeader>
         <S.FundHeaderHeadline>
-          <S.FundHeaderTitle>{details.name}</S.FundHeaderTitle>
+          <Title>{details.name}</Title>
           <S.FundHeaderLinks>
             {
               <a href={fundEtherscanLink!} title={address}>

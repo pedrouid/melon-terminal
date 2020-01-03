@@ -11,24 +11,6 @@ export const WalletHeader = styled.div`
   }
 `;
 
-export const WalletHeaderTitle = styled.h1`
-  margin: 0;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 100%;
-
-  &::after {
-    border: none;
-  }
-`;
-
-export const WalletHeaderText = styled.div`
-  margin-top: ${props => props.theme.spaceUnits.xs};
-  overflow: hidden;
-  text-overflow: ellipsis;
-`;
-
 export const WalletHeaderHeadline = styled.div`
   padding-right: ${props => props.theme.spaceUnits.s};
 `;

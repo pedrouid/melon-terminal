@@ -1,8 +1,6 @@
 import styled from 'styled-components';
 import { NavLink } from 'react-router-dom';
 
-export const WalletNavigation = styled.div``;
-
 export const WalletNavigationLink = styled(NavLink)`
   display: inline-block;
   position: relative;

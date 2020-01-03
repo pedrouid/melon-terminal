@@ -16,18 +16,6 @@ export const InputFieldLabel = styled.span`
   line-height: ${props => props.theme.spaceUnits.m};
 `;
 
-export const InputFieldInput = styled.input`
-  text-align: right;
-  font-family: ${props => props.theme.fontFamilies.primary};
-  font-size: ${props => props.theme.fontSizes.m};
-  min-width: 100%;
-  border: 1px solid ${props => props.theme.mainColors.border};
-  padding: ${props => props.theme.spaceUnits.xs};
-  line-height: 1;
-  height: 38px;
-  display: inline-block;
-`;
-
 export const InputFieldError = styled.div`
   color: red;
 `;

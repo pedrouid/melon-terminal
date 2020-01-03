@@ -9,8 +9,10 @@ import { TransactionModal } from '~/components/Common/TransactionModal/Transacti
 import { WrapEtherForm } from '~/components/Common/Form/WrapEtherForm';
 import { useEnvironment } from '~/hooks/useEnvironment';
 import { useAccount } from '~/hooks/useAccount';
-import * as S from './WalletUnwrapEther.styles';
 import { useOnChainQueryRefetcher } from '~/hooks/useOnChainQueryRefetcher';
+
+import { Block } from '~/storybook/components/Block/Block';
+import { Title } from '~/storybook/components/Title/Title';
 
 const validationSchema = Yup.object().shape({
   quantity: Yup.mixed<number>(),
@@ -43,14 +45,14 @@ export const WalletUnwrapEther: React.FC = () => {
   });
 
   return (
-    <S.Wrapper>
-      <S.Title>Unwrap Ether</S.Title>
+    <Block>
+      <Title>Unwrap Ether</Title>
       <FormContext {...form}>
         <WrapEtherForm submit={submit} form={form} label="unwrap" />
       </FormContext>
 
       <TransactionModal transaction={transaction} />
-    </S.Wrapper>
+    </Block>
   );
 };
 

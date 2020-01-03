@@ -9,8 +9,10 @@ import { TransactionModal } from '~/components/Common/TransactionModal/Transacti
 import { WrapEtherForm } from '~/components/Common/Form/WrapEtherForm';
 import { useEnvironment } from '~/hooks/useEnvironment';
 import { useAccount } from '~/hooks/useAccount';
-import * as S from './WalletWrapEther.styles';
 import { useOnChainQueryRefetcher } from '~/hooks/useOnChainQueryRefetcher';
+
+import { Block } from '~/storybook/components/Block/Block';
+import { Title } from '~/storybook/components/Title/Title';
 
 const validationSchema = Yup.object().shape({
   quantity: Yup.number()
@@ -45,14 +47,14 @@ export const WalletWrapEther: React.FC = () => {
   });
 
   return (
-    <S.Wrapper>
-      <S.Title>Wrap Ether</S.Title>
+    <Block>
+      <Title>Wrap Ether</Title>
       <FormContext {...form}>
         <WrapEtherForm submit={submit} form={form} label="wrap" />
       </FormContext>
 
       <TransactionModal transaction={transaction} />
-    </S.Wrapper>
+    </Block>
   );
 };
 

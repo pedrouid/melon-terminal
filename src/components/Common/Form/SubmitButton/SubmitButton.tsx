@@ -1,5 +1,6 @@
-import * as S from './SubmitButton.styles';
 import React from 'react';
+
+import { Button } from '~/storybook/components/Button/Button';
 
 export interface SubmitButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   label: string;
@@ -7,8 +8,8 @@ export interface SubmitButtonProps extends React.ButtonHTMLAttributes<HTMLButton
 
 export const SubmitButton: React.FC<SubmitButtonProps> = ({ label, ...rest }) => {
   return (
-    <S.SubmitButtonWrapper type="submit" {...rest}>
+    <Button type="submit" {...rest}>
       {label}
-    </S.SubmitButtonWrapper>
+    </Button>
   );
 };

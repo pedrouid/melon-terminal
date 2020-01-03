@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useConnectionState } from '~/hooks/useConnectionState';
-import * as S from './ConnectionSelector.styles';
 import { useHistory } from 'react-router';
 import { ConnectionStatus } from '~/components/Contexts/Connection/Connection';
+
+import { Block } from '~/storybook/components/Block/Block';
 
 export const ConnectionSelector: React.FC = () => {
   const history = useHistory();
@@ -26,9 +27,9 @@ export const ConnectionSelector: React.FC = () => {
         };
 
         return (
-          <S.Method key={method.name}>
+          <Block key={method.name}>
             <Component active={active} select={select} />
-          </S.Method>
+          </Block>
         );
       })}
     </>

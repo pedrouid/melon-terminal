@@ -5,7 +5,8 @@ import { Eth } from 'web3-eth';
 import { HttpProvider } from 'web3-providers';
 import { networkFromId } from '~/utils/networkFromId';
 import { connectionEstablished, ConnectionAction, ConnectionMethod } from '~/components/Contexts/Connection/Connection';
-import { SubmitButton } from '~/components/Common/Form/SubmitButton/SubmitButton';
+import { Title } from '~/storybook/components/Title/Title';
+import { Button } from '~/storybook/components/Button/Button';
 
 interface EthResource extends Rx.Unsubscribable {
   eth: Eth;
@@ -47,10 +48,10 @@ const connect = (): Rx.Observable<ConnectionAction> => {
 
 export const Ganache: React.FC<any> = ({ select, active }) => {
   return (
-    <div>
-      <h2>Ganache</h2>
-      {!active ? <SubmitButton onClick={() => select()} label="Connect" /> : <div>Currently selected</div>}
-    </div>
+    <>
+      <Title>Ganache</Title>
+      {!active ? <Button onClick={() => select()}>Connect</Button> : <span>Currently selected</span>}
+    </>
   );
 };
 

@@ -13,6 +13,9 @@ import {
   HeaderRow,
 } from '~/components/Common/Table/Table.styles';
 
+import { SectionTitle } from '~/storybook/components/Title/Title';
+import { Block } from '~/storybook/components/Block/Block';
+
 export interface FundHoldingsProps {
   address: string;
 }
@@ -21,10 +24,10 @@ export const FundHoldings: React.FC<FundHoldingsProps> = ({ address }) => {
   const [holdings, query] = useFundHoldingsQuery(address);
   if (query.loading) {
     return (
-      <S.Wrapper>
-        <S.Title>Holdings</S.Title>
+      <Block>
+        <SectionTitle>Holdings</SectionTitle>
         <Spinner />
-      </S.Wrapper>
+      </Block>
     );
   }
 
@@ -42,8 +45,8 @@ export const FundHoldings: React.FC<FundHoldingsProps> = ({ address }) => {
     });
 
   return (
-    <S.Wrapper>
-      <S.Title>Holdings</S.Title>
+    <Block>
+      <SectionTitle>Holdings</SectionTitle>
       <Table>
         <thead>
           <HeaderRow>
@@ -66,7 +69,7 @@ export const FundHoldings: React.FC<FundHoldingsProps> = ({ address }) => {
           ))}
         </tbody>
       </Table>
-    </S.Wrapper>
+    </Block>
   );
 };
 

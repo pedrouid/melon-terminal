@@ -1,7 +1,7 @@
 import React from 'react';
 import { Foo } from './Foo';
 
-export default { title: 'Foo' };
+export default { title: 'Atoms|Foo' };
 
 export const HelloBeatriz: React.FC = () => <Foo name="Beatriz" />;
 

@@ -13009,6 +13009,11 @@ react-app-rewired@^2.1.5:
   dependencies:
     semver "^5.6.0"
 
+react-awesome-styled-grid@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/react-awesome-styled-grid/-/react-awesome-styled-grid-3.0.1.tgz#4240a33abfd9b7c15ac9861a6e7009dc6c9f91ca"
+  integrity sha512-ybB3t2YRt7J+aIbfG3tEbNGUAzr4bRVbwT/mjEfuHf1xTXtQcoJZTnL7grYR6iUZmvmqyTdB/jvGlGCMkzUTMA==
+
 react-clientside-effect@^1.2.0:
   version "1.2.2"
   resolved "https://registry.yarnpkg.com/react-clientside-effect/-/react-clientside-effect-1.2.2.tgz#6212fb0e07b204e714581dd51992603d1accc837"

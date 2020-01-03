@@ -2,14 +2,19 @@ import { createGlobalStyle } from 'styled-components';
 
 export const theme = {
   mainColors: {
-    primary: 'rgb(255, 253, 244)',
-    primaryDark: 'rgb(161, 147, 94)',
-    secondary: 'rgb(249, 242, 219)',
-    secondaryDark: 'rgb(195, 179, 121)',
-    secondaryDarkAlpha: 'rgb(195, 179, 121, 0.75)',
-    border: 'rgb(234, 229, 212)',
+    primary: 'rgb(255, 255, 255)',
+    primaryDark: 'rgb(29,29,29)',
+    secondary: 'rgb(242, 242, 242)',
+    secondaryDark: 'rgb(120, 120, 120)',
+    secondaryDarkAlpha: 'rgb(196, 196, 196)',
+    border: 'rgb(29, 29, 29)',
   },
-
+  border: {
+    borderDefault: '1px solid rgb(29,29,29)',
+    borderSecondary: '1px solid rgb(196,196,196)',
+    borderRadius: '4px',
+    borderColor: 'rgb(29,29,29)',
+  },
   statusColors: {
     primaryProfit: 'rgb(141, 197, 103)',
     secondaryProfit: 'rgb(243, 249, 241)',
@@ -17,7 +22,6 @@ export const theme = {
     secondaryLoss: 'rgb(252, 240, 242)',
     warning: 'rgb(249,209,118)',
   },
-
   otherColors: {
     black: 'rgb(0, 0, 0)',
     white: 'rgb(255, 255, 255)',
@@ -25,7 +29,6 @@ export const theme = {
     red: 'rgb(244,67,54)',
     green: 'rgb(76,175,80)',
   },
-
   spaceUnits: {
     xxxs: '2px',
     xxs: '4px',
@@ -35,29 +38,72 @@ export const theme = {
     l: '24px',
     xl: '32px',
     xxl: '40px',
+    xxxl: '48px',
   },
-
   fontFamilies: {
     primary: '"Source Serif Pro", serif',
   },
-
-  fontSizes: { xxl: '1.25rem', xl: '1.125rem', l: '1rem', m: '0.875rem', s: '0.75rem', xs: '0.625rem', xxs: '0.55rem' },
-
+  fontSizes: {
+    xxl: '1.25rem',
+    xl: '1.125rem',
+    l: '1rem',
+    m: '0.875rem',
+    s: '0.75rem',
+    xs: '0.625rem',
+    xxs: '0.55rem',
+  },
   fontWeights: {
     light: '300',
     regular: '400',
     semiBold: '600',
     bold: '700',
   },
-
   mediaQueries: {
     l: 'min-width: 1024px',
     m: 'min-width: 768px',
     s: 'min-width: 480px',
   },
-
   transition: {
+    defaultAll: 'all 0.3s ease-in-out',
     duration: '0.3s',
+  },
+  awesomegrid: {
+    mediaQuery: 'only screen',
+    columns: {
+      xs: 12,
+      sm: 12,
+      md: 12,
+      lg: 12,
+      xl: 12,
+    },
+    gutterWidth: {
+      xs: 1,
+      sm: 1,
+      md: 1.5,
+      lg: 1.5,
+      xl: 1.5,
+    },
+    paddingWidth: {
+      xs: 1,
+      sm: 1,
+      md: 1.5,
+      lg: 1.5,
+      xl: 1.5,
+    },
+    container: {
+      xs: 'full', // 'full' = max-width: 100%
+      sm: 45, // max-width: 720px
+      md: 62, // max-width: 992px
+      lg: 64, // max-width: 1024px
+      xl: 90, // max-width: 1440px
+    },
+    breakpoints: {
+      xs: 1,
+      sm: 48, // 768px
+      md: 64, // 1024px
+      lg: 90, // 1440px
+      xl: 120, // 1920px
+    },
   },
 };
 
@@ -71,7 +117,7 @@ export const Global = createGlobalStyle`
   html {
     min-height: 100%;
   }
-  
+
   body {
     position: relative;
     font-family: 'Source Serif Pro', serif;
@@ -79,38 +125,33 @@ export const Global = createGlobalStyle`
     line-height: 1.4;
     margin: 0;
     min-height: 100%;
-    background-color: ${theme.mainColors.primary};
+    background-color: ${theme.mainColors.secondary};
   }
-  
+
   h1, h2, h3 {
     margin-bottom: ${theme.spaceUnits.m};
     font-size: ${theme.fontSizes.xl};
     font-weight: bold;
     position: relative;
   }
-  
-  h1::after,
-  h2::after,
-  h3::after {
-    content: ' ';
-    position: absolute;
-    bottom: -5px;
-    left: 0;
-    width: 100%;
-    border-top: 1px solid rgba(34, 36, 38, 0.15);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+
+
+  h2,h3 {
+    padding-bottom: ${theme.spaceUnits.xs};
+    border-bottom : ${theme.border.borderSecondary};
+    margin-bottom: ${theme.spaceUnits.xs};
   }
-  
+
   h4 {
     font-size: ${theme.fontSizes.l};
     margin-bottom: ${theme.spaceUnits.xs};
   }
-  
+
   a {
     text-decoration-style: dotted;
     color: ${theme.otherColors.black};
   }
-  
+
   hr {
     border: 0;
     height: 0;

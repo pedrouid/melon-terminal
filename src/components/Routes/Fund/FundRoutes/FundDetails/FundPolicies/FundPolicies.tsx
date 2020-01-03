@@ -1,6 +1,5 @@
 import React from 'react';
 import { Spinner } from '~/components/Common/Spinner/Spinner';
-import * as S from './FundPolicies.styles';
 import {
   useFundPoliciesQuery,
   MaxConcentrationPolicy,
@@ -20,6 +19,9 @@ import { AssetWhitelist } from './AssetWhitelist/AssetWhitelist';
 import { AssetBlacklist } from './AssetBlacklist/AssetBlacklist';
 import { UserWhitelist } from './UserWhitelist/UserWhitelist';
 import { DeployedEnvironment } from '@melonproject/melonjs';
+
+import { SectionTitle } from '~/storybook/components/Title/Title';
+import { Block } from '~/storybook/components/Block/Block';
 
 export interface FundPolicyParametersProps {
   policy: FundPolicy;
@@ -71,18 +73,18 @@ export const FundPolicies: React.FC<FundPoliciesProps> = ({ address }) => {
   const [policyManager, query] = useFundPoliciesQuery(address);
   if (query.loading) {
     return (
-      <S.Wrapper>
-        <S.Title>Policies</S.Title>
+      <Block>
+        <SectionTitle>Policies</SectionTitle>
         <Spinner />
-      </S.Wrapper>
+      </Block>
     );
   }
 
   const policies = policyManager && policyManager.policies;
 
   return (
-    <S.Wrapper>
-      <S.Title>Policies</S.Title>
+    <Block>
+      <SectionTitle>Policies</SectionTitle>
       {policies && policies.length > 0 ? (
         <Table>
           <thead>
@@ -103,7 +105,7 @@ export const FundPolicies: React.FC<FundPoliciesProps> = ({ address }) => {
       ) : (
         <NoEntries>No registered policies.</NoEntries>
       )}
-    </S.Wrapper>
+    </Block>
   );
 };
 

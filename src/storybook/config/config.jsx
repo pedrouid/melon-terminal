@@ -18,4 +18,4 @@ addDecorator(story => (
   </ThemeProvider>
 ));
 
-configure(require.context('../components', true, /\.stories\.tsx$/));
+configure(require.context('../', true, /\.stories\.tsx$/));

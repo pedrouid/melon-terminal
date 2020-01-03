@@ -7,6 +7,9 @@ import { WalletOverviewManagedFund } from './WalletOverviewManagedFund/WalletOve
 import { WalletOverviewInvestedFund } from './WalletOverviewInvestedFund/WalletOverviewInvestedFund';
 import { useAccount } from '~/hooks/useAccount';
 
+import { Block } from '~/storybook/components/Block/Block';
+import { SectionTitle } from '~/storybook/components/Title/Title';
+
 const fundHeadings = ['Name', 'Inception', 'AUM [ETH]', 'Share price', 'Change', '# shares', 'Version', 'Status'];
 const redeemHeadings = ['Name', 'Inception', 'AUM [ETH]', 'Share price', 'Change', '# shares', 'Version', 'Status'];
 const requestHeadings = ['Fund name', 'Request date', 'Request asset', 'Request amount', 'Requested shares'];
@@ -50,41 +53,41 @@ export const WalletOverview: React.FC = () => {
   );
 
   return (
-    <S.Container>
+    <>
       <S.Group>
-        <S.Title>Managed funds</S.Title>
-        <S.ScrollableTable>
+        <SectionTitle>Managed funds</SectionTitle>
+        <Block>
           <S.Table>
             <thead>
               <S.HeaderRow>{managedHeader}</S.HeaderRow>
             </thead>
             <tbody>{managedRows}</tbody>
           </S.Table>
-        </S.ScrollableTable>
+        </Block>
       </S.Group>
       <S.Group>
-        <S.Title>Funds with owned shares</S.Title>
-        <S.ScrollableTable>
+        <SectionTitle>Funds with owned shares</SectionTitle>
+        <Block>
           <S.Table>
             <thead>
               <S.HeaderRow>{investedHeader}</S.HeaderRow>
             </thead>
             <tbody>{investedRows}</tbody>
           </S.Table>
-        </S.ScrollableTable>
+        </Block>
       </S.Group>
       <S.Group>
-        <S.Title>Pending investment requests</S.Title>
-        <S.ScrollableTable>
+        <SectionTitle>Pending investment requests</SectionTitle>
+        <Block>
           <S.Table>
             <thead>
               <S.HeaderRow>{requestsHeader}</S.HeaderRow>
             </thead>
             <tbody>{requestsRows}</tbody>
           </S.Table>
-        </S.ScrollableTable>
+        </Block>
       </S.Group>
-    </S.Container>
+    </>
   );
 };
 
