@@ -9,7 +9,6 @@ import { useTransaction } from '~/hooks/useTransaction';
 import { useEnvironment } from '~/hooks/useEnvironment';
 import { useHistory } from 'react-router';
 import { versionContract } from '~/utils/deploymentContracts';
-import { findExchange, findToken } from '@melonproject/melonjs';
 import { useAccount } from '~/hooks/useAccount';
 import { useOnChainQueryRefetcher } from '~/hooks/useOnChainQueryRefetcher';
 
@@ -37,12 +36,12 @@ export const SetupDefineOverview: React.FC<Omit<SetupDefinitionProps, 'forward'>
 
   const createTransaction = () => {
     const factory = versionContract(environment);
-    const weth = findToken(environment.deployment, 'WETH');
-    const exchangeAddresses = exchanges.map(name => findExchange(environment.deployment, name)!.exchange);
-    const adapterAddresses = exchanges.map(name => findExchange(environment.deployment, name)!.adapter);
+    const weth = environment.getToken('WETH');
+    const exchangeAddresses = exchanges.map(name => environment.getExchange(name)!.exchange);
+    const adapterAddresses = exchanges.map(name => environment.getExchange(name)!.adapter);
     const managementFeeAddress = environment.deployment.melon.addr.ManagementFee;
     const performanceFeeAddress = environment.deployment.melon.addr.PerformanceFee;
-    const assetAddresses = assets.map(symbol => findToken(environment.deployment, symbol)!.address);
+    const assetAddresses = assets.map(symbol => environment.getToken(symbol)!.address);
 
     const tx = factory.beginSetup(account.address!, {
       name: props.state.name!,

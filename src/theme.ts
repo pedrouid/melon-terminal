@@ -88,7 +88,6 @@ export const Global = createGlobalStyle`
     font-weight: bold;
     position: relative;
   }
-
   
   h1::after,
   h2::after,

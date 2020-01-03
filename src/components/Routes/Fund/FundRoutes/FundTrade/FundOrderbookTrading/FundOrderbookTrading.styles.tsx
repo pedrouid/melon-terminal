@@ -1,9 +1,17 @@
 import styled from 'styled-components';
-import { Subtitle } from '~/components/Common/Styles/Styles';
 
-export const Wrapper = styled.div`
-  position: relative;
-  margin-bottom: ${props => props.theme.spaceUnits.xxl};
+export const FundOrderbookTrading = styled.div`
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
 `;
 
-export const Title = Subtitle;
+export const FundOrderbook = styled.div`
+  flex: 1 1;
+  margin-right: ${props => props.theme.spaceUnits.l};
+`;
+
+export const FundOrderbookForm = styled.div`
+  flex: 0.3 1;
+`;

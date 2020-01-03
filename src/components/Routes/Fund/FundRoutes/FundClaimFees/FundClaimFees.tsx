@@ -38,16 +38,12 @@ export const ClaimFees: React.FC<ClaimFeesProps> = ({ address }) => {
     },
   });
 
-  const submitAllFees = (event: FormEvent) => {
-    event.preventDefault();
-
+  const submitAllFees = () => {
     const tx = accounting.triggerRewardAllFees(account.address!);
     transaction.start(tx, 'Claim all fees');
   };
 
-  const submitManagementFees = (event: FormEvent) => {
-    event.preventDefault();
-
+  const submitManagementFees = () => {
     const tx = feeManager.rewardManagementFee(account.address!);
     transaction.start(tx, 'Claim management fee');
   };
@@ -73,17 +69,10 @@ export const ClaimFees: React.FC<ClaimFeesProps> = ({ address }) => {
         {feeManagerInfo && feeManagerInfo.performanceFee && feeManagerInfo.performanceFee.canUpdate}
       </p>
 
-      <form onSubmit={submitAllFees}>
-        <ButtonBlock>
-          <SubmitButton label="Claim all fees" />
-        </ButtonBlock>
-      </form>
-
-      <form onSubmit={submitManagementFees}>
-        <ButtonBlock>
-          <SubmitButton label="Claim management fees" />
-        </ButtonBlock>
-      </form>
+      <ButtonBlock>
+        <SubmitButton type="button" label="Claim all fees" onClick={() => submitAllFees()} />
+        <SubmitButton type="button" label="Claim management fees" onClick={() => submitManagementFees()} />
+      </ButtonBlock>
 
       <TransactionModal transaction={transaction} />
     </S.FundClaimFeesBody>

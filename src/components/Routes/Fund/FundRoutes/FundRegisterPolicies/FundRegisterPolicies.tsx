@@ -13,7 +13,6 @@ import {
   AssetWhitelist,
   AssetBlacklist,
   PolicyDefinition,
-  availablePolicies,
 } from '@melonproject/melonjs';
 import { useTransaction } from '~/hooks/useTransaction';
 import { TransactionModal } from '~/components/Common/TransactionModal/TransactionModal';
@@ -67,10 +66,10 @@ export const RegisterPolicies: React.FC<RegisterPoliciesProps> = ({ address }) =
         <p>Configure the risk management profile of your fund and the rules to be enforced by the smart contracts.</p>
         <p>&nbsp;</p>
 
-        <h3>Available policies ({availablePolicies.length})</h3>
+        <h3>Available policies ({environment.policies.length})</h3>
         <p>Please select the policy that you want to add:</p>
         <ul>
-          {availablePolicies.map(policy => {
+          {environment.policies.map(policy => {
             return (
               <li key={policy.name}>
                 <input type="radio" id={policy.name} name="addPolicy" onClick={() => setSelectedPolicy(policy)} />

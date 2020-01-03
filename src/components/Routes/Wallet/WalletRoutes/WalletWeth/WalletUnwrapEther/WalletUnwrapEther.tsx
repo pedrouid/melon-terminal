@@ -3,7 +3,7 @@ import * as Yup from 'yup';
 import BigNumber from 'bignumber.js';
 import useForm, { FormContext } from 'react-hook-form';
 import { toWei } from 'web3-utils';
-import { Weth, findToken } from '@melonproject/melonjs';
+import { Weth } from '@melonproject/melonjs';
 import { useTransaction } from '~/hooks/useTransaction';
 import { TransactionModal } from '~/components/Common/TransactionModal/TransactionModal';
 import { WrapEtherForm } from '~/components/Common/Form/WrapEtherForm';
@@ -36,7 +36,7 @@ export const WalletUnwrapEther: React.FC = () => {
   });
 
   const submit = form.handleSubmit(async data => {
-    const token = findToken(environment.deployment, 'WETH')!;
+    const token = environment.getToken('WETH')!;
     const weth = new Weth(environment, token.address);
     const tx = weth.withdraw(new BigNumber(toWei(data.quantity)), account.address!);
     transaction.start(tx, 'Unwrap Ether');

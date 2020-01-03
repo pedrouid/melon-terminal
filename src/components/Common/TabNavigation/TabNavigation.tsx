@@ -1,5 +1,4 @@
 import React, { createContext, useMemo, useState } from 'react';
-
 import * as S from './TabNavigation.styles';
 
 const TabNavigationContext = createContext<string | undefined>(undefined);
@@ -18,9 +17,7 @@ export const TabNavigation: React.FC = ({ children }) => {
 
   const defaultTab = useMemo(() => {
     const implicitDefaultChild = arrayChildren && arrayChildren[0];
-
     const explicitDefaultChild = arrayChildren.find(child => !!child.props.default);
-
     const defaultChild = explicitDefaultChild || implicitDefaultChild;
 
     return defaultChild && defaultChild.props && defaultChild.props.identifier;

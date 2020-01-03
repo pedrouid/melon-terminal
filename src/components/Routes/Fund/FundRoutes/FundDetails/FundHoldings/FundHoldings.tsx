@@ -36,6 +36,7 @@ export const FundHoldings: React.FC<FundHoldingsProps> = ({ address }) => {
 
       return {
         ...holding,
+        // TODO: This should be done in the graphql api.
         divided: decimals && amount ? amount.dividedBy(new BigNumber(10).exponentiatedBy(decimals)) : new BigNumber(0),
       };
     });

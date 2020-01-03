@@ -3,15 +3,7 @@ import { useEnvironment } from '~/hooks/useEnvironment';
 import { OpenMakeOrder } from '~/queries/FundOpenMakeOrders';
 import BigNumber from 'bignumber.js';
 import { useTransaction } from '~/hooks/useTransaction';
-import {
-  Hub,
-  Trading,
-  OasisDexTradingAdapter,
-  ZeroExTradingAdapter,
-  MatchingMarket,
-  findExchange,
-  findToken,
-} from '@melonproject/melonjs';
+import { Hub, Trading, OasisDexTradingAdapter, ZeroExTradingAdapter, MatchingMarket } from '@melonproject/melonjs';
 import { TransactionModal } from '~/components/Common/TransactionModal/TransactionModal';
 import { BodyCell, BodyCellRightAlign, BodyRow } from '~/components/Common/Table/Table.styles';
 import { useAccount } from '~/hooks/useAccount';
@@ -27,15 +19,15 @@ export const OpenOrderItem: React.FC<OpenOrderItemProps> = ({ address, order }) 
   const environment = useEnvironment()!;
   const account = useAccount();
 
-  const makerSymbol = findToken(environment.deployment, order.makerAsset)!;
-  const takerSymbol = findToken(environment.deployment, order.takerAsset)!;
+  const makerSymbol = environment.getToken(order.makerAsset)!;
+  const takerSymbol = environment.getToken(order.takerAsset)!;
 
   const makerAmount = order.makerQuantity.dividedBy(new BigNumber(10).exponentiatedBy(makerSymbol.decimals));
   const takerAmount = order.takerQuantity.dividedBy(new BigNumber(10).exponentiatedBy(takerSymbol.decimals));
 
   const expired = order.expiresAt < new Date();
   const price = takerAmount.dividedBy(makerAmount);
-  const exchange = findExchange(environment.deployment, order.exchange);
+  const exchange = environment.getExchange(order.exchange);
   const refetch = useOnChainQueryRefetcher();
   const transaction = useTransaction(environment, {
     onFinish: () => refetch(),
@@ -45,14 +37,13 @@ export const OpenOrderItem: React.FC<OpenOrderItemProps> = ({ address, order }) 
     const hub = new Hub(environment, address);
     const trading = new Trading(environment, (await hub.getRoutes()).trading);
 
-    if (exchange && exchange.name === 'MatchingMarket') {
+    if (exchange && exchange.name === 'OasisDex') {
       const oasisDex = await OasisDexTradingAdapter.create(trading, exchange.exchange);
 
       const matchingMarket = new MatchingMarket(environment, exchange.exchange);
       const offer = await matchingMarket.getOffer(order.id);
 
-      const isActive = await matchingMarket.isActive(order.id);
-      if (isActive) {
+      if (await matchingMarket.isActive(order.id)) {
         const args = {
           id: order.id,
           makerAsset: offer.makerAsset,
@@ -60,19 +51,21 @@ export const OpenOrderItem: React.FC<OpenOrderItemProps> = ({ address, order }) 
         };
 
         const tx = oasisDex.cancelOrder(account.address!, args);
-        transaction.start(tx, 'Cancel order');
-      } else {
-        const tx = trading.sendUpdateAndGetQuantityBeingTraded(account.address!, order.makerAsset);
-        transaction.start(tx, 'Update and get quantity being traded');
+        return transaction.start(tx, 'Cancel order');
       }
-    } else {
-      const zeroEx = await ZeroExTradingAdapter.create(trading, order.exchange);
 
+      const tx = trading.sendUpdateAndGetQuantityBeingTraded(account.address!, order.makerAsset);
+      return transaction.start(tx, 'Update and get quantity being traded');
+    }
+
+    if (exchange && exchange.name === 'ZeroEx') {
+      const zeroEx = await ZeroExTradingAdapter.create(trading, order.exchange);
       const args = {
         orderId: order.id,
       };
+
       const tx = await zeroEx.cancelOrder(account.address!, args);
-      transaction.start(tx, 'Cancel order');
+      return transaction.start(tx, 'Cancel order');
     }
   };
 

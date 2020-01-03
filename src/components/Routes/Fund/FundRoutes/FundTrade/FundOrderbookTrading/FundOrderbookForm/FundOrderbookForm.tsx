@@ -5,13 +5,14 @@ import { useEnvironment } from '~/hooks/useEnvironment';
 import { useTransaction } from '~/hooks/useTransaction';
 import { SubmitButton } from '~/components/Common/Form/SubmitButton/SubmitButton';
 import { TransactionModal } from '~/components/Common/TransactionModal/TransactionModal';
-import { Trading, Hub, OasisDexTradingAdapter, findToken, findExchange } from '@melonproject/melonjs';
+import { Trading, Hub, OasisDexTradingAdapter, TokenDefinition } from '@melonproject/melonjs';
 import { InputField } from '~/components/Common/Form/InputField/InputField';
 import { useOnChainQueryRefetcher } from '~/hooks/useOnChainQueryRefetcher';
 import { useAccount } from '~/hooks/useAccount';
 
 export interface FundOrderbookFormProps {
   address: string;
+  asset?: TokenDefinition;
 }
 
 export const FundOrderbookForm: React.FC<FundOrderbookFormProps> = props => {
@@ -26,16 +27,14 @@ export const FundOrderbookForm: React.FC<FundOrderbookFormProps> = props => {
     mode: 'onSubmit',
     reValidateMode: 'onBlur',
     defaultValues: {
-      exchange: findExchange(environment.deployment!, 'OasisDex')?.exchange,
-      makerAsset: 'WETH',
-      takerAsset: 'MLN',
+      exchange: environment.getExchange('OasisDex')?.exchange,
     },
   });
 
   const submit = form.handleSubmit(async data => {
-    const makerAsset = findToken(environment.deployment!, data.makerAsset)!;
-    const takerAsset = findToken(environment.deployment!, data.takerAsset)!;
-    const exchange = findExchange(environment.deployment, data.exchange);
+    const makerAsset = environment.getToken(data.makerAsset)!;
+    const takerAsset = environment.getToken(data.takerAsset)!;
+    const exchange = environment.getExchange(data.exchange);
 
     const hub = new Hub(environment, props.address);
     const trading = new Trading(environment, (await hub.getRoutes()).trading);
