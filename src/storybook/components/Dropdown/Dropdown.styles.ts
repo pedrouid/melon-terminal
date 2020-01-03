@@ -19,6 +19,7 @@ export const DropdownWrapper = styled.div`
     pointer-events: none;
   }
 `;
+
 export const DropdownSelect = styled.select`
   width: 100%;
   appearance: none;

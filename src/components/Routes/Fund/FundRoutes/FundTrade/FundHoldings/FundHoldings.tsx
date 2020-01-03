@@ -96,5 +96,3 @@ export const FundHoldings: React.FC<FundHoldingsProps> = props => {
     </S.Wrapper>
   );
 };
-
-export default FundHoldings;

@@ -10,6 +10,7 @@ export const Title = styled.h1`
   ${TitleBase}
   font-size: ${props => props.theme.fontSizes.xl};
 `;
+
 export const SectionTitle = styled.h2`
   ${TitleBase}
   font-size: ${props => props.theme.fontSizes.xl};

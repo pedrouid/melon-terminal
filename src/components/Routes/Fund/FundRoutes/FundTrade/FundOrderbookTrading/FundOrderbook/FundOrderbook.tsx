@@ -1,13 +1,14 @@
 import React, { useMemo, useState, useEffect } from 'react';
 import { useEnvironment } from '~/hooks/useEnvironment';
-import { Orderbook, aggregatedOrderbook } from './aggregatedOrderbook';
+import { Orderbook, aggregatedOrderbook } from './utils/aggregatedOrderbook';
 import * as Rx from 'rxjs';
 import * as S from './FundOrderbook.styles';
-import { TokenDefinition } from '@melonproject/melonjs';
+import { TokenDefinition, ExchangeDefinition } from '@melonproject/melonjs';
 
 export interface FundOrderbookProps {
   address: string;
   asset?: TokenDefinition;
+  exchanges: ExchangeDefinition[];
 }
 
 export const FundOrderbook: React.FC<FundOrderbookProps> = props => {

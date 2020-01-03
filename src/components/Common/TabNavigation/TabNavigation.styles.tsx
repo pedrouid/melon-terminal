@@ -1,30 +1,23 @@
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 
 export const Menu = styled.div`
   display: flex;
   flex-wrap: wrap;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   position: relative;
-  margin-bottom: ${props => props.theme.spaceUnits.m};
-
-  &::after {
-    content: ' ';
-    position: absolute;
-    bottom: -5px;
-    left: 0;
-    width: 100%;
-    border-top: 1px solid rgba(34, 36, 38, 0.15);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  }
+  margin-bottom: ${props => props.theme.spaceUnits.xs};
+  border-bottom: ${props => props.theme.border.borderSecondary};
 `;
 
 export interface MenuItemProps {
   active?: boolean;
 }
 
-export const MenuItem = styled.span<MenuItemProps>`
+export const MenuItem = styled.h3<MenuItemProps>`
   cursor: pointer;
+  display: inline-block;
   font-size: ${props => props.theme.fontSizes.xl};
-  font-weight: bold;
+  margin-bottom: 0;
+  margin-right: ${props => props.theme.spaceUnits.xl};
+  border-bottom: none;
   position: relative;
 `;

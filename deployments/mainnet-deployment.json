@@ -91,7 +91,7 @@
         "name": "Digix Gold Token",
         "decimals": 9
       },
-      "EUR": {
+      "USDC": {
         "name": "USD Coin",
         "decimals": 6
       },
