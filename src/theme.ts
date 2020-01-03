@@ -79,23 +79,23 @@ export const theme = {
     gutterWidth: {
       xs: 1,
       sm: 1,
-      md: 1.5,
+      md: 1,
       lg: 1.5,
       xl: 1.5,
     },
     paddingWidth: {
       xs: 1,
       sm: 1,
-      md: 1.5,
+      md: 1,
       lg: 1.5,
       xl: 1.5,
     },
     container: {
       xs: 'full', // 'full' = max-width: 100%
-      sm: 45, // max-width: 720px
-      md: 62, // max-width: 992px
-      lg: 64, // max-width: 1024px
-      xl: 90, // max-width: 1440px
+      sm: 'full', // 'full' = max-width: 100%
+      md: 'full', // 'full' = max-width: 100%
+      lg: 'full', // 'full' = max-width: 100%
+      xl: 'full', // 'full' = max-width: 100%
     },
     breakpoints: {
       xs: 1,
