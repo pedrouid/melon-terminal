@@ -38,10 +38,12 @@ export const OrderbookBarsWrapper = styled.div`
   position: absolute;
   z-index: -1;
   width: 100%;
+  height: 100%;
 `;
 
 export const OrderbookBars = styled.svg`
   width: 100%;
+  height: 100%;
   transform: scale(-1, 1);
   z-index: 0;
   pointer-events: none;

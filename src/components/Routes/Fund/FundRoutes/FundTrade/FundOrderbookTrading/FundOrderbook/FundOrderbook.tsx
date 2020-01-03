@@ -49,13 +49,13 @@ export const FundOrderbook: React.FC<FundOrderbookProps> = props => {
             <S.OrderbookBarsWrapper>
               <S.OrderbookBars height={bids.length * 20}>
                 {bids.map((item, index) => (
-                  <S.OrderbookBar key={item.price.toString()} x="0" y={index * 20} width={`${item.relative!}%`} />
+                  <S.OrderbookBar key={index} x="0" y={index * 20} width={`${item.relative!}%`} />
                 ))}
               </S.OrderbookBars>
             </S.OrderbookBarsWrapper>
 
-            {bids.map(item => (
-              <S.OrderbookItem key={item.price.toString()}>
+            {bids.map((item, index) => (
+              <S.OrderbookItem key={index}>
                 <S.OrderbookData>{item.quantity.toFixed(4)}</S.OrderbookData>
                 <S.OrderbookData>{item.total!.toFixed(4)}</S.OrderbookData>
                 <S.OrderbookData>{item.price.toFixed(4)}</S.OrderbookData>
@@ -75,13 +75,13 @@ export const FundOrderbook: React.FC<FundOrderbookProps> = props => {
             <S.OrderbookBarsWrapper>
               <S.OrderbookBars>
                 {asks.map((item, index) => (
-                  <S.OrderbookBar key={item.price.toString()} x="0" y={index * 20} width={`${item.relative!}%`} />
+                  <S.OrderbookBar key={index} x="0" y={index * 20} width={`${item.relative!}%`} />
                 ))}
               </S.OrderbookBars>
             </S.OrderbookBarsWrapper>
 
-            {asks.map(item => (
-              <S.OrderbookItem key={item.price.toString()}>
+            {asks.map((item, index) => (
+              <S.OrderbookItem key={index}>
                 <S.OrderbookData>{item.price.toFixed(4)}</S.OrderbookData>
                 <S.OrderbookData>{item.total!.toFixed(4)}</S.OrderbookData>
                 <S.OrderbookData>{item.quantity.toFixed(4)}</S.OrderbookData>
