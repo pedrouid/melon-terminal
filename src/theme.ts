@@ -63,6 +63,11 @@ export const theme = {
     m: 'min-width: 768px',
     s: 'min-width: 480px',
   },
+  container: {
+    l: '992px',
+    m: '720px',
+    s: '480px',
+  },
   transition: {
     defaultAll: 'all 0.3s ease-in-out',
     duration: '0.3s',

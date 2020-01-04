@@ -76,3 +76,29 @@ export const Button = styled.button<ButtonProps>`
     margin-left: ${props => props.theme.spaceUnits.m};
   }
 `;
+
+export interface ButtonGroupProps {
+  justify?: 'between' | 'around' | 'end';
+}
+
+export const ButtonGroup = styled.div<ButtonGroupProps>`
+  display: flex;
+  justify-content: flex-start;
+  width: 100%;
+  height: 100%;
+  ${props =>
+    props.justify === 'between' &&
+    css`
+      justify-content: space-between;
+    `}
+  ${props =>
+    props.justify === 'around' &&
+    css`
+      justify-content: space-around;
+    `}
+  ${props =>
+    props.justify === 'end' &&
+    css`
+      justify-content: flex-end;
+    `}
+`;
