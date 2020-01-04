@@ -10,6 +10,8 @@ import {
   BodyCell,
   BodyCellRightAlign,
   HeaderRow,
+  BodyRowHover,
+  BodyRow,
 } from '~/components/Common/Table/Table.styles';
 import * as S from './FundHoldings.styles';
 import { useEnvironment } from '~/hooks/useEnvironment';
@@ -29,8 +31,8 @@ export const FundHoldings: React.FC<FundHoldingsProps> = props => {
       return;
     }
 
-    const symbol = holdings && holdings[0]?.token?.symbol;
-    symbol && props.setAsset(environment.getToken(symbol));
+    const holding = holdings.find(holding => holding.token?.symbol !== 'WETH');
+    holding && props.setAsset(environment.getToken(holding.token!.symbol!));
   }, [holdings]);
 
   const mapped = useMemo(
@@ -74,13 +76,12 @@ export const FundHoldings: React.FC<FundHoldingsProps> = props => {
         <tbody>
           {mapped.map(holding => {
             const token = environment.getToken(holding.token!.symbol!);
+            const selected = token.symbol === props.asset?.symbol;
+            const handleClick = token.symbol === 'WETH' ? undefined : () => props.setAsset(token);
+            const Component = token.symbol === 'WETH' ? BodyRow : BodyRowHover;
 
             return (
-              <S.BodyRow
-                key={holding.token?.address}
-                active={token.symbol === props.asset?.symbol}
-                onClick={() => props.setAsset(token)}
-              >
+              <Component key={holding.token?.address} highlighted={selected} onClick={handleClick}>
                 <BodyCell>
                   <S.HoldingSymbol>{holding.token?.symbol}</S.HoldingSymbol>
                   <br />
@@ -88,7 +89,7 @@ export const FundHoldings: React.FC<FundHoldingsProps> = props => {
                 </BodyCell>
                 <BodyCellRightAlign>{holding.token?.price?.toFixed(4)}</BodyCellRightAlign>
                 <BodyCellRightAlign>{holding.divided?.toFixed(4)}</BodyCellRightAlign>
-              </S.BodyRow>
+              </Component>
             );
           })}
         </tbody>

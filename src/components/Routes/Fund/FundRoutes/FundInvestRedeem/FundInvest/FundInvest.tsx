@@ -15,10 +15,13 @@ export const FundInvest: React.FC<FundInvestProps> = ({ address }) => {
 
   const account = result?.account;
   const holdings = result?.fund?.routes?.accounting?.holdings;
-  const investmentRequestState = result?.account?.participation?.investmentRequestState;
-  const canCancelRequest = result?.account?.participation?.canCancelRequest;
-
   const action = useMemo(() => {
+    const canCancelRequest = result?.account?.participation?.canCancelRequest;
+    if (canCancelRequest) {
+      return 'cancel';
+    }
+
+    const investmentRequestState = result?.account?.participation?.investmentRequestState;
     if (investmentRequestState === 'VALID') {
       return 'execute';
     }
@@ -30,7 +33,7 @@ export const FundInvest: React.FC<FundInvestProps> = ({ address }) => {
     if (investmentRequestState === 'NONE') {
       return 'invest';
     }
-  }, [investmentRequestState]);
+  }, [result]);
 
   if (query.loading) {
     return (
@@ -44,15 +47,15 @@ export const FundInvest: React.FC<FundInvestProps> = ({ address }) => {
   return (
     <S.Wrapper>
       <S.Title>Invest</S.Title>
-      {action === 'invest' && <RequestInvestment address={address} holdings={holdings} account={account!} />}
-      {action === 'execute' && <ExecuteRequest address={address} account={account!} />}
+      {action === 'cancel' && <CancelRequest address={address} account={account!} loading={query.networkStatus < 7} />}
+      {action === 'invest' && <RequestInvestment address={address} holdings={holdings} account={account!} loading={query.networkStatus < 7} />}
+      {action === 'execute' && <ExecuteRequest address={address} account={account!} loading={query.networkStatus < 7} />}
       {action === 'waiting' && (
         <p>
           You need to wait before you can execute your investment request. The time-window to execute your investment
           request is between the next price update and 24 hours after your investment request .
         </p>
       )}
-      {canCancelRequest && <CancelRequest address={address} account={account!} />}
     </S.Wrapper>
   );
 };

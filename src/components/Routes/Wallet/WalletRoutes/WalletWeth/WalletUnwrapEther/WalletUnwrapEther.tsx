@@ -6,13 +6,15 @@ import { toWei } from 'web3-utils';
 import { Weth } from '@melonproject/melonjs';
 import { useTransaction } from '~/hooks/useTransaction';
 import { TransactionModal } from '~/components/Common/TransactionModal/TransactionModal';
-import { WrapEtherForm } from '~/components/Common/Form/WrapEtherForm';
 import { useEnvironment } from '~/hooks/useEnvironment';
 import { useAccount } from '~/hooks/useAccount';
 import { useOnChainQueryRefetcher } from '~/hooks/useOnChainQueryRefetcher';
-
 import { Block } from '~/storybook/components/Block/Block';
 import { Title } from '~/storybook/components/Title/Title';
+import { FormField } from '~/storybook/components/FormField/FormField';
+import { Input } from '~/storybook/components/Input/Input';
+import { Button } from '~/storybook/components/Button/Button';
+import * as S from './WalletUnwrapEther.styles';
 
 const validationSchema = Yup.object().shape({
   quantity: Yup.mixed<number>(),
@@ -48,7 +50,18 @@ export const WalletUnwrapEther: React.FC = () => {
     <Block>
       <Title>Unwrap Ether</Title>
       <FormContext {...form}>
-        <WrapEtherForm submit={submit} form={form} label="unwrap" />
+        <form onSubmit={submit}>
+          <S.WalletUnwrapEtherBalances>
+            <S.WalletUnwrapEtherBalance>{account.eth?.toFixed(4)} ETH</S.WalletUnwrapEtherBalance>
+            <S.WalletUnwrapEtherBalance>{account.weth?.toFixed(4)} WETH</S.WalletUnwrapEtherBalance>
+          </S.WalletUnwrapEtherBalances>
+
+          <FormField name="quantity" label="Quantity" >
+            <Input id="quantity" name="quantity" type="number" step="any" />
+          </FormField>
+
+          <Button type="submit">Unwrap Ether</Button>
+        </form>
       </FormContext>
 
       <TransactionModal transaction={transaction} />

@@ -1,24 +1,32 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useMemo } from 'react';
 import BigNumber from 'bignumber.js';
 import * as Yup from 'yup';
+import useForm, { FormContext } from 'react-hook-form';
+import { Participation, StandardToken, sameAddress, TokenDefinition } from '@melonproject/melonjs';
+import { Holding, Account } from '@melonproject/melongql';
 import { useEnvironment } from '~/hooks/useEnvironment';
 import { useTransaction } from '~/hooks/useTransaction';
-import useForm, { FormContext } from 'react-hook-form';
-import { Participation, StandardToken } from '@melonproject/melonjs';
 import { TransactionModal } from '~/components/Common/TransactionModal/TransactionModal';
-import { InputField } from '~/components/Common/Form/InputField/InputField';
-import { SubmitButton } from '~/components/Common/Form/SubmitButton/SubmitButton';
 import { useAccountAllowanceQuery } from '~/queries/AccountAllowance';
-import { Holding, Account } from '@melonproject/melongql';
 import { useOnChainQueryRefetcher } from '~/hooks/useOnChainQueryRefetcher';
-import * as S from './RequestInvestment.styles';
-import { sameAddress } from '@melonproject/melonjs/utils/sameAddress';
 import { useAccount } from '~/hooks/useAccount';
+import { FormField } from '~/storybook/components/FormField/FormField';
+import { Input } from '~/storybook/components/Input/Input';
+import { Button } from '~/storybook/components/Button/Button';
+import { Dropdown } from '~/storybook/components/Dropdown/Dropdown';
+import { Spinner } from '~/components/Common/Spinner/Spinner';
 
 export interface RequestInvestmentProps {
   address: string;
   holdings?: Holding[];
   account: Account;
+  loading: boolean;
+}
+
+interface RequestInvestmentFormValues {
+  investmentAsset: string | undefined;
+  investmentAmount: number;
+  requestedShares: number;
 }
 
 const validationSchema = Yup.object().shape({
@@ -31,67 +39,53 @@ const validationSchema = Yup.object().shape({
   investmentAsset: Yup.string(),
 });
 
-const defaultValues = {
-  investmentAmount: 1,
-  requestedShares: 1,
-  investmentAsset: '',
-};
-
 export const RequestInvestment: React.FC<RequestInvestmentProps> = props => {
   const environment = useEnvironment()!;
   const account = useAccount();
   const refetch = useOnChainQueryRefetcher();
-  const [selectedTokenIndex, setSelectedTokenIndex] = useState(0);
-
-  const participation = props.account?.participation?.address;
-  const holding = props.holdings && props.holdings[selectedTokenIndex];
-  const [allowance] = useAccountAllowanceQuery(account.address, holding?.token?.address, participation);
 
   const transaction = useTransaction(environment, {
     onFinish: () => refetch(),
   });
 
-  const form = useForm<typeof defaultValues>({
-    defaultValues,
+  const holdings = props.holdings ?? [];
+  const form = useForm<RequestInvestmentFormValues>({
     validationSchema,
     mode: 'onSubmit',
     reValidateMode: 'onBlur',
+    defaultValues: {
+      investmentAsset: holdings[0]?.token?.address,
+      investmentAmount: 1,
+      requestedShares: 1,
+    },
   });
 
-  const investmentAsset = form.watch('investmentAsset') as string;
+  const investmentAsset = form.watch('investmentAsset') as string | undefined;
   const investmentAmount = form.watch('investmentAmount') as number;
   const requestedShares = form.watch('requestedShares') as number;
+  const token = (investmentAsset && environment.getToken(investmentAsset)) as TokenDefinition | undefined;
+  const holding = holdings.find(holding => sameAddress(holding.token?.address, investmentAsset));
+  const participation = props.account?.participation?.address;
+  const [allowance, query] = useAccountAllowanceQuery(account.address, investmentAsset, participation);
 
   const action = useMemo(() => {
-    if (allowance && allowance.allowance.isGreaterThanOrEqualTo(investmentAmount)) {
+    if (allowance?.allowance.isGreaterThanOrEqualTo(investmentAmount)) {
       return 'invest';
     }
 
     return 'approve';
   }, [allowance, investmentAmount]);
 
-  useEffect(() => {
-    holding && form.setValue('investmentAsset', holding!.token!.address!);
-
-    const calculatedInvestmentAmount =
-      holding &&
-      new BigNumber(requestedShares)
-        .multipliedBy(holding!.shareCostInAsset!)
-        .dividedBy(new BigNumber(10).exponentiatedBy(holding!.token!.decimals!));
-
-    form.setValue('investmentAmount', (calculatedInvestmentAmount && calculatedInvestmentAmount!.toNumber()) || 1);
-  }, [selectedTokenIndex]);
-
-  const submit = form.handleSubmit(data => {
-    const investmentToken = new StandardToken(environment, data.investmentAsset);
-
+  const submit = form.handleSubmit(values => {
     switch (action) {
       case 'approve': {
-        const tx = investmentToken.approve(
+        const contract = new StandardToken(environment, values.investmentAsset);
+        const tx = contract.approve(
           account.address!,
           participation!,
-          new BigNumber(data.investmentAmount).times(new BigNumber(10).exponentiatedBy(holding!.token!.decimals!))
+          new BigNumber(values.investmentAmount).times(new BigNumber(10).exponentiatedBy(token!.decimals))
         );
+
         transaction.start(tx, 'Approve');
         break;
       }
@@ -100,9 +94,9 @@ export const RequestInvestment: React.FC<RequestInvestmentProps> = props => {
         const contract = new Participation(environment, participation);
         const tx = contract.requestInvestment(
           account.address!,
-          new BigNumber(data.requestedShares).times(new BigNumber(10).exponentiatedBy(18)),
-          new BigNumber(data.investmentAmount).times(new BigNumber(10).exponentiatedBy(holding!.token!.decimals!)),
-          data.investmentAsset
+          new BigNumber(values.requestedShares).times(new BigNumber(10).exponentiatedBy(18)),
+          new BigNumber(values.investmentAmount).times(new BigNumber(10).exponentiatedBy(token!.decimals)),
+          values.investmentAsset!
         );
 
         transaction.start(tx, 'Invest');
@@ -111,80 +105,71 @@ export const RequestInvestment: React.FC<RequestInvestmentProps> = props => {
     }
   });
 
-  const handleTokenChange = (e: any) => {
-    const index = props.holdings && props.holdings.map(token => token!.token!.address).indexOf(e.target.value);
-    setSelectedTokenIndex(index || 0);
+  const handleInvestmentAmountChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const shares = (holding && token && requestedShares && new BigNumber(event.target.value ?? 0)
+      .multipliedBy(new BigNumber(10).exponentiatedBy(token.decimals))
+      .dividedBy(holding.shareCostInAsset!)) as BigNumber;
+
+    form.setValue('requestedShares', shares?.toNumber() ?? 1);
   };
 
-  const handleRequestedSharesChange = (e: any) => {
-    const token = props.holdings && props.holdings.find(token => sameAddress(token!.token!.address, investmentAsset));
-    const calculatedInvestmentAmount =
-      token &&
-      new BigNumber(requestedShares)
-        .multipliedBy(token!.shareCostInAsset!)
-        .dividedBy(new BigNumber(10).exponentiatedBy(token!.token!.decimals!));
-    form.setValue('investmentAmount', (calculatedInvestmentAmount && calculatedInvestmentAmount!.toNumber()) || 1);
+  const handleRequestedSharesChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const amount = (holding && token &&
+      new BigNumber(event.target.value ?? 0)
+        .multipliedBy(holding.shareCostInAsset!)
+        .dividedBy(new BigNumber(10).exponentiatedBy(token.decimals))) as BigNumber;
+
+    form.setValue('investmentAmount', amount?.toNumber() ?? 1);
   };
 
-  const handleInvestmentAmountChange = (e: any) => {
-    const token = props.holdings && props.holdings.find(token => sameAddress(token!.token!.address, investmentAsset));
-    const calculatedRequestedShares =
-      token &&
-      new BigNumber(investmentAmount)
-        .multipliedBy(new BigNumber(10).exponentiatedBy(token!.token!.decimals!))
-        .dividedBy(token!.shareCostInAsset!);
-    form.setValue('requestedShares', (calculatedRequestedShares && calculatedRequestedShares!.toNumber()) || 1);
-  };
-
-  const currentBalance =
-    allowance &&
-    allowance.balance
-      // .times(new BigNumber(10).exponentiatedBy(props.holdings![selectedTokenIndex].token.decimals))
-      .toString();
-  const currentAllowance =
-    allowance &&
-    allowance.allowance
-      // .times(new BigNumber(10).exponentiatedBy(props.holdings![selectedTokenIndex].token.decimals))
-      .toString();
+  const investmentAssetOptions = (props.holdings ?? []).map(holding => ({
+    value: holding.token!.address!,
+    name: holding.token!.symbol!,
+  }))
 
   return (
     <>
       <FormContext {...form}>
-        <S.RequestInvestmentForm onSubmit={submit}>
-          <S.DropDownWrapper>
-            <S.Select ref={form.register} name="investmentAsset" id="investmentAsset" onChange={handleTokenChange}>
-              {props.holdings &&
-                props.holdings.map(holding => {
-                  return (
-                    <option value={holding!.token!.address!} key={holding!.token!.address!}>
-                      {holding!.token!.symbol!}
-                    </option>
-                  );
-                })}
-            </S.Select>
-          </S.DropDownWrapper>
-          Your current balance: {currentBalance} - your current allowance: {currentAllowance}
-          <InputField
-            id="requestedShares"
-            name="requestedShares"
-            label="Number of shares"
-            type="number"
-            step="any"
-            min="0"
-            onChange={handleRequestedSharesChange}
-          />
-          <InputField
-            id="investmentAmount"
-            name="investmentAmount"
-            label="Investment Amount"
-            type="number"
-            step="any"
-            min="0"
-            onChange={handleInvestmentAmountChange}
-          />
-          <SubmitButton label={action} id="action" />
-        </S.RequestInvestmentForm>
+        <form onSubmit={submit}>
+          <FormField name="investmentAsset" label="Investment asset">
+            <Dropdown name="investmentAsset" id="investmentAsset" options={investmentAssetOptions} disabled={props.loading} />
+          </FormField>
+
+          {query.loading && <Spinner /> || (
+            <>
+              <div>Your current balance: {allowance?.balance?.toString() ?? 'N/A'}</div>
+              <div>Your current allowance: {allowance?.allowance?.toString() ?? 'N/A'}</div>
+
+              <FormField name="requestedShares" label="Number of shares">
+                <Input
+                  id="requestedShares"
+                  name="requestedShares"
+                  type="number"
+                  step="any"
+                  min="0"
+                  disabled={props.loading}
+                  onChange={handleRequestedSharesChange}
+                />
+              </FormField>
+
+              <FormField name="investmentAmount" label="Investment Amount">
+                <Input
+                  id="investmentAmount"
+                  name="investmentAmount"
+                  type="number"
+                  step="any"
+                  min="0"
+                  disabled={props.loading}
+                  onChange={handleInvestmentAmountChange}
+                />
+              </FormField>
+
+              <Button type="submit" disabled={props.loading}>{action}</Button>
+            </>
+          )}
+        </form>
       </FormContext>
+
       <TransactionModal transaction={transaction} />
     </>
   );

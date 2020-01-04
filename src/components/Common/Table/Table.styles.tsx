@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 export const Table = styled.table`
   background-color: ${props => props.theme.otherColors.white};
@@ -33,27 +33,34 @@ export const BodyCellRightAlign = styled.td`
   text-align: right;
 `;
 
-export const BodyRow = styled.tr`
+export interface BodyRowProps {
+  highlighted?: boolean;
+}
+
+export const BodyRow = styled.tr<BodyRowProps>`
   border-top: 1px solid ${props => props.theme.mainColors.border};
 
   &:not(:last-child) {
     border-bottom: 1px dashed rgb(234, 229, 212);
   }
+
+  ${props => {
+    if (props.highlighted) {
+      return css`
+        background-color: ${props => props.theme.mainColors.secondary};
+      `;
+    }
+  }}
 `;
 
 export const NoEntries = styled.div`
   padding: ${props => props.theme.spaceUnits.s};
 `;
 
-export const BodyRowHover = styled.tr`
-  border-top: 1px solid ${props => props.theme.mainColors.border};
+export const BodyRowHover = styled(BodyRow)`
   cursor: pointer;
 
-  &:not(:last-child) {
-    border-bottom: 1px dashed rgb(234, 229, 212);
-  }
-
   &:hover {
-    background-color: ${props => props.theme.mainColors.primary};
+    background-color: ${props => props.theme.mainColors.secondary};
   }
 `;

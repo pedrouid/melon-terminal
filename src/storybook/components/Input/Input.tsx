@@ -1,33 +1,15 @@
-import styled, { css } from 'styled-components';
+import React from 'react';
+import { useFormContext } from 'react-hook-form';
+import * as S from './Input.styles';
 
-export const Input = styled.input`
-  position: relative;
-  width: 100%;
-  padding: 0px ${props => props.theme.spaceUnits.m};
-  border: 1px solid ${props => props.theme.mainColors.secondaryDarkAlpha};
-  border-radius: 0;
-  font-family: inherit;
-  font-size: ${props => props.theme.fontSizes.m};
-  background: ${props => props.theme.mainColors.primary};
-  box-shadow: inset 1px 4px 4px rgba(200, 200, 200, 0.25);
-  height: ${props => props.theme.spaceUnits.xl};
+export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
 
-  &::placeholder {
-    color: ${props => props.theme.mainColors.secondaryDarkAlpha};
-    font-size: ${props => props.theme.fontSizes.s};
-  }
+}
 
-  &:focus {
-    outline-color: ${props => props.theme.mainColors.secondaryDarkAlpha};
-  }
+export const Input: React.FC<InputProps> = ({ name, ...rest }) => {
+  const form = useFormContext();
+  const connected = !!(form && name);
+  const ref = connected ? form.register : undefined;
 
-  ${props => {
-    if (props.disabled) {
-      return css`
-        background: ${props => props.theme.mainColors.secondary};
-        border-color: ${props => props.theme.mainColors.secondaryDarkAlpha};
-        pointer-events: none;
-      `;
-    }
-  }}
-`;
+  return <S.Input ref={ref} name={name} {...rest} />;
+};

@@ -26,7 +26,7 @@ interface TransactionPipeline {
   [key: string]: TransactionPipelineItem;
 }
 
-export const SetupTransactions: React.FC = props => {
+export const WalletFundSetupTransactions: React.FC = props => {
   const [result, query] = useAccountFundQuery();
   const environment = useEnvironment()!;
   const account = useAccount();
@@ -146,3 +146,5 @@ export const SetupTransactions: React.FC = props => {
     </>
   );
 };
+
+export default WalletFundSetupTransactions;

@@ -1,29 +1,19 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { useHistory } from 'react-router';
-import useForm, { FormContext } from 'react-hook-form';
-import * as Yup from 'yup';
-
 import { FundOverviewChange } from '~/components/Routes/Home/FundOverview/FundOverviewChange/FundOverviewChange';
 import { Spinner } from '~/components/Common/Spinner/Spinner';
 import { NoMatch } from '~/components/Routes/NoMatch/NoMatch';
 import { FundOverviewPagination } from '~/components/Routes/Home/FundOverview/FundOverviewPagination/FundOverviewPagination';
 import { useFundOverviewQuery, FundProcessed } from '~/queries/FundOverview';
 import { usePagination } from '~/hooks/usePagination';
-import { InputField } from '~/components/Common/Form/InputField/InputField';
+import { Input } from '~/storybook/components/Input/Input';
+import { FormField } from '~/storybook/components/FormField/FormField';
 import * as S from './FundOverview.styles';
 
 interface SortChoice {
   key: keyof typeof sortChoice;
   order: 'asc' | 'desc';
 }
-
-const validationSchema = Yup.object().shape({
-  search: Yup.mixed<string>(),
-});
-
-const defaultValues = {
-  search: '',
-};
 
 function createSortString(key: keyof FundProcessed) {
   return function sortString(a: FundProcessed, b: FundProcessed): number {
@@ -150,14 +140,7 @@ const tableHeadings = [
 export const FundOverview: React.FC = () => {
   const history = useHistory();
   const [funds, query] = useFundOverviewQuery();
-
-  const form = useForm<typeof defaultValues>({
-    defaultValues,
-    validationSchema,
-    mode: 'onChange',
-  });
-
-  const search = form.watch('search', '') as string;
+  const [search, setSearch] = useState('');
 
   const filtered = useFilteredFunds(funds, search);
   const sorted = useSortedFunds(filtered.funds);
@@ -191,14 +174,16 @@ export const FundOverview: React.FC = () => {
 
   return (
     <S.Container>
-      <FormContext {...form}>
-        <InputField id="search" name="search" label="Search" type="text" />
-      </FormContext>
+      <FormField label="Search">
+        <Input id="search" name="search" type="text" onChange={(event) => setSearch(event.target.value)} />
+      </FormField>
+
       <FundOverviewPagination
         offset={pagination.offset}
         setOffset={pagination.setOffset}
         funds={filtered.funds.length}
       />
+
       <S.ScrollableTable>
         <S.Table>
           <thead>
@@ -234,10 +219,10 @@ export const FundOverview: React.FC = () => {
                 </S.BodyRow>
               ))
             ) : (
-              <S.EmptyRow>
-                <S.EmptyCell colSpan={12}>No records to display</S.EmptyCell>
-              </S.EmptyRow>
-            )}
+                <S.EmptyRow>
+                  <S.EmptyCell colSpan={12}>No records to display</S.EmptyCell>
+                </S.EmptyRow>
+              )}
           </tbody>
         </S.Table>
       </S.ScrollableTable>

@@ -1,18 +1,17 @@
 import React from 'react';
-import useForm, { FormContext } from 'react-hook-form';
 import { useEnvironment } from '~/hooks/useEnvironment';
 import { useTransaction } from '~/hooks/useTransaction';
 import { Participation } from '@melonproject/melonjs';
 import { TransactionModal } from '~/components/Common/TransactionModal/TransactionModal';
-import { SubmitButton } from '~/components/Common/Form/SubmitButton/SubmitButton';
 import { Account } from '@melonproject/melongql';
 import { useOnChainQueryRefetcher } from '~/hooks/useOnChainQueryRefetcher';
 import { useAccount } from '~/hooks/useAccount';
-import * as S from './ExecuteRequest.styles';
+import { Button } from '~/storybook/components/Button/Button';
 
 export interface ExecuteRequestProps {
   address: string;
   account: Account;
+  loading: boolean;
 }
 
 export const ExecuteRequest: React.FC<ExecuteRequestProps> = props => {
@@ -23,24 +22,15 @@ export const ExecuteRequest: React.FC<ExecuteRequestProps> = props => {
     onFinish: () => refetch(),
   });
 
-  const form = useForm({
-    mode: 'onSubmit',
-    reValidateMode: 'onBlur',
-  });
-
-  const submit = form.handleSubmit(() => {
+  const execute = () => {
     const contract = new Participation(environment, props.account.participation!.address!);
     const tx = contract.executeRequestFor(account.address!, account.address!);
     transaction.start(tx, 'Execute investment request');
-  });
+  };
 
   return (
     <>
-      <FormContext {...form}>
-        <S.ExecuteRequestForm onSubmit={submit}>
-          <SubmitButton label="Execute investment request" id="action" />
-        </S.ExecuteRequestForm>
-      </FormContext>
+      <Button type="button" disabled={props.loading} onClick={() => execute()}>Execute investment request</Button>
       <TransactionModal transaction={transaction} />
     </>
   );

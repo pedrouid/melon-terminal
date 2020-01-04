@@ -1,19 +1,19 @@
 import React from 'react';
+import BigNumber from 'bignumber.js';
 import * as Yup from 'yup';
-import { useEnvironment } from '~/hooks/useEnvironment';
-import { useFundInvestQuery } from '~/queries/FundInvest';
 import useForm, { FormContext } from 'react-hook-form';
 import { Participation } from '@melonproject/melonjs';
+import { useEnvironment } from '~/hooks/useEnvironment';
+import { useFundInvestQuery } from '~/queries/FundInvest';
 import { useTransaction } from '~/hooks/useTransaction';
-import BigNumber from 'bignumber.js';
 import { TransactionModal } from '~/components/Common/TransactionModal/TransactionModal';
-import { InputField } from '~/components/Common/Form/InputField/InputField';
-import { SubmitButton } from '~/components/Common/Form/SubmitButton/SubmitButton';
-import { useFundDetailsQuery } from '~/queries/FundDetails';
 import { Spinner } from '~/components/Common/Spinner/Spinner';
 import { useAccount } from '~/hooks/useAccount';
-import * as S from './FundRedeem.styles';
 import { useOnChainQueryRefetcher } from '~/hooks/useOnChainQueryRefetcher';
+import { FormField } from '~/storybook/components/FormField/FormField';
+import { Input } from '~/storybook/components/Input/Input';
+import { Button } from '~/storybook/components/Button/Button';
+import * as S from './FundRedeem.styles';
 
 export interface FundRedeemProps {
   address: string;
@@ -89,16 +89,17 @@ export const FundRedeem: React.FC<FundRedeemProps> = ({ address }) => {
           <p>You own {shares?.balanceOf?.toString()} shares!</p>
           <FormContext {...form}>
             <form onSubmit={submit}>
-              <InputField
-                id="shareQuantity"
-                name="shareQuantity"
-                label="Number of shares to redeem"
-                type="number"
-                step="any"
-                min="0"
-                max={shares?.balanceOf?.toString()}
-                disabled={redeemAll}
-              />
+              <FormField name="shareQuantity" label="Number of shares to redeem">
+                <Input
+                  id="shareQuantity"
+                  name="shareQuantity"
+                  type="number"
+                  step="any"
+                  min="0"
+                  max={shares?.balanceOf?.toString()}
+                  disabled={redeemAll}
+                />
+              </FormField>
 
               <input
                 type="checkbox"
@@ -109,7 +110,7 @@ export const FundRedeem: React.FC<FundRedeemProps> = ({ address }) => {
               />
               <label htmlFor="redeemAll">Redeem all shares</label>
 
-              <SubmitButton label="Redeem" id="action" />
+              <Button type="submit">Redeem</Button>
             </form>
           </FormContext>
           <TransactionModal transaction={transaction} />

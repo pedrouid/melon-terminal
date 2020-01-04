@@ -4,10 +4,10 @@ import { FormContext } from 'react-hook-form';
 import { TransactionHookValues, TransactionProgress } from '~/hooks/useTransaction';
 import { ProgressBar } from '~/components/Common/ProgressBar/ProgressBar';
 import { ProgressBarStep } from '~/components/Common/ProgressBar/ProgressBarStep/ProgressBarStep';
-import { InputField } from '~/components/Common/Form/InputField/InputField';
-import { SubmitButton } from '~/components/Common/Form/SubmitButton/SubmitButton';
-import { CancelButton } from '~/components/Common/Form/CancelButton/CancelButton';
 import { useEtherscanLink } from '~/hooks/useEtherscanLink';
+import { FormField } from '~/storybook/components/FormField/FormField';
+import { Input } from '~/storybook/components/Input/Input';
+import { Button } from '~/storybook/components/Button/Button';
 import * as S from './TransactionModal.styles';
 
 function progressToStep(progress: number) {
@@ -101,15 +101,16 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
               {!finished && !(!estimated && error) && (
                 <>
                   <S.TransactionModalFeeForm>
-                    <InputField
-                      id="gas-price"
-                      type="number"
-                      name="gasPrice"
-                      label="Gas Price (GWEI)"
-                      step=".01"
-                      defaultValue={price}
-                      disabled={!!loading && estimated}
-                    />
+                    <FormField name="gasPrice" label="Gas Price (GWEI)">
+                      <Input
+                        id="gas-price"
+                        type="number"
+                        name="gasPrice"
+                        step=".01"
+                        defaultValue={price}
+                        disabled={!!loading && estimated}
+                      />
+                    </FormField>
                     {options && options.gas && <div>Gas limit: {options.gas}</div>}
                     {options && options.amgu && <div>AMGU: {options.amgu.toFixed(4)}</div>}
                     {options && options.incentive && <div>INCENTIVE: {options.incentive.toFixed(4)}</div>}
@@ -169,19 +170,19 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
               <S.TransactionModalActions>
                 {!finished && (
                   <S.TransactionModalAction>
-                    <CancelButton label={estimated ? 'Cancel' : 'Close'} onClick={() => cancel()} />
+                    <Button type="button" kind="secondary" onClick={() => cancel()}>{estimated ? 'Cancel' : 'Close'}</Button>
                   </S.TransactionModalAction>
                 )}
 
                 {!finished && estimated && (
                   <S.TransactionModalAction>
-                    <SubmitButton label={error ? 'Retry' : 'Confirm'} disabled={loading} />
+                    <Button type="submit" kind="success" disabled={loading}>{error ? 'Retry' : 'Confirm'}</Button>
                   </S.TransactionModalAction>
                 )}
 
                 {finished && (
                   <S.TransactionModalAction>
-                    <SubmitButton label="Close" onClick={() => acknowledge()} />
+                    <Button type="button" kind="success" onClick={() => acknowledge()} disabled={loading}>Close</Button>
                   </S.TransactionModalAction>
                 )}
               </S.TransactionModalActions>

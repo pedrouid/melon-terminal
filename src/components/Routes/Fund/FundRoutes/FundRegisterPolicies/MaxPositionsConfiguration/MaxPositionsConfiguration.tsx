@@ -2,12 +2,13 @@ import React from 'react';
 import * as Yup from 'yup';
 import * as S from './MaxPositionsConfiguration.styles';
 import useForm, { FormContext } from 'react-hook-form';
-import { SubmitButton } from '~/components/Common/Form/SubmitButton/SubmitButton';
-import { InputField } from '~/components/Common/Form/InputField/InputField';
 import { useEnvironment } from '~/hooks/useEnvironment';
 import { MaxPositions, Deployment, PolicyDefinition } from '@melonproject/melonjs';
 import { MaxPositionsBytecode } from '@melonproject/melonjs/abis/MaxPositions.bin';
 import { useAccount } from '~/hooks/useAccount';
+import { Button } from '~/storybook/components/Button/Button';
+import { FormField } from '~/storybook/components/FormField/FormField';
+import { Input } from '~/storybook/components/Input/Input';
 
 interface MaxPositionsConfigurationForm {
   maxPositions: number;
@@ -46,8 +47,10 @@ export const MaxPositionsConfiguration: React.FC<MaxPositionsConfigurationProps>
 
       <FormContext {...form}>
         <form onSubmit={submit}>
-          <InputField name="maxPositions" label="Maximum number of positions" type="number" id="maxPositions" />
-          <SubmitButton label="Add MaxPositions policy" />
+          <FormField name="maxPositions" label="Maximum number of positions">
+            <Input name="maxPositions" type="number" id="maxPositions" />
+          </FormField>
+          <Button type="submit">Add MaxPositions policy</Button>
         </form>
       </FormContext>
     </>
