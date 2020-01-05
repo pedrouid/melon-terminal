@@ -30,7 +30,9 @@ export const ExecuteRequest: React.FC<ExecuteRequestProps> = props => {
 
   return (
     <>
-      <Button type="button" disabled={props.loading} onClick={() => execute()}>Execute investment request</Button>
+      <Button type="button" disabled={props.loading} onClick={() => execute()}>
+        Execute investment request
+      </Button>
       <TransactionModal transaction={transaction} />
     </>
   );

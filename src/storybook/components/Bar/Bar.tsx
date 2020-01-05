@@ -36,9 +36,9 @@ export const BarContent = styled.div<BarProps>`
       justify-content: flex-end;
     `}
   ${props =>
-     props.size === 'full' &&
-     css`
-       width: 100%;
+    props.size === 'full' &&
+    css`
+      width: 100%;
     `}
   ${props =>
     props.size === 'contained' &&

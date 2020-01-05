@@ -21,7 +21,11 @@ export const OrderbookData = styled.span`
   font-size: ${props => props.theme.fontSizes.s};
 `;
 
-export const OrderbookItem = styled.div`
+export interface OrderbookItemProps {
+  selected: boolean;
+}
+
+export const OrderbookItem = styled.div<OrderbookItemProps>`
   cursor: pointer;
   height: 20px;
   padding: 0 ${props => props.theme.spaceUnits.s};
@@ -31,6 +35,12 @@ export const OrderbookItem = styled.div`
   &:hover {
     background-color: rgba(0, 0, 0, 0.2);
   }
+
+  ${props =>
+    props.selected &&
+    css`
+      background-color: rgba(0, 0, 0, 0.2);
+    `}
 `;
 
 export const OrderbookBarsWrapper = styled.div`

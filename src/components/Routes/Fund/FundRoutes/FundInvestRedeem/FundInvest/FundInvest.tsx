@@ -48,8 +48,12 @@ export const FundInvest: React.FC<FundInvestProps> = ({ address }) => {
     <S.Wrapper>
       <S.Title>Invest</S.Title>
       {action === 'cancel' && <CancelRequest address={address} account={account!} loading={query.networkStatus < 7} />}
-      {action === 'invest' && <RequestInvestment address={address} holdings={holdings} account={account!} loading={query.networkStatus < 7} />}
-      {action === 'execute' && <ExecuteRequest address={address} account={account!} loading={query.networkStatus < 7} />}
+      {action === 'invest' && (
+        <RequestInvestment address={address} holdings={holdings} account={account!} loading={query.networkStatus < 7} />
+      )}
+      {action === 'execute' && (
+        <ExecuteRequest address={address} account={account!} loading={query.networkStatus < 7} />
+      )}
       {action === 'waiting' && (
         <p>
           You need to wait before you can execute your investment request. The time-window to execute your investment

@@ -4,10 +4,10 @@ import { equals } from 'ramda';
 import { Orderbook as OrderbookProvider } from '@0x/orderbook';
 import { APIOrder as ZeroExOrder } from '@0x/types';
 import { assetDataUtils } from '@0x/order-utils';
-import { TokenDefinition, DeployedEnvironment } from '@melonproject/melonjs';
+import { TokenDefinition, DeployedEnvironment, ExchangeIdentifier } from '@melonproject/melonjs';
 import { concatMap, expand, distinctUntilChanged, map } from 'rxjs/operators';
 import { NetworkEnum } from '~/types';
-import { Orderbook, OrderbookItem, OrderType } from './aggregatedOrderbook';
+import { Orderbook, OrderbookItem } from './aggregatedOrderbook';
 
 const endpoints = {
   [NetworkEnum.MAINNET]: {
@@ -26,26 +26,30 @@ const endpoints = {
 };
 
 export interface ZeroExOrderbookItem extends OrderbookItem {
-  type: OrderType.ZeroEx;
+  type: ExchangeIdentifier.ZeroEx;
   order: ZeroExOrder;
 }
 
-function mapOrders(orders: ZeroExOrder[], makerAsset: TokenDefinition, takerAsset: TokenDefinition) {
+function mapOrders(
+  orders: ZeroExOrder[],
+  makerAsset: TokenDefinition,
+  takerAsset: TokenDefinition,
+  side: 'bid' | 'ask'
+) {
   const makerAssetDecimals = new BigNumber(10).exponentiatedBy(makerAsset.decimals);
   const takerAssetDecimals = new BigNumber(10).exponentiatedBy(takerAsset.decimals);
 
   return orders.map(order => {
-    const type = OrderType.ZeroEx;
     const quantity = order.order.makerAssetAmount.dividedBy(makerAssetDecimals);
     const price = order.order.takerAssetAmount.dividedBy(takerAssetDecimals).dividedBy(quantity);
 
     return {
       order,
-      type,
       quantity,
       price,
-      maker: makerAsset,
-      taker: takerAsset,
+      side,
+      exchange: ExchangeIdentifier.ZeroEx,
+      id: `zeroex:${order.order.salt}`,
     } as OrderbookItem;
   });
 }
@@ -89,8 +93,8 @@ export function zeroExOrderbook(
 
       return polling$.pipe<Orderbook>(
         map(([b, a]) => ({
-          bids: mapOrders(b, takerAsset, makerAsset),
-          asks: mapOrders(a, makerAsset, takerAsset),
+          bids: mapOrders(b, takerAsset, makerAsset, 'bid'),
+          asks: mapOrders(a, makerAsset, takerAsset, 'ask'),
         }))
       );
     }

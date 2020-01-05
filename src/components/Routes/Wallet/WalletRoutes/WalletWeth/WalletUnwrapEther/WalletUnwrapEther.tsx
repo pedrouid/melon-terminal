@@ -56,7 +56,7 @@ export const WalletUnwrapEther: React.FC = () => {
             <S.WalletUnwrapEtherBalance>{account.weth?.toFixed(4)} WETH</S.WalletUnwrapEtherBalance>
           </S.WalletUnwrapEtherBalances>
 
-          <FormField name="quantity" label="Quantity" >
+          <FormField name="quantity" label="Quantity">
             <Input id="quantity" name="quantity" type="number" step="any" />
           </FormField>
 

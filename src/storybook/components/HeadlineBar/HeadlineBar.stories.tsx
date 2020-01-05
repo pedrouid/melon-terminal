@@ -9,7 +9,7 @@ export const Default: React.FC = () => {
   return (
     <Bar>
       <BarContent size="contained" justify="between">
-        <Headline title="My title" text="My subtitle" icon="icon"/>
+        <Headline title="My title" text="My subtitle" icon="icon" />
       </BarContent>
     </Bar>
   );
@@ -19,7 +19,7 @@ export const JustTitle: React.FC = () => {
   return (
     <Bar>
       <BarContent size="contained" justify="between">
-        <Headline title="My title" text="My subtitle"/>
+        <Headline title="My title" text="My subtitle" />
       </BarContent>
     </Bar>
   );
@@ -29,7 +29,7 @@ export const WithButtons: React.FC = () => {
   return (
     <Bar>
       <BarContent size="contained" justify="between">
-        <Headline title="My title" text="My subtitle" icon="icon"/>
+        <Headline title="My title" text="My subtitle" icon="icon" />
         <ButtonGroup justify="end">
           <Button>button 1</Button>
           <Button>button 2</Button>

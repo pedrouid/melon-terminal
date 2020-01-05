@@ -1,9 +1,16 @@
 import React from 'react';
+import BigNumber from 'bignumber.js';
 import { useEnvironment } from '~/hooks/useEnvironment';
 import { OpenMakeOrder } from '~/queries/FundOpenMakeOrders';
-import BigNumber from 'bignumber.js';
 import { useTransaction } from '~/hooks/useTransaction';
-import { Hub, Trading, OasisDexTradingAdapter, ZeroExTradingAdapter, MatchingMarket } from '@melonproject/melonjs';
+import {
+  Hub,
+  Trading,
+  OasisDexTradingAdapter,
+  ZeroExTradingAdapter,
+  MatchingMarket,
+  ExchangeIdentifier,
+} from '@melonproject/melonjs';
 import { TransactionModal } from '~/components/Common/TransactionModal/TransactionModal';
 import { BodyCell, BodyCellRightAlign, BodyRow } from '~/components/Common/Table/Table.styles';
 import { useAccount } from '~/hooks/useAccount';
@@ -37,20 +44,14 @@ export const OpenOrderItem: React.FC<OpenOrderItemProps> = ({ address, order }) 
     const hub = new Hub(environment, address);
     const trading = new Trading(environment, (await hub.getRoutes()).trading);
 
-    if (exchange && exchange.name === 'OasisDex') {
+    if (exchange && exchange.id === ExchangeIdentifier.OasisDex) {
       const oasisDex = await OasisDexTradingAdapter.create(trading, exchange.exchange);
 
       const matchingMarket = new MatchingMarket(environment, exchange.exchange);
       const offer = await matchingMarket.getOffer(order.id);
 
       if (await matchingMarket.isActive(order.id)) {
-        const args = {
-          id: order.id,
-          makerAsset: offer.makerAsset,
-          takerAsset: order.takerAsset,
-        };
-
-        const tx = oasisDex.cancelOrder(account.address!, args);
+        const tx = oasisDex.cancelOrder(account.address!, order.id, offer);
         return transaction.start(tx, 'Cancel order');
       }
 
@@ -58,7 +59,7 @@ export const OpenOrderItem: React.FC<OpenOrderItemProps> = ({ address, order }) 
       return transaction.start(tx, 'Update and get quantity being traded');
     }
 
-    if (exchange && exchange.name === 'ZeroEx') {
+    if (exchange && exchange.id === ExchangeIdentifier.ZeroEx) {
       const zeroEx = await ZeroExTradingAdapter.create(trading, order.exchange);
       const args = {
         orderId: order.id,

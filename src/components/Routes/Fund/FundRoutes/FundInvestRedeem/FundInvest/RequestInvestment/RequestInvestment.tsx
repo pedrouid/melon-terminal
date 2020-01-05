@@ -106,15 +106,19 @@ export const RequestInvestment: React.FC<RequestInvestmentProps> = props => {
   });
 
   const handleInvestmentAmountChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const shares = (holding && token && requestedShares && new BigNumber(event.target.value ?? 0)
-      .multipliedBy(new BigNumber(10).exponentiatedBy(token.decimals))
-      .dividedBy(holding.shareCostInAsset!)) as BigNumber;
+    const shares = (holding &&
+      token &&
+      requestedShares &&
+      new BigNumber(event.target.value ?? 0)
+        .multipliedBy(new BigNumber(10).exponentiatedBy(token.decimals))
+        .dividedBy(holding.shareCostInAsset!)) as BigNumber;
 
     form.setValue('requestedShares', shares?.toNumber() ?? 1);
   };
 
   const handleRequestedSharesChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const amount = (holding && token &&
+    const amount = (holding &&
+      token &&
       new BigNumber(event.target.value ?? 0)
         .multipliedBy(holding.shareCostInAsset!)
         .dividedBy(new BigNumber(10).exponentiatedBy(token.decimals))) as BigNumber;
@@ -125,17 +129,22 @@ export const RequestInvestment: React.FC<RequestInvestmentProps> = props => {
   const investmentAssetOptions = (props.holdings ?? []).map(holding => ({
     value: holding.token!.address!,
     name: holding.token!.symbol!,
-  }))
+  }));
 
   return (
     <>
       <FormContext {...form}>
         <form onSubmit={submit}>
           <FormField name="investmentAsset" label="Investment asset">
-            <Dropdown name="investmentAsset" id="investmentAsset" options={investmentAssetOptions} disabled={props.loading} />
+            <Dropdown
+              name="investmentAsset"
+              id="investmentAsset"
+              options={investmentAssetOptions}
+              disabled={props.loading}
+            />
           </FormField>
 
-          {query.loading && <Spinner /> || (
+          {(query.loading && <Spinner />) || (
             <>
               <div>Your current balance: {allowance?.balance?.toString() ?? 'N/A'}</div>
               <div>Your current allowance: {allowance?.allowance?.toString() ?? 'N/A'}</div>
@@ -164,7 +173,9 @@ export const RequestInvestment: React.FC<RequestInvestmentProps> = props => {
                 />
               </FormField>
 
-              <Button type="submit" disabled={props.loading}>{action}</Button>
+              <Button type="submit" disabled={props.loading}>
+                {action}
+              </Button>
             </>
           )}
         </form>

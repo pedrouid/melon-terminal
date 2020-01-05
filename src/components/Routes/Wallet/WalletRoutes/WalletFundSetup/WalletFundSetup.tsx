@@ -71,7 +71,7 @@ export const WalletFundSetup: React.FC = () => {
 
     const wethAddress = environment.getToken('WETH')!.address;
     const assetAddresses = values.assets.map(symbol => environment.getToken(symbol)!.address);
-    const selectedExchanges = values.exchanges.map(name => environment.getExchange(name));
+    const selectedExchanges = values.exchanges.map(id => environment.getExchange(id));
     const exchangeAddresses = selectedExchanges.map(exchange => exchange.exchange);
     const adapterAddresses = selectedExchanges.map(exchange => exchange.adapter);
 
@@ -123,13 +123,13 @@ export const WalletFundSetup: React.FC = () => {
           {form.errors.exchanges && <p>{form.errors.exchanges.message}</p>}
           <ul>
             {environment.exchanges.map((exchange, index) => (
-              <li key={exchange.name}>
+              <li key={exchange.id}>
                 <input
                   id={`exchanges[${index}]`}
                   type="checkbox"
                   name={`exchanges[${index}]`}
-                  value={exchange.name}
-                  key={exchange.name}
+                  value={exchange.id}
+                  key={exchange.id}
                   ref={form.register}
                 />
                 <label htmlFor={`exchanges[${index}]`}>{exchange.name}</label>

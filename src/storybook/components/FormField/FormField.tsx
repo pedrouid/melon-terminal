@@ -7,7 +7,7 @@ export interface FormFieldProps {
   label?: string;
 }
 
-export const FormField: React.FC<FormFieldProps> = (props) => {
+export const FormField: React.FC<FormFieldProps> = props => {
   const form = useFormContext();
   const connected = !!(form && props.name);
   const error = connected && form?.errors[props.name!];

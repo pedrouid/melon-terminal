@@ -26,17 +26,6 @@ const connect = (): Rx.Observable<ConnectionAction> => {
     const eth = (resource as EthResource).eth;
 
     const connection$ = Rx.defer(async () => {
-      // @ts-ignore
-      const ganache = (await import('deployments/testnet-accounts')) as any;
-      const keys = Object.entries(ganache.private_keys) as [string, string][];
-
-      keys.forEach(([address, key]) => {
-        eth.accounts.wallet.add({
-          address,
-          privateKey: !key.startsWith('0x') ? `0x${key}` : key,
-        });
-      });
-
       const [id, accounts] = await Promise.all([eth.net.getId(), eth.getAccounts()]);
       const network = networkFromId(id);
       return connectionEstablished(eth, network, accounts);

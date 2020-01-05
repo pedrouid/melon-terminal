@@ -1,14 +1,16 @@
-import React, { useMemo, useState, useEffect } from 'react';
+import React, { useMemo, useState, useEffect, useCallback } from 'react';
 import { useEnvironment } from '~/hooks/useEnvironment';
-import { Orderbook, aggregatedOrderbook } from './utils/aggregatedOrderbook';
+import { Orderbook, aggregatedOrderbook, OrderbookItem } from './utils/aggregatedOrderbook';
 import * as Rx from 'rxjs';
 import * as S from './FundOrderbook.styles';
 import { TokenDefinition, ExchangeDefinition } from '@melonproject/melonjs';
 
 export interface FundOrderbookProps {
   address: string;
-  asset?: TokenDefinition;
   exchanges: ExchangeDefinition[];
+  setSelected: (order?: OrderbookItem) => void;
+  selected?: OrderbookItem;
+  asset?: TokenDefinition;
 }
 
 export const FundOrderbook: React.FC<FundOrderbookProps> = props => {
@@ -34,6 +36,16 @@ export const FundOrderbook: React.FC<FundOrderbookProps> = props => {
 
   const bids = orders?.bids ?? [];
   const asks = orders?.asks ?? [];
+  const toggle = useCallback(
+    (order: OrderbookItem) => {
+      if (props.selected?.id === order.id) {
+        return props.setSelected(undefined);
+      }
+
+      props.setSelected(order);
+    },
+    [props.selected, props.setSelected]
+  );
 
   return (
     <S.Wrapper>
@@ -55,7 +67,7 @@ export const FundOrderbook: React.FC<FundOrderbookProps> = props => {
             </S.OrderbookBarsWrapper>
 
             {bids.map((item, index) => (
-              <S.OrderbookItem key={index}>
+              <S.OrderbookItem key={index} selected={item.id === props.selected?.id} onClick={() => toggle(item)}>
                 <S.OrderbookData>{item.quantity.toFixed(4)}</S.OrderbookData>
                 <S.OrderbookData>{item.total!.toFixed(4)}</S.OrderbookData>
                 <S.OrderbookData>{item.price.toFixed(4)}</S.OrderbookData>
@@ -81,7 +93,7 @@ export const FundOrderbook: React.FC<FundOrderbookProps> = props => {
             </S.OrderbookBarsWrapper>
 
             {asks.map((item, index) => (
-              <S.OrderbookItem key={index}>
+              <S.OrderbookItem key={index} selected={item.id === props.selected?.id} onClick={() => toggle(item)}>
                 <S.OrderbookData>{item.price.toFixed(4)}</S.OrderbookData>
                 <S.OrderbookData>{item.total!.toFixed(4)}</S.OrderbookData>
                 <S.OrderbookData>{item.quantity.toFixed(4)}</S.OrderbookData>

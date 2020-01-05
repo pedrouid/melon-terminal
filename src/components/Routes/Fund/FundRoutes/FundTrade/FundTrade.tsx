@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { TokenDefinition } from '@melonproject/melonjs';
+import { TokenDefinition, ExchangeIdentifier } from '@melonproject/melonjs';
 import { FundOpenOrders } from './FundOpenOrders/FundOpenOrders';
 import { TabNavigation } from '~/components/Common/TabNavigation/TabNavigation';
 import { TabNavigationItem } from '~/components/Common/TabNavigation/TabNavigationItem/TabNavigationItem';
@@ -22,8 +22,10 @@ export const FundTrade: React.FC<FundTradeProps> = props => {
     return <Spinner />;
   }
 
-  const markets = exchanges.filter(exchange => exchange.name === 'OasisDex' || exchange.name === 'ZeroEx');
-  const kyber = exchanges.filter(exchange => exchange.name === 'KyberNetwork');
+  const markets = exchanges.filter(
+    exchange => exchange.id === ExchangeIdentifier.OasisDex || exchange.id === ExchangeIdentifier.ZeroEx
+  );
+  const kyber = exchanges.filter(exchange => exchange.id === ExchangeIdentifier.KyberNetwork);
 
   return (
     <S.FundTradeBody>

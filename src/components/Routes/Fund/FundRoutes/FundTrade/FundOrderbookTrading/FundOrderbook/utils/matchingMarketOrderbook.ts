@@ -1,37 +1,41 @@
 import * as Rx from 'rxjs';
 import BigNumber from 'bignumber.js';
 import { equals } from 'ramda';
-import { APIOrder as ZeroExOrder } from '@0x/types';
 import {
   TokenDefinition,
   DeployedEnvironment,
   MatchingMarketAccessor,
   MatchingMarketOrder,
+  ExchangeIdentifier,
 } from '@melonproject/melonjs';
 import { concatMap, expand, distinctUntilChanged, map } from 'rxjs/operators';
-import { Orderbook, OrderbookItem, OrderType } from './aggregatedOrderbook';
+import { Orderbook, OrderbookItem } from './aggregatedOrderbook';
 
-export interface ZeroExOrderbookItem extends OrderbookItem {
-  type: OrderType.ZeroEx;
-  order: ZeroExOrder;
+export interface MatchingMarketOrderbookItem extends OrderbookItem {
+  type: ExchangeIdentifier.OasisDex;
+  order: MatchingMarketOrder;
 }
 
-function mapOrders(orders: MatchingMarketOrder[], makerAsset: TokenDefinition, takerAsset: TokenDefinition) {
+function mapOrders(
+  orders: MatchingMarketOrder[],
+  makerAsset: TokenDefinition,
+  takerAsset: TokenDefinition,
+  side: 'bid' | 'ask'
+) {
   const makerAssetDecimals = new BigNumber(10).exponentiatedBy(makerAsset.decimals);
   const takerAssetDecimals = new BigNumber(10).exponentiatedBy(takerAsset.decimals);
 
   return orders.map(order => {
-    const type = OrderType.OasisDex;
     const quantity = order.buyQuantity.dividedBy(makerAssetDecimals);
     const price = order.sellQuantity.dividedBy(takerAssetDecimals).dividedBy(quantity);
 
     return {
       order,
-      type,
       quantity,
       price,
-      maker: makerAsset,
-      taker: takerAsset,
+      side,
+      exchange: ExchangeIdentifier.OasisDex,
+      id: `matchingmarket:${order.id.toString()}`,
     } as OrderbookItem;
   });
 }
@@ -55,8 +59,8 @@ export function matchingMarketOrderbook(
 
   return polling$.pipe<Orderbook>(
     map(([b, a]) => ({
-      bids: mapOrders(b, takerAsset, makerAsset),
-      asks: mapOrders(a, makerAsset, takerAsset),
+      bids: mapOrders(b, takerAsset, makerAsset, 'bid'),
+      asks: mapOrders(a, makerAsset, takerAsset, 'ask'),
     }))
   );
 }

@@ -170,19 +170,25 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
               <S.TransactionModalActions>
                 {!finished && (
                   <S.TransactionModalAction>
-                    <Button type="button" kind="secondary" onClick={() => cancel()}>{estimated ? 'Cancel' : 'Close'}</Button>
+                    <Button type="button" kind="secondary" onClick={() => cancel()}>
+                      {estimated ? 'Cancel' : 'Close'}
+                    </Button>
                   </S.TransactionModalAction>
                 )}
 
                 {!finished && estimated && (
                   <S.TransactionModalAction>
-                    <Button type="submit" kind="success" disabled={loading}>{error ? 'Retry' : 'Confirm'}</Button>
+                    <Button type="submit" kind="success" disabled={loading}>
+                      {error ? 'Retry' : 'Confirm'}
+                    </Button>
                   </S.TransactionModalAction>
                 )}
 
                 {finished && (
                   <S.TransactionModalAction>
-                    <Button type="button" kind="success" onClick={() => acknowledge()} disabled={loading}>Close</Button>
+                    <Button type="button" kind="success" onClick={() => acknowledge()} disabled={loading}>
+                      Close
+                    </Button>
                   </S.TransactionModalAction>
                 )}
               </S.TransactionModalActions>

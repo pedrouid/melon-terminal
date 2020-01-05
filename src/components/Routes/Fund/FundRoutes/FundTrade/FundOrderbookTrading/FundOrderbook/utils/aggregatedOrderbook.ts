@@ -1,22 +1,17 @@
 import * as Rx from 'rxjs';
 import BigNumber from 'bignumber.js';
 import { startWith } from 'rxjs/operators';
-import { TokenDefinition, DeployedEnvironment } from '@melonproject/melonjs';
+import { TokenDefinition, DeployedEnvironment, ExchangeIdentifier } from '@melonproject/melonjs';
 import { zeroExOrderbook } from './zeroExOrderbook';
 import { matchingMarketOrderbook } from './matchingMarketOrderbook';
 
-export enum OrderType {
-  'ZeroEx' = 'ZeroEx',
-  'OasisDex' = 'OasisDex',
-  'Ethfinex' = 'Ethfinex',
-  'Kyber' = 'Kyber',
-}
-
 export interface OrderbookItem {
-  type: OrderType;
+  id: string;
   order: any;
   price: BigNumber;
   quantity: BigNumber;
+  side: 'bid' | 'ask';
+  exchange: ExchangeIdentifier;
   total?: BigNumber;
   relative?: number;
 }

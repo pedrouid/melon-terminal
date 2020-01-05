@@ -10,7 +10,9 @@ const NoMatch = React.lazy(() => import('~/components/Routes/NoMatch/NoMatch'));
 const WalletOverview = React.lazy(() => import('./WalletRoutes/WalletOverview/WalletOverview'));
 const WalletWeth = React.lazy(() => import('./WalletRoutes/WalletWeth/WalletWeth'));
 const WalletFundSetup = React.lazy(() => import('./WalletRoutes/WalletFundSetup/WalletFundSetup'));
-const WalletFundSetupTransactions = React.lazy(() => import('./WalletRoutes/WalletFundSetupTransactions/WalletFundSetupTransactions'));
+const WalletFundSetupTransactions = React.lazy(() =>
+  import('./WalletRoutes/WalletFundSetupTransactions/WalletFundSetupTransactions')
+);
 
 export const Wallet: React.FC = () => {
   const match = useRouteMatch()!;
