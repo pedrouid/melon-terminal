@@ -28,11 +28,12 @@ export const FundOpenOrders: React.FC<FundOpenOrdersProps> = ({ address }) => {
         <Table>
           <thead>
             <HeaderRow>
-              <HeaderCell>Asset</HeaderCell>
+              <HeaderCell>Maker asset</HeaderCell>
+              <HeaderCell>Taker asset</HeaderCell>
               <HeaderCell>Exchange</HeaderCell>
               <HeaderCellRightAlign>Price</HeaderCellRightAlign>
               <HeaderCellRightAlign>Quantity</HeaderCellRightAlign>
-              <HeaderCell>Expired</HeaderCell>
+              <HeaderCell>Status</HeaderCell>
             </HeaderRow>
           </thead>
           <tbody>
@@ -42,8 +43,8 @@ export const FundOpenOrders: React.FC<FundOpenOrdersProps> = ({ address }) => {
           </tbody>
         </Table>
       ) : (
-        <NoEntries>No open orders</NoEntries>
-      )}
+          <NoEntries>No open orders</NoEntries>
+        )}
     </S.Wrapper>
   );
 };

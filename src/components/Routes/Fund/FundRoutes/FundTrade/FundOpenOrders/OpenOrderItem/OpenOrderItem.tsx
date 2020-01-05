@@ -73,6 +73,7 @@ export const OpenOrderItem: React.FC<OpenOrderItemProps> = ({ address, order }) 
   return (
     <BodyRow>
       <BodyCell>{makerSymbol && makerSymbol.symbol}</BodyCell>
+      <BodyCell>{takerSymbol && takerSymbol.symbol}</BodyCell>
       <BodyCell>{exchange && exchange.name}</BodyCell>
       <BodyCellRightAlign>{price.toFixed(6)}</BodyCellRightAlign>
       <BodyCellRightAlign>{makerAmount.toFixed(6)}</BodyCellRightAlign>
