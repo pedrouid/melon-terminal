@@ -1649,12 +1649,13 @@
     web3-providers "^2.0.0-alpha.1"
     web3-utils "^2.0.0-alpha.1"
 
-"@melonproject/melonjs@^0.0.59":
-  version "0.0.59"
-  resolved "https://registry.yarnpkg.com/@melonproject/melonjs/-/melonjs-0.0.59.tgz#daa9d9b225b2a9b321b0d04c6bb757ae4182140b"
-  integrity sha512-9Add7qOgsdrErizAGMFO3moL8xJJ4tIJNgZ6oOPS3wRP+7EA3Xhi68Qsd0RTVGQWjNOedimrq5UwIBra+n6g3A==
+"@melonproject/melonjs@^0.0.60":
+  version "0.0.60"
+  resolved "https://registry.yarnpkg.com/@melonproject/melonjs/-/melonjs-0.0.60.tgz#e9d3620b3b0ec8d29b7e47ece340140e46a44f76"
+  integrity sha512-0HQJ6V4ysmF6KsdBd+cYr3mp/A0vDZCrAO/kjoel00K2DFczjBr42hpw88scmVAYrd06wuzGdXaseTGXDpbuuQ==
   dependencies:
     "@0x/order-utils" "^8.4.0"
+    "@0x/subproviders" "^5.0.4"
     bignumber.js "^9.0.0"
     web3 "^2.0.0-alpha.1"
     web3-core "^2.0.0-alpha.1"
