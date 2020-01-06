@@ -22,9 +22,9 @@ export const SkeletonBody = styled.div`
   position: relative;
   flex: 1 0 auto;
   width: 100%;
-  padding: ${props => props.theme.header.height}$ 0px 0px;
+  padding: ${props => props.theme.header.height} 0px 0px;
   @media (${props => props.theme.mediaQueries.s}) {
-    padding: ${props => props.theme.header.height}$ 0px 0px;
+    padding: ${props => props.theme.header.height} 0px 0px;
   }
 `;
 
