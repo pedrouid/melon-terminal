@@ -13,6 +13,7 @@ export const OrderbookHeader = styled.div`
 
 export const OrderbookBody = styled.div`
   position: relative;
+  z-index: 1;
 `;
 
 export const OrderbookLabel = styled.span``;
