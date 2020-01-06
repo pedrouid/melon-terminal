@@ -8,7 +8,11 @@ export const Skeleton = styled.div`
   height: 100%;
 `;
 
-export const SkeletonHead = styled.div`
+export interface DebuggableSkeletonProps {
+  debug?: boolean;
+}
+
+export const SkeletonHead = styled.div<DebuggableSkeletonProps>`
   flex: none;
   position: fixed;
   top: 0px;
@@ -17,31 +21,31 @@ export const SkeletonHead = styled.div`
   width:100%;
   height: ${props => props.theme.skeleton.headerHeight};
   ${props =>
-  props.debug &&
+    props.debug &&
     css`
       border: 1px solid green;
     `}
 `;
 
-export const SkeletonBody = styled.div`
+export const SkeletonBody = styled.div<DebuggableSkeletonProps>`
   position: relative;
   flex: 1 0 auto;
   width: 100%;
   min-height: calc(100vh - ${props => props.theme.skeleton.footerHeight});
   padding: ${props => props.theme.skeleton.headerHeight} 0px 0px;
   ${props =>
-  props.debug &&
+    props.debug &&
     css`
       border: 1px solid blue;
     `}
 `;
 
-export const SkeletonFeet = styled.div`
+export const SkeletonFeet = styled.div<DebuggableSkeletonProps>`
   position: relative;
   flex: none;
   height: ${props => props.theme.skeleton.footerHeight};
   ${props =>
-  props.debug &&
+    props.debug &&
     css`
       border: 1px solid yellow;
     `}

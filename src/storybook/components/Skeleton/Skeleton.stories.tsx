@@ -1,12 +1,10 @@
 import React from 'react';
 import { Skeleton, SkeletonHead, SkeletonBody, SkeletonFeet } from './Skeleton';
-import { Default as Header } from '../Header/Header.stories.tsx';
+import { Default as Header } from '../Header/Header.stories';
 import { Bar, BarContent } from '../Bar/Bar';
 import { Headline } from '../Headline/Headline';
 import { Container } from '../Container/Container';
-import { FundLayout as ComplexGridSample } from '../Grid/Grid.stories.tsx';
-import { TwoColumns as SimpleGridSample } from '../Grid/Grid.stories.tsx';
-import { WithoutBlocks as NoBlockGridSample } from '../Grid/Grid.stories.tsx';
+import { FundLayout as ComplexGridSample, TwoColumns as SimpleGridSample, WithoutBlocks as NoBlockGridSample } from '../Grid/Grid.stories';
 
 
 export default { title: 'Structure|Skeleton' };
@@ -21,7 +19,7 @@ export const Deafult: React.FC = () => {
         <div>App content here</div>
       </SkeletonBody>
       <SkeletonFeet>
-         <div>Footer here</div>
+        <div>Footer here</div>
       </SkeletonFeet>
     </Skeleton>
   );
@@ -30,14 +28,14 @@ export const Deafult: React.FC = () => {
 export const Debug: React.FC = () => {
   return (
     <Skeleton>
-      <SkeletonHead debug>
+      <SkeletonHead debug={true}>
         <div>Header here</div>
       </SkeletonHead>
-      <SkeletonBody debug>
+      <SkeletonBody debug={true}>
         <div>App content here</div>
       </SkeletonBody>
-      <SkeletonFeet debug>
-         <div>Footer here</div>
+      <SkeletonFeet debug={true}>
+        <div>Footer here</div>
       </SkeletonFeet>
     </Skeleton>
   );
@@ -60,7 +58,7 @@ export const WithBlocksContained: React.FC = () => {
         </Container>
       </SkeletonBody>
       <SkeletonFeet>
-         <div>Footer here</div>
+        <div>Footer here</div>
       </SkeletonFeet>
     </Skeleton>
   );
@@ -78,12 +76,12 @@ export const WithBlocksFull: React.FC = () => {
             <Headline title="My title" text="My subtitle" icon="icon" />
           </BarContent>
         </Bar>
-        <Container full>
+        <Container full={true}>
           <ComplexGridSample />
         </Container>
       </SkeletonBody>
       <SkeletonFeet>
-         <div>Footer here</div>
+        <div>Footer here</div>
       </SkeletonFeet>
     </Skeleton>
   );
@@ -101,7 +99,7 @@ export const WithotSecondaryBar: React.FC = () => {
         </Container>
       </SkeletonBody>
       <SkeletonFeet>
-         <div>Footer here</div>
+        <div>Footer here</div>
       </SkeletonFeet>
     </Skeleton>
   );
