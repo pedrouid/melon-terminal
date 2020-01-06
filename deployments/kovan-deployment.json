@@ -1,4 +1,7 @@
 {
+  "conf": {
+    "networkID": "42"
+  },
   "melon": {
     "addr": {
       "EthfinexAdapter": "0xdEaF7cbB076a99F9D6C2dC397a44F5055FD191bb",

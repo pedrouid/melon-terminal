@@ -1,7 +1,7 @@
 {
   "conf": {
     "deployer": "0x0d580ae50B58fe08514dEAB4e38c0DFdB0D30adC",
-    "networkID": "42"
+    "networkID": "1"
   },
   "melon": {
     "addr": {
@@ -91,10 +91,6 @@
         "name": "Digix Gold Token",
         "decimals": 9
       },
-      "USDC": {
-        "name": "USD Coin",
-        "decimals": 6
-      },
       "KNC": {
         "name": "Kyber Network",
         "decimals": 18
@@ -110,6 +106,10 @@
       "ZRX": {
         "name": "ZeroX Protocol Token",
         "decimals": 18
+      },
+      "USDC": {
+        "name": "USD Coin",
+        "decimals": 6
       },
       "WBTC": {
         "name": "Wrapped BTC",
