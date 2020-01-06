@@ -31,7 +31,7 @@ export const Default: React.FC = () => {
   );
 };
 
-export const TwoClumns: React.FC = () => {
+export const TwoColumns: React.FC = () => {
   return (
     <Grid>
       <GridRow>
@@ -65,6 +65,7 @@ export const StandaloneSmall: React.FC = () => {
     </Grid>
   );
 };
+
 
 export const StandaloneMedium: React.FC = () => {
   return (
@@ -115,6 +116,18 @@ export const FundLayout: React.FC = () => {
           <Block>
             <h2>Trading History</h2>Bottom-CenterRight fund section<hr></hr>xs={12} sm={6} md={6}
           </Block>
+        </GridCol>
+      </GridRow>
+    </Grid>
+  );
+};
+
+export const WithoutBlocks: React.FC = () => {
+  return (
+    <Grid>
+      <GridRow>
+        <GridCol xs={12}>
+          <div>Stand-alone grid full<hr></hr>xs={12}</div>
         </GridCol>
       </GridRow>
     </Grid>

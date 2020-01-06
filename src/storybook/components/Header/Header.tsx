@@ -1,11 +1,12 @@
 import styled from 'styled-components';
 
+
 export const Header = styled.div`
   position: relative;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  height: ${props => props.theme.header.height};
+  height: ${props => props.theme.skeleton.headerHeight};
   border-bottom: ${props => props.theme.border.borderDefault};
   background-color: ${props => props.theme.mainColors.primary};
   @media (${props => props.theme.mediaQueries.m}) {

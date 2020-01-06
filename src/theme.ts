@@ -65,9 +65,13 @@ export const theme = {
     s: 'min-width: 480px',
   },
   container: {
-    l: '992px',
-    m: '720px',
-    s: '480px',
+    l: '1024px',
+    m: '992px',
+    s: '720px',
+  },
+  skeleton:{
+    headerHeight: '88px',
+    footerHeight: '32px',
   },
   header: {
     height: '88px',
