@@ -17,7 +17,7 @@ export const BarContent = styled.div<BarProps>`
   justify-content: flex-start;
   align-content: center;
   flex-wrap: wrap;
-  @media (${props => props.theme.mediaQueries.m}) {
+  @media (${props => props.theme.mediaQueries.l}) {
     flex-wrap: nowrap;
   }
   ${props =>
@@ -54,4 +54,20 @@ export const BarContent = styled.div<BarProps>`
         max-width: ${props => props.theme.container.l};
       }
     `}
+`;
+
+export const BarSection = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  margin-top: ${props => props.theme.spaceUnits.l};
+  @media (${props => props.theme.mediaQueries.m}) {
+    flex-wrap: nowrap;
+  }
+  @media (${props => props.theme.mediaQueries.l}) {
+    justify-content: flex-start;
+    margin-top: 0px;
+  }
 `;

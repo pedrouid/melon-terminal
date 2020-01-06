@@ -1,7 +1,9 @@
 import React from 'react';
-import { Bar, BarContent } from '../Bar/Bar';
+import { Bar, BarContent, BarSection } from '../Bar/Bar';
 import { Headline } from '../Headline/Headline';
 import { Button, ButtonGroup } from '../Button/Button';
+import { DataBlock } from '../DataBlock/DataBlock';
+
 
 export default { title: 'Layouts|HeadlineBar' };
 
@@ -36,6 +38,22 @@ export const WithButtons: React.FC = () => {
           <Button>other button</Button>
           <Button kind="danger">button danger</Button>
         </ButtonGroup>
+      </BarContent>
+    </Bar>
+  );
+};
+
+export const WithData: React.FC = () => {
+  return (
+    <Bar>
+      <BarContent size="contained" justify="between">
+        <Headline title="My title" text="My subtitle" icon="icon" />
+        <BarSection>
+          <DataBlock label="Share Price">1.0000 WETH/Share</DataBlock>
+          <DataBlock label="AUM">0.1000 WETH</DataBlock>
+          <DataBlock label="Total number of shares">0.1000000</DataBlock>
+          <DataBlock label="Shares owned by me">0.1000000</DataBlock>
+        </BarSection>
       </BarContent>
     </Bar>
   );
