@@ -1,9 +1,17 @@
 import styled from 'styled-components';
 import { NavLink } from '~/components/Common/Link/Link';
 
-export const FundNavigation = styled.div``;
+export const FundNavigation = styled.div`
+  &::after {
+    content: '.';
+    clear: both;
+    display: block;
+    visibility: hidden;
+    height: 0px;
+  }
+`;
 
-export const FundNavigationAll = styled.div`
+export const FundNavigationPublic = styled.div`
   float: left;
 `;
 

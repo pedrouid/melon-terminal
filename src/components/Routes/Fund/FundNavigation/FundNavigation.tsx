@@ -10,14 +10,14 @@ export interface FundNavigationProps {
 export const FundNavigation: React.FC<FundNavigationProps> = ({ address }) => {
   return (
     <S.FundNavigation>
-      <S.FundNavigationAll>
+      <S.FundNavigationPublic>
         <S.FundNavigationLink to={`/fund/${address}`} exact={true} activeClassName="active">
           Overview
         </S.FundNavigationLink>
         <S.FundNavigationLink to={`/fund/${address}/invest`} exact={true} activeClassName="active">
           Invest &amp; redeem
         </S.FundNavigationLink>
-      </S.FundNavigationAll>
+      </S.FundNavigationPublic>
       <RequiresFundManager fallback={false}>
         <S.FundNavigationManager>
           <S.FundNavigationLink to={`/fund/${address}/trade`} exact={true} activeClassName="active">
