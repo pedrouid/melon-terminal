@@ -27,7 +27,9 @@ export const Header: React.FC = () => {
     <SkeletonHead>
       <HeaderContainer>
         <LogoContainer>
-          <Logo name="with-bottom-text" size="small" />
+          <Link to="/">
+            <Logo name="with-bottom-text" size="small" />
+          </Link>
         </LogoContainer>
         <Account>
           <AccountName>
