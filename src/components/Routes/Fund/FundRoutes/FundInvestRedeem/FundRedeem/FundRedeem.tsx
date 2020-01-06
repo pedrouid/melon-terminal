@@ -13,7 +13,8 @@ import { useOnChainQueryRefetcher } from '~/hooks/useOnChainQueryRefetcher';
 import { FormField } from '~/storybook/components/FormField/FormField';
 import { Input } from '~/storybook/components/Input/Input';
 import { Button } from '~/storybook/components/Button/Button';
-import * as S from './FundRedeem.styles';
+import { Block } from '~/storybook/components/Block/Block';
+import { SectionTitle } from '~/storybook/components/Title/Title';
 
 export interface FundRedeemProps {
   address: string;
@@ -74,16 +75,16 @@ export const FundRedeem: React.FC<FundRedeemProps> = ({ address }) => {
 
   if (query.loading) {
     return (
-      <S.Wrapper>
-        <S.Title>Redeem</S.Title>
+      <Block>
+        <SectionTitle>Redeem</SectionTitle>
         <Spinner />
-      </S.Wrapper>
+      </Block>
     );
   }
 
   return (
-    <S.Wrapper>
-      <S.Title>Redeem</S.Title>
+    <Block>
+      <SectionTitle>Redeem</SectionTitle>
       {hasInvested && shares && (
         <>
           <p>You own {shares?.balanceOf?.toString()} shares!</p>
@@ -117,6 +118,6 @@ export const FundRedeem: React.FC<FundRedeemProps> = ({ address }) => {
         </>
       )}
       {(!hasInvested || shares?.balanceOf?.isZero() || !shares?.balanceOf) && <p>You don't own any shares.</p>}
-    </S.Wrapper>
+    </Block>
   );
 };

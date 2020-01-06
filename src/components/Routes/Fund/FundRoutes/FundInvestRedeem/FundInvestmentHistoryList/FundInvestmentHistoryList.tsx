@@ -12,7 +12,8 @@ import {
   BodyRow,
   NoEntries,
 } from '~/components/Common/Table/Table.styles';
-import * as S from './FundInvestmentHistoryList.styles';
+import { Block } from '~/storybook/components/Block/Block';
+import { SectionTitle } from '~/storybook/components/Title/Title';
 
 export interface FundInvestmentHistoryListProps {
   address: string;
@@ -23,25 +24,25 @@ export const FundInvestmentHistoryList: React.FC<FundInvestmentHistoryListProps>
 
   if (investementQuery.loading) {
     return (
-      <S.Wrapper>
-        <S.Title>Investment history</S.Title>
+      <Block>
+        <SectionTitle>Investment history</SectionTitle>
         <Spinner />
-      </S.Wrapper>
+      </Block>
     );
   }
 
   if (!fundInvestement || !fundInvestement.length) {
     return (
-      <S.Wrapper>
-        <S.Title>Investment history</S.Title>
+      <Block>
+        <SectionTitle>Investment history</SectionTitle>
         <NoEntries>No entries.</NoEntries>
-      </S.Wrapper>
+      </Block>
     );
   }
 
   return (
-    <S.Wrapper>
-      <S.Title>Investment history</S.Title>
+    <Block>
+      <SectionTitle>Investment history</SectionTitle>
       <Table>
         <thead>
           <HeaderRow>
@@ -72,6 +73,6 @@ export const FundInvestmentHistoryList: React.FC<FundInvestmentHistoryListProps>
           })}
         </tbody>
       </Table>
-    </S.Wrapper>
+    </Block>
   );
 };

@@ -6,7 +6,6 @@ import { WalletOverviewInvestmentRequest } from './WalletOverviewInvestmentReque
 import { WalletOverviewManagedFund } from './WalletOverviewManagedFund/WalletOverviewManagedFund';
 import { WalletOverviewInvestedFund } from './WalletOverviewInvestedFund/WalletOverviewInvestedFund';
 import { useAccount } from '~/hooks/useAccount';
-
 import { Block } from '~/storybook/components/Block/Block';
 import { SectionTitle } from '~/storybook/components/Title/Title';
 import { GridRow, Grid, GridCol } from '~/storybook/components/Grid/Grid';

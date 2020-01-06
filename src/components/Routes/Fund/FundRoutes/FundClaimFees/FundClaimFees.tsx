@@ -1,5 +1,4 @@
-import React, { FormEvent } from 'react';
-import * as S from './FundClaimFees.styles';
+import React from 'react';
 import { useEnvironment } from '~/hooks/useEnvironment';
 import { useTransaction } from '~/hooks/useTransaction';
 import { useHistory } from 'react-router';
@@ -11,6 +10,9 @@ import { useFundDetailsQuery } from '~/queries/FundDetails';
 import { Spinner } from '~/components/Common/Spinner/Spinner';
 import { useAccount } from '~/hooks/useAccount';
 import { useOnChainQueryRefetcher } from '~/hooks/useOnChainQueryRefetcher';
+import { Block } from '~/storybook/components/Block/Block';
+import { Grid, GridRow, GridCol } from '~/storybook/components/Grid/Grid';
+import { SectionTitle } from '~/storybook/components/Title/Title';
 
 export interface ClaimFeesProps {
   address: string;
@@ -50,32 +52,48 @@ export const ClaimFees: React.FC<ClaimFeesProps> = ({ address }) => {
 
   if (query.loading) {
     return (
-      <S.FundClaimFeesBody>
-        <Spinner />
-      </S.FundClaimFeesBody>
+      <Grid>
+        <GridRow justify="center">
+          <GridCol xs={12} sm={6} md={4} lg={4}>
+            <Block>
+              <Spinner />
+            </Block>
+          </GridCol>
+        </GridRow>
+      </Grid>
     );
   }
 
   return (
-    <S.FundClaimFeesBody>
-      <h1>Claim fees</h1>
-      <p>Claim management fees and performance fees for the fund.</p>
-      <p>Accrued management fee: {feeManagerInfo && feeManagerInfo.managementFeeAmount.dividedBy('1e18').toFixed(6)}</p>
-      <p>
-        Accrued performance fee: {feeManagerInfo && feeManagerInfo.performanceFeeAmount.dividedBy('1e18').toFixed(6)}
-      </p>
-      <p>
-        Payout of performance fee possible:{' '}
-        {feeManagerInfo && feeManagerInfo.performanceFee && feeManagerInfo.performanceFee.canUpdate}
-      </p>
+    <Grid>
+      <GridRow justify="center">
+        <GridCol xs={12} sm={6} md={4} lg={4}>
+          <Block>
+            <SectionTitle>Claim fees</SectionTitle>
+            <p>Claim management fees and performance fees for the fund.</p>
+            <p>
+              Accrued management fee:{' '}
+              {feeManagerInfo && feeManagerInfo.managementFeeAmount.dividedBy('1e18').toFixed(6)}
+            </p>
+            <p>
+              Accrued performance fee:{' '}
+              {feeManagerInfo && feeManagerInfo.performanceFeeAmount.dividedBy('1e18').toFixed(6)}
+            </p>
+            <p>
+              Payout of performance fee possible:{' '}
+              {feeManagerInfo && feeManagerInfo.performanceFee && feeManagerInfo.performanceFee.canUpdate}
+            </p>
 
-      <ButtonBlock>
-        <SubmitButton type="button" label="Claim all fees" onClick={() => submitAllFees()} />
-        <SubmitButton type="button" label="Claim management fees" onClick={() => submitManagementFees()} />
-      </ButtonBlock>
+            <ButtonBlock>
+              <SubmitButton type="button" label="Claim all fees" onClick={() => submitAllFees()} />
+              <SubmitButton type="button" label="Claim management fees" onClick={() => submitManagementFees()} />
+            </ButtonBlock>
 
-      <TransactionModal transaction={transaction} />
-    </S.FundClaimFeesBody>
+            <TransactionModal transaction={transaction} />
+          </Block>
+        </GridCol>
+      </GridRow>
+    </Grid>
   );
 };
 

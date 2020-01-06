@@ -1,9 +1,10 @@
 import React from 'react';
-import * as S from './FundOpenOrders.styles';
 import { useFundOpenMakeOrdersQuery } from '~/queries/FundOpenMakeOrders';
 import OpenOrderItem from './OpenOrderItem/OpenOrderItem';
 import { Spinner } from '~/components/Common/Spinner/Spinner';
 import { Table, HeaderCell, HeaderCellRightAlign, HeaderRow, NoEntries } from '~/components/Common/Table/Table.styles';
+import { Block } from '~/storybook/components/Block/Block';
+import { SectionTitle } from '~/storybook/components/Title/Title';
 
 export interface FundOpenOrdersProps {
   address: string;
@@ -14,16 +15,16 @@ export const FundOpenOrders: React.FC<FundOpenOrdersProps> = ({ address }) => {
 
   if (query.loading) {
     return (
-      <S.Wrapper>
-        <S.Title>Open orders</S.Title>
+      <Block>
+        <SectionTitle>Open orders</SectionTitle>
         <Spinner />
-      </S.Wrapper>
+      </Block>
     );
   }
 
   return (
-    <S.Wrapper>
-      <S.Title>Open orders</S.Title>
+    <Block>
+      <SectionTitle>Open orders</SectionTitle>
       {orders && orders.length > 0 ? (
         <Table>
           <thead>
@@ -45,6 +46,6 @@ export const FundOpenOrders: React.FC<FundOpenOrdersProps> = ({ address }) => {
       ) : (
         <NoEntries>No open orders</NoEntries>
       )}
-    </S.Wrapper>
+    </Block>
   );
 };

@@ -1,7 +1,4 @@
 import styled from 'styled-components';
-import { PaddedBody } from '~/components/Common/Styles/Styles';
-
-export const FundPoliciesBody = PaddedBody;
 
 export const Table = styled.table`
   background-color: ${props => props.theme.otherColors.white};

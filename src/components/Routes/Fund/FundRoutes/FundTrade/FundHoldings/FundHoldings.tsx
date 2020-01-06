@@ -15,6 +15,8 @@ import {
 } from '~/components/Common/Table/Table.styles';
 import * as S from './FundHoldings.styles';
 import { useEnvironment } from '~/hooks/useEnvironment';
+import { Block } from '~/storybook/components/Block/Block';
+import { SectionTitle } from '~/storybook/components/Title/Title';
 
 export interface FundHoldingsProps {
   address: string;
@@ -55,16 +57,16 @@ export const FundHoldings: React.FC<FundHoldingsProps> = props => {
 
   if (query.loading) {
     return (
-      <S.Wrapper>
-        <S.Title>Holdings</S.Title>
+      <Block>
+        <SectionTitle>Holdings</SectionTitle>
         <Spinner />
-      </S.Wrapper>
+      </Block>
     );
   }
 
   return (
-    <S.Wrapper>
-      <S.Title>Holdings</S.Title>
+    <Block>
+      <SectionTitle>Holdings</SectionTitle>
       <Table>
         <thead>
           <HeaderRow>
@@ -83,7 +85,7 @@ export const FundHoldings: React.FC<FundHoldingsProps> = props => {
             return (
               <Component key={holding.token?.address} highlighted={selected} onClick={handleClick}>
                 <BodyCell>
-                  <S.HoldingSymbol>{holding.token?.symbol}</S.HoldingSymbol>
+                  <span>{holding.token?.symbol}</span>
                   <br />
                   <S.HoldingName>{holding.token?.name}</S.HoldingName>
                 </BodyCell>
@@ -94,6 +96,6 @@ export const FundHoldings: React.FC<FundHoldingsProps> = props => {
           })}
         </tbody>
       </Table>
-    </S.Wrapper>
+    </Block>
   );
 };

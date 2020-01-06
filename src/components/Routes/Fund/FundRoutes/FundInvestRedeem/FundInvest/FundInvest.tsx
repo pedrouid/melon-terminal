@@ -1,10 +1,11 @@
 import React, { useMemo } from 'react';
-import * as S from './FundInvest.styles';
 import { useFundInvestQuery } from '~/queries/FundInvest';
 import { Spinner } from '~/components/Common/Spinner/Spinner';
 import RequestInvestment from './RequestInvestment/RequestInvestment';
 import ExecuteRequest from './ExecuteRequest/ExecuteRequest';
 import CancelRequest from './CancelRequest/CancelRequest';
+import { Block } from '~/storybook/components/Block/Block';
+import { SectionTitle } from '~/storybook/components/Title/Title';
 
 export interface FundInvestProps {
   address: string;
@@ -37,16 +38,16 @@ export const FundInvest: React.FC<FundInvestProps> = ({ address }) => {
 
   if (query.loading) {
     return (
-      <S.Wrapper>
-        <S.Title>Invest</S.Title>
+      <Block>
+        <SectionTitle>Invest</SectionTitle>
         <Spinner />
-      </S.Wrapper>
+      </Block>
     );
   }
 
   return (
-    <S.Wrapper>
-      <S.Title>Invest</S.Title>
+    <Block>
+      <SectionTitle>Invest</SectionTitle>
       {action === 'cancel' && <CancelRequest address={address} account={account!} loading={query.networkStatus < 7} />}
       {action === 'invest' && (
         <RequestInvestment address={address} holdings={holdings} account={account!} loading={query.networkStatus < 7} />
@@ -60,6 +61,6 @@ export const FundInvest: React.FC<FundInvestProps> = ({ address }) => {
           request is between the next price update and 24 hours after your investment request .
         </p>
       )}
-    </S.Wrapper>
+    </Block>
   );
 };

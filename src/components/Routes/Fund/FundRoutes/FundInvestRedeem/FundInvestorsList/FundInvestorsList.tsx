@@ -12,7 +12,8 @@ import {
   BodyRow,
   NoEntries,
 } from '~/components/Common/Table/Table.styles';
-import * as S from './FundInvestorsList.styles';
+import { Block } from '~/storybook/components/Block/Block';
+import { SectionTitle } from '~/storybook/components/Title/Title';
 
 export interface FundInvestorsListProps {
   address: string;
@@ -23,25 +24,25 @@ export const FundInvestorsList: React.FC<FundInvestorsListProps> = ({ address })
 
   if (investementQuery.loading) {
     return (
-      <S.Wrapper>
-        <S.Title>Investors</S.Title>
+      <Block>
+        <SectionTitle>Investors</SectionTitle>
         <Spinner />
-      </S.Wrapper>
+      </Block>
     );
   }
 
   if (!fundInvestements || !fundInvestements.length) {
     return (
-      <S.Wrapper>
-        <S.Title>Investors</S.Title>
+      <Block>
+        <SectionTitle>Investors</SectionTitle>
         <NoEntries>No entries.</NoEntries>
-      </S.Wrapper>
+      </Block>
     );
   }
 
   return (
-    <S.Wrapper>
-      <S.Title>Investors</S.Title>
+    <Block>
+      <SectionTitle>Investors</SectionTitle>
       <Table>
         <thead>
           <HeaderRow>
@@ -60,6 +61,6 @@ export const FundInvestorsList: React.FC<FundInvestorsListProps> = ({ address })
           })}
         </tbody>
       </Table>
-    </S.Wrapper>
+    </Block>
   );
 };

@@ -24,6 +24,9 @@ import { AssetWhitelistConfiguration } from './AssetWhitelistConfiguration/Asset
 import { AssetBlacklistConfiguration } from './AssetBlacklistConfiguration/AssetBlacklistConfiguration';
 import { useAccount } from '~/hooks/useAccount';
 import { useOnChainQueryRefetcher } from '~/hooks/useOnChainQueryRefetcher';
+import { Grid, GridRow, GridCol } from '~/storybook/components/Grid/Grid';
+import { Block } from '~/storybook/components/Block/Block';
+import { SectionTitle } from '~/storybook/components/Title/Title';
 
 export interface RegisterPoliciesProps {
   address: string;
@@ -60,101 +63,107 @@ export const RegisterPolicies: React.FC<RegisterPoliciesProps> = ({ address }) =
   ) => transaction.start(tx, name);
 
   return (
-    <>
-      <S.FundPoliciesBody>
-        <h1>Risk profile</h1>
-        <p>Configure the risk management profile of your fund and the rules to be enforced by the smart contracts.</p>
-        <p>&nbsp;</p>
+    <Grid>
+      <GridRow justify="center">
+        <GridCol xs={12} sm={6} md={4} lg={4}>
+          <Block>
+            <SectionTitle>Risk profile</SectionTitle>
+            <p>
+              Configure the risk management profile of your fund and the rules to be enforced by the smart contracts.
+            </p>
+            <p>&nbsp;</p>
 
-        <h3>Available policies ({environment.policies.length})</h3>
-        <p>Please select the policy that you want to add:</p>
-        <ul>
-          {environment.policies.map(policy => {
-            return (
-              <li key={policy.name}>
-                <input type="radio" id={policy.name} name="addPolicy" onClick={() => setSelectedPolicy(policy)} />
-                <label htmlFor={policy.name}>{policy.name}</label>
-              </li>
-            );
-          })}
-        </ul>
-        <p>&nbsp;</p>
+            <SectionTitle>Available policies ({environment.policies.length})</SectionTitle>
+            <p>Please select the policy that you want to add:</p>
+            <ul>
+              {environment.policies.map(policy => {
+                return (
+                  <li key={policy.name}>
+                    <input type="radio" id={policy.name} name="addPolicy" onClick={() => setSelectedPolicy(policy)} />
+                    <label htmlFor={policy.name}>{policy.name}</label>
+                  </li>
+                );
+              })}
+            </ul>
+            <p>&nbsp;</p>
 
-        {policyManager && selectedPolicy && selectedPolicy.id === 'priceTolerance' && (
-          <PriceToleranceConfiguration
-            policyManager={policyManager.address!}
-            policy={selectedPolicy}
-            startTransaction={startTransaction}
-          />
-        )}
+            {policyManager && selectedPolicy && selectedPolicy.id === 'priceTolerance' && (
+              <PriceToleranceConfiguration
+                policyManager={policyManager.address!}
+                policy={selectedPolicy}
+                startTransaction={startTransaction}
+              />
+            )}
 
-        {policyManager && selectedPolicy && selectedPolicy.id === 'maxPositions' && (
-          <MaxPositionsConfiguration
-            policyManager={policyManager.address!}
-            policy={selectedPolicy}
-            startTransaction={startTransaction}
-          />
-        )}
+            {policyManager && selectedPolicy && selectedPolicy.id === 'maxPositions' && (
+              <MaxPositionsConfiguration
+                policyManager={policyManager.address!}
+                policy={selectedPolicy}
+                startTransaction={startTransaction}
+              />
+            )}
 
-        {policyManager && selectedPolicy && selectedPolicy.id === 'maxConcentration' && (
-          <MaxConcentrationConfiguration
-            policyManager={policyManager.address!}
-            policy={selectedPolicy}
-            startTransaction={startTransaction}
-          />
-        )}
+            {policyManager && selectedPolicy && selectedPolicy.id === 'maxConcentration' && (
+              <MaxConcentrationConfiguration
+                policyManager={policyManager.address!}
+                policy={selectedPolicy}
+                startTransaction={startTransaction}
+              />
+            )}
 
-        {policyManager && selectedPolicy && selectedPolicy.id === 'userWhitelist' && (
-          <UserWhitelistConfiguration
-            policyManager={policyManager.address!}
-            policy={selectedPolicy}
-            startTransaction={startTransaction}
-          />
-        )}
+            {policyManager && selectedPolicy && selectedPolicy.id === 'userWhitelist' && (
+              <UserWhitelistConfiguration
+                policyManager={policyManager.address!}
+                policy={selectedPolicy}
+                startTransaction={startTransaction}
+              />
+            )}
 
-        {policyManager && selectedPolicy && selectedPolicy.id === 'assetWhitelist' && (
-          <AssetWhitelistConfiguration
-            policyManager={policyManager.address!}
-            policy={selectedPolicy}
-            startTransaction={startTransaction}
-          />
-        )}
+            {policyManager && selectedPolicy && selectedPolicy.id === 'assetWhitelist' && (
+              <AssetWhitelistConfiguration
+                policyManager={policyManager.address!}
+                policy={selectedPolicy}
+                startTransaction={startTransaction}
+              />
+            )}
 
-        {policyManager && selectedPolicy && selectedPolicy.id === 'assetBlacklist' && (
-          <AssetBlacklistConfiguration
-            policyManager={policyManager.address!}
-            policy={selectedPolicy}
-            startTransaction={startTransaction}
-          />
-        )}
+            {policyManager && selectedPolicy && selectedPolicy.id === 'assetBlacklist' && (
+              <AssetBlacklistConfiguration
+                policyManager={policyManager.address!}
+                policy={selectedPolicy}
+                startTransaction={startTransaction}
+              />
+            )}
 
-        <p>&nbsp;</p>
+            <p>&nbsp;</p>
 
-        <h3>Active policies ({policies.length})</h3>
-        {policies.length ? (
-          <S.Table>
-            <thead>
-              <S.HeaderRow>
-                <S.HeaderCell>Name</S.HeaderCell>
-                <S.HeaderCell>Parameter(s)</S.HeaderCell>
-              </S.HeaderRow>
-            </thead>
-            <tbody>
-              {policies.map(policy => (
-                <S.BodyRow key={policy.address}>
-                  <S.BodyCell>{policy.identifier}</S.BodyCell>
-                  <FundPolicyParameters policy={policy} environment={environment} />
-                </S.BodyRow>
-              ))}
-            </tbody>
-          </S.Table>
-        ) : (
-          <S.NoRegisteredPolicies>No registered policies.</S.NoRegisteredPolicies>
-        )}
-      </S.FundPoliciesBody>
+            <SectionTitle>Active policies ({policies.length})</SectionTitle>
+            {policies.length ? (
+              <S.Table>
+                <thead>
+                  <S.HeaderRow>
+                    <S.HeaderCell>Name</S.HeaderCell>
+                    <S.HeaderCell>Parameter(s)</S.HeaderCell>
+                  </S.HeaderRow>
+                </thead>
+                <tbody>
+                  {policies.map(policy => (
+                    <S.BodyRow key={policy.address}>
+                      <S.BodyCell>{policy.identifier}</S.BodyCell>
+                      <FundPolicyParameters policy={policy} environment={environment} />
+                    </S.BodyRow>
+                  ))}
+                </tbody>
+              </S.Table>
+            ) : (
+              <S.NoRegisteredPolicies>No registered policies.</S.NoRegisteredPolicies>
+            )}
 
-      <TransactionModal transaction={transaction} />
-    </>
+            <TransactionModal transaction={transaction} />
+          </Block>
+        </GridCol>
+      </GridRow>
+    </Grid>
   );
 };
 

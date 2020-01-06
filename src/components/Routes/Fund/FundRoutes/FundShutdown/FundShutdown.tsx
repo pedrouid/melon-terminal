@@ -1,16 +1,16 @@
-import React, { FormEvent } from 'react';
-import * as S from './FundShutdown.styles';
+import React from 'react';
 import { useEnvironment } from '~/hooks/useEnvironment';
 import { useTransaction } from '~/hooks/useTransaction';
 import { useHistory } from 'react-router';
 import { ButtonBlock } from '~/components/Common/Form/ButtonBlock/ButtonBlock';
 import { SubmitButton } from '~/components/Common/Form/SubmitButton/SubmitButton';
 import { TransactionModal } from '~/components/Common/TransactionModal/TransactionModal';
-import { refetchQueries } from '~/utils/refetchQueries';
-import { useOnChainClient } from '~/hooks/useQuery';
 import { Hub, Version } from '@melonproject/melonjs';
 import { useAccount } from '~/hooks/useAccount';
 import { useOnChainQueryRefetcher } from '~/hooks/useOnChainQueryRefetcher';
+import { Grid, GridRow, GridCol } from '~/storybook/components/Grid/Grid';
+import { Block } from '~/storybook/components/Block/Block';
+import { SectionTitle } from '~/storybook/components/Title/Title';
 
 export interface ShutdownProps {
   address: string;
@@ -37,14 +37,20 @@ export const Shutdown: React.FC<ShutdownProps> = ({ address }) => {
   };
 
   return (
-    <S.FundShutdownBody>
-      <h1>Shut down fund</h1>
-      <ButtonBlock>
-        <SubmitButton type="button" label="Shutdown fund" onClick={() => submit()} />
-      </ButtonBlock>
+    <Grid>
+      <GridRow justify="center">
+        <GridCol xs={12} sm={6} md={4} lg={4}>
+          <Block>
+            <SectionTitle>Shut down fund</SectionTitle>
+            <ButtonBlock>
+              <SubmitButton type="button" label="Shutdown fund" onClick={() => submit()} />
+            </ButtonBlock>
 
-      <TransactionModal transaction={transaction} />
-    </S.FundShutdownBody>
+            <TransactionModal transaction={transaction} />
+          </Block>
+        </GridCol>
+      </GridRow>
+    </Grid>
   );
 };
 

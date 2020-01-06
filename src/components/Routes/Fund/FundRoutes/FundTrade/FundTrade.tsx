@@ -9,6 +9,8 @@ import { FundKyberTrading } from './FundKyberTrading/FundKyberTrading';
 import { useFundExchanges } from './FundTrade.query';
 import { FundHoldings } from './FundHoldings/FundHoldings';
 import * as S from './FundTrade.styles';
+import { Block } from '~/storybook/components/Block/Block';
+import { Grid, GridRow, GridCol } from '~/storybook/components/Grid/Grid';
 
 export interface FundTradeProps {
   address: string;
@@ -28,30 +30,34 @@ export const FundTrade: React.FC<FundTradeProps> = props => {
   const kyber = exchanges.filter(exchange => exchange.id === ExchangeIdentifier.KyberNetwork);
 
   return (
-    <S.FundTradeBody>
-      <S.FundTradeTop>
-        <S.FundHoldings>
+    <Grid>
+      <GridRow>
+        <GridCol xs={12} sm={12}>
+          <Block>
+            <TabNavigation>
+              {!!markets && (
+                <TabNavigationItem label="Orderbook" identifier="orderbook">
+                  <FundOrderbookTrading address={props.address} asset={asset} exchanges={markets} />
+                </TabNavigationItem>
+              )}
+              {!!kyber && (
+                <TabNavigationItem label="Kyber" identifier="kyber">
+                  <FundKyberTrading address={props.address} asset={asset} />
+                </TabNavigationItem>
+              )}
+            </TabNavigation>
+          </Block>
+        </GridCol>
+      </GridRow>
+      <GridRow>
+        <GridCol xs={12} sm={6}>
           <FundHoldings address={props.address} asset={asset} setAsset={setAsset} />
-        </S.FundHoldings>
-        <S.FundTrading>
-          <TabNavigation>
-            {!!markets && (
-              <TabNavigationItem label="Orderbook" identifier="orderbook">
-                <FundOrderbookTrading address={props.address} asset={asset} exchanges={markets} />
-              </TabNavigationItem>
-            )}
-            {!!kyber && (
-              <TabNavigationItem label="Kyber" identifier="kyber">
-                <FundKyberTrading address={props.address} asset={asset} />
-              </TabNavigationItem>
-            )}
-          </TabNavigation>
-        </S.FundTrading>
-      </S.FundTradeTop>
-      <S.FundTradeBottom>
-        <FundOpenOrders address={props.address} />
-      </S.FundTradeBottom>
-    </S.FundTradeBody>
+        </GridCol>
+        <GridCol xs={12} sm={6}>
+          <FundOpenOrders address={props.address} />
+        </GridCol>
+      </GridRow>
+    </Grid>
   );
 };
 
