@@ -19,7 +19,3 @@ export const EmptyCell = styled.td`
   text-align: center;
   padding: 50px;
 `;
-
-export const Group = styled.div`
-  margin-bottom: ${props => props.theme.spaceUnits.xxl};
-`;

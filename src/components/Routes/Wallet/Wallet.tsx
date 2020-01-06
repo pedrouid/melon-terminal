@@ -5,6 +5,7 @@ import { WalletNavigation } from './WalletNavigation/WalletNavigation';
 import * as S from './Wallet.styles';
 
 import { Container } from '~/storybook/components/Container/Container';
+import { Bar } from '~/storybook/components/Bar/Bar';
 
 const NoMatch = React.lazy(() => import('~/components/Routes/NoMatch/NoMatch'));
 const WalletOverview = React.lazy(() => import('./WalletRoutes/WalletOverview/WalletOverview'));
@@ -19,9 +20,9 @@ export const Wallet: React.FC = () => {
 
   return (
     <Container>
-      <S.WalletHeader>
+      <Bar>
         <WalletHeader />
-      </S.WalletHeader>
+      </Bar>
       <S.WalletNavigation>
         <WalletNavigation />
       </S.WalletNavigation>

@@ -9,6 +9,7 @@ import { useAccount } from '~/hooks/useAccount';
 
 import { Block } from '~/storybook/components/Block/Block';
 import { SectionTitle } from '~/storybook/components/Title/Title';
+import { GridRow, Grid, GridCol } from '~/storybook/components/Grid/Grid';
 
 const fundHeadings = ['Name', 'Inception', 'AUM [ETH]', 'Share price', 'Change', '# shares', 'Version', 'Status'];
 const redeemHeadings = ['Name', 'Inception', 'AUM [ETH]', 'Share price', 'Change', '# shares', 'Version', 'Status'];
@@ -53,41 +54,47 @@ export const WalletOverview: React.FC = () => {
   );
 
   return (
-    <>
-      <S.Group>
-        <SectionTitle>Managed funds</SectionTitle>
-        <Block>
-          <S.Table>
-            <thead>
-              <S.HeaderRow>{managedHeader}</S.HeaderRow>
-            </thead>
-            <tbody>{managedRows}</tbody>
-          </S.Table>
-        </Block>
-      </S.Group>
-      <S.Group>
-        <SectionTitle>Funds with owned shares</SectionTitle>
-        <Block>
-          <S.Table>
-            <thead>
-              <S.HeaderRow>{investedHeader}</S.HeaderRow>
-            </thead>
-            <tbody>{investedRows}</tbody>
-          </S.Table>
-        </Block>
-      </S.Group>
-      <S.Group>
-        <SectionTitle>Pending investment requests</SectionTitle>
-        <Block>
-          <S.Table>
-            <thead>
-              <S.HeaderRow>{requestsHeader}</S.HeaderRow>
-            </thead>
-            <tbody>{requestsRows}</tbody>
-          </S.Table>
-        </Block>
-      </S.Group>
-    </>
+    <Grid>
+      <GridRow>
+        <GridCol xs={12} sm={6}>
+          <SectionTitle>Managed funds</SectionTitle>
+          <Block>
+            <S.Table>
+              <thead>
+                <S.HeaderRow>{managedHeader}</S.HeaderRow>
+              </thead>
+              <tbody>{managedRows}</tbody>
+            </S.Table>
+          </Block>
+        </GridCol>
+      </GridRow>
+      <GridRow>
+        <GridCol xs={12} sm={6}>
+          <SectionTitle>Funds with owned shares</SectionTitle>
+          <Block>
+            <S.Table>
+              <thead>
+                <S.HeaderRow>{investedHeader}</S.HeaderRow>
+              </thead>
+              <tbody>{investedRows}</tbody>
+            </S.Table>
+          </Block>
+        </GridCol>
+      </GridRow>
+      <GridRow>
+        <GridCol xs={12} sm={6}>
+          <SectionTitle>Pending investment requests</SectionTitle>
+          <Block>
+            <S.Table>
+              <thead>
+                <S.HeaderRow>{requestsHeader}</S.HeaderRow>
+              </thead>
+              <tbody>{requestsRows}</tbody>
+            </S.Table>
+          </Block>
+        </GridCol>
+      </GridRow>
+    </Grid>
   );
 };
 
