@@ -56,7 +56,7 @@ export const FundOrderbookLimitForm: React.FC<FundOrderbookLimitFormProps> = pro
   useEffect(() => {
     if (props.order) {
       return form.reset({
-        direction: props.order.side === 'bid' ? 'buy' : 'sell',
+        direction: props.order.side === 'bid' ? 'sell' : 'buy',
         quantity: props.order.quantity.toFixed(),
         price: props.order.price.toFixed(),
       });

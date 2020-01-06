@@ -78,7 +78,7 @@ export const OpenOrderItem: React.FC<OpenOrderItemProps> = ({ address, order }) 
       <BodyCellRightAlign>{price.toFixed(6)}</BodyCellRightAlign>
       <BodyCellRightAlign>{makerAmount.toFixed(6)}</BodyCellRightAlign>
       <BodyCell>
-        {expired && <SubmitButton type="button" label="Cancel" onClick={() => submit()} />}
+        <SubmitButton type="button" label="Cancel" onClick={() => submit()} />
         <TransactionModal transaction={transaction} />
       </BodyCell>
     </BodyRow>

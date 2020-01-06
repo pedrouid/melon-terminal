@@ -40,7 +40,7 @@ export const FundOrderbookMarketForm: React.FC<FundOrderbookMarketFormProps> = p
     name: item.name,
   }));
 
-  const direction = props.order?.side === 'bid' ? 'buy' : 'sell';
+  const direction = props.order?.side === 'bid' ? 'sell' : 'buy';
   const directions = [
     {
       value: 'buy',
