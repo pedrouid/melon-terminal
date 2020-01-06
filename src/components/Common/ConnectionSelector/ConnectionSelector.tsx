@@ -4,6 +4,7 @@ import { useHistory } from 'react-router';
 import { ConnectionStatus } from '~/components/Contexts/Connection/Connection';
 
 import { Block } from '~/storybook/components/Block/Block';
+import { GridRow, GridCol } from '~/storybook/components/Grid/Grid';
 
 export const ConnectionSelector: React.FC = () => {
   const history = useHistory();
@@ -27,9 +28,13 @@ export const ConnectionSelector: React.FC = () => {
         };
 
         return (
-          <Block key={method.name}>
-            <Component active={active} select={select} />
-          </Block>
+          <GridRow key={method.name}>
+            <GridCol xs={12} sm={6}>
+              <Block>
+                <Component active={active} select={select} />
+              </Block>
+            </GridCol>
+          </GridRow>
         );
       })}
     </>
