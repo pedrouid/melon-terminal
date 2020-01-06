@@ -12,7 +12,7 @@ export const theme = {
   border: {
     borderDefault: '1px solid rgb(29,29,29)',
     borderSecondary: '1px solid rgb(196,196,196)',
-    borderRadius: '4px',
+    borderRadius: '0px',
     borderColor: 'rgb(29,29,29)',
   },
   statusColors: {
