@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from '~/components/Common/Link/Link';
 import { format } from 'date-fns';
 import { usePriceFeedUpdateQuery } from '~/queries/PriceFeedUpdate';
 import * as S from './Footer.styles';

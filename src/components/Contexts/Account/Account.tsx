@@ -1,5 +1,4 @@
 import React, { createContext, useMemo } from 'react';
-import { useEnvironment } from '~/hooks/useEnvironment';
 import { useAccountContextQuery, AccountContext } from './Account.query';
 import { useConnectionState } from '~/hooks/useConnectionState';
 

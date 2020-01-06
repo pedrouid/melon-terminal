@@ -28,6 +28,7 @@ export const theme = {
     grey: 'rgb(155, 155, 155)',
     red: 'rgb(244,67,54)',
     green: 'rgb(76,175,80)',
+    logo: '#0B0B09',
   },
   spaceUnits: {
     xxxs: '2px',
@@ -68,7 +69,7 @@ export const theme = {
     m: '720px',
     s: '480px',
   },
-  header:{
+  header: {
     height: '88px',
   },
   transition: {
@@ -144,7 +145,7 @@ export const Global = createGlobalStyle`
   }
 
 
-  h2,h3 {
+  h2, h3 {
     padding-bottom: ${theme.spaceUnits.xs};
     border-bottom : ${theme.border.borderSecondary};
     margin-bottom: ${theme.spaceUnits.xs};

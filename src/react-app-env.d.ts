@@ -1,7 +1,7 @@
 /// <reference types="react-scripts" />
 
 import 'styled-components';
-import { theme } from './components/App.styles';
+import { theme } from '~/theme';
 import { Deployment, NetworkEnum } from './types';
 
 declare module 'console' {

@@ -1,8 +1,7 @@
 import React from 'react';
-import * as S from './Header';
 import { SkeletonHead } from '../Skeleton/Skeleton';
 import { Logo } from '../Logo/Logo';
-import { Link } from 'react-router-dom';
+import * as S from './Header';
 
 export default { title: 'Components|Header' };
 

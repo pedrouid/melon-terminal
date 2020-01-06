@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { NavLink } from 'react-router-dom';
+import { NavLink } from '~/components/Common/Link/Link';
 
 export const WalletNavigationLink = styled(NavLink)`
   display: inline-block;

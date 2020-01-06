@@ -12,9 +12,9 @@ export const SkeletonHead = styled.div`
   flex: none;
   position: fixed;
   top: 0px;
-  left:0px;
+  left: 0px;
   z-index: 200;
-  width:100%;
+  width: 100%;
   height: ${props => props.theme.header.height};
 `;
 
