@@ -1,4 +1,5 @@
-import React, { createContext, useState } from 'react';
+import React, { createContext, useState, useLayoutEffect } from 'react';
+import { useLocation } from 'react-router';
 
 export interface ColorContextValue {
   color: string;
@@ -13,9 +14,15 @@ export interface ColorProviderProps {
 }
 
 export const ColorProvider: React.FC<ColorProviderProps> = props => {
-  const [color, set] = useState(props.default);
-  const reset = () => set(props.default);
-  const random = () => set(`#${Math.floor(Math.random() * 16777215).toString(16)}`);
+  const location = useLocation()!;
+  const [base, setBase] = useState(props.default);
+  const [color, setColor] = useState(props.default);
+  const reset = () => setColor(base);
+  const random = () => setColor(`#${Math.floor(Math.random() * 16777215).toString(16)}`);
+
+  useLayoutEffect(() => {
+    setBase(`#${Math.floor(Math.random() * 16777215).toString(16)}`);
+  }, [location.pathname]);
 
   const context = {
     color,

@@ -1,7 +1,7 @@
 import React, { Suspense, useMemo } from 'react';
 import ErrorBoundary, { FallbackProps } from 'react-error-boundary';
-import { ModalProvider } from 'styled-react-modal';
 import { hot } from 'react-hot-loader';
+import { ModalProvider } from 'styled-react-modal';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { Spinner } from './Common/Spinner/Spinner';
 import { Layout } from './Layout/Layout';
@@ -25,12 +25,12 @@ const AppComponent = () => {
   }, []);
 
   return (
-    <Theme>
-      <ModalProvider backgroundComponent={ModalBackground}>
-        <ConnectionProvider methods={methods}>
-          <ApolloProvider>
-            <AccountProvider>
-              <Router>
+    <Router>
+      <Theme>
+        <ModalProvider backgroundComponent={ModalBackground}>
+          <ConnectionProvider methods={methods}>
+            <ApolloProvider>
+              <AccountProvider>
                 <Layout>
                   <ErrorBoundary FallbackComponent={ErrorFallback}>
                     <Suspense fallback={<Spinner size="large" positioning="overlay" />}>
@@ -38,12 +38,12 @@ const AppComponent = () => {
                     </Suspense>
                   </ErrorBoundary>
                 </Layout>
-              </Router>
-            </AccountProvider>
-          </ApolloProvider>
-        </ConnectionProvider>
-      </ModalProvider>
-    </Theme>
+              </AccountProvider>
+            </ApolloProvider>
+          </ConnectionProvider>
+        </ModalProvider>
+      </Theme>
+    </Router>
   );
 };
 
