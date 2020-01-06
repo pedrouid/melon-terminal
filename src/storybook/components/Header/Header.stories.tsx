@@ -1,5 +1,6 @@
 import React from 'react';
 import * as S from './Header';
+import { SkeletonHead } from '../Skeleton/Skeleton';
 import { Logo } from '../Logo/Logo';
 import { Link } from 'react-router-dom';
 
@@ -7,7 +8,7 @@ export default { title: 'Components|Header' };
 
 export const Default: React.FC = () => {
   return (
-    <S.HeaderPosition>
+    <SkeletonHead>
       <S.Header>
         <S.LogoContainer>
           <Logo name="with-bottom-text" size="small" />
@@ -22,6 +23,6 @@ export const Default: React.FC = () => {
           </S.AccountInfo>
         </S.Account>
       </S.Header>
-    </S.HeaderPosition>
+    </SkeletonHead>
   );
 };

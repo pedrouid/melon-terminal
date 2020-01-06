@@ -1,4 +1,5 @@
 import React from 'react';
-import * as S from './Body.styles';
 
-export const Body: React.FC = ({ children }) => <S.Body>{children}</S.Body>;
+import { SkeletonBody } from '~/storybook/components/Skeleton/Skeleton';
+
+export const Body: React.FC = ({ children }) => <SkeletonBody>{children}</SkeletonBody>;

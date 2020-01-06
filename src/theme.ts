@@ -68,6 +68,9 @@ export const theme = {
     m: '720px',
     s: '480px',
   },
+  header:{
+    height: '88px',
+  },
   transition: {
     defaultAll: 'all 0.3s ease-in-out',
     duration: '0.3s',

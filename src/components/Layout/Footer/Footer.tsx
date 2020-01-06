@@ -4,11 +4,13 @@ import { format } from 'date-fns';
 import { usePriceFeedUpdateQuery } from '~/queries/PriceFeedUpdate';
 import * as S from './Footer.styles';
 
+import { SkeletonFeet } from '~/storybook/components/Skeleton/Skeleton';
+
 export const Footer: React.FC = () => {
   const [update] = usePriceFeedUpdateQuery();
 
   return (
-    <S.FooterPosition>
+    <SkeletonFeet>
       <S.Footer>
         <S.FooterItem>
           <a href="https://melonprotocol.com">Protocol</a>
@@ -27,6 +29,6 @@ export const Footer: React.FC = () => {
         </S.FooterItem>
         {update && <S.FooterItem>Last price feed update at {format(update, 'yyyy-MM-dd hh:mm a')}</S.FooterItem>}
       </S.Footer>
-    </S.FooterPosition>
+    </SkeletonFeet>
   );
 };

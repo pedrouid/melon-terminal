@@ -1,18 +1,14 @@
 import styled from 'styled-components';
 
-export const HeaderPosition = styled.div`
-  position: fixed;
-  top: 0;
-  z-index: 200;
-  width: 100%;
-  padding: ${props => props.theme.spaceUnits.l} ${props => props.theme.spaceUnits.s};
-  border-bottom: ${props => props.theme.border.borderDefault};
-  background-color: ${props => props.theme.mainColors.primary};
-`;
+
 export const Header = styled.div`
   position: relative;
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  height: ${props => props.theme.header.height};
+  border-bottom: ${props => props.theme.border.borderDefault};
+  background-color: ${props => props.theme.mainColors.primary};
   @media (${props => props.theme.mediaQueries.m}) {
     justify-content: flex-end;
   }
@@ -20,12 +16,12 @@ export const Header = styled.div`
 
 export const LogoContainer = styled.div`
   position: relative;
+  padding: 0px ${props => props.theme.spaceUnits.m};
   @media (${props => props.theme.mediaQueries.m}) {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    padding: ${props => props.theme.spaceUnits.m} 0px;
   }
 `;
 
