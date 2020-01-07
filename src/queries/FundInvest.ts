@@ -23,11 +23,9 @@ const FundHoldingsQuery = gql`
     }
     fund(address: $fund) {
       routes {
-        accounting {
+        participation {
           address
-          holdings {
-            amount
-            shareCostInAsset
+          allowedAssets {
             token {
               address
               symbol
@@ -35,6 +33,7 @@ const FundHoldingsQuery = gql`
               price
               decimals
             }
+            shareCostInAsset
           }
         }
       }

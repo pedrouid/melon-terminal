@@ -3,7 +3,7 @@ import BigNumber from 'bignumber.js';
 import * as Yup from 'yup';
 import useForm, { FormContext } from 'react-hook-form';
 import { Participation, StandardToken, sameAddress, TokenDefinition } from '@melonproject/melonjs';
-import { Holding, Account } from '@melonproject/melongql';
+import { AllowedInvestmentAsset, Account } from '@melonproject/melongql';
 import { useEnvironment } from '~/hooks/useEnvironment';
 import { useTransaction } from '~/hooks/useTransaction';
 import { TransactionModal } from '~/components/Common/TransactionModal/TransactionModal';
@@ -18,7 +18,7 @@ import { Spinner } from '~/components/Common/Spinner/Spinner';
 
 export interface RequestInvestmentProps {
   address: string;
-  holdings?: Holding[];
+  allowedAssets?: AllowedInvestmentAsset[];
   account: Account;
   loading: boolean;
 }
@@ -48,13 +48,13 @@ export const RequestInvestment: React.FC<RequestInvestmentProps> = props => {
     onFinish: () => refetch(),
   });
 
-  const holdings = props.holdings ?? [];
+  const allowedAssets = props.allowedAssets ?? [];
   const form = useForm<RequestInvestmentFormValues>({
     validationSchema,
     mode: 'onSubmit',
     reValidateMode: 'onBlur',
     defaultValues: {
-      investmentAsset: holdings[0]?.token?.address,
+      investmentAsset: allowedAssets[0]?.token?.address,
       investmentAmount: 1,
       requestedShares: 1,
     },
@@ -64,7 +64,7 @@ export const RequestInvestment: React.FC<RequestInvestmentProps> = props => {
   const investmentAmount = form.watch('investmentAmount') as number;
   const requestedShares = form.watch('requestedShares') as number;
   const token = (investmentAsset && environment.getToken(investmentAsset)) as TokenDefinition | undefined;
-  const holding = holdings.find(holding => sameAddress(holding.token?.address, investmentAsset));
+  const asset = allowedAssets.find(allowedAsset => sameAddress(allowedAsset.token?.address, investmentAsset));
   const participation = props.account?.participation?.address;
   const [allowance, query] = useAccountAllowanceQuery(account.address, investmentAsset, participation);
 
@@ -106,26 +106,26 @@ export const RequestInvestment: React.FC<RequestInvestmentProps> = props => {
   });
 
   const handleInvestmentAmountChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (holding && token && requestedShares) {
+    if (asset && token && requestedShares) {
       const shares = new BigNumber(event.target.value ?? 0)
         .multipliedBy(new BigNumber(10).exponentiatedBy(token.decimals))
-        .dividedBy(holding.shareCostInAsset!);
+        .dividedBy(asset.shareCostInAsset!);
 
       form.setValue('requestedShares', shares.isNaN() ? 0 : shares.toNumber());
     }
   };
 
   const handleRequestedSharesChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (holding && token) {
+    if (asset && token) {
       const amount = new BigNumber(event.target.value ?? 0)
-        .multipliedBy(holding.shareCostInAsset!)
+        .multipliedBy(asset.shareCostInAsset!)
         .dividedBy(new BigNumber(10).exponentiatedBy(token.decimals));
 
       form.setValue('investmentAmount', amount.isNaN() ? 0 : amount.toNumber());
     }
   };
 
-  const investmentAssetOptions = (props.holdings ?? []).map(holding => ({
+  const investmentAssetOptions = (props.allowedAssets ?? []).map(holding => ({
     value: holding.token!.address!,
     name: holding.token!.symbol!,
   }));

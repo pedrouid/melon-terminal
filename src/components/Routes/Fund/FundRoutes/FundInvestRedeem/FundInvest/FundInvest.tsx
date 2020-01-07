@@ -15,7 +15,7 @@ export const FundInvest: React.FC<FundInvestProps> = ({ address }) => {
   const [result, query] = useFundInvestQuery(address);
 
   const account = result?.account;
-  const holdings = result?.fund?.routes?.accounting?.holdings;
+  const allowedAssets = result?.fund?.routes?.participation?.allowedAssets;
   const action = useMemo(() => {
     const canCancelRequest = result?.account?.participation?.canCancelRequest;
     if (canCancelRequest) {
@@ -50,7 +50,12 @@ export const FundInvest: React.FC<FundInvestProps> = ({ address }) => {
       <SectionTitle>Invest</SectionTitle>
       {action === 'cancel' && <CancelRequest address={address} account={account!} loading={query.networkStatus < 7} />}
       {action === 'invest' && (
-        <RequestInvestment address={address} holdings={holdings} account={account!} loading={query.networkStatus < 7} />
+        <RequestInvestment
+          address={address}
+          allowedAssets={allowedAssets}
+          account={account!}
+          loading={query.networkStatus < 7}
+        />
       )}
       {action === 'execute' && (
         <ExecuteRequest address={address} account={account!} loading={query.networkStatus < 7} />
