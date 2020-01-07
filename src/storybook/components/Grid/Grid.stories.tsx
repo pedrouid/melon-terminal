@@ -66,7 +66,6 @@ export const StandaloneSmall: React.FC = () => {
   );
 };
 
-
 export const StandaloneMedium: React.FC = () => {
   return (
     <Grid>
@@ -127,7 +126,9 @@ export const WithoutBlocks: React.FC = () => {
     <Grid>
       <GridRow>
         <GridCol xs={12}>
-          <div>Stand-alone grid full<hr></hr>xs={12}</div>
+          <div>
+            Stand-alone grid full<hr></hr>xs={12}
+          </div>
         </GridCol>
       </GridRow>
     </Grid>

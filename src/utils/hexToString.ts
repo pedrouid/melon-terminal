@@ -1,15 +1,15 @@
+import { toUtf8, hexToNumberString, isHexStrict } from 'web3-utils';
+
 // TODO: This should never be needed. Instead, the subgraph should
-// already return an ASCII string.
+// already return a string.
 export function hexToString(hex: string): string {
-  let str = '';
-
-  for (let i = 54; i < hex.length; i += 2) {
-    const value = parseInt(hex.substr(i, 2), 16);
-
-    if (value) {
-      str += String.fromCharCode(value);
+  if (isHexStrict(hex)) {
+    try {
+      return toUtf8(hex);
+    } catch (e) {
+      return hexToNumberString(hex);
     }
   }
 
-  return str.trim();
+  return hex;
 }

@@ -106,24 +106,23 @@ export const RequestInvestment: React.FC<RequestInvestmentProps> = props => {
   });
 
   const handleInvestmentAmountChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const shares = (holding &&
-      token &&
-      requestedShares &&
-      new BigNumber(event.target.value ?? 0)
+    if (holding && token && requestedShares) {
+      const shares = new BigNumber(event.target.value ?? 0)
         .multipliedBy(new BigNumber(10).exponentiatedBy(token.decimals))
-        .dividedBy(holding.shareCostInAsset!)) as BigNumber;
+        .dividedBy(holding.shareCostInAsset!);
 
-    form.setValue('requestedShares', shares?.toNumber() ?? 1);
+      form.setValue('requestedShares', shares.isNaN() ? 0 : shares.toNumber());
+    }
   };
 
   const handleRequestedSharesChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const amount = (holding &&
-      token &&
-      new BigNumber(event.target.value ?? 0)
+    if (holding && token) {
+      const amount = new BigNumber(event.target.value ?? 0)
         .multipliedBy(holding.shareCostInAsset!)
-        .dividedBy(new BigNumber(10).exponentiatedBy(token.decimals))) as BigNumber;
+        .dividedBy(new BigNumber(10).exponentiatedBy(token.decimals));
 
-    form.setValue('investmentAmount', amount?.toNumber() ?? 1);
+      form.setValue('investmentAmount', amount.isNaN() ? 0 : amount.toNumber());
+    }
   };
 
   const investmentAssetOptions = (props.holdings ?? []).map(holding => ({

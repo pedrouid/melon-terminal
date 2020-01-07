@@ -26,13 +26,10 @@ export const OpenOrderItem: React.FC<OpenOrderItemProps> = ({ address, order }) 
   const environment = useEnvironment()!;
   const account = useAccount();
 
-  const makerSymbol = environment.getToken(order.makerAsset)!;
-  const takerSymbol = environment.getToken(order.takerAsset)!;
-
-  const makerAmount = order.makerQuantity.dividedBy(new BigNumber(10).exponentiatedBy(makerSymbol.decimals));
-  const takerAmount = order.takerQuantity.dividedBy(new BigNumber(10).exponentiatedBy(takerSymbol.decimals));
-
-  const expired = order.expiresAt < new Date();
+  const makerAsset = environment.getToken(order.makerAsset);
+  const takerAsset = environment.getToken(order.takerAsset);
+  const makerAmount = order.makerQuantity.dividedBy(new BigNumber(10).exponentiatedBy(makerAsset?.decimals ?? 'NaN'));
+  const takerAmount = order.takerQuantity.dividedBy(new BigNumber(10).exponentiatedBy(takerAsset?.decimals ?? 'NaN'));
   const price = takerAmount.dividedBy(makerAmount);
   const exchange = environment.getExchange(order.exchange);
   const refetch = useOnChainQueryRefetcher();
@@ -72,11 +69,11 @@ export const OpenOrderItem: React.FC<OpenOrderItemProps> = ({ address, order }) 
 
   return (
     <BodyRow>
-      <BodyCell>{makerSymbol && makerSymbol.symbol}</BodyCell>
-      <BodyCell>{takerSymbol && takerSymbol.symbol}</BodyCell>
-      <BodyCell>{exchange && exchange.name}</BodyCell>
-      <BodyCellRightAlign>{price.toFixed(6)}</BodyCellRightAlign>
-      <BodyCellRightAlign>{makerAmount.toFixed(6)}</BodyCellRightAlign>
+      <BodyCell>{makerAsset?.symbol ?? order.makerAsset}</BodyCell>
+      <BodyCell>{takerAsset?.symbol ?? order.takerAsset}</BodyCell>
+      <BodyCell>{exchange?.name ?? order.exchange}</BodyCell>
+      <BodyCellRightAlign>{price && !price.isNaN() ? price.toFixed(6) : 'N/A'}</BodyCellRightAlign>
+      <BodyCellRightAlign>{makerAmount && !makerAmount.isNaN() ? makerAmount.toFixed(6) : 'N/A'}</BodyCellRightAlign>
       <BodyCell>
         <SubmitButton type="button" label="Cancel" onClick={() => submit()} />
         <TransactionModal transaction={transaction} />

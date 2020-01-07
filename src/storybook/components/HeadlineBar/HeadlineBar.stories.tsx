@@ -4,7 +4,6 @@ import { Headline } from '../Headline/Headline';
 import { Button, ButtonGroup } from '../Button/Button';
 import { DataBlock } from '../DataBlock/DataBlock';
 
-
 export default { title: 'Layouts|HeadlineBar' };
 
 export const Default: React.FC = () => {

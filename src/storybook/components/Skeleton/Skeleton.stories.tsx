@@ -4,8 +4,11 @@ import { Default as Header } from '../Header/Header.stories';
 import { Bar, BarContent } from '../Bar/Bar';
 import { Headline } from '../Headline/Headline';
 import { Container } from '../Container/Container';
-import { FundLayout as ComplexGridSample, TwoColumns as SimpleGridSample, WithoutBlocks as NoBlockGridSample } from '../Grid/Grid.stories';
-
+import {
+  FundLayout as ComplexGridSample,
+  TwoColumns as SimpleGridSample,
+  WithoutBlocks as NoBlockGridSample,
+} from '../Grid/Grid.stories';
 
 export default { title: 'Structure|Skeleton' };
 

@@ -16,9 +16,9 @@ export const SkeletonHead = styled.div<DebuggableSkeletonProps>`
   flex: none;
   position: fixed;
   top: 0px;
-  left:0px;
+  left: 0px;
   z-index: 200;
-  width:100%;
+  width: 100%;
   height: ${props => props.theme.skeleton.headerHeight};
   ${props =>
     props.debug &&

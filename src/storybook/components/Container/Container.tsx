@@ -13,8 +13,8 @@ export const Container = styled.div<ContainerProps>`
   @media (${props => props.theme.mediaQueries.s}) {
     max-width: ${props => props.theme.container.s};
     ${props =>
-    props.full &&
-    css`
+      props.full &&
+      css`
         max-width: 100%;
       `}
   }
@@ -22,8 +22,8 @@ export const Container = styled.div<ContainerProps>`
   @media (${props => props.theme.mediaQueries.m}) {
     max-width: ${props => props.theme.container.m};
     ${props =>
-    props.full &&
-    css`
+      props.full &&
+      css`
         max-width: 100%;
       `}
   }
@@ -31,8 +31,8 @@ export const Container = styled.div<ContainerProps>`
   @media (${props => props.theme.mediaQueries.l}) {
     max-width: ${props => props.theme.container.l};
     ${props =>
-    props.full &&
-    css`
+      props.full &&
+      css`
         max-width: 100%;
       `}
   }
