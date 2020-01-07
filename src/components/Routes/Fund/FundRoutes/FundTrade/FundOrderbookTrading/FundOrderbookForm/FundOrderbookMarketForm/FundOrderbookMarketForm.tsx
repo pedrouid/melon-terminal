@@ -25,6 +25,7 @@ export interface FundOrderbookMarketFormProps {
   asset?: TokenDefinition;
   exchanges: ExchangeDefinition[];
   order?: OrderbookItem;
+  unsetOrder: () => void;
 }
 
 export const FundOrderbookMarketForm: React.FC<FundOrderbookMarketFormProps> = props => {
@@ -32,7 +33,10 @@ export const FundOrderbookMarketForm: React.FC<FundOrderbookMarketFormProps> = p
   const account = useAccount()!;
   const refetch = useOnChainQueryRefetcher();
   const transaction = useTransaction(environment, {
-    onFinish: () => refetch(),
+    onFinish: () => {
+      props.unsetOrder();
+      refetch();
+    },
   });
 
   const exchanges = props.exchanges.map(item => ({

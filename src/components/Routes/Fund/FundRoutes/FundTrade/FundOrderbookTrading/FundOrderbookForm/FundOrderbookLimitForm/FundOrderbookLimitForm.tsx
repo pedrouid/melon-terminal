@@ -26,6 +26,7 @@ export interface FundOrderbookLimitFormProps {
   asset?: TokenDefinition;
   exchanges: ExchangeDefinition[];
   order?: OrderbookItem;
+  unsetOrder: () => void;
 }
 
 interface FundOrderbookLimitFormValues {
@@ -136,11 +137,11 @@ export const FundOrderbookLimitForm: React.FC<FundOrderbookLimitFormProps> = pro
           </FormField>
 
           <FormField label="Quantity" name="quantity">
-            <Input type="number" name="quantity" />
+            <Input type="number" name="quantity" onChange={() => props.order && props.unsetOrder()} />
           </FormField>
 
           <FormField label="Price" name="price">
-            <Input type="number" name="price" />
+            <Input type="number" name="price" onChange={() => props.order && props.unsetOrder()} />
           </FormField>
 
           <Button type="submit">Submit</Button>

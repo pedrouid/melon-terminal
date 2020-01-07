@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ExchangeDefinition, sameAddress } from '@melonproject/melonjs';
+import { ExchangeDefinition } from '@melonproject/melonjs';
 import { FundOrderbook } from './FundOrderbook/FundOrderbook';
 import { FundOrderbookForm } from './FundOrderbookForm/FundOrderbookForm';
 import { OrderbookItem } from './FundOrderbook/utils/aggregatedOrderbook';
@@ -41,7 +41,7 @@ export const FundOrderbookTrading: React.FC<FundOrderbookTradingProps> = props =
         <FormField label="Asset" name="asset">
           <Dropdown name="asset" options={options} onChange={event => setAsset(environment.getToken(event.target.value)!)} />
         </FormField>
-        <FundOrderbookForm address={props.address} asset={asset} exchanges={props.exchanges} order={order} />
+        <FundOrderbookForm address={props.address} asset={asset} exchanges={props.exchanges} order={order} unsetOrder={() => setOrder(undefined)} />
       </S.FundOrderbookForm>
     </S.FundOrderbookTrading>
   );

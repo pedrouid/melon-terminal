@@ -11,6 +11,7 @@ export interface FundOrderbookFormProps {
   exchanges: ExchangeDefinition[];
   asset?: TokenDefinition;
   order?: OrderbookItem;
+  unsetOrder: () => void;
 }
 
 export const FundOrderbookForm: React.FC<FundOrderbookFormProps> = props => {
@@ -37,6 +38,7 @@ export const FundOrderbookForm: React.FC<FundOrderbookFormProps> = props => {
           address={props.address}
           asset={props.asset}
           order={props.order}
+          unsetOrder={props.unsetOrder}
           exchanges={props.exchanges}
         />
       )}
@@ -46,6 +48,7 @@ export const FundOrderbookForm: React.FC<FundOrderbookFormProps> = props => {
           address={props.address}
           asset={props.asset}
           order={props.order}
+          unsetOrder={props.unsetOrder}
           exchanges={props.exchanges}
         />
       )}
