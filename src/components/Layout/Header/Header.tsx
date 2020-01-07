@@ -40,11 +40,13 @@ export const Header: React.FC = () => {
             )}
           </AccountName>
           <AccountInfo>
-            <AccountAddress>
-              <Link to="/wallet" title={account.address}>
-                Your wallet
-              </Link>
-            </AccountAddress>
+            {account.address && (
+              <AccountAddress>
+                <Link to="/wallet" title={account.address}>
+                  Your wallet
+                </Link>
+              </AccountAddress>
+            )}
             <AccountNetwork>
               <Link to={{ pathname: '/connect', state: { redirect: location } }} title="Change connection method">
                 {environment ? environment.network : 'OFFLINE'}
