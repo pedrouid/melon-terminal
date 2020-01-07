@@ -71,7 +71,7 @@ export const theme = {
   },
   skeleton: {
     headerHeight: '88px',
-    footerHeight: '32px',
+    footerHeight: '48px',
   },
   header: {
     height: '88px',

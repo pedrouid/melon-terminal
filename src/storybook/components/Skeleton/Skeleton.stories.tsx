@@ -1,6 +1,7 @@
 import React from 'react';
 import { Skeleton, SkeletonHead, SkeletonBody, SkeletonFeet } from './Skeleton';
 import { Default as Header } from '../Header/Header.stories';
+import { Default as Footer } from '../Footer/Footer.stories';
 import { Bar, BarContent } from '../Bar/Bar';
 import { Headline } from '../Headline/Headline';
 import { Container } from '../Container/Container';
@@ -61,7 +62,7 @@ export const WithBlocksContained: React.FC = () => {
         </Container>
       </SkeletonBody>
       <SkeletonFeet>
-        <div>Footer here</div>
+        <Footer />
       </SkeletonFeet>
     </Skeleton>
   );
@@ -84,7 +85,7 @@ export const WithBlocksFull: React.FC = () => {
         </Container>
       </SkeletonBody>
       <SkeletonFeet>
-        <div>Footer here</div>
+        <Footer />
       </SkeletonFeet>
     </Skeleton>
   );
@@ -102,7 +103,7 @@ export const WithotSecondaryBar: React.FC = () => {
         </Container>
       </SkeletonBody>
       <SkeletonFeet>
-        <div>Footer here</div>
+        <Footer />
       </SkeletonFeet>
     </Skeleton>
   );
