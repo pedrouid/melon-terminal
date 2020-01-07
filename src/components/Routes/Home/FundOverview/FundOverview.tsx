@@ -14,6 +14,7 @@ import { Grid, GridRow, GridCol } from '~/storybook/components/Grid/Grid';
 import { Block } from '~/storybook/components/Block/Block';
 import { Input } from '~/storybook/components/Input/Input';
 import { FormField } from '~/storybook/components/FormField/FormField';
+import { SectionTitle } from '~/storybook/components/Title/Title';
 
 interface SortChoice {
   key: keyof typeof sortChoice;
@@ -202,6 +203,7 @@ export const FundOverview: React.FC = () => {
       <GridRow>
         <GridCol xs={12} sm={12}>
           <Block>
+            <SectionTitle>Melon fund universe</SectionTitle>
             <FormField label="Search">
               <Input id="search" name="search" type="text" onChange={event => setSearch(event.target.value)} />
             </FormField>
