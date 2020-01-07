@@ -18,18 +18,6 @@ export const FundHeaderShutDown = styled.div`
   margin-bottom: ${props => props.theme.spaceUnits.s};
 `;
 
-// export const FundHeaderTitle = styled.h1`
-//   margin: 0;
-//   white-space: nowrap;
-//   overflow: hidden;
-//   text-overflow: ellipsis;
-//   max-width: 100%;
-
-//   &::after {
-//     border: none;
-//   }
-// `;
-
 export const FundHeaderText = styled.div`
   margin-top: ${props => props.theme.spaceUnits.xs};
   overflow: hidden;
