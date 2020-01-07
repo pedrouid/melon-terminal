@@ -51,7 +51,6 @@ export const Header: React.FC = () => {
               </Link>
             </AccountNetwork>
             {account.eth && <AccountBalance>{account.eth?.toFixed(4)} ETH</AccountBalance>}
-            <AccountInfoItem>Redy</AccountInfoItem>
           </AccountInfo>
         </Account>
       </HeaderContainer>

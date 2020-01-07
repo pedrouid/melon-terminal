@@ -17,7 +17,7 @@ export const Default: React.FC = () => {
           <S.AccountAddress>link</S.AccountAddress>
           <S.AccountNetwork>Live</S.AccountNetwork>
           <S.AccountBalance>ETH 1.00000</S.AccountBalance>
-          <S.AccountInfoItem>Redy</S.AccountInfoItem>
+          <S.AccountInfoItem>Ready</S.AccountInfoItem>
         </S.AccountInfo>
       </S.Account>
     </S.Header>

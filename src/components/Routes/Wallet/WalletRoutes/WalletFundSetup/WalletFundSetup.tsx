@@ -119,7 +119,7 @@ export const WalletFundSetup: React.FC = () => {
             <Input id="performanceFeePeriod" name="performanceFeePeriod" type="number" />
           </FormField>
 
-          <h3>Exchanges</h3>
+          <h3>Supported exchanges</h3>
           {form.errors.exchanges && <p>{form.errors.exchanges.message}</p>}
           <ul>
             {environment.exchanges.map((exchange, index) => (
@@ -137,7 +137,7 @@ export const WalletFundSetup: React.FC = () => {
             ))}
           </ul>
 
-          <h3>Allowed tokens</h3>
+          <h3>Allowed investment assets</h3>
           {form.errors.assets && <p>{form.errors.assets.message}</p>}
           <ul>
             {environment.tokens.map((token, index) => (
