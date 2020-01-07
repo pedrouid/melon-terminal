@@ -51,11 +51,11 @@ export const FundHeader: React.FC<FundHeaderProps> = ({ address }) => {
         <S.FundHeaderInformation>
           <S.FundHeaderItem>
             <S.FundHeaderItemTitle>Share price</S.FundHeaderItemTitle>
-            {(accounting?.sharePrice?.toFixed(4)) || 0} WETH / share
+            {accounting?.sharePrice?.toFixed(4) || 0} WETH / share
           </S.FundHeaderItem>
           <S.FundHeaderItem>
             <S.FundHeaderItemTitle>AUM</S.FundHeaderItemTitle>
-            {(accounting?.grossAssetValue?.toFixed(4)) || 0}
+            {accounting?.grossAssetValue?.toFixed(4) || 0}
           </S.FundHeaderItem>
           <S.FundHeaderItem>
             <S.FundHeaderItemTitle>Creation date</S.FundHeaderItemTitle>
