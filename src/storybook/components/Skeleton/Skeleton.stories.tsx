@@ -55,7 +55,7 @@ export const WithBlocksContained: React.FC = () => {
       </SkeletonHead>
       <SkeletonBody>
         <Bar>
-          <BarContent size="contained" justify="between">
+          <BarContent justify="between">
             <Headline title="My title" text="My subtitle" icon="icon" />
           </BarContent>
         </Bar>
@@ -77,23 +77,23 @@ export const WithBlocksFull: React.FC = () => {
         <Header />
       </SkeletonHead>
       <SkeletonBody>
-      <Bar>
-        <BarContent size="contained" justify="between">
-          <Headline title="My title" text="My subtitle" icon="icon" />
-        </BarContent>
-      </Bar>
-      <DataBlockBar>
-        <DataBlockBarContent justify="between">
-          <DataBlock label="Share Price">1.0000000 WETH/Share</DataBlock>
-          <DataBlock label="AUM">0.1000 WETH</DataBlock>
-          <DataBlock label="Creation date">02.Mar 2019 00:52</DataBlock>
-          <DataBlock label="Total number of shares">0.1000000</DataBlock>
-          <DataBlock label="Shares owned by me">0.1000000</DataBlock>
-          <DataBlock label="Management fee">0.5%</DataBlock>
-          <DataBlock label="Performance fee">0%</DataBlock>
-          <DataBlock label="Performance fee period">90 days</DataBlock>
-        </DataBlockBarContent>
-      </DataBlockBar>
+        <Bar>
+          <BarContent justify="between">
+            <Headline title="My title" text="My subtitle" icon="icon" />
+          </BarContent>
+        </Bar>
+        <DataBlockBar>
+          <DataBlockBarContent justify="between">
+            <DataBlock label="Share Price">1.0000000 WETH/Share</DataBlock>
+            <DataBlock label="AUM">0.1000 WETH</DataBlock>
+            <DataBlock label="Creation date">02.Mar 2019 00:52</DataBlock>
+            <DataBlock label="Total number of shares">0.1000000</DataBlock>
+            <DataBlock label="Shares owned by me">0.1000000</DataBlock>
+            <DataBlock label="Management fee">0.5%</DataBlock>
+            <DataBlock label="Performance fee">0%</DataBlock>
+            <DataBlock label="Performance fee period">90 days</DataBlock>
+          </DataBlockBarContent>
+        </DataBlockBar>
         <Container full={true}>
           <ComplexGridSample />
         </Container>
@@ -113,7 +113,7 @@ export const WithotSecondaryBar: React.FC = () => {
       </SkeletonHead>
       <SkeletonBody>
         <Bar>
-          <BarContent size="contained" justify="between">
+          <BarContent justify="between">
             <Headline title="My title" text="My subtitle" icon="icon" />
           </BarContent>
         </Bar>

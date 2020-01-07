@@ -12,6 +12,7 @@ import { Theme, ModalBackground } from './App.styles';
 import { ApolloProvider } from './Contexts/Apollo/Apollo';
 import { ConnectionProvider } from './Contexts/Connection/Connection';
 import { AccountProvider } from './Contexts/Account/Account';
+import { PageTitleProvider } from './Contexts/PageTitle/PageTitle';
 // NOTE: Imported using root relative import to allow overrides with webpack.
 import { AppRouter } from '~/components/AppRouter';
 
@@ -27,21 +28,23 @@ const AppComponent = () => {
   return (
     <Router>
       <Theme>
-        <ModalProvider backgroundComponent={ModalBackground}>
-          <ConnectionProvider methods={methods}>
-            <ApolloProvider>
-              <AccountProvider>
-                <Layout>
-                  <ErrorBoundary FallbackComponent={ErrorFallback}>
-                    <Suspense fallback={<Spinner size="large" positioning="overlay" />}>
-                      <AppRouter />
-                    </Suspense>
-                  </ErrorBoundary>
-                </Layout>
-              </AccountProvider>
-            </ApolloProvider>
-          </ConnectionProvider>
-        </ModalProvider>
+        <PageTitleProvider>
+          <ModalProvider backgroundComponent={ModalBackground}>
+            <ConnectionProvider methods={methods}>
+              <ApolloProvider>
+                <AccountProvider>
+                  <Layout>
+                    <ErrorBoundary FallbackComponent={ErrorFallback}>
+                      <Suspense fallback={<Spinner size="large" positioning="overlay" />}>
+                        <AppRouter />
+                      </Suspense>
+                    </ErrorBoundary>
+                  </Layout>
+                </AccountProvider>
+              </ApolloProvider>
+            </ConnectionProvider>
+          </ModalProvider>
+        </PageTitleProvider>
       </Theme>
     </Router>
   );

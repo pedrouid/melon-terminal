@@ -1,11 +1,9 @@
 import React from 'react';
 import { Switch, Route, useRouteMatch } from 'react-router';
-import { WalletHeader } from './WalletHeader/WalletHeader';
 import { WalletNavigation } from './WalletNavigation/WalletNavigation';
-import * as S from './Wallet.styles';
-
 import { Container } from '~/storybook/components/Container/Container';
-import { Bar } from '~/storybook/components/Bar/Bar';
+import { PageTitle } from '~/components/Contexts/PageTitle/PageTitle';
+import * as S from './Wallet.styles';
 
 const NoMatch = React.lazy(() => import('~/components/Routes/NoMatch/NoMatch'));
 const WalletOverview = React.lazy(() => import('./WalletRoutes/WalletOverview/WalletOverview'));
@@ -20,9 +18,7 @@ export const Wallet: React.FC = () => {
 
   return (
     <>
-      <Bar>
-        <WalletHeader />
-      </Bar>
+      <PageTitle>Your wallet</PageTitle>
       <S.WalletNavigation>
         <WalletNavigation />
       </S.WalletNavigation>

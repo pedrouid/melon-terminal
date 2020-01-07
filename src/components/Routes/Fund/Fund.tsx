@@ -7,7 +7,7 @@ import { FundNavigation } from './FundNavigation/FundNavigation';
 import { FundProvider } from '~/components/Contexts/Fund/Fund';
 import * as S from './Fund.styles';
 import { Container } from '~/storybook/components/Container/Container';
-import { Bar } from '~/storybook/components/Bar/Bar';
+import { FundTitle } from './FundTitle/FundTitle';
 
 const NoMatch = React.lazy(() => import('~/components/Routes/NoMatch/NoMatch'));
 const FundInvestRedeem = React.lazy(() => import('./FundRoutes/FundInvestRedeem/FundInvestRedeem'));
@@ -45,9 +45,8 @@ export const Fund: React.FC = () => {
 
   return (
     <FundProvider address={match.params.address}>
-      <Bar>
-        <FundHeader address={match.params.address} />
-      </Bar>
+      <FundTitle />
+      <FundHeader address={match.params.address} />
       <S.FundNavigation>
         <FundNavigation address={match.params.address} />
       </S.FundNavigation>
