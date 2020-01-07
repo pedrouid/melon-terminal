@@ -11,7 +11,7 @@ export const WalletNavigation: React.FC = () => {
         Overview
       </S.WalletNavigationLink>
       <S.WalletNavigationLink to="/wallet/weth" exact={true} activeClassName="active">
-        Wrapped Ether
+        Wrap Ether
       </S.WalletNavigationLink>
       {!account.fund && (
         <S.WalletNavigationLink to={`/wallet/setup`} activeClassName="active">
