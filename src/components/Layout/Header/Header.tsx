@@ -1,6 +1,7 @@
 import React from 'react';
-import { Link } from '~/components/Common/Link/Link';
 import { useLocation } from 'react-router';
+
+import { Link } from '~/components/Common/Link/Link';
 import { useAccount } from '~/hooks/useAccount';
 import { useEnvironment } from '~/hooks/useEnvironment';
 
@@ -13,7 +14,6 @@ import {
   AccountName,
   AccountInfo,
   AccountNetwork,
-  AccountInfoItem,
 } from '~/storybook/components/Header/Header';
 import { SkeletonHead } from '~/storybook/components/Skeleton/Skeleton';
 import { Logo } from '~/storybook/components/Logo/Logo';

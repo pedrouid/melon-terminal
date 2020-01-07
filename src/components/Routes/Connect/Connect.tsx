@@ -3,14 +3,16 @@ import { ConnectionSelector } from '~/components/Common/ConnectionSelector/Conne
 
 import { Container } from '~/storybook/components/Container/Container';
 import { Title } from '~/storybook/components/Title/Title';
-import { Grid, GridRow } from '~/storybook/components/Grid/Grid';
+import { Grid, GridRow, GridCol } from '~/storybook/components/Grid/Grid';
 
 export const Connect = () => {
   return (
     <Container>
       <Grid>
-        <GridRow>
-          <Title>Select your preferred connection method</Title>
+        <GridRow justify="center">
+          <GridCol xs={12} sm={6} md={4} lg={4}>
+            <Title>Select your preferred connection method</Title>
+          </GridCol>
         </GridRow>
         <ConnectionSelector />
       </Grid>

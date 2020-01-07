@@ -1,11 +1,5 @@
 import styled from 'styled-components';
 
-export const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-`;
-
 export const ScrollableTable = styled.div`
   overflow-y: auto;
   border: 1px solid ${props => props.theme.mainColors.border};

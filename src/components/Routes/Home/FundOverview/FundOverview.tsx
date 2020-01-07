@@ -1,14 +1,19 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { useHistory } from 'react-router';
+
 import { FundOverviewChange } from '~/components/Routes/Home/FundOverview/FundOverviewChange/FundOverviewChange';
 import { Spinner } from '~/components/Common/Spinner/Spinner';
 import { NoMatch } from '~/components/Routes/NoMatch/NoMatch';
 import { FundOverviewPagination } from '~/components/Routes/Home/FundOverview/FundOverviewPagination/FundOverviewPagination';
 import { useFundOverviewQuery, FundProcessed } from '~/queries/FundOverview';
 import { usePagination } from '~/hooks/usePagination';
+
+import * as S from './FundOverview.styles';
+
+import { Grid, GridRow, GridCol } from '~/storybook/components/Grid/Grid';
+import { Block } from '~/storybook/components/Block/Block';
 import { Input } from '~/storybook/components/Input/Input';
 import { FormField } from '~/storybook/components/FormField/FormField';
-import * as S from './FundOverview.styles';
 
 interface SortChoice {
   key: keyof typeof sortChoice;
@@ -151,11 +156,31 @@ export const FundOverview: React.FC = () => {
   }, [search]);
 
   if (query.loading) {
-    return <Spinner positioning="centered" size="large" />;
+    return (
+      <Grid>
+        <GridRow>
+          <GridCol xs={12} sm={12}>
+            <Block>
+              <Spinner positioning="centered" size="large" />
+            </Block>
+          </GridCol>
+        </GridRow>
+      </Grid>
+    );
   }
 
   if (!funds) {
-    return <NoMatch />;
+    return (
+      <Grid>
+        <GridRow>
+          <GridCol xs={12} sm={12}>
+            <Block>
+              <NoMatch />
+            </Block>
+          </GridCol>
+        </GridRow>
+      </Grid>
+    );
   }
 
   const handleChangeSortableItem = (key: any) => {
@@ -173,64 +198,72 @@ export const FundOverview: React.FC = () => {
   };
 
   return (
-    <S.Container>
-      <FormField label="Search">
-        <Input id="search" name="search" type="text" onChange={event => setSearch(event.target.value)} />
-      </FormField>
+    <Grid>
+      <GridRow>
+        <GridCol xs={12} sm={12}>
+          <Block>
+            <FormField label="Search">
+              <Input id="search" name="search" type="text" onChange={event => setSearch(event.target.value)} />
+            </FormField>
+            <FundOverviewPagination
+              offset={pagination.offset}
+              setOffset={pagination.setOffset}
+              funds={filtered.funds.length}
+            />
 
-      <FundOverviewPagination
-        offset={pagination.offset}
-        setOffset={pagination.setOffset}
-        funds={filtered.funds.length}
-      />
-
-      <S.ScrollableTable>
-        <S.Table>
-          <thead>
-            <S.HeaderRow>
-              {tableHeadings.map((heading, key) => (
-                <S.HeaderCell key={key} onClick={heading.key ? () => handleChangeSortableItem(heading.key) : undefined}>
-                  {heading.value}
-                  {sorted.item.key === heading.key && (sorted.item.order === 'asc' ? <>&uarr;</> : <>&darr;</>)}
-                </S.HeaderCell>
-              ))}
-            </S.HeaderRow>
-          </thead>
-          <tbody>
-            {pagination.data.length ? (
-              pagination.data.map(fund => (
-                <S.BodyRow key={fund.id} onClick={() => history.push(`/fund/${fund.id}`)}>
-                  <S.BodyCell>{fund.name}</S.BodyCell>
-                  <S.BodyCell>{fund.inception}</S.BodyCell>
-                  <S.BodyCell>{fund.aumEth}</S.BodyCell>
-                  <S.BodyCell>{fund.sharePrice}</S.BodyCell>
-                  <S.BodyCell>
-                    <FundOverviewChange
-                      prefix={fund.change.prefix}
-                      dailyReturn={fund.change.dailyReturn}
-                      color={fund.change.color}
-                    />
-                  </S.BodyCell>
-                  <S.BodyCell>{fund.shares}</S.BodyCell>
-                  <S.BodyCell>{fund.denomination}</S.BodyCell>
-                  <S.BodyCell>{fund.investments}</S.BodyCell>
-                  <S.BodyCell>{fund.version}</S.BodyCell>
-                  <S.BodyCell>{fund.status}</S.BodyCell>
-                </S.BodyRow>
-              ))
-            ) : (
-              <S.EmptyRow>
-                <S.EmptyCell colSpan={12}>No records to display</S.EmptyCell>
-              </S.EmptyRow>
-            )}
-          </tbody>
-        </S.Table>
-      </S.ScrollableTable>
-      <FundOverviewPagination
-        offset={pagination.offset}
-        setOffset={pagination.setOffset}
-        funds={filtered.funds.length}
-      />
-    </S.Container>
+            <S.ScrollableTable>
+              <S.Table>
+                <thead>
+                  <S.HeaderRow>
+                    {tableHeadings.map((heading, key) => (
+                      <S.HeaderCell
+                        key={key}
+                        onClick={heading.key ? () => handleChangeSortableItem(heading.key) : undefined}
+                      >
+                        {heading.value}
+                        {sorted.item.key === heading.key && (sorted.item.order === 'asc' ? <>&uarr;</> : <>&darr;</>)}
+                      </S.HeaderCell>
+                    ))}
+                  </S.HeaderRow>
+                </thead>
+                <tbody>
+                  {pagination.data.length ? (
+                    pagination.data.map(fund => (
+                      <S.BodyRow key={fund.id} onClick={() => history.push(`/fund/${fund.id}`)}>
+                        <S.BodyCell>{fund.name}</S.BodyCell>
+                        <S.BodyCell>{fund.inception}</S.BodyCell>
+                        <S.BodyCell>{fund.aumEth}</S.BodyCell>
+                        <S.BodyCell>{fund.sharePrice}</S.BodyCell>
+                        <S.BodyCell>
+                          <FundOverviewChange
+                            prefix={fund.change.prefix}
+                            dailyReturn={fund.change.dailyReturn}
+                            color={fund.change.color}
+                          />
+                        </S.BodyCell>
+                        <S.BodyCell>{fund.shares}</S.BodyCell>
+                        <S.BodyCell>{fund.denomination}</S.BodyCell>
+                        <S.BodyCell>{fund.investments}</S.BodyCell>
+                        <S.BodyCell>{fund.version}</S.BodyCell>
+                        <S.BodyCell>{fund.status}</S.BodyCell>
+                      </S.BodyRow>
+                    ))
+                  ) : (
+                    <S.EmptyRow>
+                      <S.EmptyCell colSpan={12}>No records to display</S.EmptyCell>
+                    </S.EmptyRow>
+                  )}
+                </tbody>
+              </S.Table>
+            </S.ScrollableTable>
+            <FundOverviewPagination
+              offset={pagination.offset}
+              setOffset={pagination.setOffset}
+              funds={filtered.funds.length}
+            />
+          </Block>
+        </GridCol>
+      </GridRow>
+    </Grid>
   );
 };

@@ -28,8 +28,8 @@ export const ConnectionSelector: React.FC = () => {
         };
 
         return (
-          <GridRow key={method.name}>
-            <GridCol xs={12} sm={6}>
+          <GridRow key={method.name} justify="center">
+            <GridCol xs={12} sm={6} md={4} lg={4}>
               <Block>
                 <Component active={active} select={select} />
               </Block>
