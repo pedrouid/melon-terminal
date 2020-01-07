@@ -19,14 +19,14 @@ export const Wallet: React.FC = () => {
   const match = useRouteMatch()!;
 
   return (
-    <Container>
+    <>
       <Bar>
         <WalletHeader />
       </Bar>
       <S.WalletNavigation>
         <WalletNavigation />
       </S.WalletNavigation>
-      <S.WalletBody>
+      <Container>
         <Switch>
           <Route path={match.path} exact={true}>
             <WalletOverview />
@@ -44,8 +44,8 @@ export const Wallet: React.FC = () => {
             <NoMatch />
           </Route>
         </Switch>
-      </S.WalletBody>
-    </Container>
+      </Container>
+    </>
   );
 };
 

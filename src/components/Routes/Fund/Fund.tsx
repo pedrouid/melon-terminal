@@ -44,14 +44,14 @@ export const Fund: React.FC = () => {
   }
 
   return (
-    <Container>
-      <FundProvider address={match.params.address}>
-        <Bar>
-          <FundHeader address={match.params.address} />
-        </Bar>
-        <S.FundNavigation>
-          <FundNavigation address={match.params.address} />
-        </S.FundNavigation>
+    <FundProvider address={match.params.address}>
+      <Bar>
+        <FundHeader address={match.params.address} />
+      </Bar>
+      <S.FundNavigation>
+        <FundNavigation address={match.params.address} />
+      </S.FundNavigation>
+      <Container>
         <Switch>
           <Route path={match.path} exact={true}>
             <FundDetails address={match.params.address} />
@@ -75,8 +75,8 @@ export const Fund: React.FC = () => {
             <NoMatch />
           </Route>
         </Switch>
-      </FundProvider>
-    </Container>
+      </Container>
+    </FundProvider>
   );
 };
 

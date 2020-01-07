@@ -4,8 +4,10 @@ import { useEtherscanLink } from '~/hooks/useEtherscanLink';
 import { Spinner } from '~/components/Common/Spinner/Spinner';
 import { useFundDetailsQuery } from '~/queries/FundDetails';
 import * as S from './FundHeader.styles';
+import { BarContent, BarSection } from '~/storybook/components/Bar/Bar';
 
-import { Title } from '~/storybook/components/Title/Title';
+import { Headline } from '~/storybook/components/Headline/Headline';
+import { DataBlock } from '~/storybook/components/DataBlock/DataBlock';
 
 export interface FundHeaderProps {
   address: string;
@@ -35,54 +37,30 @@ export const FundHeader: React.FC<FundHeaderProps> = ({ address }) => {
   const sharesOwned = accountDetails && accountDetails.shares && accountDetails.shares.balanceOf;
 
   return (
-    <>
+    <BarContent>
       {details.isShutDown && <S.FundHeaderShutDown>This fund is shutdown</S.FundHeaderShutDown>}
-      <S.FundHeader>
-        <S.FundHeaderHeadline>
-          <Title>{details.name}</Title>
-          <S.FundHeaderLinks>
-            {
-              <a href={fundEtherscanLink!} title={address}>
-                View on etherscan
-              </a>
-            }
-          </S.FundHeaderLinks>
-        </S.FundHeaderHeadline>
-        <S.FundHeaderInformation>
-          <S.FundHeaderItem>
-            <S.FundHeaderItemTitle>Share price</S.FundHeaderItemTitle>
-            {accounting?.sharePrice?.toFixed(4) || 0} WETH / share
-          </S.FundHeaderItem>
-          <S.FundHeaderItem>
-            <S.FundHeaderItemTitle>AUM</S.FundHeaderItemTitle>
-            {accounting?.grossAssetValue?.toFixed(4) || 0}
-          </S.FundHeaderItem>
-          <S.FundHeaderItem>
-            <S.FundHeaderItemTitle>Creation date</S.FundHeaderItemTitle>
-            {creation && format(creation, 'yyyy-MM-dd hh:mm a')}
-          </S.FundHeaderItem>
-          <S.FundHeaderItem>
-            <S.FundHeaderItemTitle>Total number of shares</S.FundHeaderItemTitle>
-            {shares?.totalSupply?.toFixed(4)}
-          </S.FundHeaderItem>
-          <S.FundHeaderItem>
-            <S.FundHeaderItemTitle>Shares owned by me</S.FundHeaderItemTitle>
-            {sharesOwned?.toFixed(4)}
-          </S.FundHeaderItem>
-          <S.FundHeaderItem>
-            <S.FundHeaderItemTitle>Management fee</S.FundHeaderItemTitle>
-            {`${managementFee?.rate ?? 0}%`}
-          </S.FundHeaderItem>
-          <S.FundHeaderItem>
-            <S.FundHeaderItemTitle>Performance fee</S.FundHeaderItemTitle>
-            {`${performanceFee?.rate ?? 0}%`}
-          </S.FundHeaderItem>
-          <S.FundHeaderItem>
-            <S.FundHeaderItemTitle>Performance fee period</S.FundHeaderItemTitle>
-            {`${performanceFee?.period ?? 0} days`}
-          </S.FundHeaderItem>
-        </S.FundHeaderInformation>
-      </S.FundHeader>
-    </>
+      <Headline
+        title={details.name}
+        text={
+          <a href={fundEtherscanLink!} title={address}>
+            View on etherscan
+          </a>
+        }
+      />
+      <BarSection>
+        <DataBlock label="Share price">{accounting?.sharePrice?.toFixed(4) || 0} WETH / share</DataBlock>
+        <DataBlock label="AUM">{accounting?.grossAssetValue?.toFixed(4) || 0}</DataBlock>
+      </BarSection>
+      <BarSection>
+        <DataBlock label="Creation date">{creation && format(creation, 'yyyy-MM-dd hh:mm a')}</DataBlock>
+        <DataBlock label="Total number of shares">{shares?.totalSupply?.toFixed(4)}</DataBlock>
+        <DataBlock label="Shares owned by me">{sharesOwned?.toFixed(4)}</DataBlock>
+      </BarSection>
+      <BarSection>
+        <DataBlock label="Management fee">{`${managementFee?.rate ?? 0}%`}</DataBlock>
+        <DataBlock label="Performance fee">{`${performanceFee?.rate ?? 0}%`}</DataBlock>
+        <DataBlock label="Performance fee period">{`${performanceFee?.period ?? 0} days`}</DataBlock>
+      </BarSection>
+    </BarContent>
   );
 };

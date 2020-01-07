@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { ReactChild } from 'react';
 import * as H from './Headline.styles';
 import { Title } from '../Title/Title';
 
 export interface HeadlineProps {
   title: string;
-  text?: string;
+  text?: string | ReactChild;
   icon?: string;
 }
 
