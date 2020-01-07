@@ -6,6 +6,7 @@ import { useEnvironment } from '~/hooks/useEnvironment';
 import { usePageTitle } from '~/components/Contexts/PageTitle/PageTitle'
 import {
   Header as HeaderContainer,
+  HeaderContent,
   LogoContainer,
   Account,
   AccountAddress,
@@ -27,32 +28,34 @@ export const Header: React.FC = () => {
   return (
     <SkeletonHead>
       <HeaderContainer>
-        <LogoContainer>
-          <Link to="/">
-            <Logo name="with-bottom-text" size="small" />
-          </Link>
-        </LogoContainer>
-        <Account>
-          <AccountName>
-            {title}
-          </AccountName>
-          <AccountInfo>
-            {account.fund && (
-              <AccountAddress>
-                <Link to={`/fund/${account.fund}`} title={account.fund}>Your fund</Link>
-              </AccountAddress>
-            )}
-            {account.address && (
-              <AccountAddress>
-                <Link to="/wallet" title={account.address}>Your wallet</Link>
-              </AccountAddress>
-            )}
-            <AccountNetwork>
-              <Link to={{ pathname: '/connect', state: { redirect: location } }} title="Change connection method">{network}</Link>
-            </AccountNetwork>
-            {account.eth && <AccountBalance>{account.eth.toFixed(4)} ETH</AccountBalance>}
-          </AccountInfo>
-        </Account>
+        <HeaderContent>
+          <LogoContainer>
+            <Link to="/">
+              <Logo name="with-bottom-text" size="small" />
+            </Link>
+          </LogoContainer>
+          <Account>
+            <AccountName>
+              {title}
+            </AccountName>
+            <AccountInfo>
+              {account.fund && (
+                <AccountAddress>
+                  <Link to={`/fund/${account.fund}`} title={account.fund}>Your fund</Link>
+                </AccountAddress>
+              )}
+              {account.address && (
+                <AccountAddress>
+                  <Link to="/wallet" title={account.address}>Your wallet</Link>
+                </AccountAddress>
+              )}
+              <AccountNetwork>
+                <Link to={{ pathname: '/connect', state: { redirect: location } }} title="Change connection method">{network}</Link>
+              </AccountNetwork>
+              {account.eth && <AccountBalance>{account.eth.toFixed(4)} ETH</AccountBalance>}
+            </AccountInfo>
+          </Account>
+        </HeaderContent>
       </HeaderContainer>
     </SkeletonHead>
   );

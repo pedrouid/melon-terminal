@@ -60,12 +60,14 @@ export const theme = {
     bold: '700',
   },
   mediaQueries: {
+    xl: 'min-width: 1440px',
     l: 'min-width: 1024px',
     m: 'min-width: 768px',
     s: 'min-width: 480px',
   },
   container: {
-    l: '1440px',
+    xl: '1320px',
+    l: '1180px',
     m: '992px',
     s: '720px',
   },
@@ -97,11 +99,11 @@ export const theme = {
       xl: 1.5,
     },
     paddingWidth: {
-      xs: 1,
-      sm: 1,
-      md: 1,
-      lg: 1.5,
-      xl: 1.5,
+      xs: 0,
+      sm: 0,
+      md: 0,
+      lg: 0,
+      xl: 0,
     },
     container: {
       xs: 'full', // 'full' = max-width: 100%

@@ -1,4 +1,5 @@
 import styled, { css } from 'styled-components';
+import { Container } from '../Container/Container';
 
 export interface BarContentProps {
   justify?: 'between' | 'around' | 'end';
@@ -6,30 +7,16 @@ export interface BarContentProps {
 
 export const Bar = styled.div`
   width: 100%;
-  padding: ${props => props.theme.spaceUnits.l} ${props => props.theme.spaceUnits.s};
+  padding: ${props => props.theme.spaceUnits.l} 0px;
   border-bottom: ${props => props.theme.border.borderDefault};
   background-color: ${props => props.theme.mainColors.primary};
 `;
 
-export const BarContent = styled.div<BarContentProps>`
+export const BarContent = styled(Container)<BarContentProps>`
   display: flex;
   justify-content: flex-start;
   align-content: center;
   flex-wrap: wrap;
-  width: 100%;
-  margin: 0px auto;
-  @media (${props => props.theme.mediaQueries.s}) {
-    max-width: ${props => props.theme.container.s};
-  }
-  @media (${props => props.theme.mediaQueries.m}) {
-    max-width: ${props => props.theme.container.m};
-  }
-  @media (${props => props.theme.mediaQueries.l}) {
-    max-width: ${props => props.theme.container.l};
-  }
-  @media (${props => props.theme.mediaQueries.l}) {
-    flex-wrap: nowrap;
-  }
   ${props =>
     props.justify === 'between' &&
     css`

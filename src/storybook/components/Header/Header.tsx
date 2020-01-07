@@ -1,16 +1,19 @@
 import styled from 'styled-components';
+import { Container } from '../Container/Container';
 
 export const Header = styled.div`
+  position: relative;
+  width:100%;
+  border-bottom: ${props => props.theme.border.borderDefault};
+  background-color: ${props => props.theme.mainColors.primary};
+`;
+
+export const HeaderContent = styled(Container)`
   position: relative;
   display: flex;
   justify-content: space-between;
   align-items: center;
   height: ${props => props.theme.skeleton.headerHeight};
-  border-bottom: ${props => props.theme.border.borderDefault};
-  background-color: ${props => props.theme.mainColors.primary};
-  @media (${props => props.theme.mediaQueries.m}) {
-    justify-content: flex-end;
-  }
 `;
 
 export const LogoContainer = styled.div`
@@ -27,7 +30,7 @@ export const LogoContainer = styled.div`
 export const Account = styled.div`
   display: flex;
   flex-direction: column;
-  padding: ${props => props.theme.spaceUnits.xs} ${props => props.theme.spaceUnits.m};
+  padding: ${props => props.theme.spaceUnits.xs} 0px;
   font-size: ${props => props.theme.fontSizes.s};
   justify-content: center;
 

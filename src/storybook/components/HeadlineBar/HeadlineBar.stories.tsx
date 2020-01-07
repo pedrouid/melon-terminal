@@ -2,8 +2,6 @@ import React from 'react';
 import { Bar, BarContent } from '../Bar/Bar';
 import { Headline } from '../Headline/Headline';
 import { Button, ButtonGroup } from '../Button/Button';
-import { DataBlock } from '../DataBlock/DataBlock';
-import { DataBlockBar, DataBlockBarContent } from '../DataBlockBar/DataBlockBar';
 
 
 export default { title: 'Layouts|HeadlineBar' };

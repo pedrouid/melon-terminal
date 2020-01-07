@@ -9,7 +9,7 @@ export const Container = styled.div<ContainerProps>`
   display: block;
   width: 100%;
   margin: 0 auto;
-
+  padding: 0px ${props => props.theme.spaceUnits.m};
   @media (${props => props.theme.mediaQueries.s}) {
     max-width: ${props => props.theme.container.s};
     ${props =>
@@ -36,6 +36,15 @@ export const Container = styled.div<ContainerProps>`
         max-width: 100%;
       `}
   }
+  @media (${props => props.theme.mediaQueries.xl}) {
+    max-width: ${props => props.theme.container.xl};
+    ${props =>
+      props.full &&
+      css`
+        max-width: 100%;
+      `}
+  }
+
   ${props =>
     props.full &&
     css`
