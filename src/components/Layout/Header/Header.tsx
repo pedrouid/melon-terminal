@@ -37,14 +37,14 @@ export const Header: React.FC = () => {
             {title}
           </AccountName>
           <AccountInfo>
-            {account.address && (
-              <AccountAddress>
-                <Link to="/wallet" title={account.address}>Your wallet</Link>
-              </AccountAddress>
-            )}
             {account.fund && (
               <AccountAddress>
                 <Link to={`/fund/${account.fund}`} title={account.fund}>Your fund</Link>
+              </AccountAddress>
+            )}
+            {account.address && (
+              <AccountAddress>
+                <Link to="/wallet" title={account.address}>Your wallet</Link>
               </AccountAddress>
             )}
             <AccountNetwork>

@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import useForm, { FormContext } from 'react-hook-form';
+import * as Yup from 'yup';
 import BigNumber from 'bignumber.js';
 import { useEnvironment } from '~/hooks/useEnvironment';
 import { useTransaction } from '~/hooks/useTransaction';
@@ -36,6 +37,18 @@ interface FundOrderbookLimitFormValues {
   direction: 'sell' | 'buy';
 }
 
+const validationSchema = Yup.object().shape({
+  exchange: Yup.string().required(),
+  direction: Yup.string()
+    .required().oneOf(['buy', 'sell']),
+  quantity: Yup.number()
+    .required()
+    .positive(),
+  price: Yup.number()
+    .required()
+    .positive(),
+});
+
 export const FundOrderbookLimitForm: React.FC<FundOrderbookLimitFormProps> = props => {
   const environment = useEnvironment()!;
   const account = useAccount();
@@ -45,12 +58,14 @@ export const FundOrderbookLimitForm: React.FC<FundOrderbookLimitFormProps> = pro
   });
 
   const form = useForm<FundOrderbookLimitFormValues>({
+    validationSchema,
     mode: 'onSubmit',
     reValidateMode: 'onBlur',
     defaultValues: {
       direction: 'buy',
       quantity: '',
       price: '',
+      exchange: undefined,
     },
   });
 

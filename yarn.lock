@@ -1649,10 +1649,10 @@
     web3-providers "^2.0.0-alpha.1"
     web3-utils "^2.0.0-alpha.1"
 
-"@melonproject/melonjs@^0.0.64":
-  version "0.0.64"
-  resolved "https://registry.yarnpkg.com/@melonproject/melonjs/-/melonjs-0.0.64.tgz#d4528d0e6c773de759b35a5a555b1b7fc8d3b981"
-  integrity sha512-gLUDlOnKHbaKqKeWesy1koiLvit+wqNQ+6iFO9X5TnR6D2ldR4r0R1QvKIDQMSqcG8pu/ow5vE5yAV+sUNQdbw==
+"@melonproject/melonjs@^0.0.65":
+  version "0.0.65"
+  resolved "https://registry.yarnpkg.com/@melonproject/melonjs/-/melonjs-0.0.65.tgz#61832f0ac00fac7bfba3c1cea1df6afa571e138c"
+  integrity sha512-Z7qd9sQcVVlgE3a87tdA9vnhOa4R7qXfY68qZ2YnDMw/nC5YHHAunoqIGaXA7JhOm0FJtJLxf6yBCmV4F8LO/A==
   dependencies:
     "@0x/order-utils" "^8.4.0"
     "@0x/subproviders" "^5.0.4"
