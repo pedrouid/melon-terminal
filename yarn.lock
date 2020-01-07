@@ -1631,10 +1631,10 @@
   resolved "https://registry.yarnpkg.com/@ledgerhq/logs/-/logs-4.72.0.tgz#43df23af013ad1135407e5cf33ca6e4c4c7708d5"
   integrity sha512-o+TYF8vBcyySRsb2kqBDv/KMeme8a2nwWoG+lAWzbDmWfb2/MrVWYCVYDYvjXdSoI/Cujqy1i0gIDrkdxa9chA==
 
-"@melonproject/melongql@^0.0.8":
-  version "0.0.8"
-  resolved "https://registry.yarnpkg.com/@melonproject/melongql/-/melongql-0.0.8.tgz#6b12368b425024aad35aa6216637446813a98ccf"
-  integrity sha512-nQ1GqGuzxbFBmA/ptbH+GMLiWUKeG983X0xT+cX+2OhPEm7OMyKXSKVLhoxY75vbd+7Oj4S+u6m4MpkD8w1XFQ==
+"@melonproject/melongql@^0.0.9":
+  version "0.0.9"
+  resolved "https://registry.yarnpkg.com/@melonproject/melongql/-/melongql-0.0.9.tgz#5c71a8736d3300cea0b3700f932e60ca834aa910"
+  integrity sha512-ISMGg1eEFQnDq//Yd742OYoHYTVFVbb2TBOpYfzoBk1nMM1e6WRRzNC/+81qBcA6aNnvIpS/9LcpuuqsLw5pQg==
   dependencies:
     apollo-link "^1.2.13"
     apollo-utilities "^1.3.3"
@@ -1649,10 +1649,10 @@
     web3-providers "^2.0.0-alpha.1"
     web3-utils "^2.0.0-alpha.1"
 
-"@melonproject/melonjs@^0.0.60":
-  version "0.0.60"
-  resolved "https://registry.yarnpkg.com/@melonproject/melonjs/-/melonjs-0.0.60.tgz#e9d3620b3b0ec8d29b7e47ece340140e46a44f76"
-  integrity sha512-0HQJ6V4ysmF6KsdBd+cYr3mp/A0vDZCrAO/kjoel00K2DFczjBr42hpw88scmVAYrd06wuzGdXaseTGXDpbuuQ==
+"@melonproject/melonjs@^0.0.62":
+  version "0.0.62"
+  resolved "https://registry.yarnpkg.com/@melonproject/melonjs/-/melonjs-0.0.62.tgz#2713c10f6888369bea749064e38daf174c0ff003"
+  integrity sha512-ayQjP+GvdsyOk6fmsdRxvtLvHGeeM4wx+KBpb5T+vKFnc1qTZzi6PinRYQq8iWNJZSoNWFFriJMzHyTQIlLgQg==
   dependencies:
     "@0x/order-utils" "^8.4.0"
     "@0x/subproviders" "^5.0.4"
