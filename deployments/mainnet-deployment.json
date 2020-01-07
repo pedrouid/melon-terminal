@@ -41,7 +41,7 @@
     "addr": {
       "ConversionRates": "0x798AbDA6Cc246D0EDbA912092A2a3dBd3d11191B",
       "KyberNetwork": "0x9ae49C0d7F8F9EF4B864e004FE86Ac8294E20950",
-      "KyberNetworkProxy": "0x818E6FECD516Ecc3849DAf6845e3EC868087B755",
+      "KyberNetworkProxy": "0x818E6FECD516Ecc3849DAf6845e3EC868087B755"
     },
     "conf": {}
   },
