@@ -55,9 +55,9 @@ export const WalletOverview: React.FC = () => {
   return (
     <Grid>
       <GridRow>
-        <GridCol xs={12} sm={6}>
-          <SectionTitle>Managed funds</SectionTitle>
+        <GridCol xs={12} sm={12}>
           <Block>
+            <SectionTitle>Managed funds</SectionTitle>
             <S.Table>
               <thead>
                 <S.HeaderRow>{managedHeader}</S.HeaderRow>
@@ -68,9 +68,9 @@ export const WalletOverview: React.FC = () => {
         </GridCol>
       </GridRow>
       <GridRow>
-        <GridCol xs={12} sm={6}>
-          <SectionTitle>Funds with owned shares</SectionTitle>
+        <GridCol xs={12} sm={12}>
           <Block>
+            <SectionTitle>Funds with owned shares</SectionTitle>
             <S.Table>
               <thead>
                 <S.HeaderRow>{investedHeader}</S.HeaderRow>
@@ -81,9 +81,9 @@ export const WalletOverview: React.FC = () => {
         </GridCol>
       </GridRow>
       <GridRow>
-        <GridCol xs={12} sm={6}>
-          <SectionTitle>Pending investment requests</SectionTitle>
+        <GridCol xs={12} sm={12}>
           <Block>
+            <SectionTitle>Pending investment requests</SectionTitle>
             <S.Table>
               <thead>
                 <S.HeaderRow>{requestsHeader}</S.HeaderRow>
