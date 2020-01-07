@@ -16,6 +16,9 @@
   "contributors": [
     "Sebastian Siemssen <fubhy@fubhy.com>"
   ],
+  "engines": {
+    "node": ">=12.x"
+  },
   "scripts": {
     "clean": "rimraf coverage build",
     "prebuild": "yarn clean",
