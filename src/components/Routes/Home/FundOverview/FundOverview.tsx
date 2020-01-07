@@ -110,23 +110,23 @@ const tableHeadings = [
     key: 'inception',
   },
   {
-    value: 'AUM [ETH]',
-    key: 'aumEth',
-  },
-  {
     value: 'Share price',
     key: 'sharePrice',
   },
   {
-    value: 'Change',
+    value: 'Daily change',
     key: 'change',
+  },
+  {
+    value: 'AUM [ETH]',
+    key: 'aumEth',
   },
   {
     value: '# shares',
     key: 'shares',
   },
   {
-    value: 'Denomination',
+    value: 'Denomination asset',
     key: 'denomination',
   },
   {
@@ -134,7 +134,7 @@ const tableHeadings = [
     key: 'investments',
   },
   {
-    value: 'Protocol',
+    value: 'Protocol version',
     key: 'version',
   },
   {
@@ -234,7 +234,6 @@ export const FundOverview: React.FC = () => {
                       <S.BodyRow key={fund.id} onClick={() => history.push(`/fund/${fund.id}`)}>
                         <S.BodyCell>{fund.name}</S.BodyCell>
                         <S.BodyCell>{fund.inception}</S.BodyCell>
-                        <S.BodyCell>{fund.aumEth}</S.BodyCell>
                         <S.BodyCell>{fund.sharePrice}</S.BodyCell>
                         <S.BodyCell>
                           <FundOverviewChange
@@ -243,6 +242,7 @@ export const FundOverview: React.FC = () => {
                             color={fund.change.color}
                           />
                         </S.BodyCell>
+                        <S.BodyCell>{fund.aumEth}</S.BodyCell>
                         <S.BodyCell>{fund.shares}</S.BodyCell>
                         <S.BodyCell>{fund.denomination}</S.BodyCell>
                         <S.BodyCell>{fund.investments}</S.BodyCell>
