@@ -14,13 +14,27 @@ export const Footer: React.FC = () => {
     <SkeletonFeet>
       <FooterContainer>
         <FooterNavigation>
-          <FooterItem><a href="https://melonprotocol.com">Protocol</a></FooterItem>
-          <FooterItem><a href="https://docs.melonport.com">Documentation</a></FooterItem>
-          <FooterItem><a href="https://github.com/Avantgarde-Finance/manager-interface/issues">Report an issue</a></FooterItem>
-          <FooterItem><Link to="/playground/onchain">Network explorer</Link></FooterItem>
-          <FooterItem><Link to="/playground/thegraph">Graph explorer</Link></FooterItem>
+          <FooterItem>
+            <a href="https://melonprotocol.com">Protocol</a>
+          </FooterItem>
+          <FooterItem>
+            <a href="https://docs.melonport.com">Documentation</a>
+          </FooterItem>
+          <FooterItem>
+            <a href="https://github.com/Avantgarde-Finance/manager-interface/issues">Report an issue</a>
+          </FooterItem>
+          <FooterItem>
+            <Link to="/playground/onchain">Network explorer</Link>
+          </FooterItem>
+          <FooterItem>
+            <Link to="/playground/thegraph">Graph explorer</Link>
+          </FooterItem>
         </FooterNavigation>
-        {update && <FooterItem><span>Last price feed update at {format(update, 'yyyy-MM-dd hh:mm a')}</span></FooterItem>}
+        {update && (
+          <FooterItem>
+            <span>Last price feed update at {format(update, 'yyyy-MM-dd hh:mm a')}</span>
+          </FooterItem>
+        )}
       </FooterContainer>
     </SkeletonFeet>
   );

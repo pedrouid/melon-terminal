@@ -14,7 +14,7 @@ export const Footer = styled.div`
     justify-content: space-between;
     padding: 0px ${props => props.theme.spaceUnits.m};
   }
-`
+`;
 
 export const FooterNavigation = styled.div`
   display: flex;
@@ -24,7 +24,7 @@ export const FooterNavigation = styled.div`
   @media (${props => props.theme.mediaQueries.s}) {
     justify-content: flex-start;
   }
-`
+`;
 
 export const FooterItem = styled.div`
   &::before {
