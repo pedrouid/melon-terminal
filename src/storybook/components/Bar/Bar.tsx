@@ -1,7 +1,6 @@
 import styled, { css } from 'styled-components';
 
-export interface BarProps {
-  size?: 'full' | 'contained';
+export interface BarContentProps {
   justify?: 'between' | 'around' | 'end';
 }
 
@@ -12,11 +11,22 @@ export const Bar = styled.div`
   background-color: ${props => props.theme.mainColors.primary};
 `;
 
-export const BarContent = styled.div<BarProps>`
+export const BarContent = styled.div<BarContentProps>`
   display: flex;
   justify-content: flex-start;
   align-content: center;
   flex-wrap: wrap;
+  width: 100%;
+  margin: 0px auto;
+  @media (${props => props.theme.mediaQueries.s}) {
+    max-width: ${props => props.theme.container.s};
+  }
+  @media (${props => props.theme.mediaQueries.m}) {
+    max-width: ${props => props.theme.container.m};
+  }
+  @media (${props => props.theme.mediaQueries.l}) {
+    max-width: ${props => props.theme.container.l};
+  }
   @media (${props => props.theme.mediaQueries.l}) {
     flex-wrap: nowrap;
   }
@@ -35,39 +45,4 @@ export const BarContent = styled.div<BarProps>`
     css`
       justify-content: flex-end;
     `}
-  ${props =>
-    props.size === 'full' &&
-    css`
-      width: 100%;
-    `}
-  ${props =>
-    props.size === 'contained' &&
-    css`
-      margin: 0px auto;
-      @media (${props => props.theme.mediaQueries.s}) {
-        max-width: ${props => props.theme.container.s};
-      }
-      @media (${props => props.theme.mediaQueries.m}) {
-        max-width: ${props => props.theme.container.m};
-      }
-      @media (${props => props.theme.mediaQueries.l}) {
-        max-width: ${props => props.theme.container.l};
-      }
-    `}
-`;
-
-export const BarSection = styled.div`
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: flex-end;
-  flex-wrap: wrap;
-  margin-top: ${props => props.theme.spaceUnits.l};
-  @media (${props => props.theme.mediaQueries.m}) {
-    flex-wrap: nowrap;
-  }
-  @media (${props => props.theme.mediaQueries.l}) {
-    justify-content: flex-start;
-    margin-top: 0px;
-  }
 `;
