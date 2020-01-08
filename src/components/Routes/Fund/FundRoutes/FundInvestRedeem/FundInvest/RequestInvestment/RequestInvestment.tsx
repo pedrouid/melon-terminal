@@ -52,14 +52,12 @@ export const RequestInvestment: React.FC<RequestInvestmentProps> = props => {
     mode: 'onSubmit',
     reValidateMode: 'onBlur',
     defaultValues: {
-      investmentAsset: initialAsset?.token?.address,
-      investmentAmount: parseFloat(
-        initialAsset.shareCostInAsset
-          .dividedBy(new BigNumber(10).exponentiatedBy(initialAsset.token.decimals || 18))
-          .multipliedBy(new BigNumber(1.1))
-          .toFixed(initialAsset.token.decimals || 18)
-      ),
       requestedShares: 1,
+      investmentAsset: initialAsset?.token?.address,
+      investmentAmount: initialAsset?.shareCostInAsset?.dividedBy(new BigNumber(10).exponentiatedBy(initialAsset?.token?.decimals || 18))
+        .multipliedBy(new BigNumber(1.1))
+        .decimalPlaces(initialAsset?.token?.decimals || 18)
+        .toNumber(),
     },
   });
 
@@ -84,13 +82,9 @@ export const RequestInvestment: React.FC<RequestInvestmentProps> = props => {
       const values = form.getValues();
       if (action === 'invest') {
         const contract = new Participation(environment, participation);
-        const tx = contract.requestInvestment(
-          account.address!,
-          new BigNumber(values.requestedShares).times(new BigNumber(10).exponentiatedBy(18)),
-          new BigNumber(values.investmentAmount).times(new BigNumber(10).exponentiatedBy(token!.decimals)),
-          values.investmentAsset!
-        );
-
+        const sharesAmount = new BigNumber(values.requestedShares).times(new BigNumber(10).exponentiatedBy(18));
+        const investmentAmount = new BigNumber(values.investmentAmount).times(new BigNumber(10).exponentiatedBy(token!.decimals));
+        const tx = contract.requestInvestment(account.address!, sharesAmount, investmentAmount, values.investmentAsset!);
         transaction.start(tx, 'Invest');
       }
     },
@@ -100,25 +94,17 @@ export const RequestInvestment: React.FC<RequestInvestmentProps> = props => {
     switch (action) {
       case 'approve': {
         const contract = new StandardToken(environment, values.investmentAsset);
-        const tx = contract.approve(
-          account.address!,
-          participation!,
-          new BigNumber(values.investmentAmount).times(new BigNumber(10).exponentiatedBy(token!.decimals))
-        );
-
+        const amount = new BigNumber(values.investmentAmount).times(new BigNumber(10).exponentiatedBy(token!.decimals));
+        const tx = contract.approve(account.address!, participation!, amount);
         transaction.start(tx, 'Approve');
         break;
       }
 
       case 'invest': {
         const contract = new Participation(environment, participation);
-        const tx = contract.requestInvestment(
-          account.address!,
-          new BigNumber(values.requestedShares).times(new BigNumber(10).exponentiatedBy(18)),
-          new BigNumber(values.investmentAmount).times(new BigNumber(10).exponentiatedBy(token!.decimals)),
-          values.investmentAsset!
-        );
-
+        const sharesAmount = new BigNumber(values.requestedShares).times(new BigNumber(10).exponentiatedBy(18));
+        const investmentAmount = new BigNumber(values.investmentAmount).times(new BigNumber(10).exponentiatedBy(token!.decimals));
+        const tx = contract.requestInvestment(account.address!, sharesAmount, investmentAmount, values.investmentAsset!);
         transaction.start(tx, 'Invest');
         break;
       }
