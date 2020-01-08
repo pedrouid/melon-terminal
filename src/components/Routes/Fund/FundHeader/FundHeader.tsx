@@ -1,6 +1,6 @@
 import React from 'react';
 import { useFundDetailsQuery } from '~/queries/FundDetails';
-import { DataBlock } from '~/storybook/components/DataBlock/DataBlock';
+import { DataBlock, DataBlockSection } from '~/storybook/components/DataBlock/DataBlock';
 import { Bar, BarContent } from '~/storybook/components/Bar/Bar';
 import { Headline } from '~/storybook/components/Headline/Headline';
 import { useEtherscanLink } from '~/hooks/useEtherscanLink';
@@ -35,8 +35,10 @@ export const FundHeader: React.FC<FundHeaderProps> = ({ address }) => {
             icon="icon"
           />
           <RequiresFundSetupComplete fallback={false}>
-            <DataBlock label="Share price">{accounting?.sharePrice?.toFixed(4) || 0} WETH / share</DataBlock>
-            <DataBlock label="AUM">{accounting?.grossAssetValue?.toFixed(4) || 0}</DataBlock>
+            <DataBlockSection>
+              <DataBlock label="Share price">{accounting?.sharePrice?.toFixed(4) || 0} WETH / share</DataBlock>
+              <DataBlock label="AUM">{accounting?.grossAssetValue?.toFixed(4) || 0}</DataBlock>
+            </DataBlockSection>   
           </RequiresFundSetupComplete>
         </BarContent>
       </Bar>

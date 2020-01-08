@@ -17,6 +17,9 @@ export const BarContent = styled(Container)<BarContentProps>`
   justify-content: flex-start;
   align-content: center;
   flex-wrap: wrap;
+  @media (${props => props.theme.mediaQueries.m}) {
+    flex-wrap:nowrap;
+  }
   ${props =>
     props.justify === 'between' &&
     css`
@@ -32,4 +35,5 @@ export const BarContent = styled(Container)<BarContentProps>`
     css`
       justify-content: flex-end;
     `}
+
 `;

@@ -8,8 +8,14 @@ export interface DataBlockProps {
 export const DataBlock: React.FC<DataBlockProps> = props => {
   return (
     <S.DataBlock>
-      <S.DataBlockLabel>{props.label}</S.DataBlockLabel>
-      <S.DataBlockContent>{props.children}</S.DataBlockContent>
+      <S.DataLabel>{props.label}</S.DataLabel>
+      <S.Data>{props.children}</S.Data>
     </S.DataBlock>
+  );
+};
+
+export const DataBlockSection: React.FC = props => {
+  return (
+    <S.DataBlockSection>{props.children}</S.DataBlockSection>
   );
 };

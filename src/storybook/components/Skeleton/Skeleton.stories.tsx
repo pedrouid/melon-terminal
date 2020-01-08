@@ -83,18 +83,6 @@ export const WithBlocksFull: React.FC = () => {
             <Headline title="My title" text="My subtitle" icon="icon" />
           </BarContent>
         </Bar>
-        <DataBlockBar>
-          <DataBlockBarContent justify="between">
-            <DataBlock label="Share Price">1.0000000 WETH/Share</DataBlock>
-            <DataBlock label="AUM">0.1000 WETH</DataBlock>
-            <DataBlock label="Creation date">02.Mar 2019 00:52</DataBlock>
-            <DataBlock label="Total number of shares">0.1000000</DataBlock>
-            <DataBlock label="Shares owned by me">0.1000000</DataBlock>
-            <DataBlock label="Management fee">0.5%</DataBlock>
-            <DataBlock label="Performance fee">0%</DataBlock>
-            <DataBlock label="Performance fee period">90 days</DataBlock>
-          </DataBlockBarContent>
-        </DataBlockBar>
         <Container full={true}>
           <ComplexGridSample />
         </Container>
@@ -113,18 +101,6 @@ export const WithotSecondaryBar: React.FC = () => {
         <Header />
       </SkeletonHead>
       <SkeletonBody>
-        <DataBlockBar>
-          <DataBlockBarContent justify="between">
-            <DataBlock label="Share Price">1.0000000 WETH/Share</DataBlock>
-            <DataBlock label="AUM">0.1000 WETH</DataBlock>
-            <DataBlock label="Creation date">02.Mar 2019 00:52</DataBlock>
-            <DataBlock label="Total number of shares">0.1000000</DataBlock>
-            <DataBlock label="Shares owned by me">0.1000000</DataBlock>
-            <DataBlock label="Management fee">0.5%</DataBlock>
-            <DataBlock label="Performance fee">0%</DataBlock>
-            <DataBlock label="Performance fee period">90 days</DataBlock>
-          </DataBlockBarContent>
-        </DataBlockBar>
         <NotificationBar kind="error" size="small">
           <NotificationContent>
             <span>This fund is shut down</span>

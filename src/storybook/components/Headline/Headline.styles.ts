@@ -8,6 +8,7 @@ export const Headline = styled.div`
   position: relative;
   display: flex;
   align-items: center;
+  width: 100%;
 `;
 
 export const HeadlineIcon = styled.div<HeadlineIconProps>`
