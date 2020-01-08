@@ -26,6 +26,7 @@ import { useAccount } from '~/hooks/useAccount';
 import { useOnChainQueryRefetcher } from '~/hooks/useOnChainQueryRefetcher';
 import { Block } from '~/storybook/components/Block/Block';
 import { SectionTitle } from '~/storybook/components/Title/Title';
+import { Spinner } from '~/components/Common/Spinner/Spinner';
 
 export interface RegisterPoliciesProps {
   address: string;
@@ -36,7 +37,7 @@ export const RegisterPolicies: React.FC<RegisterPoliciesProps> = ({ address }) =
   const account = useAccount()!;
   const refetch = useOnChainQueryRefetcher();
   const [selectedPolicy, setSelectedPolicy] = useState<PolicyDefinition>();
-  const [policyManager] = useFundPoliciesQuery(address);
+  const [policyManager, query] = useFundPoliciesQuery(address);
 
   const transaction = useTransaction(environment, {
     onAcknowledge: receipt => {
@@ -59,6 +60,15 @@ export const RegisterPolicies: React.FC<RegisterPoliciesProps> = ({ address }) =
     tx: Deployment<PriceTolerance | MaxPositions | MaxConcentration | UserWhitelist | AssetWhitelist | AssetBlacklist>,
     name: string
   ) => transaction.start(tx, name);
+
+  if (query.loading) {
+    return (
+      <Block>
+        <SectionTitle>Configure fund ruleset</SectionTitle>
+        <Spinner />
+      </Block>
+    );
+  }
 
   return (
     <Block>

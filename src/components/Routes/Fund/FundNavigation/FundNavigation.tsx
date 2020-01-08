@@ -1,5 +1,4 @@
 import React from 'react';
-import * as S from './FundNavigation.styles';
 import { RequiresFundManager } from '~/components/Common/Gates/RequiresFundManager/RequiresFundManager';
 import { RequiresFundNotShutDown } from '~/components/Common/Gates/RequiresFundNotShutDown/RequiresFundNotShutDown';
 import { TabBar, TabBarContent, TabBarSection, TabLink } from '~/storybook/components/TabNavigation/TabNavigation';
@@ -21,19 +20,19 @@ export const FundNavigation: React.FC<FundNavigationProps> = ({ address }) => {
           </TabLink>
         </TabBarSection>
         <RequiresFundManager fallback={false}>
-          <TabBarSection>
-            <RequiresFundNotShutDown fallback={false}>
+          <RequiresFundNotShutDown fallback={false}>
+            <TabBarSection>
               <TabLink to={`/fund/${address}/trade`} exact={true} activeClassName="active">
                 Trade
-              </TabLink>
+                </TabLink>
               <TabLink to={`/fund/${address}/policies`} exact={true} activeClassName="active">
                 Ruleset
-              </TabLink>
+                </TabLink>
               <TabLink to={`/fund/${address}/manage`} exact={true} activeClassName="active">
                 Manage
-              </TabLink>
-            </RequiresFundNotShutDown>
-          </TabBarSection>
+                </TabLink>
+            </TabBarSection>
+          </RequiresFundNotShutDown>
         </RequiresFundManager>
       </TabBarContent>
     </TabBar>

@@ -21,14 +21,12 @@ export interface ClaimFeesProps {
 export const ClaimFees: React.FC<ClaimFeesProps> = ({ address }) => {
   const environment = useEnvironment()!;
   const account = useAccount();
+  const history = useHistory();
   const refetch = useOnChainQueryRefetcher();
   const [details, query] = useFundDetailsQuery(address);
 
-  const history = useHistory();
-
   const accountingAddress = details && details.routes && details.routes.accounting && details.routes.accounting.address;
   const accounting = new Accounting(environment, accountingAddress);
-
   const feeManagerInfo = details && details.routes && details.routes.feeManager;
   const feeManagerAddress = feeManagerInfo && feeManagerInfo.address;
   const feeManager = new FeeManager(environment, feeManagerAddress);
@@ -52,15 +50,10 @@ export const ClaimFees: React.FC<ClaimFeesProps> = ({ address }) => {
 
   if (query.loading) {
     return (
-      <Grid>
-        <GridRow justify="center">
-          <GridCol xs={12} sm={6} md={4} lg={4}>
-            <Block>
-              <Spinner />
-            </Block>
-          </GridCol>
-        </GridRow>
-      </Grid>
+      <Block>
+        <SectionTitle>Claim fees</SectionTitle>
+        <Spinner />
+      </Block>
     );
   }
 

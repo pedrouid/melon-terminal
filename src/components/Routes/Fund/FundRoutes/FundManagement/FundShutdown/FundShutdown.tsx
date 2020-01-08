@@ -8,9 +8,9 @@ import { TransactionModal } from '~/components/Common/TransactionModal/Transacti
 import { Hub, Version } from '@melonproject/melonjs';
 import { useAccount } from '~/hooks/useAccount';
 import { useOnChainQueryRefetcher } from '~/hooks/useOnChainQueryRefetcher';
-import { Grid, GridRow, GridCol } from '~/storybook/components/Grid/Grid';
 import { Block } from '~/storybook/components/Block/Block';
 import { SectionTitle } from '~/storybook/components/Title/Title';
+import { RequiresFundNotShutDown } from '~/components/Common/Gates/RequiresFundNotShutDown/RequiresFundNotShutDown';
 
 export interface ShutdownProps {
   address: string;
@@ -39,9 +39,11 @@ export const Shutdown: React.FC<ShutdownProps> = ({ address }) => {
   return (
     <Block>
       <SectionTitle>Shut down fund</SectionTitle>
-      <ButtonBlock>
-        <SubmitButton type="button" label="Shutdown fund" onClick={() => submit()} />
-      </ButtonBlock>
+      <RequiresFundNotShutDown>
+        <ButtonBlock>
+          <SubmitButton type="button" label="Shutdown fund" onClick={() => submit()} />
+        </ButtonBlock>
+      </RequiresFundNotShutDown>
 
       <TransactionModal transaction={transaction} />
     </Block>

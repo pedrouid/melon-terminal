@@ -25,7 +25,7 @@ export const FundOpenOrders: React.FC<FundOpenOrdersProps> = ({ address }) => {
   return (
     <Block>
       <SectionTitle>Open orders</SectionTitle>
-      {orders && orders.length > 0 ? (
+      {orders && orders.length ? (
         <Table>
           <thead>
             <HeaderRow>
@@ -44,8 +44,8 @@ export const FundOpenOrders: React.FC<FundOpenOrdersProps> = ({ address }) => {
           </tbody>
         </Table>
       ) : (
-        <NoEntries>No open orders</NoEntries>
-      )}
+          <NoEntries>No open orders</NoEntries>
+        )}
     </Block>
   );
 };

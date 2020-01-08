@@ -30,7 +30,7 @@ export const TabLink = styled(NavLink)`
       border-bottom: 3px solid ${props => props.theme.mainColors.secondaryDarkAlpha};
     }
     &.active::before {
-        border-bottom: 3px solid ${props => props.theme.mainColors.primaryDark};
+      border-bottom: 3px solid ${props => props.theme.mainColors.primaryDark};
     }
   }
 `;

@@ -80,6 +80,7 @@ export const InvestmentAssets: React.FC<InvestmentAssetsProps> = ({ address }) =
     const assetsToAdd = data.assets.filter(
       selected => selected && !allowedAssets?.some(available => available.token!.address === selected)
     );
+
     const assetsToRemove = (allowedAssets || [])
       .filter(asset => !data.assets.some(selected => selected === asset.token!.address))
       .map(item => item.token!.address) as string[];
@@ -88,6 +89,15 @@ export const InvestmentAssets: React.FC<InvestmentAssetsProps> = ({ address }) =
     setAddAssets(assetsToAdd);
   });
 
+  if (query.loading) {
+    return (
+      <Block>
+        <SectionTitle>Define investment assets</SectionTitle>
+        <Spinner />
+      </Block>
+    );
+  }
+
   return (
     <Block>
       <FormContext {...form}>
@@ -95,35 +105,32 @@ export const InvestmentAssets: React.FC<InvestmentAssetsProps> = ({ address }) =
           <SectionTitle>Define investment assets</SectionTitle>
 
           {form.errors.assets && <p>{form.errors.assets.message}</p>}
-          {query.loading && <Spinner />}
 
-          {!query.loading && (
-            <>
-              <ul>
-                {environment.tokens.map((token, index) => (
-                  <li key={token.symbol}>
-                    <input
-                      defaultChecked={defaultValues[index]}
-                      id={`assets[${index}]`}
-                      type="checkbox"
-                      name={`assets[${index}]`}
-                      value={token.address}
-                      key={token.address}
-                      ref={form.register}
-                    />
-                    <label htmlFor={`assets[${index}]`}>
-                      {token.symbol} ({token.name})
-                    </label>
-                  </li>
-                ))}
-              </ul>
-              <ButtonBlock>
-                <SubmitButton type="button" label="Set investment assets" onClick={submit} />
-              </ButtonBlock>
-            </>
-          )}
+          <ul>
+            {environment.tokens.map((token, index) => (
+              <li key={token.symbol}>
+                <input
+                  defaultChecked={defaultValues[index]}
+                  id={`assets[${index}]`}
+                  type="checkbox"
+                  name={`assets[${index}]`}
+                  value={token.address}
+                  key={token.address}
+                  ref={form.register}
+                />
+                <label htmlFor={`assets[${index}]`}>
+                  {token.symbol} ({token.name})
+                </label>
+              </li>
+            ))}
+          </ul>
+
+          <ButtonBlock>
+            <SubmitButton type="button" label="Set investment assets" onClick={submit} />
+          </ButtonBlock>
         </form>
       </FormContext>
+
       <TransactionModal transaction={transaction} />
     </Block>
   );

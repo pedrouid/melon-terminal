@@ -53,9 +53,7 @@ export const BodyRow = styled.tr<BodyRowProps>`
   }}
 `;
 
-export const NoEntries = styled.div`
-  padding: ${props => props.theme.spaceUnits.s};
-`;
+export const NoEntries = styled.div``;
 
 export const BodyRowHover = styled(BodyRow)`
   cursor: pointer;
