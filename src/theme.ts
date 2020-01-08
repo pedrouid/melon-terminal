@@ -165,8 +165,12 @@ export const Global = createGlobalStyle`
   }
 
   a {
-    text-decoration-style: dotted;
+    text-decoration: underline;
     color: ${theme.otherColors.black};
+    transition: ${theme.transition.defaultAll};
+    :hover{
+      opacity: 0.6;
+    }
   }
 
   hr {

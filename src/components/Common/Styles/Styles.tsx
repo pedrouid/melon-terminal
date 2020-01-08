@@ -50,12 +50,12 @@ export const PrimaryButton = styled.button`
   text-transform: uppercase;
   text-decoration: none;
   display: block;
-  border: 1px solid 1px solid rgba(195, 179, 121, 0.75);
-  background-color: rgba(195, 179, 121, 0.75);
+  color: ${props => props.theme.mainColors.secondary};
+  background-color: ${props => props.theme.mainColors.primaryDark};
   padding: ${props => props.theme.spaceUnits.s} ${props => props.theme.spaceUnits.m};
 
   &:hover {
-    background-color: rgb(195, 179, 121);
+    background-color: ${props => props.theme.mainColors.secondaryDarkAlpha};
   }
 `;
 

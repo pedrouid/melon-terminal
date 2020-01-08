@@ -2,6 +2,7 @@ import React from 'react';
 import * as S from './FundNavigation.styles';
 import { RequiresFundManager } from '~/components/Common/Gates/RequiresFundManager/RequiresFundManager';
 import { RequiresFundNotShutDown } from '~/components/Common/Gates/RequiresFundNotShutDown/RequiresFundNotShutDown';
+import { TabBar, TabBarContent, TabBarSection, TabLink } from '~/storybook/components/TabNavigation/TabNavigation';
 
 export interface FundNavigationProps {
   address: string;
@@ -9,31 +10,32 @@ export interface FundNavigationProps {
 
 export const FundNavigation: React.FC<FundNavigationProps> = ({ address }) => {
   return (
-    <S.FundNavigation>
-      <S.FundNavigationPublic>
-        <S.FundNavigationLink to={`/fund/${address}`} exact={true} activeClassName="active">
-          Overview
-        </S.FundNavigationLink>
-        <S.FundNavigationLink to={`/fund/${address}/invest`} exact={true} activeClassName="active">
-          Invest &amp; redeem
-        </S.FundNavigationLink>
-      </S.FundNavigationPublic>
-      <RequiresFundManager fallback={false}>
-        <S.FundNavigationManager>
-          <RequiresFundNotShutDown fallback={false}>
-            <S.FundNavigationLink to={`/fund/${address}/trade`} exact={true} activeClassName="active">
-              Trade
-            </S.FundNavigationLink>
-
-            <S.FundNavigationLink to={`/fund/${address}/policies`} exact={true} activeClassName="active">
-              Ruleset
-            </S.FundNavigationLink>
-            <S.FundNavigationLink to={`/fund/${address}/manage`} exact={true} activeClassName="active">
-              Manage
-            </S.FundNavigationLink>
-          </RequiresFundNotShutDown>
-        </S.FundNavigationManager>
-      </RequiresFundManager>
-    </S.FundNavigation>
+    <TabBar>
+      <TabBarContent justify='between'>
+        <TabBarSection>
+          <TabLink to={`/fund/${address}`} exact={true} activeClassName="active">
+            Overview
+          </TabLink>
+          <TabLink to={`/fund/${address}/invest`} exact={true} activeClassName="active">
+            Invest &amp; redeem
+          </TabLink>
+        </TabBarSection>
+        <RequiresFundManager fallback={false}>
+          <TabBarSection>
+            <RequiresFundNotShutDown fallback={false}>
+              <TabLink to={`/fund/${address}/trade`} exact={true} activeClassName="active">
+                Trade
+              </TabLink>
+              <TabLink to={`/fund/${address}/policies`} exact={true} activeClassName="active">
+                Ruleset
+              </TabLink>
+              <TabLink to={`/fund/${address}/manage`} exact={true} activeClassName="active">
+                Manage
+              </TabLinkk>
+            </RequiresFundNotShutDown>
+          </TabBarSection>
+        </RequiresFundManager>
+      </TabBarContent>
+    </TabBar>
   );
 };

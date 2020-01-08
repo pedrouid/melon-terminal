@@ -1,4 +1,5 @@
 import React from 'react';
+import { BrowserRouter as Router } from 'react-router-dom';
 import { configure, addDecorator } from '@storybook/react';
 import { withNotes } from '@storybook/addon-notes';
 import { withKnobs } from '@storybook/addon-knobs';
@@ -10,11 +11,11 @@ addDecorator(withNotes);
 addDecorator(withKnobs);
 addDecorator(story => (
   <ThemeProvider theme={theme}>
-    <>
+    <Router>
       <Reset />
       <Global />
       {story()}
-    </>
+    </Router>
   </ThemeProvider>
 ));
 

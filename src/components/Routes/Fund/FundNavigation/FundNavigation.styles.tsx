@@ -28,7 +28,7 @@ export const FundNavigationLink = styled(NavLink)`
   &.active::before {
     position: absolute;
     content: '';
-    border-bottom: 2px solid rgb(195, 179, 121);
+    border-bottom: 2px solid ${props => props.theme.mainColors.primaryDark};
     bottom: -2px;
     right: 0;
     left: 0;
