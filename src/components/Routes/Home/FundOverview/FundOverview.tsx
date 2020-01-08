@@ -1,5 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { useHistory } from 'react-router';
+import { Link } from 'react-router-dom';
 
 import { FundOverviewChange } from '~/components/Routes/Home/FundOverview/FundOverviewChange/FundOverviewChange';
 import { Spinner } from '~/components/Common/Spinner/Spinner';
@@ -7,6 +8,7 @@ import { NoMatch } from '~/components/Routes/NoMatch/NoMatch';
 import { FundOverviewPagination } from '~/components/Routes/Home/FundOverview/FundOverviewPagination/FundOverviewPagination';
 import { useFundOverviewQuery, FundProcessed } from '~/queries/FundOverview';
 import { usePagination } from '~/hooks/usePagination';
+import { useAccount } from '~/hooks/useAccount';
 
 import * as S from './FundOverview.styles';
 
@@ -15,6 +17,7 @@ import { Block } from '~/storybook/components/Block/Block';
 import { Input } from '~/storybook/components/Input/Input';
 import { FormField } from '~/storybook/components/FormField/FormField';
 import { SectionTitle } from '~/storybook/components/Title/Title';
+import { Button } from '~/storybook/components/Button/Button';
 
 interface SortChoice {
   key: keyof typeof sortChoice;
@@ -151,6 +154,7 @@ export const FundOverview: React.FC = () => {
   const filtered = useFilteredFunds(funds, search);
   const sorted = useSortedFunds(filtered.funds);
   const pagination = usePagination(sorted.funds);
+  const account = useAccount();
 
   useEffect(() => {
     pagination.setOffset(0);
@@ -177,6 +181,11 @@ export const FundOverview: React.FC = () => {
           <GridCol xs={12} sm={12}>
             <Block>
               <NoMatch />
+              {!account.fund && (
+                <Link to="/wallet/setup">
+                  <Button>Create your own Melon fund</Button>
+                </Link>
+              )}
             </Block>
           </GridCol>
         </GridRow>
@@ -263,6 +272,11 @@ export const FundOverview: React.FC = () => {
               setOffset={pagination.setOffset}
               funds={filtered.funds.length}
             />
+            {!account.fund && (
+              <Link to="/wallet/setup">
+                <Button>Create your own Melon fund</Button>
+              </Link>
+            )}
           </Block>
         </GridCol>
       </GridRow>
