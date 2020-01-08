@@ -101,7 +101,7 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
               {!finished && !(!estimated && error) && (
                 <>
                   <S.TransactionModalFeeForm>
-                    <FormField name="gasPrice" label="Gas Price (GWEI)">
+                    <FormField name="gasPrice" label="Gas Price (gwei)">
                       <Input
                         id="gas-price"
                         type="number"
@@ -111,9 +111,10 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
                         disabled={!!loading && estimated}
                       />
                     </FormField>
-                    {options && options.gas && <div>Gas limit: {options.gas}</div>}
-                    {options && options.amgu && <div>AMGU: {options.amgu.toFixed(4)}</div>}
-                    {options && options.incentive && <div>INCENTIVE: {options.incentive.toFixed(4)}</div>}
+                    {options && options.amgu && <div>Asset management gas: {options.amgu.toFixed()}</div>}
+                    {options && options.incentive && (
+                      <div>Incentive for request execution: {options.incentive.toFixed(4)}</div>
+                    )}
                   </S.TransactionModalFeeForm>
                 </>
               )}
