@@ -17,6 +17,7 @@ export const Footer = styled.div`
 `;
 
 export const FooterNavigation = styled.div`
+  margin: auto;
   display: flex;
   justify-content: center;
   flex-wrap: wrap;

@@ -29,12 +29,12 @@ export const Footer: React.FC = () => {
           <FooterItem>
             <Link to="/playground/thegraph">Graph explorer</Link>
           </FooterItem>
+          {update && (
+            <FooterItem>
+              <span>Last price feed update at {format(update, 'yyyy-MM-dd hh:mm a')}</span>
+            </FooterItem>
+          )}
         </FooterNavigation>
-        {update && (
-          <FooterItem>
-            <span>Last price feed update at {format(update, 'yyyy-MM-dd hh:mm a')}</span>
-          </FooterItem>
-        )}
       </FooterContainer>
     </SkeletonFeet>
   );
