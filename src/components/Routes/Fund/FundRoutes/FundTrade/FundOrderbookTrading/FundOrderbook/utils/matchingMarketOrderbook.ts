@@ -26,8 +26,15 @@ function mapOrders(
   const takerAssetDecimals = new BigNumber(10).exponentiatedBy(takerAsset.decimals);
 
   return orders.map(order => {
-    const quantity = order.buyQuantity.dividedBy(makerAssetDecimals);
-    const price = order.sellQuantity.dividedBy(takerAssetDecimals).dividedBy(quantity);
+    const quantity =
+      side === 'bid'
+        ? order.buyQuantity.dividedBy(makerAssetDecimals)
+        : order.sellQuantity.dividedBy(takerAssetDecimals);
+
+    const price =
+      side === 'bid'
+        ? order.sellQuantity.dividedBy(takerAssetDecimals).dividedBy(quantity)
+        : order.buyQuantity.dividedBy(makerAssetDecimals).dividedBy(quantity);
 
     return {
       order,

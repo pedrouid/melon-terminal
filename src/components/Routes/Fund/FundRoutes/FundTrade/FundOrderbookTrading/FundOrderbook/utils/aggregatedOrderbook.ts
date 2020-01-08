@@ -2,7 +2,7 @@ import * as Rx from 'rxjs';
 import BigNumber from 'bignumber.js';
 import { startWith } from 'rxjs/operators';
 import { TokenDefinition, DeployedEnvironment, ExchangeIdentifier } from '@melonproject/melonjs';
-import { zeroExOrderbook } from './zeroExOrderbook';
+// import { zeroExOrderbook } from './zeroExOrderbook';
 import { matchingMarketOrderbook } from './matchingMarketOrderbook';
 
 export interface OrderbookItem {
@@ -32,7 +32,7 @@ export function aggregatedOrderbook(
   } as Orderbook;
 
   const streams = [
-    zeroExOrderbook(environment, makerAsset, takerAsset).pipe(startWith(empty)),
+    // zeroExOrderbook(environment, makerAsset, takerAsset).pipe(startWith(empty)),
     matchingMarketOrderbook(environment, makerAsset, takerAsset).pipe(startWith(empty)),
   ];
 

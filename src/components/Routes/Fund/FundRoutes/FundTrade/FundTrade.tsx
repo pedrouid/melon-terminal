@@ -25,9 +25,10 @@ export const FundTrade: React.FC<FundTradeProps> = props => {
 
   const kyber = exchanges.find(exchange => exchange.id === ExchangeIdentifier.KyberNetwork);
   const engine = exchanges.find(exchange => exchange.id === ExchangeIdentifier.MelonEngine);
-  const markets = exchanges.filter(
-    exchange => exchange.id === ExchangeIdentifier.OasisDex || exchange.id === ExchangeIdentifier.ZeroEx
-  );
+  const markets = exchanges.filter(exchange => exchange.id === ExchangeIdentifier.OasisDex);
+  // const markets = exchanges.filter(
+  //   exchange => exchange.id === ExchangeIdentifier.OasisDex || exchange.id === ExchangeIdentifier.ZeroEx
+  // );
 
   return (
     <Grid>

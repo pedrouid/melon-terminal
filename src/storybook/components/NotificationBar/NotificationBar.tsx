@@ -23,11 +23,12 @@ export const NotificationBar = styled.div<NotificationBarProps>`
      `}
 
    ${props =>
-      props.kind === 'neutral' && props.layout === 'discrete' &&
-      css`
-        color: ${props => props.theme.statusColors.neutral};
-        background: ${props => props.theme.mainColors.primaryAlpha};
-      `}
+     props.kind === 'neutral' &&
+     props.layout === 'discrete' &&
+     css`
+       color: ${props => props.theme.statusColors.neutral};
+       background: ${props => props.theme.mainColors.primaryAlpha};
+     `}
    ${props =>
      props.kind === 'warning' &&
      css`
@@ -35,11 +36,12 @@ export const NotificationBar = styled.div<NotificationBarProps>`
        border-color: ${props => props.theme.statusColors.warning};
      `}
    ${props =>
-      props.kind === 'warning' && props.layout === 'discrete' &&
-      css`
-        color: ${props => props.theme.statusColors.warning};
-        background: ${props => props.theme.mainColors.primaryAlpha};
-      `}
+     props.kind === 'warning' &&
+     props.layout === 'discrete' &&
+     css`
+       color: ${props => props.theme.statusColors.warning};
+       background: ${props => props.theme.mainColors.primaryAlpha};
+     `}
    ${props =>
      props.kind === 'error' &&
      css`
@@ -47,11 +49,12 @@ export const NotificationBar = styled.div<NotificationBarProps>`
        border-color: ${props => props.theme.statusColors.primaryLoss};
      `}
    ${props =>
-      props.kind === 'error' && props.layout === 'discrete' &&
-      css`
-        color: ${props => props.theme.statusColors.primaryLoss};
-        background: ${props => props.theme.mainColors.primaryAlpha};
-      `}
+     props.kind === 'error' &&
+     props.layout === 'discrete' &&
+     css`
+       color: ${props => props.theme.statusColors.primaryLoss};
+       background: ${props => props.theme.mainColors.primaryAlpha};
+     `}
    ${props =>
      props.kind === 'success' &&
      css`
@@ -59,11 +62,12 @@ export const NotificationBar = styled.div<NotificationBarProps>`
        border-color: ${props => props.theme.statusColors.primaryProfit};
      `}
      ${props =>
-        props.kind === 'success' && props.layout === 'discrete' &&
-        css`
-          color: ${props => props.theme.statusColors.primaryProfit};
-          background: ${props => props.theme.mainColors.primaryAlpha};
-        `}
+       props.kind === 'success' &&
+       props.layout === 'discrete' &&
+       css`
+         color: ${props => props.theme.statusColors.primaryProfit};
+         background: ${props => props.theme.mainColors.primaryAlpha};
+       `}
      ${props =>
        props.size === 'small' &&
        css`
@@ -71,14 +75,15 @@ export const NotificationBar = styled.div<NotificationBarProps>`
          margin: 0px auto;
        `}
      ${props =>
-         props.size === 'small' && props.layout === 'discrete' &&
-        css`
-          border-left: 2px solid;
-          border-right: 2px solid;
-          borderColor: inherit
-        `}
-`
+       props.size === 'small' &&
+       props.layout === 'discrete' &&
+       css`
+         border-left: 2px solid;
+         border-right: 2px solid;
+         bordercolor: inherit;
+       `}
+`;
 
 export const NotificationContent = styled(Container)`
-   text-align: center;
-`
+  text-align: center;
+`;

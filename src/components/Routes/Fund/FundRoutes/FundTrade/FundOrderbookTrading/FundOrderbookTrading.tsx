@@ -19,7 +19,7 @@ export const FundOrderbookTrading: React.FC<FundOrderbookTradingProps> = props =
   const tokens = environment.tokens.filter(token => token !== weth);
   const options = tokens.map(token => ({
     value: token.address,
-    name: token.symbol,
+    name: `${token.symbol} / ${weth.symbol}`,
   }));
 
   const [asset, setAsset] = useState(tokens[0]);
@@ -38,7 +38,7 @@ export const FundOrderbookTrading: React.FC<FundOrderbookTradingProps> = props =
         />
       </S.FundOrderbook>
       <S.FundOrderbookForm>
-        <FormField label="Asset" name="asset">
+        <FormField label="Asset pair" name="asset">
           <Dropdown
             name="asset"
             options={options}

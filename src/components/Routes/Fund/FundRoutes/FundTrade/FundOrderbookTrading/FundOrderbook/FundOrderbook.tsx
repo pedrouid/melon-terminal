@@ -52,8 +52,8 @@ export const FundOrderbook: React.FC<FundOrderbookProps> = props => {
       <S.Orderbook>
         <S.OrderbookSide side="bids">
           <S.OrderbookHeader>
-            <S.OrderbookLabel>Quantity</S.OrderbookLabel>
             <S.OrderbookLabel>Total</S.OrderbookLabel>
+            <S.OrderbookLabel>Quantity</S.OrderbookLabel>
             <S.OrderbookLabel>Price</S.OrderbookLabel>
           </S.OrderbookHeader>
 
@@ -68,8 +68,8 @@ export const FundOrderbook: React.FC<FundOrderbookProps> = props => {
 
             {bids.map((item, index) => (
               <S.OrderbookItem key={index} selected={item.id === props.selected?.id} onClick={() => toggle(item)}>
-                <S.OrderbookData>{item.quantity.toFixed(4)}</S.OrderbookData>
                 <S.OrderbookData>{item.total!.toFixed(4)}</S.OrderbookData>
+                <S.OrderbookData>{item.quantity.toFixed(4)}</S.OrderbookData>
                 <S.OrderbookData>{item.price.toFixed(4)}</S.OrderbookData>
               </S.OrderbookItem>
             ))}
@@ -79,8 +79,8 @@ export const FundOrderbook: React.FC<FundOrderbookProps> = props => {
         <S.OrderbookSide side="asks">
           <S.OrderbookHeader>
             <S.OrderbookLabel>Price</S.OrderbookLabel>
-            <S.OrderbookLabel>Total</S.OrderbookLabel>
             <S.OrderbookLabel>Quantity</S.OrderbookLabel>
+            <S.OrderbookLabel>Total</S.OrderbookLabel>
           </S.OrderbookHeader>
 
           <S.OrderbookBody>
@@ -95,8 +95,8 @@ export const FundOrderbook: React.FC<FundOrderbookProps> = props => {
             {asks.map((item, index) => (
               <S.OrderbookItem key={index} selected={item.id === props.selected?.id} onClick={() => toggle(item)}>
                 <S.OrderbookData>{item.price.toFixed(4)}</S.OrderbookData>
-                <S.OrderbookData>{item.total!.toFixed(4)}</S.OrderbookData>
                 <S.OrderbookData>{item.quantity.toFixed(4)}</S.OrderbookData>
+                <S.OrderbookData>{item.total!.toFixed(4)}</S.OrderbookData>
               </S.OrderbookItem>
             ))}
           </S.OrderbookBody>

@@ -42,12 +42,8 @@ const validationSchema = Yup.object().shape({
   direction: Yup.string()
     .required()
     .oneOf(['buy', 'sell']),
-  quantity: Yup.number()
-    .required()
-    .positive(),
-  price: Yup.number()
-    .required()
-    .positive(),
+  quantity: Yup.string().required(),
+  price: Yup.string().required(),
 });
 
 export const FundOrderbookLimitForm: React.FC<FundOrderbookLimitFormProps> = props => {
@@ -125,7 +121,7 @@ export const FundOrderbookLimitForm: React.FC<FundOrderbookLimitFormProps> = pro
   });
 
   const exchanges = props.exchanges.map(item => ({
-    value: item.name,
+    value: item.id,
     name: item.name,
   }));
 
@@ -140,6 +136,12 @@ export const FundOrderbookLimitForm: React.FC<FundOrderbookLimitFormProps> = pro
     },
   ];
 
+  useEffect(() => {
+    if (props.order?.exchange) {
+      form.setValue('exchange', props.order.exchange);
+    }
+  }, [props.order?.exchange]);
+
   return (
     <>
       <FormContext {...form}>
@@ -153,11 +155,11 @@ export const FundOrderbookLimitForm: React.FC<FundOrderbookLimitFormProps> = pro
           </FormField>
 
           <FormField label="Quantity" name="quantity">
-            <Input type="number" name="quantity" onChange={() => props.order && props.unsetOrder()} />
+            <Input type="text" name="quantity" onChange={() => props.order && props.unsetOrder()} />
           </FormField>
 
           <FormField label="Price" name="price">
-            <Input type="number" name="price" onChange={() => props.order && props.unsetOrder()} />
+            <Input type="text" name="price" onChange={() => props.order && props.unsetOrder()} />
           </FormField>
 
           <Button type="submit">Submit</Button>

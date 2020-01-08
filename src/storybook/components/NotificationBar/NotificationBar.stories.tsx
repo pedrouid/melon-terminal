@@ -1,5 +1,5 @@
 import React from 'react';
-import { NotificationBar , NotificationContent } from './NotificationBar';
+import { NotificationBar, NotificationContent } from './NotificationBar';
 
 export default { title: 'Components|NotificationBar' };
 

@@ -11,17 +11,12 @@ import { Orderbook, OrderbookItem } from './aggregatedOrderbook';
 
 const endpoints = {
   [NetworkEnum.MAINNET]: {
-    http: 'https://api.radarrelay.com/0x/v2/',
-    ws: 'wss://ws.radarrelay.com/0x/v2',
-  },
-  [NetworkEnum.KOVAN]: {
-    http: 'https://api.kovan.radarrelay.com/0x/v2/',
-    ws: 'wss://api.kovan.radarrelay.com/0x/v2',
+    http: 'https://api-v2.ledgerdex.com/sra/v2',
   },
 } as {
   [key in NetworkEnum]: {
     http: string;
-    ws: string;
+    ws?: string;
   };
 };
 
@@ -69,9 +64,21 @@ export function zeroExOrderbook(
 
   return Rx.using(
     () => {
-      const provider = OrderbookProvider.getOrderbookForWebsocketProvider({
+      if (!!endpoints[network].ws) {
+        const provider = OrderbookProvider.getOrderbookForWebsocketProvider({
+          httpEndpoint: endpoints[network].http,
+          websocketEndpoint: endpoints[network].ws!,
+        });
+
+        return {
+          provider,
+          unsubscribe: () => provider.destroyAsync(),
+        };
+      }
+
+      const provider = OrderbookProvider.getOrderbookForPollingProvider({
         httpEndpoint: endpoints[network].http,
-        websocketEndpoint: endpoints[network].ws,
+        pollingIntervalMs: 5000,
       });
 
       return {
