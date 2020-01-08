@@ -10,6 +10,7 @@ import {
   ExchangeIdentifier,
   OasisDexTradingAdapter,
   MatchingMarket,
+  ZeroExTradingAdapter,
 } from '@melonproject/melonjs';
 import { useOnChainQueryRefetcher } from '~/hooks/useOnChainQueryRefetcher';
 import { Dropdown } from '~/storybook/components/Dropdown/Dropdown';
@@ -71,7 +72,9 @@ export const FundOrderbookMarketForm: React.FC<FundOrderbookMarketFormProps> = p
     }
 
     if (order.exchange === ExchangeIdentifier.ZeroEx) {
-      // TODO: Implement.
+      const adapter = await ZeroExTradingAdapter.create(trading, exchange.exchange);
+      const tx = adapter.takeOrder(account.address!, order.order);
+      return transaction.start(tx, 'Take order');
     }
   };
 
