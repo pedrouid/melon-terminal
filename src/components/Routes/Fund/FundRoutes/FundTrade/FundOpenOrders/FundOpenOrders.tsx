@@ -44,8 +44,8 @@ export const FundOpenOrders: React.FC<FundOpenOrdersProps> = ({ address }) => {
           </tbody>
         </Table>
       ) : (
-          <NoEntries>No open orders</NoEntries>
-        )}
+        <NoEntries>No open orders.</NoEntries>
+      )}
     </Block>
   );
 };

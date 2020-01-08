@@ -10,7 +10,6 @@ export const TabBarContent = styled(BarContent)``;
 
 export const TabBarSection = styled.div``;
 
-
 export const TabLink = styled(NavLink)`
     display: inline-block;
     position: relative;

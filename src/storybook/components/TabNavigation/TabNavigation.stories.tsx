@@ -6,7 +6,7 @@ export default { title: 'Components|TabNavigation' };
 export const Default: React.FC = () => {
   return (
     <TabBar>
-      <TabBarContent justify='between'>
+      <TabBarContent justify="between">
         <TabBarSection>
           <TabLink to="/">Overview</TabLink>
           <TabLink to="/">Wraph Ether</TabLink>
@@ -17,11 +17,10 @@ export const Default: React.FC = () => {
   );
 };
 
-
 export const WithSections: React.FC = () => {
   return (
     <TabBar>
-      <TabBarContent justify='between'>
+      <TabBarContent justify="between">
         <TabBarSection>
           <TabLink to="/">Overview</TabLink>
           <TabLink to="/">Invest &amp; redeem</TabLink>

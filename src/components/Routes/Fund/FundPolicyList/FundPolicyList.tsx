@@ -71,10 +71,11 @@ export interface FundPolicyListProps {
 export const FundPolicyList: React.FC<FundPolicyListProps> = ({ address }) => {
   const environment = useEnvironment()!;
   const [policyManager, query] = useFundPoliciesQuery(address);
+
   if (query.loading) {
     return (
       <Block>
-        <SectionTitle>Policies</SectionTitle>
+        <SectionTitle>Fund ruleset</SectionTitle>
         <Spinner />
       </Block>
     );
@@ -103,8 +104,8 @@ export const FundPolicyList: React.FC<FundPolicyListProps> = ({ address }) => {
           </tbody>
         </Table>
       ) : (
-          <NoEntries>No fund rules registered.</NoEntries>
-        )}
+        <NoEntries>No fund rules registered.</NoEntries>
+      )}
     </Block>
   );
 };

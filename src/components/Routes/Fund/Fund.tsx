@@ -8,6 +8,8 @@ import { Spinner } from '~/components/Common/Spinner/Spinner';
 import { FundHeader } from './FundHeader/FundHeader';
 import { FundNavigation } from './FundNavigation/FundNavigation';
 import { FundTitle } from './FundTitle/FundTitle';
+import { NotificationBar, NotificationContent } from '~/storybook/components/NotificationBar/NotificationBar';
+import { RequiresFundShutDown } from '~/components/Common/Gates/RequiresFundShutDown/RequiresFundShutDown';
 
 const NoMatch = React.lazy(() => import('~/components/Routes/NoMatch/NoMatch'));
 const FundDetails = React.lazy(() => import('./FundRoutes/FundDetails/FundDetails'));
@@ -29,6 +31,11 @@ export const Fund: React.FC = () => {
       <FundHeader address={match.params.address} />
       <FundNavigation address={match.params.address} />
       <Container>
+        <RequiresFundShutDown fallback={false}>
+          <NotificationBar kind="error">
+            <NotificationContent>This fund is already shut down.</NotificationContent>
+          </NotificationBar>
+        </RequiresFundShutDown>
         <ErrorBoundary FallbackComponent={ErrorFallback}>
           <Suspense fallback={<Spinner />}>
             <Switch>

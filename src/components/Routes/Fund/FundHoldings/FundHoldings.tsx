@@ -26,7 +26,7 @@ export const FundHoldings: React.FC<FundHoldingsProps> = ({ address }) => {
   if (query.loading) {
     return (
       <Block>
-        <SectionTitle>Holdings</SectionTitle>
+        <SectionTitle>Portfolio holdings</SectionTitle>
         <Spinner />
       </Block>
     );

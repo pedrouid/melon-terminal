@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link , NavLink } from './Link';
+import { Link, NavLink } from './Link';
 
 export default { title: 'Atoms|Link' };
 

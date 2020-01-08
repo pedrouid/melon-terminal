@@ -54,7 +54,8 @@ export const RequestInvestment: React.FC<RequestInvestmentProps> = props => {
     defaultValues: {
       requestedShares: 1,
       investmentAsset: initialAsset?.token?.address,
-      investmentAmount: initialAsset?.shareCostInAsset?.dividedBy(new BigNumber(10).exponentiatedBy(initialAsset?.token?.decimals || 18))
+      investmentAmount: initialAsset?.shareCostInAsset
+        ?.dividedBy(new BigNumber(10).exponentiatedBy(initialAsset?.token?.decimals || 18))
         .multipliedBy(new BigNumber(1.1))
         .decimalPlaces(initialAsset?.token?.decimals || 18)
         .toNumber(),
@@ -83,8 +84,15 @@ export const RequestInvestment: React.FC<RequestInvestmentProps> = props => {
       if (action === 'invest') {
         const contract = new Participation(environment, participation);
         const sharesAmount = new BigNumber(values.requestedShares).times(new BigNumber(10).exponentiatedBy(18));
-        const investmentAmount = new BigNumber(values.investmentAmount).times(new BigNumber(10).exponentiatedBy(token!.decimals));
-        const tx = contract.requestInvestment(account.address!, sharesAmount, investmentAmount, values.investmentAsset!);
+        const investmentAmount = new BigNumber(values.investmentAmount).times(
+          new BigNumber(10).exponentiatedBy(token!.decimals)
+        );
+        const tx = contract.requestInvestment(
+          account.address!,
+          sharesAmount,
+          investmentAmount,
+          values.investmentAsset!
+        );
         transaction.start(tx, 'Invest');
       }
     },
@@ -103,8 +111,15 @@ export const RequestInvestment: React.FC<RequestInvestmentProps> = props => {
       case 'invest': {
         const contract = new Participation(environment, participation);
         const sharesAmount = new BigNumber(values.requestedShares).times(new BigNumber(10).exponentiatedBy(18));
-        const investmentAmount = new BigNumber(values.investmentAmount).times(new BigNumber(10).exponentiatedBy(token!.decimals));
-        const tx = contract.requestInvestment(account.address!, sharesAmount, investmentAmount, values.investmentAsset!);
+        const investmentAmount = new BigNumber(values.investmentAmount).times(
+          new BigNumber(10).exponentiatedBy(token!.decimals)
+        );
+        const tx = contract.requestInvestment(
+          account.address!,
+          sharesAmount,
+          investmentAmount,
+          values.investmentAsset!
+        );
         transaction.start(tx, 'Invest');
         break;
       }

@@ -10,7 +10,7 @@ export interface FundNavigationProps {
 export const FundNavigation: React.FC<FundNavigationProps> = ({ address }) => {
   return (
     <TabBar>
-      <TabBarContent justify='between'>
+      <TabBarContent justify="between">
         <TabBarSection>
           <TabLink to={`/fund/${address}`} exact={true} activeClassName="active">
             Overview
@@ -24,13 +24,13 @@ export const FundNavigation: React.FC<FundNavigationProps> = ({ address }) => {
             <TabBarSection>
               <TabLink to={`/fund/${address}/trade`} exact={true} activeClassName="active">
                 Trade
-                </TabLink>
+              </TabLink>
               <TabLink to={`/fund/${address}/policies`} exact={true} activeClassName="active">
                 Ruleset
-                </TabLink>
+              </TabLink>
               <TabLink to={`/fund/${address}/manage`} exact={true} activeClassName="active">
                 Manage
-                </TabLink>
+              </TabLink>
             </TabBarSection>
           </RequiresFundNotShutDown>
         </RequiresFundManager>

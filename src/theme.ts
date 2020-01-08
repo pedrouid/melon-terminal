@@ -22,7 +22,7 @@ export const theme = {
     primaryLoss: 'rgb(206, 88, 102)',
     secondaryLoss: 'rgb(252, 240, 242)',
     warning: 'rgb(249,209,118)',
-    neutral: 'rgb(96,213,255)',
+    neutral: 'rgb(74,194,238)',
   },
   otherColors: {
     black: 'rgb(0, 0, 0)',
