@@ -50,7 +50,7 @@ export const MaxConcentrationConfiguration: React.FC<MaxConcentrationConfigurati
 
   return (
     <>
-      <S.Title>Configure MaxConcentration policy</S.Title>
+      <S.Title>Configure max concentration policy</S.Title>
 
       <FormContext {...form}>
         <form onSubmit={submit}>

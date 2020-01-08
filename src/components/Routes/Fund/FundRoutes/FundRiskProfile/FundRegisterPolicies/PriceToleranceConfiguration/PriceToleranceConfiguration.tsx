@@ -44,7 +44,7 @@ export const PriceToleranceConfiguration: React.FC<PriceToleranceConfigurationPr
 
   return (
     <>
-      <S.Title>Configure Price Tolerance policy</S.Title>
+      <S.Title>Configure price tolerance policy</S.Title>
       <FormContext {...form}>
         <form onSubmit={submit}>
           <FormField name="priceTolerance" label="Price tolerance (%)">

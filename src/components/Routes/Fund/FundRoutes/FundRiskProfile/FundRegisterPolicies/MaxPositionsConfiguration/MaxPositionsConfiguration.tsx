@@ -43,7 +43,7 @@ export const MaxPositionsConfiguration: React.FC<MaxPositionsConfigurationProps>
 
   return (
     <>
-      <S.Title>Configure MaxPositions policy</S.Title>
+      <S.Title>Configure max positions policy</S.Title>
 
       <FormContext {...form}>
         <form onSubmit={submit}>

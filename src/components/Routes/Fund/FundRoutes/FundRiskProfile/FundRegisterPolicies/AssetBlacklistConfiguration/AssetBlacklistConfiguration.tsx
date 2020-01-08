@@ -42,7 +42,7 @@ export const AssetBlacklistConfiguration: React.FC<AssetBlacklistConfigurationPr
 
   return (
     <>
-      <S.Title>Configure AssetBlacklist policy</S.Title>
+      <S.Title>Configure asset blacklist policy</S.Title>
       <ul>
         {tokens.map((token, index) => (
           <li key={token.address}>

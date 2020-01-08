@@ -42,7 +42,7 @@ export const AssetWhitelistConfiguration: React.FC<AssetWhitelistConfigurationPr
 
   return (
     <>
-      <S.Title>Configure AssetWhitelist policy</S.Title>
+      <S.Title>Configure asset whitelist policy</S.Title>
       <ul>
         {tokens.map((token, index) => (
           <li key={token.address}>

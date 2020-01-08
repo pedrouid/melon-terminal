@@ -41,7 +41,7 @@ export const UserWhitelistConfiguration: React.FC<UserWhitelistConfigurationProp
 
   return (
     <>
-      <S.Title>Configure UserWhitelist policy</S.Title>
+      <S.Title>Configure user whitelist policy</S.Title>
 
       <FormContext {...form}>
         <form onSubmit={submit}>
@@ -52,6 +52,7 @@ export const UserWhitelistConfiguration: React.FC<UserWhitelistConfigurationProp
           0x000000000000`}
             id="userWhitelist"
           />
+
           <SubmitButton label="Add user whitelist policy" />
         </form>
       </FormContext>
