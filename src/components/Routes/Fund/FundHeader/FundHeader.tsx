@@ -1,5 +1,4 @@
 import React from 'react';
-import { Spinner } from '~/components/Common/Spinner/Spinner';
 import { useFundDetailsQuery } from '~/queries/FundDetails';
 import { DataBlock } from '~/storybook/components/DataBlock/DataBlock';
 import { Bar, BarContent } from '~/storybook/components/Bar/Bar';
@@ -11,12 +10,8 @@ export interface FundHeaderProps {
 }
 
 export const FundHeader: React.FC<FundHeaderProps> = ({ address }) => {
-  const [fund, query] = useFundDetailsQuery(address);
+  const [fund] = useFundDetailsQuery(address);
   const link = useEtherscanLink({ address });
-
-  if (!query || query.loading) {
-    return <Spinner />;
-  }
 
   if (!fund) {
     return null;
