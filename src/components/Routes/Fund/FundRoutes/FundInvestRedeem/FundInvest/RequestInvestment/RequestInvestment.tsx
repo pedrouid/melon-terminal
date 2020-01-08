@@ -168,7 +168,6 @@ export const RequestInvestment: React.FC<RequestInvestmentProps> = props => {
           {(query.loading && <Spinner />) || (
             <>
               <div>Your current balance: {allowance?.balance?.toString() ?? 'N/A'}</div>
-              <div>Your current allowance: {allowance?.allowance?.toString() ?? 'N/A'}</div>
               <div>
                 Share price in {asset?.token?.symbol}:{' '}
                 {asset &&
