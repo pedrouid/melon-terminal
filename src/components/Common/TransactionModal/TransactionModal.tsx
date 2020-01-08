@@ -8,6 +8,7 @@ import { useEtherscanLink } from '~/hooks/useEtherscanLink';
 import { FormField } from '~/storybook/components/FormField/FormField';
 import { Input } from '~/storybook/components/Input/Input';
 import { Button } from '~/storybook/components/Button/Button';
+import { Spinner } from '~/components/Common/Spinner/Spinner';
 import * as S from './TransactionModal.styles';
 
 function progressToStep(progress: number) {
@@ -73,12 +74,18 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
           <S.TransactionModalTitle>{state.name}</S.TransactionModalTitle>
 
           <S.TransactionModalContent>
-            <ProgressBar step={currentStep} loading={loadingStep(state.progress)}>
-              <ProgressBarStep />
-              <ProgressBarStep />
-              <ProgressBarStep />
-              <ProgressBarStep />
-            </ProgressBar>
+            {!estimated && !error && (
+              <Spinner />
+            )}
+
+            {estimated && (
+              <ProgressBar step={currentStep} loading={loadingStep(state.progress)}>
+                <ProgressBarStep />
+                <ProgressBarStep />
+                <ProgressBarStep />
+                <ProgressBarStep />
+              </ProgressBar>
+            )}
 
             {!finished && estimated && gas && (
               <S.EthGasStation>
@@ -97,103 +104,105 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
               </S.EthGasStation>
             )}
 
-            <S.TransactionModalForm onSubmit={submit}>
-              {!finished && !(!estimated && error) && (
-                <>
-                  <S.TransactionModalFeeForm>
-                    <FormField name="gasPrice" label="Gas Price (gwei)">
-                      <Input
-                        id="gas-price"
-                        type="number"
-                        name="gasPrice"
-                        step=".01"
-                        defaultValue={price}
-                        disabled={!!loading && estimated}
-                      />
-                    </FormField>
-                    {options && options.amgu && <div>Asset management gas: {options.amgu.toFixed()}</div>}
-                    {options && options.incentive && (
-                      <div>Incentive for request execution: {options.incentive.toFixed(4)}</div>
-                    )}
-                  </S.TransactionModalFeeForm>
-                </>
-              )}
+            {error && <S.NotificationError>{error.message}</S.NotificationError>}
 
-              {error && <S.NotificationError>{error.message}</S.NotificationError>}
-
-              {output && (
-                <S.TransactionModalMessages>
-                  <S.TransactionModalMessagesTable>
-                    <S.TransactionModalMessagesTableBody>
-                      {hash && (
-                        <S.TransactionModalMessagesTableRow>
-                          <S.TransactionModalMessagesTableRowLabel>Hash</S.TransactionModalMessagesTableRowLabel>
-                          <S.TransactionModalMessagesTableRowQuantity>
-                            <a target="_blank" href={etherscanLink || ''}>
-                              {hash}
-                            </a>
-                          </S.TransactionModalMessagesTableRowQuantity>
-                        </S.TransactionModalMessagesTableRow>
+            {estimated && (
+              <S.TransactionModalForm onSubmit={submit}>
+                {!finished && !(!estimated && error) && (
+                  <>
+                    <S.TransactionModalFeeForm>
+                      <FormField name="gasPrice" label="Gas Price (gwei)">
+                        <Input
+                          id="gas-price"
+                          type="number"
+                          name="gasPrice"
+                          step=".01"
+                          defaultValue={price}
+                          disabled={!!loading && estimated}
+                        />
+                      </FormField>
+                      {options && options.amgu && <div>Asset management gas: {options.amgu.toFixed()}</div>}
+                      {options && options.incentive && (
+                        <div>Incentive for request execution: {options.incentive.toFixed(4)}</div>
                       )}
-                      {receipt && (
-                        <S.TransactionModalMessagesTableRow>
-                          <S.TransactionModalMessagesTableRowLabel>
-                            Block number
-                          </S.TransactionModalMessagesTableRowLabel>
-                          <S.TransactionModalMessagesTableRowQuantity>
-                            {receipt.blockNumber}
-                          </S.TransactionModalMessagesTableRowQuantity>
-                        </S.TransactionModalMessagesTableRow>
-                      )}
-                      {receipt && (
-                        <S.TransactionModalMessagesTableRow>
-                          <S.TransactionModalMessagesTableRowLabel>Gas used</S.TransactionModalMessagesTableRowLabel>
-                          <S.TransactionModalMessagesTableRowQuantity>
-                            {receipt.gasUsed}
-                          </S.TransactionModalMessagesTableRowQuantity>
-                        </S.TransactionModalMessagesTableRow>
-                      )}
-                      {receipt && (
-                        <S.TransactionModalMessagesTableRow>
-                          <S.TransactionModalMessagesTableRowLabel>
-                            Cumulative gas used
-                          </S.TransactionModalMessagesTableRowLabel>
-                          <S.TransactionModalMessagesTableRowQuantity>
-                            {receipt.cumulativeGasUsed}
-                          </S.TransactionModalMessagesTableRowQuantity>
-                        </S.TransactionModalMessagesTableRow>
-                      )}
-                    </S.TransactionModalMessagesTableBody>
-                  </S.TransactionModalMessagesTable>
-                </S.TransactionModalMessages>
-              )}
-
-              <S.TransactionModalActions>
-                {!finished && (
-                  <S.TransactionModalAction>
-                    <Button type="button" kind="secondary" onClick={() => cancel()}>
-                      {estimated ? 'Cancel' : 'Close'}
-                    </Button>
-                  </S.TransactionModalAction>
+                    </S.TransactionModalFeeForm>
+                  </>
                 )}
 
-                {!finished && estimated && (
-                  <S.TransactionModalAction>
-                    <Button type="submit" kind="success" disabled={loading}>
-                      {error ? 'Retry' : 'Confirm'}
-                    </Button>
-                  </S.TransactionModalAction>
+                {output && (
+                  <S.TransactionModalMessages>
+                    <S.TransactionModalMessagesTable>
+                      <S.TransactionModalMessagesTableBody>
+                        {hash && (
+                          <S.TransactionModalMessagesTableRow>
+                            <S.TransactionModalMessagesTableRowLabel>Hash</S.TransactionModalMessagesTableRowLabel>
+                            <S.TransactionModalMessagesTableRowQuantity>
+                              <a target="_blank" href={etherscanLink || ''}>
+                                {hash}
+                              </a>
+                            </S.TransactionModalMessagesTableRowQuantity>
+                          </S.TransactionModalMessagesTableRow>
+                        )}
+                        {receipt && (
+                          <S.TransactionModalMessagesTableRow>
+                            <S.TransactionModalMessagesTableRowLabel>
+                              Block number
+                            </S.TransactionModalMessagesTableRowLabel>
+                            <S.TransactionModalMessagesTableRowQuantity>
+                              {receipt.blockNumber}
+                            </S.TransactionModalMessagesTableRowQuantity>
+                          </S.TransactionModalMessagesTableRow>
+                        )}
+                        {receipt && (
+                          <S.TransactionModalMessagesTableRow>
+                            <S.TransactionModalMessagesTableRowLabel>Gas used</S.TransactionModalMessagesTableRowLabel>
+                            <S.TransactionModalMessagesTableRowQuantity>
+                              {receipt.gasUsed}
+                            </S.TransactionModalMessagesTableRowQuantity>
+                          </S.TransactionModalMessagesTableRow>
+                        )}
+                        {receipt && (
+                          <S.TransactionModalMessagesTableRow>
+                            <S.TransactionModalMessagesTableRowLabel>
+                              Cumulative gas used
+                            </S.TransactionModalMessagesTableRowLabel>
+                            <S.TransactionModalMessagesTableRowQuantity>
+                              {receipt.cumulativeGasUsed}
+                            </S.TransactionModalMessagesTableRowQuantity>
+                          </S.TransactionModalMessagesTableRow>
+                        )}
+                      </S.TransactionModalMessagesTableBody>
+                    </S.TransactionModalMessagesTable>
+                  </S.TransactionModalMessages>
                 )}
 
-                {finished && (
-                  <S.TransactionModalAction>
-                    <Button type="button" kind="success" onClick={() => acknowledge()} disabled={loading}>
-                      Close
-                    </Button>
-                  </S.TransactionModalAction>
-                )}
-              </S.TransactionModalActions>
-            </S.TransactionModalForm>
+                <S.TransactionModalActions>
+                  {!finished && (
+                    <S.TransactionModalAction>
+                      <Button type="button" kind="secondary" onClick={() => cancel()}>
+                        {estimated ? 'Cancel' : 'Close'}
+                      </Button>
+                    </S.TransactionModalAction>
+                  )}
+
+                  {!finished && estimated && (
+                    <S.TransactionModalAction>
+                      <Button type="submit" kind="success" disabled={loading}>
+                        {error ? 'Retry' : 'Confirm'}
+                      </Button>
+                    </S.TransactionModalAction>
+                  )}
+
+                  {finished && (
+                    <S.TransactionModalAction>
+                      <Button type="button" kind="success" onClick={() => acknowledge()} disabled={loading}>
+                        Close
+                      </Button>
+                    </S.TransactionModalAction>
+                  )}
+                </S.TransactionModalActions>
+              </S.TransactionModalForm>
+            )}
           </S.TransactionModalContent>
         </S.TransactionModal>
       </Modal>
