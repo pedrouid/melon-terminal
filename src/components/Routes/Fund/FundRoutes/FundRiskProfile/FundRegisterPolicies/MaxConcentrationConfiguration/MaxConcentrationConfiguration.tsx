@@ -57,7 +57,7 @@ export const MaxConcentrationConfiguration: React.FC<MaxConcentrationConfigurati
           <FormField name="maxConcentration" label="Maximum concentration (%)">
             <Input name="maxConcentration" type="number" id="maxConcentration" />
           </FormField>
-          <Button type="submit">Add MaxConcentration policy</Button>
+          <Button type="submit">Add max concentration policy</Button>
         </form>
       </FormContext>
     </>

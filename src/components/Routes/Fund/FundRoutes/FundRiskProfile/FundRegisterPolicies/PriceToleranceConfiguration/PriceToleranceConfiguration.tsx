@@ -50,7 +50,7 @@ export const PriceToleranceConfiguration: React.FC<PriceToleranceConfigurationPr
           <FormField name="priceTolerance" label="Price tolerance (%)">
             <Input name="priceTolerance" type="number" id="priceTolerance" />
           </FormField>
-          <Button type="submit">Add PriceTolerance policy</Button>
+          <Button type="submit">Add price tolerance policy</Button>
         </form>
       </FormContext>
     </>

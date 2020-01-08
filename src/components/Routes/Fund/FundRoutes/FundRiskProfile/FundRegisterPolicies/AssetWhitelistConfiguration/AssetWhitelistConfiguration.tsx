@@ -61,7 +61,7 @@ export const AssetWhitelistConfiguration: React.FC<AssetWhitelistConfigurationPr
       <p>&nbsp;</p>
       <FormContext {...form}>
         <form onSubmit={submit}>
-          <SubmitButton label="Add AssetWhitelist policy" />
+          <SubmitButton label="Add asset whitelist policy" />
         </form>
       </FormContext>
     </>

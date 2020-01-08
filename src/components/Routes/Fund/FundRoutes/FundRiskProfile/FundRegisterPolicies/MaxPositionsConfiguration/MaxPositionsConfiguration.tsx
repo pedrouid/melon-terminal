@@ -50,7 +50,7 @@ export const MaxPositionsConfiguration: React.FC<MaxPositionsConfigurationProps>
           <FormField name="maxPositions" label="Maximum number of positions">
             <Input name="maxPositions" type="number" id="maxPositions" />
           </FormField>
-          <Button type="submit">Add MaxPositions policy</Button>
+          <Button type="submit">Add max positions policy</Button>
         </form>
       </FormContext>
     </>

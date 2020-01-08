@@ -52,7 +52,7 @@ export const UserWhitelistConfiguration: React.FC<UserWhitelistConfigurationProp
           0x000000000000`}
             id="userWhitelist"
           />
-          <SubmitButton label="Add UserWhitelist policy" />
+          <SubmitButton label="Add user whitelist policy" />
         </form>
       </FormContext>
     </>
