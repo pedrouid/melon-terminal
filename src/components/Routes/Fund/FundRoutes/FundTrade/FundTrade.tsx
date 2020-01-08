@@ -10,6 +10,7 @@ import { useFundExchanges } from './FundTrade.query';
 import { Block } from '~/storybook/components/Block/Block';
 import { Grid, GridRow, GridCol } from '~/storybook/components/Grid/Grid';
 import FundHoldings from '../../FundHoldings/FundHoldings';
+import { FundMelonEngineTrading } from './FundMelonEngineTrading/FundMelonEngineTrading';
 
 export interface FundTradeProps {
   address: string;
@@ -23,6 +24,7 @@ export const FundTrade: React.FC<FundTradeProps> = props => {
   }
 
   const kyber = exchanges.find(exchange => exchange.id === ExchangeIdentifier.KyberNetwork);
+  const engine = exchanges.find(exchange => exchange.id === ExchangeIdentifier.MelonEngine);
   const markets = exchanges.filter(
     exchange => exchange.id === ExchangeIdentifier.OasisDex || exchange.id === ExchangeIdentifier.ZeroEx
   );
@@ -41,6 +43,11 @@ export const FundTrade: React.FC<FundTradeProps> = props => {
               {!!kyber && (
                 <TabNavigationItem label="Kyber" identifier="kyber">
                   <FundKyberTrading address={props.address} exchange={kyber} />
+                </TabNavigationItem>
+              )}
+              {!!engine && (
+                <TabNavigationItem label="Melon Engine" identifier="engine">
+                  <FundMelonEngineTrading address={props.address} exchange={engine} />
                 </TabNavigationItem>
               )}
             </TabNavigation>

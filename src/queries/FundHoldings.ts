@@ -1,6 +1,7 @@
 import gql from 'graphql-tag';
 import BigNumber from 'bignumber.js';
 import { useOnChainQuery } from '~/hooks/useQuery';
+import { Holding } from '@melonproject/melongql';
 
 export interface FundHolding {
   amount: BigNumber;
@@ -44,6 +45,6 @@ export const useFundHoldingsQuery = (address: string) => {
   };
 
   const result = useOnChainQuery<FundHoldingsQueryVariables>(FundHoldingsQuery, options);
-  const holdings = result.data?.fund?.routes?.accounting?.holdings ?? [];
+  const holdings = result.data?.fund?.routes?.accounting?.holdings ?? ([] as Holding[]);
   return [holdings, result] as [typeof holdings, typeof result];
 };

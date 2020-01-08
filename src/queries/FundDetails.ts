@@ -1,7 +1,6 @@
 import gql from 'graphql-tag';
 import BigNumber from 'bignumber.js';
 import { useOnChainQuery } from '~/hooks/useQuery';
-import { useAccount } from '~/hooks/useAccount';
 
 export interface FundDetails {
   name: string;
@@ -13,9 +12,6 @@ export interface FundDetails {
       address: string;
       sharePrice: BigNumber;
       grossAssetValue: BigNumber;
-    };
-    shares?: {
-      totalSupply: BigNumber;
     };
     feeManager?: {
       address: string;
@@ -41,16 +37,10 @@ export interface AccountDetails {
 
 export interface FundDetailsQueryVariables {
   fund: string;
-  account?: string | boolean;
 }
 
 const FundDetailsQuery = gql`
-  query FundDetailsQuery($account: Address, $fund: Address!) {
-    account(address: $account) @include(if: $account) {
-      shares(address: $fund) {
-        balanceOf
-      }
-    }
+  query FundDetailsQuery($fund: Address!) {
     fund(address: $fund) {
       name
       manager
@@ -61,9 +51,6 @@ const FundDetailsQuery = gql`
           address
           grossAssetValue
           sharePrice
-        }
-        shares {
-          totalSupply
         }
         feeManager {
           address
@@ -84,15 +71,10 @@ const FundDetailsQuery = gql`
 `;
 
 export const useFundDetailsQuery = (fund: string) => {
-  const account = useAccount();
   const options = {
-    variables: { fund, account: account.address || false },
+    variables: { fund },
   };
 
   const result = useOnChainQuery<FundDetailsQueryVariables>(FundDetailsQuery, options);
-  return [result.data && result.data.fund, result.data && result.data.account, result] as [
-    FundDetails | undefined,
-    AccountDetails | undefined,
-    typeof result
-  ];
+  return [result.data?.fund, result] as [FundDetails | undefined, typeof result];
 };

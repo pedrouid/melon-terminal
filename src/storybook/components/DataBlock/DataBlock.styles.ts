@@ -3,7 +3,6 @@ import styled, { css } from 'styled-components';
 export const DataBlock = styled.div`
   display: block;
   position: relative;
-  width: 100%;
   justify-content: space-between;
   padding: 0px;
   text-align: left;

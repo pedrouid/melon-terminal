@@ -25,7 +25,7 @@ import { useTransaction } from '~/hooks/useTransaction';
 import { useOnChainQueryRefetcher } from '~/hooks/useOnChainQueryRefetcher';
 import { TransactionModal } from '~/components/Common/TransactionModal/TransactionModal';
 
-export interface FundKyberTradingProps {
+export interface FundMelonEngineTradingProps {
   address: string;
   exchange: ExchangeDefinition;
   asset?: TokenDefinition;
@@ -42,15 +42,15 @@ const validationSchema = Yup.object().shape({
     .positive(),
 });
 
-interface FundKyberTradingFormValues {
+interface FundMelonEngineTradingFormValues {
   makerAsset?: string;
   takerAsset?: string;
   makerQuantity?: string;
   takerQuantity?: string;
 }
 
-export const FundKyberTrading: React.FC<FundKyberTradingProps> = props => {
-  const [price, setPrice] = useState(new BigNumber(0));
+export const FundMelonEngineTrading: React.FC<FundMelonEngineTradingProps> = props => {
+  const [price, setPrice] = useState('0');
   const [loading, setLoading] = useState(true);
   const environment = useEnvironment()!;
   const account = useAccount()!;
@@ -65,10 +65,10 @@ export const FundKyberTrading: React.FC<FundKyberTradingProps> = props => {
   const defaultValues = {
     makerAsset: options[0].value,
     takerAsset: options[1].value,
-    takerQuantity: '',
+    makerQuantity: '',
   };
 
-  const form = useForm<FundKyberTradingFormValues>({
+  const form = useForm<FundMelonEngineTradingFormValues>({
     defaultValues,
     validationSchema,
     mode: 'onSubmit',
@@ -80,9 +80,9 @@ export const FundKyberTrading: React.FC<FundKyberTradingProps> = props => {
     onAcknowledge: () => form.reset(defaultValues),
   });
 
+  const makerQuantity = form.watch('makerQuantity');
   const makerAddress = form.watch('makerAsset');
   const takerAddress = form.watch('takerAsset');
-  const takerQuantity = form.watch('takerQuantity');
   const makerAsset = makerAddress ? environment.getToken(makerAddress) : undefined;
   const takerAsset = takerAddress ? environment.getToken(takerAddress) : undefined;
 
@@ -101,18 +101,18 @@ export const FundKyberTrading: React.FC<FundKyberTradingProps> = props => {
         const expected = await new Promise<BigNumber>(async resolve => {
           try {
             const kyberEth = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee';
-            const srcToken = values.takerAsset === weth.address ? kyberEth : values.takerAsset;
-            const destToken = values.makerAsset === weth.address ? kyberEth : values.makerAsset;
-            const srcQty = new BigNumber(toWei(values.takerQuantity));
-            const result = await contract.getExpectedRate(srcToken, destToken, srcQty);
-
-            resolve(result.expectedRate);
+            const makerAddress = values.makerAsset === weth.address ? kyberEth : values.makerAsset;
+            const takerAddress = values.takerAsset === weth.address ? kyberEth : values.takerAsset;
+            resolve(
+              (await contract.getExpectedRate(makerAddress, takerAddress, new BigNumber(toWei(values.makerQuantity))))
+                .expectedRate
+            );
           } catch (e) {
             resolve(new BigNumber(0));
           }
         });
 
-        return new BigNumber(1).dividedBy(fromWei(expected.toString()));
+        return fromWei(expected.toString());
       }),
       tap(price => setPrice(price)),
       tap(() => setLoading(false))
@@ -125,9 +125,9 @@ export const FundKyberTrading: React.FC<FundKyberTradingProps> = props => {
   }, [stream$]);
 
   useLayoutEffect(() => {
-    const qty = new BigNumber(takerQuantity ?? 0).multipliedBy(price).decimalPlaces(4);
-    form.setValue('makerQuantity', !qty.isZero() ? qty.toString() : '');
-  }, [price.toString(), takerQuantity]);
+    const qty = new BigNumber(makerQuantity ?? 0).multipliedBy(price);
+    form.setValue('takerQuantity', !qty.isZero() ? qty.toString() : '');
+  }, [price.toString(), makerQuantity]);
 
   const submit = form.handleSubmit(async data => {
     const hub = new Hub(environment, props.address);
@@ -151,29 +151,27 @@ export const FundKyberTrading: React.FC<FundKyberTradingProps> = props => {
     <>
       <FormContext {...form}>
         <form onSubmit={submit}>
-          <FormField name="takerAsset" label="Sell">
-            <Dropdown name="takerAsset" options={options} onChange={handleChange} disabled={loading} />
-          </FormField>
-
-          <FormField name="takerQuantity">
-            <Input type="number" step="any" name="takerQuantity" onChange={handleChange} />
-          </FormField>
-
           <FormField name="makerAsset" label="Buy">
             <Dropdown name="makerAsset" options={options} onChange={handleChange} disabled={loading} />
           </FormField>
 
           <FormField name="makerQuantity">
-            <Input type="number" step="any" name="makerQuantity" disabled={true} />
+            <Input type="number" step="any" name="makerQuantity" onChange={handleChange} />
           </FormField>
 
-          {!loading && !price.isFinite() && <div>No liquidity for this quantity.</div>}
-          {!loading && price.isFinite() && (
+          <FormField name="takerAsset" label="Sell">
+            <Dropdown name="takerAsset" options={options} onChange={handleChange} disabled={loading} />
+          </FormField>
+
+          <FormField name="takerQuantity">
+            <Input type="number" step="any" name="takerQuantity" disabled={true} />
+          </FormField>
+
+          {!loading && (
             <div>
-              1 {makerAsset?.symbol ?? 'N/A'} = {price.toFixed(4)} {takerAsset?.symbol ?? 'N/A'}
+              1 {makerAsset?.symbol ?? 'N/A'} = {price} {takerAsset?.symbol ?? 'N/A'}
             </div>
           )}
-
           {loading && <Spinner />}
 
           <Button type="submit" disabled={loading}>

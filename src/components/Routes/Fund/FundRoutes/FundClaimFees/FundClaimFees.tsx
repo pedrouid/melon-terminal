@@ -22,7 +22,7 @@ export const ClaimFees: React.FC<ClaimFeesProps> = ({ address }) => {
   const environment = useEnvironment()!;
   const account = useAccount();
   const refetch = useOnChainQueryRefetcher();
-  const [details, _, query] = useFundDetailsQuery(address);
+  const [details, query] = useFundDetailsQuery(address);
 
   const history = useHistory();
 

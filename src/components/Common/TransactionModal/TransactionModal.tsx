@@ -74,9 +74,7 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
           <S.TransactionModalTitle>{state.name}</S.TransactionModalTitle>
 
           <S.TransactionModalContent>
-            {!estimated && !error && (
-              <Spinner />
-            )}
+            {!estimated && !error && <Spinner />}
 
             {estimated && (
               <ProgressBar step={currentStep} loading={loadingStep(state.progress)}>

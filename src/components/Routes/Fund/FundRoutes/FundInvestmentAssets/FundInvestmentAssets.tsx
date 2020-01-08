@@ -71,12 +71,17 @@ export const InvestmentAssets: React.FC<InvestmentAssetsProps> = ({ address }) =
 
   const allowedAssets = details?.fund?.routes?.participation?.allowedAssets || [];
   const defaultValues = useMemo(
-    () => environment.tokens.map(token => allowedAssets?.some((allowed: AllowedInvestmentAsset) => allowed && allowed.token!.symbol === token.symbol)),
+    () =>
+      environment.tokens.map(token =>
+        allowedAssets?.some((allowed: AllowedInvestmentAsset) => allowed && allowed.token!.symbol === token.symbol)
+      ),
     [environment, allowedAssets]
   );
 
   const submit = form.handleSubmit(async data => {
-    const assetsToAdd = data.assets.filter(selected => selected && !allowedAssets?.some(available => available.token!.address === selected));
+    const assetsToAdd = data.assets.filter(
+      selected => selected && !allowedAssets?.some(available => available.token!.address === selected)
+    );
     const assetsToRemove = (allowedAssets || [])
       .filter(asset => !data.assets.some(selected => selected === asset.token!.address))
       .map(item => item.token!.address) as string[];
