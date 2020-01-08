@@ -21,10 +21,12 @@ export const FundInvestRedeem: React.FC<FundInvestProps> = ({ address }) => {
         </GridCol>
       </GridRow>
       <GridRow>
-        <GridCol xs={12} sm={6}>
+        <GridCol xs={12} sm={12}>
           <FundInvestmentHistoryList address={address} />
         </GridCol>
-        <GridCol xs={12} sm={6}>
+      </GridRow>
+      <GridRow>
+        <GridCol xs={12} sm={12}>
           <FundInvestorsList address={address} />
         </GridCol>
       </GridRow>
