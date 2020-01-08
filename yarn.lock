@@ -1649,10 +1649,10 @@
     web3-providers "^2.0.0-alpha.1"
     web3-utils "^2.0.0-alpha.1"
 
-"@melonproject/melonjs@^0.0.66":
-  version "0.0.66"
-  resolved "https://registry.yarnpkg.com/@melonproject/melonjs/-/melonjs-0.0.66.tgz#374d196d054271f5e857d9455503c8ba59886e4c"
-  integrity sha512-bsGrDlvAW278eCAU0i/EZfqqJiNfhEmuD9/ThF7hlsAw82izrJ4p/0FLJVEiuaYbA2cwbG1tC7zXUOBqQ7jLgw==
+"@melonproject/melonjs@^0.0.67":
+  version "0.0.67"
+  resolved "https://registry.yarnpkg.com/@melonproject/melonjs/-/melonjs-0.0.67.tgz#e8bdf6a91b8680dfa032ad0b1ba035afa31da9e4"
+  integrity sha512-0pOayPa6W3JtuIspKqiDrD3wUgFc/TM8CQzEYEcF8lGH59vvvq9RnPRh8V/GxPrIRv1KbfGKaqTOPXtCk/JbKA==
   dependencies:
     "@0x/order-utils" "^8.4.0"
     "@0x/subproviders" "^5.0.4"
@@ -16911,7 +16911,7 @@ typedarray@^0.0.6:
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
   integrity sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=
 
-typescript@^3.7.2:
+typescript@^3.7.4:
   version "3.7.4"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.7.4.tgz#1743a5ec5fef6a1fa9f3e4708e33c81c73876c19"
   integrity sha512-A25xv5XCtarLwXpcDNZzCGvW2D1S3/bACratYBx2sax8PefsFhlYmkQicKHvpYflFS8if4zne5zT5kpJ7pzuvw==

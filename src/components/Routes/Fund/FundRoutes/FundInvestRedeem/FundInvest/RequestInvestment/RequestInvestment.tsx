@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useEffect } from 'react';
 import BigNumber from 'bignumber.js';
 import * as Yup from 'yup';
 import useForm, { FormContext } from 'react-hook-form';
@@ -24,7 +24,7 @@ export interface RequestInvestmentProps {
 }
 
 interface RequestInvestmentFormValues {
-  investmentAsset: string | undefined;
+  investmentAsset?: string;
   investmentAmount: number;
   requestedShares: number;
 }
@@ -44,18 +44,21 @@ export const RequestInvestment: React.FC<RequestInvestmentProps> = props => {
   const account = useAccount();
   const refetch = useOnChainQueryRefetcher();
 
-  const transaction = useTransaction(environment, {
-    onFinish: () => refetch(),
-  });
+  const allowedAssets = props.allowedAssets || [];
+  const initialAsset = allowedAssets[0];
 
-  const allowedAssets = props.allowedAssets ?? [];
   const form = useForm<RequestInvestmentFormValues>({
     validationSchema,
     mode: 'onSubmit',
     reValidateMode: 'onBlur',
     defaultValues: {
-      investmentAsset: allowedAssets[0]?.token?.address,
-      investmentAmount: 1,
+      investmentAsset: initialAsset?.token?.address,
+      investmentAmount: parseFloat(
+        initialAsset.shareCostInAsset
+          .dividedBy(new BigNumber(10).exponentiatedBy(initialAsset.token.decimals || 18))
+          .multipliedBy(new BigNumber(1.1))
+          .toFixed(initialAsset.token.decimals || 18)
+      ),
       requestedShares: 1,
     },
   });
@@ -72,9 +75,26 @@ export const RequestInvestment: React.FC<RequestInvestmentProps> = props => {
     if (allowance?.allowance.isGreaterThanOrEqualTo(investmentAmount)) {
       return 'invest';
     }
-
     return 'approve';
   }, [allowance, investmentAmount]);
+
+  const transaction = useTransaction(environment, {
+    onFinish: () => refetch(),
+    onAcknowledge: () => {
+      const values = form.getValues();
+      if (action === 'invest') {
+        const contract = new Participation(environment, participation);
+        const tx = contract.requestInvestment(
+          account.address!,
+          new BigNumber(values.requestedShares).times(new BigNumber(10).exponentiatedBy(18)),
+          new BigNumber(values.investmentAmount).times(new BigNumber(10).exponentiatedBy(token!.decimals)),
+          values.investmentAsset!
+        );
+
+        transaction.start(tx, 'Invest');
+      }
+    },
+  });
 
   const submit = form.handleSubmit(values => {
     switch (action) {
@@ -119,9 +139,10 @@ export const RequestInvestment: React.FC<RequestInvestmentProps> = props => {
     if (asset && token) {
       const amount = new BigNumber(event.target.value ?? 0)
         .multipliedBy(asset.shareCostInAsset!)
-        .dividedBy(new BigNumber(10).exponentiatedBy(token.decimals));
+        .dividedBy(new BigNumber(10).exponentiatedBy(token.decimals))
+        .multipliedBy(new BigNumber(1.1));
 
-      form.setValue('investmentAmount', amount.isNaN() ? 0 : amount.toNumber());
+      form.setValue('investmentAmount', amount.isNaN() ? 0 : parseFloat(amount.toFixed(token.decimals || 18)));
     }
   };
 
@@ -147,6 +168,14 @@ export const RequestInvestment: React.FC<RequestInvestmentProps> = props => {
             <>
               <div>Your current balance: {allowance?.balance?.toString() ?? 'N/A'}</div>
               <div>Your current allowance: {allowance?.allowance?.toString() ?? 'N/A'}</div>
+              <div>
+                Share price in {asset?.token?.symbol}:{' '}
+                {asset &&
+                  asset.shareCostInAsset &&
+                  asset?.shareCostInAsset
+                    .dividedBy(new BigNumber(10).exponentiatedBy(asset?.token?.decimals || 18))
+                    .toString()}
+              </div>
 
               <FormField name="requestedShares" label="Number of shares">
                 <Input
@@ -160,7 +189,7 @@ export const RequestInvestment: React.FC<RequestInvestmentProps> = props => {
                 />
               </FormField>
 
-              <FormField name="investmentAmount" label="Investment Amount">
+              <FormField name="investmentAmount" label={`Max investment amount in ${asset?.token?.symbol}`}>
                 <Input
                   id="investmentAmount"
                   name="investmentAmount"
@@ -173,7 +202,7 @@ export const RequestInvestment: React.FC<RequestInvestmentProps> = props => {
               </FormField>
 
               <Button type="submit" disabled={props.loading}>
-                {action}
+                Invest
               </Button>
             </>
           )}
