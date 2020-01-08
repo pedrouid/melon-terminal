@@ -1,7 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { useHistory } from 'react-router';
 import { Link } from 'react-router-dom';
-
 import { FundOverviewChange } from '~/components/Routes/Home/FundOverview/FundOverviewChange/FundOverviewChange';
 import { Spinner } from '~/components/Common/Spinner/Spinner';
 import { NoMatch } from '~/components/Routes/NoMatch/NoMatch';
@@ -9,15 +8,13 @@ import { FundOverviewPagination } from '~/components/Routes/Home/FundOverview/Fu
 import { useFundOverviewQuery, FundProcessed } from '~/queries/FundOverview';
 import { usePagination } from '~/hooks/usePagination';
 import { useAccount } from '~/hooks/useAccount';
-
-import * as S from './FundOverview.styles';
-
 import { Grid, GridRow, GridCol } from '~/storybook/components/Grid/Grid';
 import { Block } from '~/storybook/components/Block/Block';
 import { Input } from '~/storybook/components/Input/Input';
 import { FormField } from '~/storybook/components/FormField/FormField';
 import { SectionTitle } from '~/storybook/components/Title/Title';
 import { Button } from '~/storybook/components/Button/Button';
+import * as S from './FundOverview.styles';
 
 interface SortChoice {
   key: keyof typeof sortChoice;
@@ -166,7 +163,7 @@ export const FundOverview: React.FC = () => {
         <GridRow>
           <GridCol xs={12} sm={12}>
             <Block>
-              <Spinner positioning="centered" size="large" />
+              <Spinner />
             </Block>
           </GridCol>
         </GridRow>
@@ -260,10 +257,10 @@ export const FundOverview: React.FC = () => {
                       </S.BodyRow>
                     ))
                   ) : (
-                    <S.EmptyRow>
-                      <S.EmptyCell colSpan={12}>No records to display</S.EmptyCell>
-                    </S.EmptyRow>
-                  )}
+                      <S.EmptyRow>
+                        <S.EmptyCell colSpan={12}>No records to display</S.EmptyCell>
+                      </S.EmptyRow>
+                    )}
                 </tbody>
               </S.Table>
             </S.ScrollableTable>

@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { Suspense } from 'react';
+import ErrorBoundary from 'react-error-boundary';
 import { Switch, Route, useRouteMatch } from 'react-router';
-import { WalletNavigation } from './WalletNavigation/WalletNavigation';
 import { Container } from '~/storybook/components/Container/Container';
+import { Spinner } from '~/components/Common/Spinner/Spinner';
+import { ErrorFallback } from '~/components/Common/ErrorFallback/ErrorFallback';
 import { WalletHeader } from './WalletHeader/WalletHeader';
-import * as S from './Wallet.styles';
+import { WalletNavigation } from './WalletNavigation/WalletNavigation';
 
 const NoMatch = React.lazy(() => import('~/components/Routes/NoMatch/NoMatch'));
 const WalletOverview = React.lazy(() => import('./WalletRoutes/WalletOverview/WalletOverview'));
@@ -19,27 +21,29 @@ export const Wallet: React.FC = () => {
   return (
     <>
       <WalletHeader />
-      <S.WalletNavigation>
-        <WalletNavigation />
-      </S.WalletNavigation>
+      <WalletNavigation />
       <Container>
-        <Switch>
-          <Route path={match.path} exact={true}>
-            <WalletOverview />
-          </Route>
-          <Route path={`${match.path}/weth`} exact={true}>
-            <WalletWeth />
-          </Route>
-          <Route path={`${match.path}/setup`} exact={true}>
-            <WalletFundSetup />
-          </Route>
-          <Route path={`${match.path}/setup/transactions`} exact={true}>
-            <WalletFundSetupTransactions />
-          </Route>
-          <Route>
-            <NoMatch />
-          </Route>
-        </Switch>
+        <ErrorBoundary FallbackComponent={ErrorFallback}>
+          <Suspense fallback={<Spinner />}>
+            <Switch>
+              <Route path={match.path} exact={true}>
+                <WalletOverview />
+              </Route>
+              <Route path={`${match.path}/weth`} exact={true}>
+                <WalletWeth />
+              </Route>
+              <Route path={`${match.path}/setup`} exact={true}>
+                <WalletFundSetup />
+              </Route>
+              <Route path={`${match.path}/setup/transactions`} exact={true}>
+                <WalletFundSetupTransactions />
+              </Route>
+              <Route>
+                <NoMatch />
+              </Route>
+            </Switch>
+          </Suspense>
+        </ErrorBoundary>
       </Container>
     </>
   );
