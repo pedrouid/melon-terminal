@@ -37,20 +37,14 @@ export const Shutdown: React.FC<ShutdownProps> = ({ address }) => {
   };
 
   return (
-    <Grid>
-      <GridRow justify="center">
-        <GridCol xs={12} sm={6} md={4} lg={4}>
-          <Block>
-            <SectionTitle>Shut down fund</SectionTitle>
-            <ButtonBlock>
-              <SubmitButton type="button" label="Shutdown fund" onClick={() => submit()} />
-            </ButtonBlock>
+    <Block>
+      <SectionTitle>Shut down fund</SectionTitle>
+      <ButtonBlock>
+        <SubmitButton type="button" label="Shutdown fund" onClick={() => submit()} />
+      </ButtonBlock>
 
-            <TransactionModal transaction={transaction} />
-          </Block>
-        </GridCol>
-      </GridRow>
-    </Grid>
+      <TransactionModal transaction={transaction} />
+    </Block>
   );
 };
 

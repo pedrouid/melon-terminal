@@ -249,10 +249,10 @@ export const FundOverview: React.FC = () => {
                         </S.BodyRow>
                       ))
                     ) : (
-                        <S.EmptyRow>
-                          <S.EmptyCell colSpan={12}>No records to display</S.EmptyCell>
-                        </S.EmptyRow>
-                      )}
+                      <S.EmptyRow>
+                        <S.EmptyCell colSpan={12}>No records to display</S.EmptyCell>
+                      </S.EmptyRow>
+                    )}
                   </tbody>
                 </S.Table>
               </S.ScrollableTable>

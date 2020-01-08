@@ -10,13 +10,11 @@ import { FundNavigation } from './FundNavigation/FundNavigation';
 import { FundTitle } from './FundTitle/FundTitle';
 
 const NoMatch = React.lazy(() => import('~/components/Routes/NoMatch/NoMatch'));
-const FundInvestRedeem = React.lazy(() => import('./FundRoutes/FundInvestRedeem/FundInvestRedeem'));
 const FundDetails = React.lazy(() => import('./FundRoutes/FundDetails/FundDetails'));
-const FundClaimFees = React.lazy(() => import('./FundRoutes/FundClaimFees/FundClaimFees'));
-const FundRegisterPolicies = React.lazy(() => import('./FundRoutes/FundRegisterPolicies/FundRegisterPolicies'));
-const FundInvestmentAssets = React.lazy(() => import('./FundRoutes/FundInvestmentAssets/FundInvestmentAssets'));
-const FundShutdown = React.lazy(() => import('./FundRoutes/FundShutdown/FundShutdown'));
+const FundInvestRedeem = React.lazy(() => import('./FundRoutes/FundInvestRedeem/FundInvestRedeem'));
 const FundTrade = React.lazy(() => import('./FundRoutes/FundTrade/FundTrade'));
+const FundPolicies = React.lazy(() => import('./FundRoutes/FundRiskProfile/FundRiskProfile'));
+const FundManagement = React.lazy(() => import('./FundRoutes/FundManagement/FundManagement'));
 
 export interface FundRouteParams {
   address: string;
@@ -40,20 +38,14 @@ export const Fund: React.FC = () => {
               <Route path={`${match.path}/invest`} exact={true}>
                 <FundInvestRedeem address={match.params.address} />
               </Route>
-              <Route path={`${match.path}/claimfees`} exact={true}>
-                <FundClaimFees address={match.params.address} />
-              </Route>
-              <Route path={`${match.path}/policies`} exact={true}>
-                <FundRegisterPolicies address={match.params.address} />
-              </Route>
               <Route path={`${match.path}/trade`} exact={true}>
                 <FundTrade address={match.params.address} />
               </Route>
-              <Route path={`${match.path}/investmentassets`} exact={true}>
-                <FundInvestmentAssets address={match.params.address} />
+              <Route path={`${match.path}/policies`} exact={true}>
+                <FundPolicies address={match.params.address} />
               </Route>
-              <Route path={`${match.path}/shutdown`} exact={true}>
-                <FundShutdown address={match.params.address} />
+              <Route path={`${match.path}/manage`} exact={true}>
+                <FundManagement address={match.params.address} />
               </Route>
               <Route>
                 <NoMatch />

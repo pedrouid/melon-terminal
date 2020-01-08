@@ -65,35 +65,25 @@ export const ClaimFees: React.FC<ClaimFeesProps> = ({ address }) => {
   }
 
   return (
-    <Grid>
-      <GridRow justify="center">
-        <GridCol xs={12} sm={6} md={4} lg={4}>
-          <Block>
-            <SectionTitle>Claim fees</SectionTitle>
-            <p>Claim management fees and performance fees for the fund.</p>
-            <p>
-              Accrued management fee:{' '}
-              {feeManagerInfo && feeManagerInfo.managementFeeAmount.dividedBy('1e18').toFixed(6)}
-            </p>
-            <p>
-              Accrued performance fee:{' '}
-              {feeManagerInfo && feeManagerInfo.performanceFeeAmount.dividedBy('1e18').toFixed(6)}
-            </p>
-            <p>
-              Payout of performance fee possible:{' '}
-              {feeManagerInfo && feeManagerInfo.performanceFee && feeManagerInfo.performanceFee.canUpdate}
-            </p>
+    <Block>
+      <SectionTitle>Claim fees</SectionTitle>
+      <p>Claim management fees and performance fees for the fund.</p>
+      <p>Accrued management fee: {feeManagerInfo && feeManagerInfo.managementFeeAmount.dividedBy('1e18').toFixed(6)}</p>
+      <p>
+        Accrued performance fee: {feeManagerInfo && feeManagerInfo.performanceFeeAmount.dividedBy('1e18').toFixed(6)}
+      </p>
+      <p>
+        Payout of performance fee possible:{' '}
+        {feeManagerInfo && feeManagerInfo.performanceFee && feeManagerInfo.performanceFee.canUpdate}
+      </p>
 
-            <ButtonBlock>
-              <SubmitButton type="button" label="Claim all fees" onClick={() => submitAllFees()} />
-              <SubmitButton type="button" label="Claim management fees" onClick={() => submitManagementFees()} />
-            </ButtonBlock>
+      <ButtonBlock>
+        <SubmitButton type="button" label="Claim all fees" onClick={() => submitAllFees()} />
+        <SubmitButton type="button" label="Claim management fees" onClick={() => submitManagementFees()} />
+      </ButtonBlock>
 
-            <TransactionModal transaction={transaction} />
-          </Block>
-        </GridCol>
-      </GridRow>
-    </Grid>
+      <TransactionModal transaction={transaction} />
+    </Block>
   );
 };
 

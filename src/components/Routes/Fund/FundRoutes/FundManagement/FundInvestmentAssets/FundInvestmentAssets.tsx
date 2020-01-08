@@ -10,7 +10,6 @@ import { SubmitButton } from '~/components/Common/Form/SubmitButton/SubmitButton
 import { TransactionModal } from '~/components/Common/TransactionModal/TransactionModal';
 import { useOnChainQueryRefetcher } from '~/hooks/useOnChainQueryRefetcher';
 import { Block } from '~/storybook/components/Block/Block';
-import { Grid, GridRow, GridCol } from '~/storybook/components/Grid/Grid';
 import { SectionTitle } from '~/storybook/components/Title/Title';
 import { Spinner } from '~/components/Common/Spinner/Spinner';
 import { useAccount } from '~/hooks/useAccount';
@@ -64,7 +63,6 @@ export const InvestmentAssets: React.FC<InvestmentAssetsProps> = ({ address }) =
 
   const form = useForm<InvestmentAssetsForm>({
     validationSchema,
-    // defaultValues,
     mode: 'onSubmit',
     reValidateMode: 'onBlur',
   });
@@ -91,49 +89,43 @@ export const InvestmentAssets: React.FC<InvestmentAssetsProps> = ({ address }) =
   });
 
   return (
-    <Grid>
-      <GridRow justify="center">
-        <GridCol xs={12} sm={6} md={4} lg={4}>
-          <Block>
-            <FormContext {...form}>
-              <form onSubmit={submit}>
-                <SectionTitle>Define investment assets</SectionTitle>
+    <Block>
+      <FormContext {...form}>
+        <form onSubmit={submit}>
+          <SectionTitle>Define investment assets</SectionTitle>
 
-                {form.errors.assets && <p>{form.errors.assets.message}</p>}
-                {query.loading && <Spinner />}
+          {form.errors.assets && <p>{form.errors.assets.message}</p>}
+          {query.loading && <Spinner />}
 
-                {!query.loading && (
-                  <ul>
-                    {environment.tokens.map((token, index) => (
-                      <li key={token.symbol}>
-                        <input
-                          defaultChecked={defaultValues[index]}
-                          id={`assets[${index}]`}
-                          type="checkbox"
-                          name={`assets[${index}]`}
-                          value={token.address}
-                          key={token.address}
-                          ref={form.register}
-                        />
-                        <label htmlFor={`assets[${index}]`}>
-                          {token.symbol} ({token.name})
-                        </label>
-                      </li>
-                    ))}
-                  </ul>
-                )}
-
-                <ButtonBlock>
-                  <SubmitButton type="button" label="Set investment assets" onClick={submit} />
-                </ButtonBlock>
-              </form>
-            </FormContext>
-          </Block>
-
-          <TransactionModal transaction={transaction} />
-        </GridCol>
-      </GridRow>
-    </Grid>
+          {!query.loading && (
+            <>
+              <ul>
+                {environment.tokens.map((token, index) => (
+                  <li key={token.symbol}>
+                    <input
+                      defaultChecked={defaultValues[index]}
+                      id={`assets[${index}]`}
+                      type="checkbox"
+                      name={`assets[${index}]`}
+                      value={token.address}
+                      key={token.address}
+                      ref={form.register}
+                    />
+                    <label htmlFor={`assets[${index}]`}>
+                      {token.symbol} ({token.name})
+                    </label>
+                  </li>
+                ))}
+              </ul>
+              <ButtonBlock>
+                <SubmitButton type="button" label="Set investment assets" onClick={submit} />
+              </ButtonBlock>
+            </>
+          )}
+        </form>
+      </FormContext>
+      <TransactionModal transaction={transaction} />
+    </Block>
   );
 };
 

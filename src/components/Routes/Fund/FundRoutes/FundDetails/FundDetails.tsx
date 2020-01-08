@@ -1,6 +1,6 @@
 import React from 'react';
 import FundHoldings from '../../FundHoldings/FundHoldings';
-import FundPolicies from './FundPolicies/FundPolicies';
+import FundPolicyList from '../../FundPolicyList/FundPolicyList';
 import { Grid, GridRow, GridCol } from '~/storybook/components/Grid/Grid';
 
 export interface FundDetailsProps {
@@ -14,7 +14,7 @@ export const FundDetails: React.FC<FundDetailsProps> = ({ address }) => (
         <FundHoldings address={address} />
       </GridCol>
       <GridCol xs={12} sm={6}>
-        <FundPolicies address={address} />
+        <FundPolicyList address={address} />
       </GridCol>
     </GridRow>
   </Grid>

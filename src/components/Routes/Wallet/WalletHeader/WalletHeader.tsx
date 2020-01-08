@@ -14,7 +14,11 @@ export const WalletHeader: React.FC = () => {
         <BarContent justify="between">
           <Headline
             title="Your account"
-            text={<a target="_blank" href={link!}>{account.address}</a>}
+            text={
+              <a target="_blank" href={link!}>
+                {account.address}
+              </a>
+            }
             icon="icon"
           />
         </BarContent>
