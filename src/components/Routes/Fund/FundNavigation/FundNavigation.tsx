@@ -31,7 +31,7 @@ export const FundNavigation: React.FC<FundNavigationProps> = ({ address }) => {
             </RequiresFundNotShutDown>
             <TabLink to={`/fund/${address}/manage`} exact={true} activeClassName="active">
               Manage
-              </TabLink>
+            </TabLink>
           </TabBarSection>
         </RequiresFundManager>
       </TabBarContent>

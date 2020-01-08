@@ -47,7 +47,7 @@ interface FundKyberTradingFormValues {
   makerAsset?: string;
   takerAsset?: string;
   makerQuantity?: string;
-  takerQuantity?: string;
+  takerQuantity: string;
 }
 
 export const FundKyberTrading: React.FC<FundKyberTradingProps> = props => {

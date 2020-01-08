@@ -1,12 +1,11 @@
-import React, { Suspense, useLayoutEffect } from 'react';
+import React, { Suspense } from 'react';
 import ErrorBoundary from 'react-error-boundary';
-import { Route, Switch, useHistory } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import { OnChainApollo, TheGraphApollo } from './Contexts/Apollo/Apollo';
 import { RequiresAccount } from './Common/Gates/RequiresAccount/RequiresAccount';
 import { RequiresConnection } from './Common/Gates/RequiresConnection/RequiresConnection';
 import { Spinner } from './Common/Spinner/Spinner';
 import { ErrorFallback } from './Common/ErrorFallback/ErrorFallback';
-import { useConnectionState } from '~/hooks/useConnectionState';
 
 const Home = React.lazy(() => import('./Routes/Home/Home'));
 const Wallet = React.lazy(() => import('./Routes/Wallet/Wallet'));
@@ -16,13 +15,15 @@ const Playground = React.lazy(() => import('./Routes/Playground/Playground'));
 const NoMatch = React.lazy(() => import('./Routes/NoMatch/NoMatch'));
 
 export const AppRouter = () => {
-  const connection = useConnectionState();
-  const history = useHistory();
-  useLayoutEffect(() => {
-    if (connection.environment?.network) {
-      history.push('/');
-    }
-  }, [connection.environment?.network]);
+  // TODO: Re-enable this again at some point.
+  //
+  // const connection = useConnectionState();
+  // const history = useHistory();
+  // useLayoutEffect(() => {
+  //   if (connection.environment?.network) {
+  //      history.push('/');
+  //   }
+  // }, [connection.environment?.network]);
 
   return (
     <ErrorBoundary FallbackComponent={ErrorFallback}>

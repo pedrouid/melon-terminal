@@ -40,7 +40,7 @@ export const FundOrderbookMarketForm: React.FC<FundOrderbookMarketFormProps> = p
   const transaction = useTransaction(environment, {
     onFinish: () => {
       props.unsetOrder();
-      refetch();
+      return refetch();
     },
   });
 

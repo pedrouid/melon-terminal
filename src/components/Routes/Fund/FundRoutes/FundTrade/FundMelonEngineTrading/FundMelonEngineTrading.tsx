@@ -1,29 +1,18 @@
-import React, { useMemo, useEffect, useState, useLayoutEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import BigNumber from 'bignumber.js';
 import * as Yup from 'yup';
-import * as Rx from 'rxjs';
-import { toWei, fromWei } from 'web3-utils';
-import { equals } from 'ramda';
 import useForm, { FormContext } from 'react-hook-form';
-import {
-  TokenDefinition,
-  KyberNetworkProxy,
-  Trading,
-  Hub,
-  KyberTradingAdapter,
-  ExchangeDefinition,
-} from '@melonproject/melonjs';
+import { TokenDefinition, MelonEngineTradingAdapter, Trading, Hub, ExchangeDefinition } from '@melonproject/melonjs';
 import { useEnvironment } from '~/hooks/useEnvironment';
-import { Dropdown } from '~/storybook/components/Dropdown/Dropdown';
 import { FormField } from '~/storybook/components/FormField/FormField';
 import { Input } from '~/storybook/components/Input/Input';
 import { Button } from '~/storybook/components/Button/Button';
-import { startWith, scan, distinctUntilChanged, debounceTime, switchMap, tap } from 'rxjs/operators';
 import { Spinner } from '~/components/Common/Spinner/Spinner';
 import { useAccount } from '~/hooks/useAccount';
 import { useTransaction } from '~/hooks/useTransaction';
 import { useOnChainQueryRefetcher } from '~/hooks/useOnChainQueryRefetcher';
 import { TransactionModal } from '~/components/Common/TransactionModal/TransactionModal';
+import { useMelonEngineTradingQuery } from './FundMelonEngineTrading.query';
 
 export interface FundMelonEngineTradingProps {
   address: string;
@@ -31,48 +20,51 @@ export interface FundMelonEngineTradingProps {
   asset?: TokenDefinition;
 }
 
-const validationSchema = Yup.object().shape({
-  makerAsset: Yup.string().required(),
-  takerAsset: Yup.string().required(),
-  makerQuantity: Yup.number()
-    .required()
-    .positive(),
-  takerQuantity: Yup.number()
-    .required()
-    .positive(),
-});
-
 interface FundMelonEngineTradingFormValues {
-  makerAsset?: string;
-  takerAsset?: string;
-  makerQuantity?: string;
-  takerQuantity?: string;
+  takerQuantity: string;
+  makerQuantity: string;
 }
 
 export const FundMelonEngineTrading: React.FC<FundMelonEngineTradingProps> = props => {
-  const [price, setPrice] = useState('0');
-  const [loading, setLoading] = useState(true);
   const environment = useEnvironment()!;
   const account = useAccount()!;
   const refetch = useOnChainQueryRefetcher();
-
   const weth = environment.getToken('WETH')!;
-  const options = environment.tokens.map(token => ({
-    value: token.address,
-    name: token.symbol,
-  }));
+  const mln = environment.getToken('MLN')!;
+  const [price, liquid, query] = useMelonEngineTradingQuery(props.address);
 
   const defaultValues = {
-    makerAsset: options[0].value,
-    takerAsset: options[1].value,
+    takerQuantity: '',
     makerQuantity: '',
   };
 
+  // TODO: Solve this in a nicer way with validation context.
+  const liquidRef = useRef(liquid);
+  useEffect(() => {
+    liquidRef.current = liquid;
+  }, [liquid]);
+
   const form = useForm<FundMelonEngineTradingFormValues>({
     defaultValues,
-    validationSchema,
     mode: 'onSubmit',
     reValidateMode: 'onBlur',
+    validationSchema: Yup.object().shape({
+      takerQuantity: Yup.string()
+        .required()
+        .test('positive-number', 'Value must be a positive number.', value => {
+          const number = new BigNumber(value);
+          return !number.isNaN() && !number.isZero() && number.isPositive() && number.isFinite();
+        }),
+      makerQuantity: Yup.string()
+        .required()
+        .test('liquid-ether-exceeded', 'Liquid ether balance exceeded.', value => {
+          return liquidRef.current.dividedBy(new BigNumber(10).exponentiatedBy(weth.decimals)).isGreaterThan(value);
+        })
+        .test('positive-number', 'Value must be a positive number.', value => {
+          const number = new BigNumber(value);
+          return !number.isNaN() && !number.isZero() && number.isPositive() && number.isFinite();
+        }),
+    }),
   });
 
   const transaction = useTransaction(environment, {
@@ -80,103 +72,50 @@ export const FundMelonEngineTrading: React.FC<FundMelonEngineTradingProps> = pro
     onAcknowledge: () => form.reset(defaultValues),
   });
 
-  const makerQuantity = form.watch('makerQuantity');
-  const makerAddress = form.watch('makerAsset');
-  const takerAddress = form.watch('takerAsset');
-  const makerAsset = makerAddress ? environment.getToken(makerAddress) : undefined;
-  const takerAsset = takerAddress ? environment.getToken(takerAddress) : undefined;
-
-  const changes$ = useMemo(() => new Rx.Subject<[string, string]>(), []);
-  const stream$ = useMemo(() => {
-    const contract = new KyberNetworkProxy(environment, environment.deployment.kyber.addr.KyberNetworkProxy);
-    const scanned$ = Rx.from(changes$).pipe(scan((carry, [key, value]) => ({ ...carry, [key]: value }), defaultValues));
-    const values$ = scanned$.pipe(
-      debounceTime(500),
-      startWith(defaultValues),
-      distinctUntilChanged((a, b) => equals(a, b))
-    );
-    return values$.pipe(
-      tap(() => setLoading(true)),
-      switchMap(async values => {
-        const expected = await new Promise<BigNumber>(async resolve => {
-          try {
-            const kyberEth = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee';
-            const makerAddress = values.makerAsset === weth.address ? kyberEth : values.makerAsset;
-            const takerAddress = values.takerAsset === weth.address ? kyberEth : values.takerAsset;
-            resolve(
-              (await contract.getExpectedRate(makerAddress, takerAddress, new BigNumber(toWei(values.makerQuantity))))
-                .expectedRate
-            );
-          } catch (e) {
-            resolve(new BigNumber(0));
-          }
-        });
-
-        return fromWei(expected.toString());
-      }),
-      tap(price => setPrice(price)),
-      tap(() => setLoading(false))
-    );
-  }, [changes$]);
+  const takerQuantity = form.watch('takerQuantity');
 
   useEffect(() => {
-    const subscription = stream$.subscribe();
-    return () => subscription.unsubscribe();
-  }, [stream$]);
-
-  useLayoutEffect(() => {
-    const qty = new BigNumber(makerQuantity ?? 0).multipliedBy(price);
-    form.setValue('takerQuantity', !qty.isZero() ? qty.toString() : '');
-  }, [price.toString(), makerQuantity]);
+    const makerQuantity = price.multipliedBy(takerQuantity);
+    form.setValue('makerQuantity', !makerQuantity.isNaN() ? makerQuantity.toString() : '');
+  }, [takerQuantity, price.toString()]);
 
   const submit = form.handleSubmit(async data => {
     const hub = new Hub(environment, props.address);
     const trading = new Trading(environment, (await hub.getRoutes()).trading);
-    const adapter = await KyberTradingAdapter.create(trading, props.exchange.exchange);
+    const adapter = await MelonEngineTradingAdapter.create(trading, props.exchange.exchange);
 
     const tx = adapter.takeOrder(account.address!, {
-      makerAsset: data.makerAsset!,
-      takerAsset: data.takerAsset!,
-      makerQuantity: new BigNumber(toWei(`${data.makerQuantity!}`)),
-      takerQuantity: new BigNumber(toWei(`${data.takerQuantity!}`)),
+      makerAsset: weth.address,
+      takerAsset: mln.address,
+      makerQuantity: new BigNumber(data.makerQuantity)
+        .multipliedBy(price)
+        .multipliedBy(new BigNumber(10).exponentiatedBy(weth.decimals)),
+      takerQuantity: new BigNumber(data.takerQuantity).multipliedBy(new BigNumber(10).exponentiatedBy(mln.decimals)),
     });
 
     transaction.start(tx, 'Take order');
   });
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) =>
-    changes$.next([event.target.name, event.target.value]);
+  if (query.loading) {
+    return <Spinner />;
+  }
 
   return (
     <>
       <FormContext {...form}>
         <form onSubmit={submit}>
-          <FormField name="makerAsset" label="Buy">
-            <Dropdown name="makerAsset" options={options} onChange={handleChange} disabled={loading} />
+          <FormField name="takerQuantity" label="MLN">
+            <Input type="text" name="takerQuantity" />
           </FormField>
 
-          <FormField name="makerQuantity">
-            <Input type="number" step="any" name="makerQuantity" onChange={handleChange} />
+          <FormField name="makerQuantity" label="WETH">
+            <Input type="text" name="makerQuantity" disabled={true} />
           </FormField>
 
-          <FormField name="takerAsset" label="Sell">
-            <Dropdown name="takerAsset" options={options} onChange={handleChange} disabled={loading} />
-          </FormField>
+          <div>1 MLN = {price.toFixed()} WETH</div>
+          <div>{liquid.toString()} WETH available</div>
 
-          <FormField name="takerQuantity">
-            <Input type="number" step="any" name="takerQuantity" disabled={true} />
-          </FormField>
-
-          {!loading && (
-            <div>
-              1 {makerAsset?.symbol ?? 'N/A'} = {price} {takerAsset?.symbol ?? 'N/A'}
-            </div>
-          )}
-          {loading && <Spinner />}
-
-          <Button type="submit" disabled={loading}>
-            Submit
-          </Button>
+          <Button type="submit">Submit</Button>
         </form>
       </FormContext>
       <TransactionModal transaction={transaction} />

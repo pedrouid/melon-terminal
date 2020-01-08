@@ -39,7 +39,7 @@ export const FundInvestRedeem: React.FC<FundInvestProps> = ({ address }) => {
           <FundInvestmentHistoryList address={address} />
         </GridCol>
       </GridRow>
-    </Grid >
+    </Grid>
   );
 };
 
