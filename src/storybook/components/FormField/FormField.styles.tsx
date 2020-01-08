@@ -4,6 +4,7 @@ export const FormField = styled.div`
   position: relative;
   display: block;
   margin: ${props => props.theme.spaceUnits.m} 0 ${props => props.theme.spaceUnits.l};
+  width: 100%;
 `;
 
 export const FormFieldLabel = styled.span`

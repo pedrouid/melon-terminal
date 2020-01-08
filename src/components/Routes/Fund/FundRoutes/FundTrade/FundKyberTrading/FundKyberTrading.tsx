@@ -24,6 +24,7 @@ import { useAccount } from '~/hooks/useAccount';
 import { useTransaction } from '~/hooks/useTransaction';
 import { useOnChainQueryRefetcher } from '~/hooks/useOnChainQueryRefetcher';
 import { TransactionModal } from '~/components/Common/TransactionModal/TransactionModal';
+import { Grid, GridRow, GridCol } from '~/storybook/components/Grid/Grid';
 
 export interface FundKyberTradingProps {
   address: string;
@@ -151,34 +152,56 @@ export const FundKyberTrading: React.FC<FundKyberTradingProps> = props => {
     <>
       <FormContext {...form}>
         <form onSubmit={submit}>
-          <FormField name="takerAsset" label="Sell">
-            <Dropdown name="takerAsset" options={options} onChange={handleChange} disabled={loading} />
-          </FormField>
+          <Grid>
+            <GridRow>
+              <GridCol xs={2}>
+                <FormField name="takerAsset" label="Sell asset">
+                  <Dropdown name="takerAsset" options={options} onChange={handleChange} disabled={loading} />
+                </FormField>
+              </GridCol>
 
-          <FormField name="takerQuantity">
-            <Input type="number" step="any" name="takerQuantity" onChange={handleChange} />
-          </FormField>
+              <GridCol xs={10}>
+                <FormField name="takerQuantity" label="Sell quantity">
+                  <Input type="number" step="any" name="takerQuantity" onChange={handleChange} />
+                </FormField>
+              </GridCol>
+            </GridRow>
 
-          <FormField name="makerAsset" label="Buy">
-            <Dropdown name="makerAsset" options={options} onChange={handleChange} disabled={loading} />
-          </FormField>
+            <GridRow>
+              <GridCol xs={2}>
+                <FormField name="makerAsset" label="Buy asset">
+                  <Dropdown name="makerAsset" options={options} onChange={handleChange} disabled={loading} />
+                </FormField>
+              </GridCol>
 
-          <FormField name="makerQuantity">
-            <Input type="number" step="any" name="makerQuantity" disabled={true} />
-          </FormField>
+              <GridCol xs={10}>
+                <FormField name="makerQuantity" label="Buy quantity">
+                  <Input type="number" step="any" name="makerQuantity" disabled={true} />
+                </FormField>
+              </GridCol>
+            </GridRow>
 
-          {!loading && !price.isFinite() && <div>No liquidity for this quantity.</div>}
-          {!loading && price.isFinite() && (
-            <div>
-              1 {makerAsset?.symbol ?? 'N/A'} = {price.toFixed(4)} {takerAsset?.symbol ?? 'N/A'}
-            </div>
-          )}
+            <GridRow>
+              <GridCol>
+                {!loading && !price.isFinite() && <div>No liquidity for this quantity.</div>}
+                {!loading && price.isFinite() && (
+                  <div>
+                    1 {makerAsset?.symbol ?? 'N/A'} = {price.toFixed(4)} {takerAsset?.symbol ?? 'N/A'}
+                  </div>
+                )}
+              </GridCol>
+            </GridRow>
 
-          {loading && <Spinner />}
+            {loading && <Spinner />}
 
-          <Button type="submit" disabled={loading}>
-            Submit
-          </Button>
+            <GridRow>
+              <GridCol>
+                <Button type="submit" disabled={loading}>
+                  Submit
+                </Button>
+              </GridCol>
+            </GridRow>
+          </Grid>
         </form>
       </FormContext>
       <TransactionModal transaction={transaction} />

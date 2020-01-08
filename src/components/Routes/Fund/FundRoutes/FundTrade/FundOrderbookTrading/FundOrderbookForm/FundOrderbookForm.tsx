@@ -29,7 +29,7 @@ export const FundOrderbookForm: React.FC<FundOrderbookFormProps> = props => {
 
   return (
     <>
-      <FormField label="Type" name="exchange">
+      <FormField name="type">
         <Dropdown name="type" options={options} onChange={event => setType(event.target.value as 'limit' | 'market')} />
       </FormField>
 

@@ -1,13 +1,13 @@
 import React from 'react';
 import { useHistory } from 'react-router';
 import { Fund } from '~/queries/FundParticipationOverview';
-import { BodyCell, BodyRow } from '~/components/Common/Table/Table.styles';
+import { BodyCell, BodyRowHover } from '~/components/Common/Table/Table.styles';
 
 export const WalletOverviewManagedFund: React.FC<Fund> = props => {
   const history = useHistory();
 
   return (
-    <BodyRow onClick={() => history.push(`/fund/${props.address}`)}>
+    <BodyRowHover onClick={() => history.push(`/fund/${props.address}`)}>
       <BodyCell>{props.name}</BodyCell>
       <BodyCell>{props.inception}</BodyCell>
       <BodyCell>{props.gav}</BodyCell>
@@ -16,6 +16,6 @@ export const WalletOverviewManagedFund: React.FC<Fund> = props => {
       <BodyCell>{props.shares}</BodyCell>
       <BodyCell>{props.version}</BodyCell>
       <BodyCell>{props.isShutDown ? 'Inactive' : 'Active'}</BodyCell>
-    </BodyRow>
+    </BodyRowHover>
   );
 };

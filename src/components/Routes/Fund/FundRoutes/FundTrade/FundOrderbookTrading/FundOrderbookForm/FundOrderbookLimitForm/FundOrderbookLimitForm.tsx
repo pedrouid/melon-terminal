@@ -146,11 +146,11 @@ export const FundOrderbookLimitForm: React.FC<FundOrderbookLimitFormProps> = pro
     <>
       <FormContext {...form}>
         <form onSubmit={submit}>
-          <FormField label="Direction" name="direction">
+          <FormField name="direction">
             <Dropdown name="direction" options={directions} />
           </FormField>
 
-          <FormField label="Exchange" name="exchange">
+          <FormField name="exchange">
             <Dropdown name="exchange" options={exchanges} />
           </FormField>
 

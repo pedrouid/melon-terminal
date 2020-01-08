@@ -4,6 +4,8 @@ import { FundRedeem } from './FundRedeem/FundRedeem';
 import { FundInvestmentHistoryList } from './FundInvestmentHistoryList/FundInvestmentHistoryList';
 import { FundInvestorsList } from './FundInvestorsList/FundInvestorsList';
 import { Grid, GridRow, GridCol } from '~/storybook/components/Grid/Grid';
+import { RequiresFundNotShutDown } from '~/components/Common/Gates/RequiresFundNotShutDown/RequiresFundNotShutDown';
+import { RequiresFundShutDown } from '~/components/Common/Gates/RequiresFundShutDown/RequiresFundShutDown';
 
 export interface FundInvestProps {
   address: string;
@@ -12,25 +14,32 @@ export interface FundInvestProps {
 export const FundInvestRedeem: React.FC<FundInvestProps> = ({ address }) => {
   return (
     <Grid>
-      <GridRow>
-        <GridCol xs={12} sm={6}>
-          <FundInvest address={address} />
-        </GridCol>
-        <GridCol xs={12} sm={6}>
-          <FundRedeem address={address} />
-        </GridCol>
-      </GridRow>
+      <RequiresFundNotShutDown fallback={false}>
+        <GridRow>
+          <GridCol xs={12} sm={6}>
+            <FundInvest address={address} />
+          </GridCol>
+          <GridCol xs={12} sm={6}>
+            <FundRedeem address={address} />
+          </GridCol>
+        </GridRow>
+      </RequiresFundNotShutDown>
+      <RequiresFundShutDown fallback={false}>
+        <GridRow>
+          <GridCol xs={12} sm={6}>
+            <FundRedeem address={address} />
+          </GridCol>
+          <GridCol xs={12} sm={6}>
+            <FundInvestorsList address={address} />
+          </GridCol>
+        </GridRow>
+      </RequiresFundShutDown>
       <GridRow>
         <GridCol xs={12} sm={12}>
           <FundInvestmentHistoryList address={address} />
         </GridCol>
       </GridRow>
-      <GridRow>
-        <GridCol xs={12} sm={12}>
-          <FundInvestorsList address={address} />
-        </GridCol>
-      </GridRow>
-    </Grid>
+    </Grid >
   );
 };
 

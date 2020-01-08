@@ -39,11 +39,9 @@ export const Shutdown: React.FC<ShutdownProps> = ({ address }) => {
   return (
     <Block>
       <SectionTitle>Shut down fund</SectionTitle>
-      <RequiresFundNotShutDown>
-        <ButtonBlock>
-          <SubmitButton type="button" label="Shutdown fund" onClick={() => submit()} />
-        </ButtonBlock>
-      </RequiresFundNotShutDown>
+      <ButtonBlock>
+        <SubmitButton type="button" label="Shutdown fund" onClick={() => submit()} />
+      </ButtonBlock>
 
       <TransactionModal transaction={transaction} />
     </Block>

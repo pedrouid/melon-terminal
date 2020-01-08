@@ -122,11 +122,11 @@ export const FundOrderbookMarketForm: React.FC<FundOrderbookMarketFormProps> = p
     <FormContext {...form}>
       {props.order && (
         <form onSubmit={submit}>
-          <FormField label="Direction" name="direction">
+          <FormField name="direction">
             <Dropdown name="direction" options={directions} disabled={true} value={direction} />
           </FormField>
 
-          <FormField label="Exchange" name="exchange">
+          <FormField name="exchange">
             <Dropdown name="exchange" options={exchanges} disabled={true} value={exchange} />
           </FormField>
 

@@ -11,6 +11,7 @@ import { Block } from '~/storybook/components/Block/Block';
 import { Grid, GridRow, GridCol } from '~/storybook/components/Grid/Grid';
 import FundHoldings from '../../FundHoldings/FundHoldings';
 import { FundMelonEngineTrading } from './FundMelonEngineTrading/FundMelonEngineTrading';
+import { RequiresFundNotShutDown } from '~/components/Common/Gates/RequiresFundNotShutDown/RequiresFundNotShutDown';
 
 export interface FundTradeProps {
   address: string;
@@ -33,36 +34,38 @@ export const FundTrade: React.FC<FundTradeProps> = props => {
   return (
     <Grid>
       <GridRow>
-        <GridCol xs={12} sm={8}>
-          <Block>
-            <TabNavigation>
-              {!!(markets && markets.length) && (
-                <TabNavigationItem label="Orderbook" identifier="orderbook">
-                  <FundOrderbookTrading address={props.address} exchanges={markets} />
-                </TabNavigationItem>
-              )}
-              {!!kyber && (
-                <TabNavigationItem label="Kyber" identifier="kyber">
-                  <FundKyberTrading address={props.address} exchange={kyber} />
-                </TabNavigationItem>
-              )}
-              {!!engine && (
-                <TabNavigationItem label="Melon Engine" identifier="engine">
-                  <FundMelonEngineTrading address={props.address} exchange={engine} />
-                </TabNavigationItem>
-              )}
-            </TabNavigation>
-          </Block>
-        </GridCol>
-        <GridCol xs={12} sm={4}>
-          <FundHoldings address={props.address} />
-        </GridCol>
-      </GridRow>
-      <GridRow>
         <GridCol xs={12} sm={12}>
           <FundOpenOrders address={props.address} />
         </GridCol>
       </GridRow>
+      <RequiresFundNotShutDown fallback={false}>
+        <GridRow>
+          <GridCol xs={12} sm={8}>
+            <Block>
+              <TabNavigation>
+                {!!(markets && markets.length) && (
+                  <TabNavigationItem label="Orderbook" identifier="orderbook">
+                    <FundOrderbookTrading address={props.address} exchanges={markets} />
+                  </TabNavigationItem>
+                )}
+                {!!kyber && (
+                  <TabNavigationItem label="Kyber" identifier="kyber">
+                    <FundKyberTrading address={props.address} exchange={kyber} />
+                  </TabNavigationItem>
+                )}
+                {!!engine && (
+                  <TabNavigationItem label="Melon Engine" identifier="engine">
+                    <FundMelonEngineTrading address={props.address} exchange={engine} />
+                  </TabNavigationItem>
+                )}
+              </TabNavigation>
+            </Block>
+          </GridCol>
+          <GridCol xs={12} sm={4}>
+            <FundHoldings address={props.address} />
+          </GridCol>
+        </GridRow>
+      </RequiresFundNotShutDown>
     </Grid>
   );
 };

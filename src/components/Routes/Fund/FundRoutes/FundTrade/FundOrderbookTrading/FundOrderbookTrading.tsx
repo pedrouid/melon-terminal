@@ -38,7 +38,7 @@ export const FundOrderbookTrading: React.FC<FundOrderbookTradingProps> = props =
         />
       </S.FundOrderbook>
       <S.FundOrderbookForm>
-        <FormField label="Asset pair" name="asset">
+        <FormField name="asset">
           <Dropdown
             name="asset"
             options={options}
