@@ -22,7 +22,7 @@ export const FundTrade: React.FC<FundTradeProps> = props => {
     return <Spinner />;
   }
 
-  const kyber = exchanges.filter(exchange => exchange.id === ExchangeIdentifier.KyberNetwork);
+  const kyber = exchanges.find(exchange => exchange.id === ExchangeIdentifier.KyberNetwork);
   const markets = exchanges.filter(
     exchange => exchange.id === ExchangeIdentifier.OasisDex || exchange.id === ExchangeIdentifier.ZeroEx
   );
@@ -33,14 +33,14 @@ export const FundTrade: React.FC<FundTradeProps> = props => {
         <GridCol xs={12} sm={8}>
           <Block>
             <TabNavigation>
-              {!!markets && (
+              {!!(markets && markets.length) && (
                 <TabNavigationItem label="Orderbook" identifier="orderbook">
                   <FundOrderbookTrading address={props.address} exchanges={markets} />
                 </TabNavigationItem>
               )}
               {!!kyber && (
                 <TabNavigationItem label="Kyber" identifier="kyber">
-                  <FundKyberTrading address={props.address} />
+                  <FundKyberTrading address={props.address} exchange={kyber} />
                 </TabNavigationItem>
               )}
             </TabNavigation>

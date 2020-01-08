@@ -8,7 +8,7 @@ import {
   MatchingMarketOrder,
   ExchangeIdentifier,
 } from '@melonproject/melonjs';
-import { concatMap, expand, distinctUntilChanged, map } from 'rxjs/operators';
+import { concatMap, expand, distinctUntilChanged, map, catchError } from 'rxjs/operators';
 import { Orderbook, OrderbookItem } from './aggregatedOrderbook';
 
 export interface MatchingMarketOrderbookItem extends OrderbookItem {
@@ -48,9 +48,15 @@ export function matchingMarketOrderbook(
   const exchange = environment.deployment.oasis.addr.OasisDexExchange;
   const contract = new MatchingMarketAccessor(environment, environment.deployment.melon.addr.MatchingMarketAccessor);
 
+  const bids$ = Rx.defer(() => contract.getOrders(exchange, makerAsset.address, takerAsset.address)).pipe(
+    catchError(() => Rx.of([]))
+  );
+
+  const asks$ = Rx.defer(() => contract.getOrders(exchange, takerAsset.address, makerAsset.address)).pipe(
+    catchError(() => Rx.of([]))
+  );
+
   const delay$ = Rx.timer(10000);
-  const bids$ = Rx.defer(() => contract.getOrders(exchange, makerAsset.address, takerAsset.address));
-  const asks$ = Rx.defer(() => contract.getOrders(exchange, takerAsset.address, makerAsset.address));
   const orders$ = Rx.combineLatest(bids$, asks$);
   const polling$ = orders$.pipe(
     expand(() => delay$.pipe(concatMap(() => orders$))),

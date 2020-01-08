@@ -3,7 +3,7 @@ import { Container } from '../Container/Container';
 
 export const Header = styled.div`
   position: relative;
-  width:100%;
+  width: 100%;
   border-bottom: ${props => props.theme.border.borderDefault};
   background-color: ${props => props.theme.mainColors.primary};
 `;

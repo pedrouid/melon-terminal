@@ -40,7 +40,8 @@ interface FundOrderbookLimitFormValues {
 const validationSchema = Yup.object().shape({
   exchange: Yup.string().required(),
   direction: Yup.string()
-    .required().oneOf(['buy', 'sell']),
+    .required()
+    .oneOf(['buy', 'sell']),
   quantity: Yup.number()
     .required()
     .positive(),

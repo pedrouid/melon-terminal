@@ -16,7 +16,7 @@ export interface FundOrderbookTradingProps {
 export const FundOrderbookTrading: React.FC<FundOrderbookTradingProps> = props => {
   const environment = useEnvironment()!;
   const weth = environment.getToken('WETH');
-  const tokens = environment.tokens.filter((token => token !== weth));
+  const tokens = environment.tokens.filter(token => token !== weth);
   const options = tokens.map(token => ({
     value: token.address,
     name: token.symbol,
@@ -39,9 +39,19 @@ export const FundOrderbookTrading: React.FC<FundOrderbookTradingProps> = props =
       </S.FundOrderbook>
       <S.FundOrderbookForm>
         <FormField label="Asset" name="asset">
-          <Dropdown name="asset" options={options} onChange={event => setAsset(environment.getToken(event.target.value)!)} />
+          <Dropdown
+            name="asset"
+            options={options}
+            onChange={event => setAsset(environment.getToken(event.target.value)!)}
+          />
         </FormField>
-        <FundOrderbookForm address={props.address} asset={asset} exchanges={props.exchanges} order={order} unsetOrder={() => setOrder(undefined)} />
+        <FundOrderbookForm
+          address={props.address}
+          asset={asset}
+          exchanges={props.exchanges}
+          order={order}
+          unsetOrder={() => setOrder(undefined)}
+        />
       </S.FundOrderbookForm>
     </S.FundOrderbookTrading>
   );

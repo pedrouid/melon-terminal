@@ -3,7 +3,7 @@ import { useLocation } from 'react-router';
 import { Link } from '~/components/Common/Link/Link';
 import { useAccount } from '~/hooks/useAccount';
 import { useEnvironment } from '~/hooks/useEnvironment';
-import { usePageTitle } from '~/components/Contexts/PageTitle/PageTitle'
+import { usePageTitle } from '~/components/Contexts/PageTitle/PageTitle';
 import {
   Header as HeaderContainer,
   HeaderContent,
@@ -15,7 +15,7 @@ import {
   AccountInfo,
   AccountNetwork,
 } from '~/storybook/components/Header/Header';
-import { SkeletonHead } from '~/storybook/components/Skeleton/Skeleton';;
+import { SkeletonHead } from '~/storybook/components/Skeleton/Skeleton';
 import { Logo } from '~/storybook/components/Logo/Logo';
 
 export const Header: React.FC = () => {
@@ -35,22 +35,26 @@ export const Header: React.FC = () => {
             </Link>
           </LogoContainer>
           <Account>
-            <AccountName>
-              {title}
-            </AccountName>
+            <AccountName>{title}</AccountName>
             <AccountInfo>
               {account.fund && (
                 <AccountAddress>
-                  <Link to={`/fund/${account.fund}`} title={account.fund}>Your fund</Link>
+                  <Link to={`/fund/${account.fund}`} title={account.fund}>
+                    Your fund
+                  </Link>
                 </AccountAddress>
               )}
               {account.address && (
                 <AccountAddress>
-                  <Link to="/wallet" title={account.address}>Your wallet</Link>
+                  <Link to="/wallet" title={account.address}>
+                    Your wallet
+                  </Link>
                 </AccountAddress>
               )}
               <AccountNetwork>
-                <Link to={{ pathname: '/connect', state: { redirect: location } }} title="Change connection method">{network}</Link>
+                <Link to={{ pathname: '/connect', state: { redirect: location } }} title="Change connection method">
+                  {network}
+                </Link>
               </AccountNetwork>
               {account.eth && <AccountBalance>{account.eth.toFixed(4)} ETH</AccountBalance>}
             </AccountInfo>

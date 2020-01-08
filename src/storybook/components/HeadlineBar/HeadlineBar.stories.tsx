@@ -3,7 +3,6 @@ import { Bar, BarContent } from '../Bar/Bar';
 import { Headline } from '../Headline/Headline';
 import { Button, ButtonGroup } from '../Button/Button';
 
-
 export default { title: 'Layouts|HeadlineBar' };
 
 export const Default: React.FC = () => {

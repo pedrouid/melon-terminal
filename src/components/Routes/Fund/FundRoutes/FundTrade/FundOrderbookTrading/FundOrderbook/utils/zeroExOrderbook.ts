@@ -5,7 +5,7 @@ import { Orderbook as OrderbookProvider } from '@0x/orderbook';
 import { APIOrder as ZeroExOrder } from '@0x/types';
 import { assetDataUtils } from '@0x/order-utils';
 import { TokenDefinition, DeployedEnvironment, ExchangeIdentifier } from '@melonproject/melonjs';
-import { concatMap, expand, distinctUntilChanged, map } from 'rxjs/operators';
+import { concatMap, expand, distinctUntilChanged, map, catchError } from 'rxjs/operators';
 import { NetworkEnum } from '~/types';
 import { Orderbook, OrderbookItem } from './aggregatedOrderbook';
 
@@ -82,9 +82,15 @@ export function zeroExOrderbook(
     resource => {
       const provider = (resource as any).provider as OrderbookProvider;
 
+      const bids$ = Rx.defer(() => provider.getOrdersAsync(takerAssetData, makerAssetData)).pipe(
+        catchError(() => Rx.of([]))
+      );
+
+      const asks$ = Rx.defer(() => provider.getOrdersAsync(makerAssetData, takerAssetData)).pipe(
+        catchError(() => Rx.of([]))
+      );
+
       const delay$ = Rx.timer(5000);
-      const bids$ = Rx.defer(() => provider.getOrdersAsync(takerAssetData, makerAssetData));
-      const asks$ = Rx.defer(() => provider.getOrdersAsync(makerAssetData, takerAssetData));
       const orders$ = Rx.combineLatest(bids$, asks$);
       const polling$ = orders$.pipe(
         expand(() => delay$.pipe(concatMap(() => orders$))),
