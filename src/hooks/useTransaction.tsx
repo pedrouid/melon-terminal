@@ -387,8 +387,11 @@ export function useTransaction(environment: DeployedEnvironment, options?: Trans
 
       const tx = transaction.send(opts);
       tx.once('transactionHash', hash => executionReceived(dispatch, hash));
-      tx.once('receipt', receipt => executionFinished(dispatch, receipt));
       tx.once('error', error => executionError(dispatch, (error as any).error ? (error as any).error : error));
+
+      const receipt = await tx;
+      await Promise.resolve(options && options.onFinish && options.onFinish(receipt));
+      executionFinished(dispatch, receipt);
     } catch (error) {
       executionError(dispatch, error);
     }
@@ -396,11 +399,6 @@ export function useTransaction(environment: DeployedEnvironment, options?: Trans
 
   useEffect(() => {
     switch (state.progress) {
-      case TransactionProgress.EXECUTION_FINISHED: {
-        options && options.onFinish && options.onFinish(state.receipt!);
-        break;
-      }
-
       case TransactionProgress.TRANSACTION_ACKNOWLEDGED: {
         options && options.onAcknowledge && options.onAcknowledge(state.receipt!);
         break;

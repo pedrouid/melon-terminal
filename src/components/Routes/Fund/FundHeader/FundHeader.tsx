@@ -4,6 +4,7 @@ import { DataBlock } from '~/storybook/components/DataBlock/DataBlock';
 import { Bar, BarContent } from '~/storybook/components/Bar/Bar';
 import { Headline } from '~/storybook/components/Headline/Headline';
 import { useEtherscanLink } from '~/hooks/useEtherscanLink';
+import { RequiresFundSetupComplete } from '~/components/Common/Gates/RequiresFundSetupComplete/RequiresFundSetupComplete';
 
 export interface FundHeaderProps {
   address: string;
@@ -33,8 +34,10 @@ export const FundHeader: React.FC<FundHeaderProps> = ({ address }) => {
             }
             icon="icon"
           />
-          <DataBlock label="Share price">{accounting?.sharePrice?.toFixed(4) || 0} WETH / share</DataBlock>
-          <DataBlock label="AUM">{accounting?.grossAssetValue?.toFixed(4) || 0}</DataBlock>
+          <RequiresFundSetupComplete fallback={false}>
+            <DataBlock label="Share price">{accounting?.sharePrice?.toFixed(4) || 0} WETH / share</DataBlock>
+            <DataBlock label="AUM">{accounting?.grossAssetValue?.toFixed(4) || 0}</DataBlock>
+          </RequiresFundSetupComplete>
         </BarContent>
       </Bar>
     </>

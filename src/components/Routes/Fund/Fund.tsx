@@ -1,6 +1,6 @@
 import React, { Suspense } from 'react';
 import ErrorBoundary from 'react-error-boundary';
-import { Switch, Route, useRouteMatch } from 'react-router';
+import { Switch, Route, useRouteMatch, Redirect } from 'react-router';
 import { FundProvider } from '~/components/Contexts/Fund/Fund';
 import { Container } from '~/storybook/components/Container/Container';
 import { ErrorFallback } from '~/components/Common/ErrorFallback/ErrorFallback';
@@ -10,8 +10,11 @@ import { FundNavigation } from './FundNavigation/FundNavigation';
 import { FundTitle } from './FundTitle/FundTitle';
 import { NotificationBar, NotificationContent } from '~/storybook/components/NotificationBar/NotificationBar';
 import { RequiresFundShutDown } from '~/components/Common/Gates/RequiresFundShutDown/RequiresFundShutDown';
+import { RequiresFundSetupInProgress } from '~/components/Common/Gates/RequiresFundSetupInProgress/RequiresFundSetupInProgress';
+import { RequiresFundSetupComplete } from '~/components/Common/Gates/RequiresFundSetupComplete/RequiresFundSetupComplete';
 
 const NoMatch = React.lazy(() => import('~/components/Routes/NoMatch/NoMatch'));
+const FundSetupTransactions = React.lazy(() => import('./FundSetupTransactions/FundSetupTransactions'));
 const FundDetails = React.lazy(() => import('./FundRoutes/FundDetails/FundDetails'));
 const FundInvestRedeem = React.lazy(() => import('./FundRoutes/FundInvestRedeem/FundInvestRedeem'));
 const FundTrade = React.lazy(() => import('./FundRoutes/FundTrade/FundTrade'));
@@ -29,37 +32,56 @@ export const Fund: React.FC = () => {
     <FundProvider address={match.params.address}>
       <FundTitle />
       <FundHeader address={match.params.address} />
-      <FundNavigation address={match.params.address} />
+      <RequiresFundSetupComplete fallback={false}>
+        <FundNavigation address={match.params.address} />
+      </RequiresFundSetupComplete>
       <Container>
         <RequiresFundShutDown fallback={false}>
           <NotificationBar kind="error">
             <NotificationContent>This fund is already shut down.</NotificationContent>
           </NotificationBar>
         </RequiresFundShutDown>
-        <ErrorBoundary FallbackComponent={ErrorFallback}>
-          <Suspense fallback={<Spinner />}>
-            <Switch>
-              <Route path={match.path} exact={true}>
-                <FundDetails address={match.params.address} />
-              </Route>
-              <Route path={`${match.path}/invest`} exact={true}>
-                <FundInvestRedeem address={match.params.address} />
-              </Route>
-              <Route path={`${match.path}/trade`} exact={true}>
-                <FundTrade address={match.params.address} />
-              </Route>
-              <Route path={`${match.path}/policies`} exact={true}>
-                <FundPolicies address={match.params.address} />
-              </Route>
-              <Route path={`${match.path}/manage`} exact={true}>
-                <FundManagement address={match.params.address} />
-              </Route>
-              <Route>
-                <NoMatch />
-              </Route>
-            </Switch>
-          </Suspense>
-        </ErrorBoundary>
+        <RequiresFundSetupInProgress>
+          <NotificationBar kind="neutral">
+            <NotificationContent>
+              You have to complete the fund setup process for this fund before you can use it.
+            </NotificationContent>
+          </NotificationBar>
+          <Switch>
+            <Route path={match.path} exact={true}>
+              <FundSetupTransactions />
+            </Route>
+            <Route>
+              <Redirect to={match.path} />
+            </Route>
+          </Switch>
+        </RequiresFundSetupInProgress>
+        <RequiresFundSetupComplete fallback={false}>
+          <ErrorBoundary FallbackComponent={ErrorFallback}>
+            <Suspense fallback={<Spinner />}>
+              <Switch>
+                <Route path={match.path} exact={true}>
+                  <FundDetails address={match.params.address} />
+                </Route>
+                <Route path={`${match.path}/invest`} exact={true}>
+                  <FundInvestRedeem address={match.params.address} />
+                </Route>
+                <Route path={`${match.path}/trade`} exact={true}>
+                  <FundTrade address={match.params.address} />
+                </Route>
+                <Route path={`${match.path}/policies`} exact={true}>
+                  <FundPolicies address={match.params.address} />
+                </Route>
+                <Route path={`${match.path}/manage`} exact={true}>
+                  <FundManagement address={match.params.address} />
+                </Route>
+                <Route>
+                  <NoMatch />
+                </Route>
+              </Switch>
+            </Suspense>
+          </ErrorBoundary>
+        </RequiresFundSetupComplete>
       </Container>
     </FundProvider>
   );

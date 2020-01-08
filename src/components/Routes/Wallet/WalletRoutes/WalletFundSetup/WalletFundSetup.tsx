@@ -60,10 +60,10 @@ export const WalletFundSetup: React.FC = () => {
     onFinish: () => refetch(),
     onAcknowledge: () => {
       if (!account.fund) {
-        return;
+        history.push('/wallet');
       }
 
-      history.push(`/wallet/setup/transactions`, {
+      history.push(`/fund/${account.fund}`, {
         start: true,
       });
     },

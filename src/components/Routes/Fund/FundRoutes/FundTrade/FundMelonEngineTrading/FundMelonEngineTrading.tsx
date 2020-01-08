@@ -112,8 +112,8 @@ export const FundMelonEngineTrading: React.FC<FundMelonEngineTradingProps> = pro
             <Input type="text" name="makerQuantity" disabled={true} />
           </FormField>
 
-          <div>1 MLN = {price.toFixed()} WETH</div>
-          <div>{liquid.toString()} WETH available</div>
+          <div>1 MLN = {price.toFixed(4)} WETH</div>
+          <div>{liquid.toFixed(4)} WETH available</div>
 
           <Button type="submit">Submit</Button>
         </form>

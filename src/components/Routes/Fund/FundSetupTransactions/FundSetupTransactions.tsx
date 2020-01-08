@@ -10,10 +10,12 @@ import { useAccountFundQuery } from '~/queries/AccountFund';
 import { Spinner } from '~/components/Common/Spinner/Spinner';
 import { NoMatch } from '~/components/Routes/NoMatch/NoMatch';
 import { useHistory } from 'react-router';
-import { NetworkStatus } from 'apollo-client';
 import { versionContract } from '~/utils/deploymentContracts';
 import { useAccount } from '~/hooks/useAccount';
 import { useOnChainQueryRefetcher } from '~/hooks/useOnChainQueryRefetcher';
+import { Block } from '~/storybook/components/Block/Block';
+import { SectionTitle } from '~/storybook/components/Title/Title';
+import { GridCol, GridRow, Grid } from '~/storybook/components/Grid/Grid';
 
 interface TransactionPipelineItem {
   previous: string;
@@ -26,7 +28,7 @@ interface TransactionPipeline {
   [key: string]: TransactionPipelineItem;
 }
 
-export const WalletFundSetupTransactions: React.FC = props => {
+export const FundSetupTransactions: React.FC = () => {
   const [result, query] = useAccountFundQuery();
   const environment = useEnvironment()!;
   const account = useAccount();
@@ -117,34 +119,39 @@ export const WalletFundSetupTransactions: React.FC = props => {
     }
   }, [progress, next, acknowledged]);
 
-  if (query.networkStatus < NetworkStatus.ready) {
-    return <Spinner />;
-  }
-
-  if (!step) {
-    return <NoMatch />;
-  }
-
   const submit = (event: FormEvent) => {
     event.preventDefault();
     next && transaction.start(next, step!.name!);
   };
 
   return (
-    <>
-      {step.previous && <p>{step.previous}</p>}
-      {step.next && <p>{step.next}</p>}
-      {step.next && (
-        <form onSubmit={submit}>
-          <ButtonBlock>
-            <SubmitButton label={step.name!} />
-          </ButtonBlock>
-        </form>
-      )}
+    <Grid>
+      <GridRow>
+        <GridCol>
+          <Block>
+            <SectionTitle>Fund setup transactions</SectionTitle>
+            {query.loading && <Spinner />}
+            {!query.loading && !step && <NoMatch />}
+            {!query.loading && step && (
+              <>
+                {step.previous && <p>{step.previous}</p>}
+                {step.next && <p>{step.next}</p>}
+                {step.next && (
+                  <form onSubmit={submit}>
+                    <ButtonBlock>
+                      <SubmitButton label={step.name!} />
+                    </ButtonBlock>
+                  </form>
+                )}
+              </>
+            )}
 
-      <TransactionModal transaction={transaction} />
-    </>
+            <TransactionModal transaction={transaction} />
+          </Block>
+        </GridCol>
+      </GridRow>
+    </Grid>
   );
 };
 
-export default WalletFundSetupTransactions;
+export default FundSetupTransactions;
