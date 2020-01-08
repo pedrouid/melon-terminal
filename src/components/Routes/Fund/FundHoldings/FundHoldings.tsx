@@ -45,7 +45,7 @@ export const FundHoldings: React.FC<FundHoldingsProps> = ({ address }) => {
 
   return (
     <Block>
-      <SectionTitle>Holdings</SectionTitle>
+      <SectionTitle>Portfolio holdings</SectionTitle>
       <Table>
         <thead>
           <HeaderRow>

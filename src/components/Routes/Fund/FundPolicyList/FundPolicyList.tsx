@@ -84,7 +84,7 @@ export const FundPolicyList: React.FC<FundPolicyListProps> = ({ address }) => {
 
   return (
     <Block>
-      <SectionTitle>Policies</SectionTitle>
+      <SectionTitle>Fund ruleset</SectionTitle>
       {policies && policies.length > 0 ? (
         <Table>
           <thead>
@@ -103,7 +103,7 @@ export const FundPolicyList: React.FC<FundPolicyListProps> = ({ address }) => {
           </tbody>
         </Table>
       ) : (
-        <NoEntries>No registered policies.</NoEntries>
+        <NoEntries>No fund rules registered.</NoEntries>
       )}
     </Block>
   );

@@ -26,10 +26,10 @@ export const FundNavigation: React.FC<FundNavigationProps> = ({ address }) => {
             </S.FundNavigationLink>
 
             <S.FundNavigationLink to={`/fund/${address}/policies`} exact={true} activeClassName="active">
-              Risk profile
+              Ruleset
             </S.FundNavigationLink>
             <S.FundNavigationLink to={`/fund/${address}/manage`} exact={true} activeClassName="active">
-              Manage fund
+              Manage
             </S.FundNavigationLink>
           </RequiresFundNotShutDown>
         </S.FundNavigationManager>
