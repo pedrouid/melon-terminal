@@ -2,7 +2,8 @@
   "conf": {
     "deployer": "0xd91dec1943c83a4bb238e9602ce378890b46296a",
     "provider": "https://kovan.infura.io/v3/9136e09ace01493b86fed528cb6a87a5",
-    "track": "TESTING"
+    "track": "TESTING",
+    "networkID": "42"
   },
   "melon": {
     "addr": {
