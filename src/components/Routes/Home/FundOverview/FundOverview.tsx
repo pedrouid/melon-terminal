@@ -15,6 +15,7 @@ import { FormField } from '~/storybook/components/FormField/FormField';
 import { SectionTitle } from '~/storybook/components/Title/Title';
 import { Button } from '~/storybook/components/Button/Button';
 import * as S from './FundOverview.styles';
+import { Container } from '~/storybook/components/Container/Container';
 
 interface SortChoice {
   key: keyof typeof sortChoice;
@@ -159,34 +160,24 @@ export const FundOverview: React.FC = () => {
 
   if (query.loading) {
     return (
-      <Grid>
-        <GridRow>
-          <GridCol xs={12} sm={12}>
-            <Block>
-              <Spinner />
-            </Block>
-          </GridCol>
-        </GridRow>
-      </Grid>
+      <Container>
+        <Spinner />
+      </Container>
     );
   }
 
   if (!funds) {
     return (
-      <Grid>
-        <GridRow>
-          <GridCol xs={12} sm={12}>
-            <Block>
-              <NoMatch />
-              {!account.fund && (
-                <Link to="/wallet/setup">
-                  <Button>Create your own Melon fund</Button>
-                </Link>
-              )}
-            </Block>
-          </GridCol>
-        </GridRow>
-      </Grid>
+      <Container>
+        <Block>
+          <NoMatch />
+          {!account.fund && (
+            <Link to="/wallet/setup">
+              <Button>Create your own Melon fund</Button>
+            </Link>
+          )}
+        </Block>
+      </Container>
     );
   }
 
@@ -205,78 +196,80 @@ export const FundOverview: React.FC = () => {
   };
 
   return (
-    <Grid>
-      <GridRow>
-        <GridCol xs={12} sm={12}>
-          <Block>
-            <SectionTitle>Melon fund universe</SectionTitle>
-            <FormField label="Search">
-              <Input id="search" name="search" type="text" onChange={event => setSearch(event.target.value)} />
-            </FormField>
-            <FundOverviewPagination
-              offset={pagination.offset}
-              setOffset={pagination.setOffset}
-              funds={filtered.funds.length}
-            />
+    <Container>
+      <Grid>
+        <GridRow>
+          <GridCol>
+            <Block>
+              <SectionTitle>Melon fund universe</SectionTitle>
+              <FormField label="Search">
+                <Input id="search" name="search" type="text" onChange={event => setSearch(event.target.value)} />
+              </FormField>
+              <FundOverviewPagination
+                offset={pagination.offset}
+                setOffset={pagination.setOffset}
+                funds={filtered.funds.length}
+              />
 
-            <S.ScrollableTable>
-              <S.Table>
-                <thead>
-                  <S.HeaderRow>
-                    {tableHeadings.map((heading, key) => (
-                      <S.HeaderCell
-                        key={key}
-                        onClick={heading.key ? () => handleChangeSortableItem(heading.key) : undefined}
-                      >
-                        {heading.value}
-                        {sorted.item.key === heading.key && (sorted.item.order === 'asc' ? <>&uarr;</> : <>&darr;</>)}
-                      </S.HeaderCell>
-                    ))}
-                  </S.HeaderRow>
-                </thead>
-                <tbody>
-                  {pagination.data.length ? (
-                    pagination.data.map(fund => (
-                      <S.BodyRow key={fund.id} onClick={() => history.push(`/fund/${fund.id}`)}>
-                        <S.BodyCell>{fund.name}</S.BodyCell>
-                        <S.BodyCell>{fund.inception}</S.BodyCell>
-                        <S.BodyCell>{fund.sharePrice}</S.BodyCell>
-                        <S.BodyCell>
-                          <FundOverviewChange
-                            prefix={fund.change.prefix}
-                            dailyReturn={fund.change.dailyReturn}
-                            color={fund.change.color}
-                          />
-                        </S.BodyCell>
-                        <S.BodyCell>{fund.aumEth}</S.BodyCell>
-                        <S.BodyCell>{fund.shares}</S.BodyCell>
-                        <S.BodyCell>{fund.denomination}</S.BodyCell>
-                        <S.BodyCell>{fund.investments}</S.BodyCell>
-                        <S.BodyCell>{fund.version}</S.BodyCell>
-                        <S.BodyCell>{fund.status}</S.BodyCell>
-                      </S.BodyRow>
-                    ))
-                  ) : (
-                      <S.EmptyRow>
-                        <S.EmptyCell colSpan={12}>No records to display</S.EmptyCell>
-                      </S.EmptyRow>
-                    )}
-                </tbody>
-              </S.Table>
-            </S.ScrollableTable>
-            <FundOverviewPagination
-              offset={pagination.offset}
-              setOffset={pagination.setOffset}
-              funds={filtered.funds.length}
-            />
-            {!account.fund && (
-              <Link to="/wallet/setup">
-                <Button>Create your own Melon fund</Button>
-              </Link>
-            )}
-          </Block>
-        </GridCol>
-      </GridRow>
-    </Grid>
+              <S.ScrollableTable>
+                <S.Table>
+                  <thead>
+                    <S.HeaderRow>
+                      {tableHeadings.map((heading, key) => (
+                        <S.HeaderCell
+                          key={key}
+                          onClick={heading.key ? () => handleChangeSortableItem(heading.key) : undefined}
+                        >
+                          {heading.value}
+                          {sorted.item.key === heading.key && (sorted.item.order === 'asc' ? <>&uarr;</> : <>&darr;</>)}
+                        </S.HeaderCell>
+                      ))}
+                    </S.HeaderRow>
+                  </thead>
+                  <tbody>
+                    {pagination.data.length ? (
+                      pagination.data.map(fund => (
+                        <S.BodyRow key={fund.id} onClick={() => history.push(`/fund/${fund.id}`)}>
+                          <S.BodyCell>{fund.name}</S.BodyCell>
+                          <S.BodyCell>{fund.inception}</S.BodyCell>
+                          <S.BodyCell>{fund.sharePrice}</S.BodyCell>
+                          <S.BodyCell>
+                            <FundOverviewChange
+                              prefix={fund.change.prefix}
+                              dailyReturn={fund.change.dailyReturn}
+                              color={fund.change.color}
+                            />
+                          </S.BodyCell>
+                          <S.BodyCell>{fund.aumEth}</S.BodyCell>
+                          <S.BodyCell>{fund.shares}</S.BodyCell>
+                          <S.BodyCell>{fund.denomination}</S.BodyCell>
+                          <S.BodyCell>{fund.investments}</S.BodyCell>
+                          <S.BodyCell>{fund.version}</S.BodyCell>
+                          <S.BodyCell>{fund.status}</S.BodyCell>
+                        </S.BodyRow>
+                      ))
+                    ) : (
+                        <S.EmptyRow>
+                          <S.EmptyCell colSpan={12}>No records to display</S.EmptyCell>
+                        </S.EmptyRow>
+                      )}
+                  </tbody>
+                </S.Table>
+              </S.ScrollableTable>
+              <FundOverviewPagination
+                offset={pagination.offset}
+                setOffset={pagination.setOffset}
+                funds={filtered.funds.length}
+              />
+              {!account.fund && (
+                <Link to="/wallet/setup">
+                  <Button>Create your own Melon fund</Button>
+                </Link>
+              )}
+            </Block>
+          </GridCol>
+        </GridRow>
+      </Grid>
+    </Container>
   );
 };
