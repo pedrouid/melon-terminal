@@ -3,6 +3,7 @@ import { createGlobalStyle } from 'styled-components';
 export const theme = {
   mainColors: {
     primary: 'rgb(255, 255, 255)',
+    primaryAlpha: 'rgba(255, 255, 255, 0.6)',
     primaryDark: 'rgb(29,29,29)',
     secondary: 'rgb(242, 242, 242)',
     secondaryDark: 'rgb(120, 120, 120)',
@@ -21,6 +22,7 @@ export const theme = {
     primaryLoss: 'rgb(206, 88, 102)',
     secondaryLoss: 'rgb(252, 240, 242)',
     warning: 'rgb(249,209,118)',
+    neutral: 'rgb(96,213,255)',
   },
   otherColors: {
     black: 'rgb(0, 0, 0)',

@@ -5,6 +5,7 @@ import { Default as Footer } from '../Footer/Footer.stories';
 import { Bar, BarContent } from '../Bar/Bar';
 import { DataBlockBar, DataBlockBarContent } from '../DataBlockBar/DataBlockBar';
 import { DataBlock } from '../DataBlock/DataBlock';
+import { NotificationBar , NotificationContent } from '../NotificationBar/NotificationBar';
 import { Headline } from '../Headline/Headline';
 import { Container } from '../Container/Container';
 import {
@@ -112,11 +113,6 @@ export const WithotSecondaryBar: React.FC = () => {
         <Header />
       </SkeletonHead>
       <SkeletonBody>
-        <Bar>
-          <BarContent justify="between">
-            <Headline title="My title" text="My subtitle" icon="icon" />
-          </BarContent>
-        </Bar>
         <DataBlockBar>
           <DataBlockBarContent justify="between">
             <DataBlock label="Share Price">1.0000000 WETH/Share</DataBlock>
@@ -129,6 +125,11 @@ export const WithotSecondaryBar: React.FC = () => {
             <DataBlock label="Performance fee period">90 days</DataBlock>
           </DataBlockBarContent>
         </DataBlockBar>
+        <NotificationBar kind="error" size="small">
+          <NotificationContent>
+            <span>This fund is shut down</span>
+          </NotificationContent>
+        </NotificationBar>
         <Container>
           <NoBlockGridSample />
         </Container>
