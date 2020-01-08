@@ -7,7 +7,7 @@ export interface FundInvestQueryVariables {
   account?: string;
 }
 
-const FundHoldingsQuery = gql`
+const FundInvestQuery = gql`
   query useFundInvestQuery($account: Address!, $fund: Address!) {
     account(address: $account) {
       participation(address: $fund) {
@@ -48,6 +48,6 @@ export const useFundInvestQuery = (fund: string) => {
     variables: { fund, account: account.address },
   };
 
-  const result = useOnChainQuery<FundInvestQueryVariables>(FundHoldingsQuery, options);
+  const result = useOnChainQuery<FundInvestQueryVariables>(FundInvestQuery, options);
   return [result.data, result] as [typeof result.data, typeof result];
 };

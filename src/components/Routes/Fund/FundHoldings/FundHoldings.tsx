@@ -32,7 +32,7 @@ export const FundHoldings: React.FC<FundHoldingsProps> = ({ address }) => {
   }
 
   const mapped = (holdings || [])
-    .filter(holding => holding && holding.token)
+    .filter(holding => holding && holding.token && holding.amount?.gt(new BigNumber(0)))
     .map(holding => {
       const decimals = holding.token?.decimals;
       const amount = holding.amount;
