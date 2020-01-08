@@ -440,9 +440,7 @@ export function useTransaction(environment: DeployedEnvironment, options?: Trans
             const [ethGasStation, onChainPrice, sendOptions] = await Promise.all([
               fetchEthGasStation(environment),
               environment.client.getGasPrice(),
-              state.transaction!.prepare({
-                gas: 8000000,
-              }),
+              state.transaction!.prepare(),
             ])!;
 
             const defaultGasPrice = ethGasStation ? ethGasStation.average : +onChainPrice! / 10e9;
