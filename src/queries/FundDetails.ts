@@ -26,6 +26,30 @@ export interface FundDetails {
         canUpdate: boolean;
       };
     };
+    participation?: {
+      address: string;
+    };
+    policyManager?: {
+      address: string;
+    };
+    trading?: {
+      address: string;
+    };
+    shares?: {
+      address: string;
+    };
+    vault?: {
+      address: string;
+    };
+    version?: {
+      address: string;
+    };
+    registry?: {
+      address: string;
+    };
+    priceSource?: {
+      address: string;
+    };
   };
 }
 
@@ -64,6 +88,30 @@ const FundDetailsQuery = gql`
             period
             canUpdate
           }
+        }
+        participation {
+          address
+        }
+        policyManager {
+          address
+        }
+        shares {
+          address
+        }
+        trading {
+          address
+        }
+        vault {
+          address
+        }
+        version {
+          address
+        }
+        registry {
+          address
+        }
+        priceSource {
+          address
         }
       }
     }

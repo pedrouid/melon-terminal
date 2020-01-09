@@ -2,10 +2,10 @@ import styled from 'styled-components';
 import { Block } from '../Block/Block';
 
 export interface DictionaryProps {
-  entries?: Array<{
+  entries?: {
     label: React.ReactNode;
     data: React.ReactNode;
-  }>;
+  }[];
 }
 
 export const Dictionary = styled(Block)<DictionaryProps>``;
