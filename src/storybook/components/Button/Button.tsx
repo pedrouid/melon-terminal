@@ -2,6 +2,7 @@ import styled, { css } from 'styled-components';
 
 export interface ButtonProps {
   size?: 'large' | 'small';
+  lenght?: 'stretch';
   kind?: 'secondary' | 'warning' | 'danger' | 'success';
 }
 
@@ -38,6 +39,9 @@ export const Button = styled.button<ButtonProps>`
       color: ${props => props.theme.mainColors.primaryDark};
       background: ${props => props.theme.mainColors.primary};
       border: ${props => props.theme.border.borderDefault};
+      :hover{
+        background: ${props => props.theme.mainColors.secondary};
+      }
     `}
   ${props =>
     props.kind === 'warning' &&
@@ -71,6 +75,11 @@ export const Button = styled.button<ButtonProps>`
     css`
       height: 32px;
     `}
+    ${props =>
+      props.lenght === 'stretch' &&
+      css`
+        width: 100%;
+      `}
   & + & {
     margin-left: ${props => props.theme.spaceUnits.m};
   }

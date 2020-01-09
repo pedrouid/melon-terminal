@@ -8,8 +8,9 @@ import { useEtherscanLink } from '~/hooks/useEtherscanLink';
 import { FormField } from '~/storybook/components/FormField/FormField';
 import { Input } from '~/storybook/components/Input/Input';
 import { Button } from '~/storybook/components/Button/Button';
+import { NotificationBar } from '~/storybook/components/NotificationBar/NotificationBar';
 import { Spinner } from '~/components/Common/Spinner/Spinner';
-import * as S from './TransactionModal.styles';
+import * as S from '~/storybook/components/Modal/Modal';
 
 function progressToStep(progress: number) {
   if (progress >= TransactionProgress.EXECUTION_FINISHED) {
@@ -73,6 +74,8 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
         <S.TransactionModal>
           <S.TransactionModalTitle>{state.name}</S.TransactionModalTitle>
 
+          {error && <NotificationBar kind="error">{error.message}</NotificationBar>}
+
           <S.TransactionModalContent>
             {!estimated && !error && <Spinner />}
 
@@ -101,8 +104,6 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
                 </S.EthGasStationButton>
               </S.EthGasStation>
             )}
-
-            {error && <S.NotificationError>{error.message}</S.NotificationError>}
 
             <S.TransactionModalForm onSubmit={submit}>
               {estimated && !finished && (
@@ -176,7 +177,7 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
               <S.TransactionModalActions>
                 {!finished && (
                   <S.TransactionModalAction>
-                    <Button type="button" kind="secondary" onClick={() => cancel()}>
+                    <Button type="button" kind="secondary" lenght="stretch" onClick={() => cancel()}>
                       {estimated ? 'Cancel' : 'Close'}
                     </Button>
                   </S.TransactionModalAction>
@@ -184,7 +185,7 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
 
                 {!finished && estimated && (
                   <S.TransactionModalAction>
-                    <Button type="submit" kind="success" disabled={loading}>
+                    <Button type="submit" kind="success" lenght="stretch" disabled={loading}>
                       {error ? 'Retry' : 'Confirm'}
                     </Button>
                   </S.TransactionModalAction>
@@ -192,7 +193,7 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
 
                 {finished && (
                   <S.TransactionModalAction>
-                    <Button type="button" kind="success" onClick={() => acknowledge()} disabled={loading}>
+                    <Button type="button" kind="success" lenght="stretch" onClick={() => acknowledge()} disabled={loading}>
                       Close
                     </Button>
                   </S.TransactionModalAction>

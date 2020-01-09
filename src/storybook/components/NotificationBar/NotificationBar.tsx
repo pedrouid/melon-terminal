@@ -10,7 +10,7 @@ export interface NotificationBarProps {
 export const NotificationBar = styled.div<NotificationBarProps>`
    width: 100%;
    height: auto;
-   padding: ${props => props.theme.spaceUnits.xs} 0px;
+   padding: ${props => props.theme.spaceUnits.xs};
    color: ${props => props.theme.mainColors.primary};
    background: ${props => props.theme.statusColors.neutral};
    border-bottom: 2px solid;

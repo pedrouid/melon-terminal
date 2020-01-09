@@ -9,6 +9,8 @@ export const Large = () => <Button size="large">Large Button</Button>;
 
 export const Small = () => <Button size="small">Small Button</Button>;
 
+export const Stretch = () => <Button lenght="stretch">Stretch Button</Button>;
+
 export const Secondary = () => <Button kind="secondary">secondary Button</Button>;
 
 export const Warning = () => <Button kind="warning">warning Button</Button>;

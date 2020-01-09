@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 
 import { ProgressBarContext } from '../ProgressBar';
-import * as S from './ProgressBarStep.styles';
+import * as S from '~/storybook/components/ProgressBarStep/ProgressBarStep';
 
 export interface ProgressBarStepProps {
   step?: number;
