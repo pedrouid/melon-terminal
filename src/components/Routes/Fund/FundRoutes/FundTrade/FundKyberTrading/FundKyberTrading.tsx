@@ -126,7 +126,7 @@ export const FundKyberTrading: React.FC<FundKyberTradingProps> = props => {
   }, [stream$]);
 
   useLayoutEffect(() => {
-    const qty = new BigNumber(takerQuantity ?? 0).multipliedBy(price).decimalPlaces(4);
+    const qty = new BigNumber(takerQuantity ?? 0).dividedBy(price).decimalPlaces(4);
     form.setValue('makerQuantity', !qty.isZero() ? qty.toString() : '');
   }, [price.toString(), takerQuantity]);
 
