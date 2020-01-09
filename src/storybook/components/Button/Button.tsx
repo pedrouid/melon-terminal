@@ -39,7 +39,7 @@ export const Button = styled.button<ButtonProps>`
       color: ${props => props.theme.mainColors.primaryDark};
       background: ${props => props.theme.mainColors.primary};
       border: ${props => props.theme.border.borderDefault};
-      :hover{
+      :hover {
         background: ${props => props.theme.mainColors.secondary};
       }
     `}

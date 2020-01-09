@@ -1,17 +1,9 @@
 import React from 'react';
 import { Grid, GridRow, GridCol } from '../Grid/Grid';
 import { SectionTitle } from '../Title/Title';
-import {
-  Dictionary,
-  DictionaryDivider,
-  DictionaryEntry,
-  DictionaryLabel,
-  DictionaryData,
-} from './Dictionary';
-
+import { Dictionary, DictionaryDivider, DictionaryEntry, DictionaryLabel, DictionaryData } from './Dictionary';
 
 export default { title: 'Components|Dictionary' };
-
 
 export const Default: React.FC = () => {
   return (

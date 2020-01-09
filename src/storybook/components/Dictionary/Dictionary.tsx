@@ -11,7 +11,7 @@ export interface DictionaryProps {
 export const Dictionary = styled(Block)<DictionaryProps>``;
 
 export const DictionaryDivider = styled.div`
-  width:100%;
+  width: 100%;
   height: ${props => props.theme.spaceUnits.m};
   @media (${props => props.theme.mediaQueries.s}) {
     height: ${props => props.theme.spaceUnits.l};

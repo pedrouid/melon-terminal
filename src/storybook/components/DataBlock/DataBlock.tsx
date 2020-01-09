@@ -15,7 +15,5 @@ export const DataBlock: React.FC<DataBlockProps> = props => {
 };
 
 export const DataBlockSection: React.FC = props => {
-  return (
-    <S.DataBlockSection>{props.children}</S.DataBlockSection>
-  );
+  return <S.DataBlockSection>{props.children}</S.DataBlockSection>;
 };

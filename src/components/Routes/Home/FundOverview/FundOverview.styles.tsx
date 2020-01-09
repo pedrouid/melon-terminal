@@ -13,7 +13,8 @@ export const Table = styled.table`
 `;
 
 export const HeaderCell = styled.th`
-  padding:${props => props.theme.spaceUnits.m} ${props => props.theme.spaceUnits.s} ${props => props.theme.spaceUnits.s};
+  padding: ${props => props.theme.spaceUnits.m} ${props => props.theme.spaceUnits.s}
+    ${props => props.theme.spaceUnits.s};
   text-align: left;
   cursor: pointer;
   font-weight: ${props => props.theme.fontWeights.semiBold};
@@ -32,7 +33,7 @@ export const BodyRow = styled.tr`
   cursor: pointer;
   transition: ${props => props.theme.transition.defaultAll};
   &:hover {
-    background-color: rgba(242,242,242,0.6);
+    background-color: rgba(242, 242, 242, 0.6);
     transform: scale(1.005);
   }
 `;

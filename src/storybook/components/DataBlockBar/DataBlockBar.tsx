@@ -8,23 +8,23 @@ export const DataBlockBar = styled(Bar)`
   padding: ${props => props.theme.spaceUnits.l} 0px;
   &::before {
     content: '';
-    position:absolute;
+    position: absolute;
     top: 0px;
     left: 0px;
     z-index: 200;
     width: ${props => props.theme.spaceUnits.xxl};
     height: 100%;
-    background: linear-gradient(to right,rgba(255,255,255,0.9),rgba(255,255,255,0));
+    background: linear-gradient(to right, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0));
   }
   &::after {
     content: '';
-    position:absolute;
+    position: absolute;
     top: 0px;
     right: 0px;
     z-index: 200;
     width: ${props => props.theme.spaceUnits.xxl};
     height: 100%;
-    background: linear-gradient(to left,rgba(255,255,255,0.9),rgba(255,255,255,0));
+    background: linear-gradient(to left, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0));
   }
 `;
 

@@ -59,7 +59,6 @@ export const TransactionModalAction = styled.div`
   }
 `;
 
-
 export const EthGasStation = styled.div`
   display: flex;
   justify-content: space-between;
@@ -83,7 +82,6 @@ export const EthGasStationButtonGwei = styled.span`
 export const EthGasStationButtonText = styled.span`
   font-size: 10px;
 `;
-
 
 export const TransactionModalMessages = styled.div`
   margin: ${props => props.theme.spaceUnits.m} 0 ${props => props.theme.spaceUnits.m} 0;
