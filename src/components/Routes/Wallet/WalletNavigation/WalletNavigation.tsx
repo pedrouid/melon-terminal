@@ -1,5 +1,5 @@
 import React from 'react';
-import * as S from './WalletNavigation.styles';
+
 import { useAccount } from '~/hooks/useAccount';
 import { TabBar, TabBarContent, TabBarSection, TabLink } from '~/storybook/components/TabNavigation/TabNavigation';
 

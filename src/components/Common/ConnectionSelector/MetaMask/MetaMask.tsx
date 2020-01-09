@@ -47,7 +47,13 @@ export const MetaMask: React.FC<any> = ({ select, active }) => {
   return (
     <>
       <Title>Metamask</Title>
-      {!active ? <Button onClick={() => select()}>Connect</Button> : <span>Currently selected</span>}
+      {!active ? (
+        <Button lenght="stretch" onClick={() => select()}>
+          Connect
+        </Button>
+      ) : (
+        <span>Currently selected</span>
+      )}
     </>
   );
 };

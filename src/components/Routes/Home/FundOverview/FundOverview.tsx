@@ -161,7 +161,15 @@ export const FundOverview: React.FC = () => {
   if (query.loading) {
     return (
       <Container>
-        <Spinner />
+        <Grid>
+          <GridRow>
+            <GridCol>
+              <Block>
+                <Spinner />
+              </Block>
+            </GridCol>
+          </GridRow>
+        </Grid>
       </Container>
     );
   }
@@ -169,14 +177,20 @@ export const FundOverview: React.FC = () => {
   if (!funds) {
     return (
       <Container>
-        <Block>
-          <NoMatch />
-          {!account.fund && (
-            <Link to="/wallet/setup">
-              <Button>Create your own Melon fund</Button>
-            </Link>
-          )}
-        </Block>
+        <Grid>
+          <GridRow>
+            <GridCol>
+              <Block>
+                <NoMatch />
+                {!account.fund && (
+                  <Link to="/wallet/setup">
+                    <Button>Create your own Melon fund</Button>
+                  </Link>
+                )}
+              </Block>
+            </GridCol>
+          </GridRow>
+        </Grid>
       </Container>
     );
   }

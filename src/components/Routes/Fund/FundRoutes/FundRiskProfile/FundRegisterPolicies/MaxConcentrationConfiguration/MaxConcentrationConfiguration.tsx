@@ -1,6 +1,5 @@
 import React from 'react';
 import * as Yup from 'yup';
-import * as S from './MaxConcentrationConfiguration.styles';
 import useForm, { FormContext } from 'react-hook-form';
 import { useEnvironment } from '~/hooks/useEnvironment';
 import { MaxConcentration, Deployment, PolicyDefinition } from '@melonproject/melonjs';
@@ -10,6 +9,7 @@ import { useAccount } from '~/hooks/useAccount';
 import { FormField } from '~/storybook/components/FormField/FormField';
 import { Input } from '~/storybook/components/Input/Input';
 import { Button } from '~/storybook/components/Button/Button';
+import { SectionTitle } from '~/storybook/components/Title/Title';
 
 interface MaxConcentrationConfigurationForm {
   maxConcentration: number;
@@ -50,7 +50,7 @@ export const MaxConcentrationConfiguration: React.FC<MaxConcentrationConfigurati
 
   return (
     <>
-      <S.Title>Configure max concentration policy</S.Title>
+      <SectionTitle>Configure max concentration policy</SectionTitle>
 
       <FormContext {...form}>
         <form onSubmit={submit}>

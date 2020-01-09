@@ -1,4 +1,5 @@
 import React from 'react';
+
 import { Spinner } from '~/components/Common/Spinner/Spinner';
 import * as S from './WalletOverview.styles';
 import { useFundParticipationOverviewQuery } from '~/queries/FundParticipationOverview';
@@ -19,7 +20,11 @@ export const WalletOverview: React.FC = () => {
   const [invested, requests, managed, query] = useFundParticipationOverviewQuery(account.address);
 
   if (query.loading) {
-    return <Spinner />;
+    return (
+      <Block>
+        <Spinner />
+      </Block>
+    );
   }
 
   const managedHeader = fundHeadings.map((heading, index) => <S.HeaderCell key={index}>{heading}</S.HeaderCell>);

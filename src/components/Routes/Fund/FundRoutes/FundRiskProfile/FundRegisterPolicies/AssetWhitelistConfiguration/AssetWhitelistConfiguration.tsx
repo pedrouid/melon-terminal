@@ -1,12 +1,12 @@
 import React from 'react';
 import * as Yup from 'yup';
-import * as S from './AssetWhitelistConfiguration.styles';
 import useForm, { FormContext } from 'react-hook-form';
 import { SubmitButton } from '~/components/Common/Form/SubmitButton/SubmitButton';
 import { useEnvironment } from '~/hooks/useEnvironment';
 import { Deployment, AssetWhitelist, availableTokens, PolicyDefinition } from '@melonproject/melonjs';
 import { AssetWhitelistBytecode } from '@melonproject/melonjs/abis/AssetWhitelist.bin';
 import { useAccount } from '~/hooks/useAccount';
+import { SectionTitle } from '~/storybook/components/Title/Title';
 
 interface AssetWhitelistConfigurationForm {
   assetWhitelist: string[];
@@ -42,7 +42,7 @@ export const AssetWhitelistConfiguration: React.FC<AssetWhitelistConfigurationPr
 
   return (
     <>
-      <S.Title>Configure asset whitelist policy</S.Title>
+      <SectionTitle>Configure asset whitelist policy</SectionTitle>
       <ul>
         {tokens.map((token, index) => (
           <li key={token.address}>

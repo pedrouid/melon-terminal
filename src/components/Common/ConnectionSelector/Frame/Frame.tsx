@@ -90,7 +90,13 @@ export const Frame: React.FC<any> = ({ select, active }) => {
   return (
     <>
       <Title>Frame</Title>
-      {!active ? <Button onClick={() => select()}>Connect</Button> : <span>Currently selected</span>}
+      {!active ? (
+        <Button lenght="stretch" onClick={() => select()}>
+          Connect
+        </Button>
+      ) : (
+        <span>Currently selected</span>
+      )}
     </>
   );
 };

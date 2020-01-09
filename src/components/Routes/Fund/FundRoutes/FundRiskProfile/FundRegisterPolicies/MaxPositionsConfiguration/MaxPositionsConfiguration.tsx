@@ -1,6 +1,5 @@
 import React from 'react';
 import * as Yup from 'yup';
-import * as S from './MaxPositionsConfiguration.styles';
 import useForm, { FormContext } from 'react-hook-form';
 import { useEnvironment } from '~/hooks/useEnvironment';
 import { MaxPositions, Deployment, PolicyDefinition } from '@melonproject/melonjs';
@@ -9,6 +8,7 @@ import { useAccount } from '~/hooks/useAccount';
 import { Button } from '~/storybook/components/Button/Button';
 import { FormField } from '~/storybook/components/FormField/FormField';
 import { Input } from '~/storybook/components/Input/Input';
+import { SectionTitle } from '~/storybook/components/Title/Title';
 
 interface MaxPositionsConfigurationForm {
   maxPositions: number;
@@ -43,7 +43,7 @@ export const MaxPositionsConfiguration: React.FC<MaxPositionsConfigurationProps>
 
   return (
     <>
-      <S.Title>Configure max positions policy</S.Title>
+      <SectionTitle>Configure max positions policy</SectionTitle>
 
       <FormContext {...form}>
         <form onSubmit={submit}>

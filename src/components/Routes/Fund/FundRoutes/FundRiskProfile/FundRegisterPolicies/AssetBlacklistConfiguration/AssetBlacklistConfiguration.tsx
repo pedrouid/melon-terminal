@@ -1,12 +1,12 @@
 import React from 'react';
 import * as Yup from 'yup';
-import * as S from './AssetBlacklistConfiguration.styles';
 import useForm, { FormContext } from 'react-hook-form';
 import { SubmitButton } from '~/components/Common/Form/SubmitButton/SubmitButton';
 import { useEnvironment } from '~/hooks/useEnvironment';
 import { Deployment, AssetBlacklist, PolicyDefinition, availableTokens } from '@melonproject/melonjs';
 import { AssetBlacklistBytecode } from '@melonproject/melonjs/abis/AssetBlacklist.bin';
 import { useAccount } from '~/hooks/useAccount';
+import { SectionTitle } from '~/storybook/components/Title/Title';
 
 interface AssetBlacklistConfigurationForm {
   assetBlacklist: string[];
@@ -42,7 +42,7 @@ export const AssetBlacklistConfiguration: React.FC<AssetBlacklistConfigurationPr
 
   return (
     <>
-      <S.Title>Configure asset blacklist policy</S.Title>
+      <SectionTitle>Configure asset blacklist policy</SectionTitle>
       <ul>
         {tokens.map((token, index) => (
           <li key={token.address}>

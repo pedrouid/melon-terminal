@@ -13,6 +13,7 @@ import { useTransaction } from '~/hooks/useTransaction';
 import { useOnChainQueryRefetcher } from '~/hooks/useOnChainQueryRefetcher';
 import { TransactionModal } from '~/components/Common/TransactionModal/TransactionModal';
 import { useMelonEngineTradingQuery } from './FundMelonEngineTrading.query';
+import { Block } from '~/storybook/components/Block/Block';
 
 export interface FundMelonEngineTradingProps {
   address: string;
@@ -97,7 +98,11 @@ export const FundMelonEngineTrading: React.FC<FundMelonEngineTradingProps> = pro
   });
 
   if (query.loading) {
-    return <Spinner />;
+    return (
+      <Block>
+        <Spinner />
+      </Block>
+    );
   }
 
   return (

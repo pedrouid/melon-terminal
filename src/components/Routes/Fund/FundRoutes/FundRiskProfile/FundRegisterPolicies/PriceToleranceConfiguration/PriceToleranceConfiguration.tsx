@@ -1,6 +1,5 @@
 import React from 'react';
 import * as Yup from 'yup';
-import * as S from './PriceToleranceConfiguration.styles';
 import useForm, { FormContext } from 'react-hook-form';
 import { useEnvironment } from '~/hooks/useEnvironment';
 import { PriceTolerance, Deployment, PolicyDefinition } from '@melonproject/melonjs';
@@ -9,6 +8,7 @@ import { useAccount } from '~/hooks/useAccount';
 import { FormField } from '~/storybook/components/FormField/FormField';
 import { Input } from '~/storybook/components/Input/Input';
 import { Button } from '~/storybook/components/Button/Button';
+import { SectionTitle } from '~/storybook/components/Title/Title';
 
 interface PriceToleranceConfigurationForm {
   priceTolerance: number;
@@ -44,7 +44,7 @@ export const PriceToleranceConfiguration: React.FC<PriceToleranceConfigurationPr
 
   return (
     <>
-      <S.Title>Configure price tolerance policy</S.Title>
+      <SectionTitle>Configure price tolerance policy</SectionTitle>
       <FormContext {...form}>
         <form onSubmit={submit}>
           <FormField name="priceTolerance" label="Price tolerance (%)">

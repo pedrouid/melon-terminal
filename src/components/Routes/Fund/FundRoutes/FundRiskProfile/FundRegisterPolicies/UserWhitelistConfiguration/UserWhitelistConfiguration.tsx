@@ -1,13 +1,14 @@
 import React from 'react';
 import * as Yup from 'yup';
-import * as S from './UserWhitelistConfiguration.styles';
 import useForm, { FormContext } from 'react-hook-form';
-import { SubmitButton } from '~/components/Common/Form/SubmitButton/SubmitButton';
 import { useEnvironment } from '~/hooks/useEnvironment';
 import { Deployment, UserWhitelist, PolicyDefinition } from '@melonproject/melonjs';
 import { UserWhitelistBytecode } from '@melonproject/melonjs/abis/UserWhitelist.bin';
 import { TextareaField } from '~/components/Common/Form/TextareaField/TextareaField';
 import { useAccount } from '~/hooks/useAccount';
+import { SectionTitle } from '~/storybook/components/Title/Title';
+import { Button } from '~/storybook/components/Button/Button';
+import { Grid, GridRow, GridCol } from '~/storybook/components/Grid/Grid';
 
 interface UserWhitelistConfigurationForm {
   userWhitelist: string;
@@ -41,19 +42,17 @@ export const UserWhitelistConfiguration: React.FC<UserWhitelistConfigurationProp
 
   return (
     <>
-      <S.Title>Configure user whitelist policy</S.Title>
-
+      <SectionTitle>Configure user whitelist policy</SectionTitle>
       <FormContext {...form}>
         <form onSubmit={submit}>
-          <TextareaField
-            name="userWhitelist"
-            label="Add users to whitelist"
-            placeholder={`0x000000000000
-          0x000000000000`}
-            id="userWhitelist"
-          />
-
-          <SubmitButton label="Add user whitelist policy" />
+          <Grid>
+            <TextareaField name="userWhitelist" placeholder="0x000000000000" id="userWhitelist" />
+            <GridRow>
+              <GridCol>
+                <Button type="submit">Add user whitelist policy</Button>
+              </GridCol>
+            </GridRow>
+          </Grid>
         </form>
       </FormContext>
     </>

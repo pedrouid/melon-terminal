@@ -39,7 +39,13 @@ export const Ganache: React.FC<any> = ({ select, active }) => {
   return (
     <>
       <Title>Ganache</Title>
-      {!active ? <Button onClick={() => select()}>Connect</Button> : <span>Currently selected</span>}
+      {!active ? (
+        <Button lenght="stretch" onClick={() => select()}>
+          Connect
+        </Button>
+      ) : (
+        <span>Currently selected</span>
+      )}
     </>
   );
 };
