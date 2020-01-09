@@ -18,6 +18,7 @@ import { Spinner } from '~/components/Common/Spinner/Spinner';
 
 export interface RequestInvestmentProps {
   address: string;
+  totalSupply?: BigNumber;
   allowedAssets?: AllowedInvestmentAsset[];
   account: Account;
   loading: boolean;
@@ -47,6 +48,11 @@ export const RequestInvestment: React.FC<RequestInvestmentProps> = props => {
   const allowedAssets = props.allowedAssets || [];
   const initialAsset = allowedAssets[0];
 
+  const totalSupply = props.totalSupply;
+  const multiplier = useMemo(() => {
+    return totalSupply?.isZero() ? new BigNumber(1) : new BigNumber(1.1);
+  }, [totalSupply]);
+
   const form = useForm<RequestInvestmentFormValues>({
     validationSchema,
     mode: 'onSubmit',
@@ -56,7 +62,7 @@ export const RequestInvestment: React.FC<RequestInvestmentProps> = props => {
       investmentAsset: initialAsset?.token?.address,
       investmentAmount: initialAsset?.shareCostInAsset
         ?.dividedBy(new BigNumber(10).exponentiatedBy(initialAsset?.token?.decimals || 18))
-        .multipliedBy(new BigNumber(1.1))
+        .multipliedBy(multiplier)
         .decimalPlaces(initialAsset?.token?.decimals || 18)
         .toNumber(),
     },
@@ -153,7 +159,7 @@ export const RequestInvestment: React.FC<RequestInvestmentProps> = props => {
       const amount = new BigNumber(event.target.value ?? 0)
         .multipliedBy(asset.shareCostInAsset!)
         .dividedBy(new BigNumber(10).exponentiatedBy(token.decimals))
-        .multipliedBy(new BigNumber(1.1));
+        .multipliedBy(multiplier);
 
       form.setValue('investmentAmount', amount.isNaN() ? 0 : parseFloat(amount.toFixed(token.decimals || 18)));
     }
@@ -207,7 +213,7 @@ export const RequestInvestment: React.FC<RequestInvestmentProps> = props => {
                     asset.shareCostInAsset &&
                     asset?.shareCostInAsset
                       .dividedBy(new BigNumber(10).exponentiatedBy(asset?.token?.decimals || 18))
-                      .multipliedBy(new BigNumber(1.1))
+                      .multipliedBy(multiplier)
                       .toString()
                   }
                   disabled={true}

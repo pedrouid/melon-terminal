@@ -36,6 +36,9 @@ const FundInvestQuery = gql`
             shareCostInAsset
           }
         }
+        shares {
+          totalSupply
+        }
       }
     }
   }

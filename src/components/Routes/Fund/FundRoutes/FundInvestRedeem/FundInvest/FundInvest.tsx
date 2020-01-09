@@ -45,6 +45,8 @@ export const FundInvest: React.FC<FundInvestProps> = ({ address }) => {
     );
   }
 
+  const totalSupply = result?.fund?.routes?.shares?.totalSupply;
+
   return (
     <Block>
       <SectionTitle>Invest</SectionTitle>
@@ -53,6 +55,7 @@ export const FundInvest: React.FC<FundInvestProps> = ({ address }) => {
         <RequestInvestment
           address={address}
           allowedAssets={allowedAssets}
+          totalSupply={totalSupply}
           account={account!}
           loading={query.networkStatus < 7}
         />

@@ -11,6 +11,7 @@ import { Button } from '~/storybook/components/Button/Button';
 import { NotificationBar } from '~/storybook/components/NotificationBar/NotificationBar';
 import { Spinner } from '~/components/Common/Spinner/Spinner';
 import * as S from '~/storybook/components/Modal/Modal';
+import BigNumber from 'bignumber.js';
 
 function progressToStep(progress: number) {
   if (progress >= TransactionProgress.EXECUTION_FINISHED) {
@@ -119,9 +120,14 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
                         disabled={!!loading && estimated}
                       />
                     </FormField>
-                    {options && options.amgu && <div>Asset management gas: {options.amgu.toFixed()}</div>}
+                    {options && options.amgu && (
+                      <div>Asset management gas: {options.amgu.dividedBy(new BigNumber('1e18')).toFixed()} ETH</div>
+                    )}
                     {options && options.incentive && (
-                      <div>Incentive for request execution: {options.incentive.toFixed(4)}</div>
+                      <div>
+                        Incentive for request execution: {options.incentive.dividedBy(new BigNumber('1e18')).toFixed(4)}{' '}
+                        ETH
+                      </div>
                     )}
                   </S.TransactionModalFeeForm>
                 </>
@@ -193,7 +199,13 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
 
                 {finished && (
                   <S.TransactionModalAction>
-                    <Button type="button" kind="success" lenght="stretch" onClick={() => acknowledge()} disabled={loading}>
+                    <Button
+                      type="button"
+                      kind="success"
+                      lenght="stretch"
+                      onClick={() => acknowledge()}
+                      disabled={loading}
+                    >
                       Close
                     </Button>
                   </S.TransactionModalAction>
