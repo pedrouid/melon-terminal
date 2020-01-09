@@ -15,7 +15,7 @@ export const Footer: React.FC = () => {
       <FooterContainer>
         <FooterNavigation>
           <FooterItem>
-            <a href="https://melonprotocol.com">Protocol</a>
+            <a href="https://melonprotocol.com">About</a>
           </FooterItem>
           <FooterItem>
             <a href="https://docs.melonport.com">Documentation</a>
@@ -31,7 +31,7 @@ export const Footer: React.FC = () => {
           </FooterItem>
           {update && (
             <FooterItem>
-              <span>Last price feed update at {format(update, 'yyyy-MM-dd hh:mm a')}</span>
+              <span>Last pricefeed update at {format(update, 'yyyy-MM-dd hh:mm a')}</span>
             </FooterItem>
           )}
         </FooterNavigation>
