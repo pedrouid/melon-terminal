@@ -21,7 +21,7 @@ export const HeaderCellRightAlign = styled.th`
 
 export const HeaderRow = styled.tr`
   font-weight: bold;
-  border-bottom: 1px solid rgb(234, 229, 212);
+  border-bottom: 1px solid ${props => props.theme.mainColors.border};
 `;
 
 export const BodyCell = styled.td`
@@ -38,10 +38,10 @@ export interface BodyRowProps {
 }
 
 export const BodyRow = styled.tr<BodyRowProps>`
-  border-top: 1px solid ${props => props.theme.mainColors.border};
+  border-top: 1px solid ${props => props.theme.mainColors.secondaryDarkAlpha};
 
   &:not(:last-child) {
-    border-bottom: 1px dashed rgb(234, 229, 212);
+    border-bottom: 1px dashed ${props => props.theme.mainColors.border};
   }
 
   ${props => {

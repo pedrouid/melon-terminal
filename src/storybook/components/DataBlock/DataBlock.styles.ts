@@ -42,7 +42,7 @@ export const Data = styled.p`
   }
 `;
 
-export const DataBlockSection = styled.p`
+export const DataBlockSection = styled.div`
   width: 100%;
   height: 100%;
   display: flex;
@@ -51,8 +51,6 @@ export const DataBlockSection = styled.p`
   margin-top: ${props => props.theme.spaceUnits.l};
   @media (${props => props.theme.mediaQueries.m}) {
     flex-wrap: nowrap;
-  }
-  @media (${props => props.theme.mediaQueries.l}) {
     margin-top: 0px;
   }
 `;

@@ -15,7 +15,7 @@ export const Bar = styled.div`
 export const BarContent = styled(Container)<BarContentProps>`
   display: flex;
   justify-content: flex-start;
-  align-content: center;
+  align-items: center;
   flex-wrap: wrap;
   @media (${props => props.theme.mediaQueries.m}) {
     flex-wrap:nowrap;
