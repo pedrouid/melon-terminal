@@ -38,7 +38,7 @@ export const Fund: React.FC = () => {
       <Container>
         <RequiresFundShutDown fallback={false}>
           <NotificationBar kind="error">
-            <NotificationContent>This fund is already shut down.</NotificationContent>
+            <NotificationContent>This fund is shut down.</NotificationContent>
           </NotificationBar>
         </RequiresFundShutDown>
         <RequiresFundSetupInProgress>
