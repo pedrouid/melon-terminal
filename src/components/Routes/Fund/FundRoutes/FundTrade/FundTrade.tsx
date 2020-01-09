@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { TokenDefinition, ExchangeIdentifier } from '@melonproject/melonjs';
+import React from 'react';
+import { ExchangeIdentifier } from '@melonproject/melonjs';
 import { FundOpenOrders } from './FundOpenOrders/FundOpenOrders';
 import { TabNavigation } from '~/components/Common/TabNavigation/TabNavigation';
 import { TabNavigationItem } from '~/components/Common/TabNavigation/TabNavigationItem/TabNavigationItem';
@@ -9,7 +9,7 @@ import { FundKyberTrading } from './FundKyberTrading/FundKyberTrading';
 import { useFundExchanges } from './FundTrade.query';
 import { Block } from '~/storybook/components/Block/Block';
 import { Grid, GridRow, GridCol } from '~/storybook/components/Grid/Grid';
-import FundHoldings from '../../FundHoldings/FundHoldings';
+import FundHoldings from '../../FundRoutes/FundOverview/FundHoldings/FundHoldings';
 import { FundMelonEngineTrading } from './FundMelonEngineTrading/FundMelonEngineTrading';
 import { RequiresFundNotShutDown } from '~/components/Common/Gates/RequiresFundNotShutDown/RequiresFundNotShutDown';
 
