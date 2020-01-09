@@ -11,6 +11,7 @@ import {
   DictionaryLabel,
 } from '~/storybook/components/Dictionary/Dictionary';
 import { Block } from '~/storybook/components/Block/Block';
+import { useEtherscanLink } from '~/hooks/useEtherscanLink';
 
 export interface FundFactSheetProps {
   address: string;
@@ -42,7 +43,7 @@ export const FundFactSheet: React.FC<FundFactSheetProps> = ({ address }) => {
 
   return (
     <Dictionary>
-      <SectionTitle>Fund Fact Sheet</SectionTitle>
+      <SectionTitle>Fund Factsheet</SectionTitle>
       <DictionaryDivider />
       <DictionaryEntry>
         <DictionaryLabel>Fund name</DictionaryLabel>
