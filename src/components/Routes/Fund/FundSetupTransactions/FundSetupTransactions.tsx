@@ -1,4 +1,5 @@
 import React, { FormEvent, useEffect, useMemo, useState } from 'react';
+import * as R from 'ramda';
 import { TransactionModal } from '~/components/Common/TransactionModal/TransactionModal';
 import { ButtonBlock } from '~/components/Common/Form/ButtonBlock/ButtonBlock';
 import { SubmitButton } from '~/components/Common/Form/SubmitButton/SubmitButton';
@@ -20,7 +21,7 @@ import { GridCol, GridRow, Grid } from '~/storybook/components/Grid/Grid';
 interface TransactionPipelineItem {
   previous: string;
   name?: string;
-  next?: string;
+  end?: boolean;
   transaction?: () => Transaction<TransactionReceipt>;
 }
 
@@ -39,67 +40,72 @@ export const FundSetupTransactions: React.FC = () => {
   const pipeline: TransactionPipeline = useMemo(
     () => ({
       BEGIN: {
-        name: 'Create Accounting Contract',
-        previous: 'The main fund contract has been created.',
-        next: 'We are now going to create the Accounting Contract (responsible for calculating share price, NAV, etc.)',
+        name: 'Create Accounting Contract (Step 2 of 9)',
+        previous: 'Begin Setup',
         transaction: () => factory.createAccounting(account.address!),
       },
       ACCOUNTING: {
-        name: 'Create Fee Manager Contract',
-        previous: 'The Accounting Contract has been created.',
-        next: 'We are now going to create the Fee Manager contract (responsible for calculating fees)',
+        name: 'Create Fee Manager Contract (Step 3 of 9)',
+        previous: 'Accounting Contract',
         transaction: () => factory.createFeeManager(account.address!),
       },
       FEE_MANAGER: {
-        name: 'Create Participation Contract',
-        previous: 'The Fee Manager Contract has been created.',
-        next:
-          'We are now going to create the Participation Contract (responsible for allowing investors into the fund)',
+        name: 'Create Participation Contract (Step 4 of 9)',
+        previous: 'Fee Manager Contract',
         transaction: () => factory.createParticipation(account.address!),
       },
       PARTICIPATION: {
-        name: 'Create Policy Manager Contract',
-        previous: 'The Participation Contract has been created.',
-        next:
-          'We are now going to create the Policy Manager Contract (responsible for managing risk management and compliance policies)',
+        name: 'Create Policy Manager Contract (Step 5 of 9)',
+        previous: 'Participation Contract',
         transaction: () => factory.createPolicyManager(account.address!),
       },
       POLICY_MANAGER: {
-        previous: 'The Policy Manager Contract has been created.',
-        name: 'Create Shares Contract',
-        next: 'We are now going to create the Shares Contract (responsible for creating fund shares)',
+        name: 'Create Shares Contract (Step 6 of 9)',
+        previous: 'Policy Manager Contract',
         transaction: () => factory.createShares(account.address!),
       },
       SHARES: {
-        previous: 'The Shares Contract has been created.',
-        name: 'Create Trading Contract',
-        next: 'We are now going to create the Trading Contract (responsible for all trading activities of the fund)',
+        name: 'Create Trading Contract (Step 7 of 9)',
+        previous: 'Shares Contract',
         transaction: () => factory.createTrading(account.address!),
       },
       TRADING: {
-        previous: 'The Trading Contract has been created.',
-        name: 'Create Vault Contract',
-        next: 'We are now going to create the Vault Contract (responsible for securely storing all assets)',
+        name: 'Create Vault Contract (Step 8 of 9)',
+        previous: 'Trading Contract',
         transaction: () => factory.createVault(account.address!),
       },
       VAULT: {
-        previous: 'The Vault Contract has been created.',
-        name: 'Complete Setup',
-        next: 'We are now going to complete the fund setup (setting permissions, etc.)',
+        name: 'Complete Setup (Step 9 of 9)',
+        previous: 'Vault Contract',
         transaction: () => factory.completeSetup(account.address!),
       },
       COMPLETE: {
-        previous: 'The fund setup has been completed.',
+        previous: 'Setup complete',
         transaction: () => factory.completeSetup(account.address!),
+        end: true,
       },
     }),
     [factory, environment]
   );
 
+  const pipelineOrder = [
+    'BEGIN',
+    'ACCOUNTING',
+    'FEE_MANAGER',
+    'PARTICIPATION',
+    'POLICY_MANAGER',
+    'SHARES',
+    'TRADING',
+    'VAULT',
+    'COMPLETE',
+  ];
+
   const fund = result ? result.fund : undefined;
   const progress = fund ? fund.progress : undefined;
   const step = progress ? (pipeline[progress] as TransactionPipelineItem) : undefined;
   const next = useMemo(() => step && step.transaction && step.transaction(), [step]);
+
+  const [checked, setChecked] = useState<boolean[]>();
 
   const [acknowledged, setAcknowledged] = useState(!!(history.location.state && history.location.state.start));
   const refetch = useOnChainQueryRefetcher();
@@ -110,6 +116,10 @@ export const FundSetupTransactions: React.FC = () => {
   });
 
   useEffect(() => {
+    const index = pipelineOrder.findIndex(item => item === progress);
+    const newChecked = R.range(0, index + 1).map(() => true);
+    setChecked(newChecked);
+
     if (acknowledged && progress === 'COMPLETE') {
       return history.push(`/fund/${fund!.address}`);
     }
@@ -134,9 +144,24 @@ export const FundSetupTransactions: React.FC = () => {
             {!query.loading && !step && <NoMatch />}
             {!query.loading && step && (
               <>
-                {step.previous && <p>{step.previous}</p>}
-                {step.next && <p>{step.next}</p>}
-                {step.next && (
+                <ul>
+                  {pipelineOrder.map((item, index) => {
+                    return (
+                      <li key={item}>
+                        <input
+                          type="checkbox"
+                          name={item}
+                          value={item}
+                          key={item}
+                          defaultChecked={checked && checked[index]}
+                          disabled={true}
+                        />
+                        <label htmlFor="1">{pipeline[item].previous}</label>
+                      </li>
+                    );
+                  })}
+                </ul>
+                {!step.end && (
                   <form onSubmit={submit}>
                     <ButtonBlock>
                       <SubmitButton label={step.name!} />

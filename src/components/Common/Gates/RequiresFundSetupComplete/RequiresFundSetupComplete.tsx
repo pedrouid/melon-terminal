@@ -1,6 +1,6 @@
 import React from 'react';
 import { useEnvironment } from '~/hooks/useEnvironment';
-import { useAccountFundQuery } from '~/queries/AccountFund';
+import { useFund } from '~/hooks/useFund';
 
 export interface RequiresFundSetupCompleteProps {
   fallback?: React.ReactNode;
@@ -8,9 +8,9 @@ export interface RequiresFundSetupCompleteProps {
 
 export const RequiresFundSetupComplete: React.FC<RequiresFundSetupCompleteProps> = ({ children, fallback = true }) => {
   const environment = useEnvironment();
-  const [account] = useAccountFundQuery();
+  const fund = useFund();
 
-  if (environment && account && account.fund && account.fund.progress && account.fund.progress === 'COMPLETE') {
+  if (environment && fund && fund.progress && fund.progress === 'COMPLETE') {
     return <>{children}</>;
   }
 

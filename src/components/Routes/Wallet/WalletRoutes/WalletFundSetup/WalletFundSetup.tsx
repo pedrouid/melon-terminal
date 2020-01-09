@@ -96,7 +96,7 @@ export const WalletFundSetup: React.FC = () => {
       feeRates: [managementFeeRate, performanceFeeRate],
     });
 
-    transaction.start(tx, 'Begin setup');
+    transaction.start(tx, 'Begin setup (Step 1 of 9)');
   });
 
   return (
