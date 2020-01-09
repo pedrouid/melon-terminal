@@ -72,7 +72,12 @@ export interface FundOverviewQueryVariables {
 
 const FundOverviewQuery = gql`
   query FundOverviewQuery {
-    funds(first: 1000) {
+    funds(
+      first: 1000
+      where: { id_not: "0x1e3ef9a8fe3cf5b3440b0df8347f1888484b8dc2" }
+      orderBy: "sharePrice"
+      orderDirection: "desc"
+    ) {
       id
       name
       gav
