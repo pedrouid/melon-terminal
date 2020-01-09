@@ -77,6 +77,18 @@ export const RequestInvestment: React.FC<RequestInvestmentProps> = props => {
     return 'approve';
   }, [allowance, investmentAmount]);
 
+  useEffect(() => {
+    if (allowance?.balance.isLessThan(investmentAmount)) {
+      form.setError(
+        'investmentAmount',
+        'tooLow',
+        `Your ${asset?.token?.symbol} balance is too low for this investment amount`
+      );
+    } else {
+      form.clearError('investmentAmount');
+    }
+  }, [allowance, investmentAmount]);
+
   const transaction = useTransaction(environment, {
     onFinish: () => refetch(),
     onAcknowledge: () => {
@@ -167,14 +179,8 @@ export const RequestInvestment: React.FC<RequestInvestmentProps> = props => {
 
           {(query.loading && <Spinner />) || (
             <>
-              <div>Your current balance: {allowance?.balance?.toString() ?? 'N/A'}</div>
               <div>
-                Share price in {asset?.token?.symbol}:{' '}
-                {asset &&
-                  asset.shareCostInAsset &&
-                  asset?.shareCostInAsset
-                    .dividedBy(new BigNumber(10).exponentiatedBy(asset?.token?.decimals || 18))
-                    .toString()}
+                Your balance: {allowance?.balance?.toString() ?? 'N/A'} {asset?.token?.symbol}
               </div>
 
               <FormField name="requestedShares" label="Number of shares">
@@ -186,6 +192,25 @@ export const RequestInvestment: React.FC<RequestInvestmentProps> = props => {
                   min="0"
                   disabled={props.loading}
                   onChange={handleRequestedSharesChange}
+                />
+              </FormField>
+
+              <FormField name="sharePrice" label={`Share price in ${asset?.token?.symbol}`}>
+                <Input
+                  id="sharePrice"
+                  name="sharePrice"
+                  type="number"
+                  step="any"
+                  min="0"
+                  value={
+                    asset &&
+                    asset.shareCostInAsset &&
+                    asset?.shareCostInAsset
+                      .dividedBy(new BigNumber(10).exponentiatedBy(asset?.token?.decimals || 18))
+                      .multipliedBy(new BigNumber(1.1))
+                      .toString()
+                  }
+                  disabled={true}
                 />
               </FormField>
 
@@ -201,7 +226,7 @@ export const RequestInvestment: React.FC<RequestInvestmentProps> = props => {
                 />
               </FormField>
 
-              <Button type="submit" disabled={props.loading}>
+              <Button type="submit" disabled={props.loading || !!form.errors.investmentAmount}>
                 Invest
               </Button>
             </>
