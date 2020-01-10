@@ -63,12 +63,12 @@ export const WithContextAndData: React.FC = () => {
             </DictionaryEntry>
             <DictionaryDivider />
             <DictionaryEntry>
-              <DictionaryLabel>GAV</DictionaryLabel>
-              <DictionaryData>0.0000 ETH</DictionaryData>
+              <DictionaryLabel>Gross asset value</DictionaryLabel>
+              <DictionaryData>0.0000 WETH</DictionaryData>
             </DictionaryEntry>
             <DictionaryEntry>
-              <DictionaryLabel>NAV</DictionaryLabel>
-              <DictionaryData>0.0000 ETH</DictionaryData>
+              <DictionaryLabel>Net asset value</DictionaryLabel>
+              <DictionaryData>0.0000 WETH</DictionaryData>
             </DictionaryEntry>
             <DictionaryEntry>
               <DictionaryLabel># shares</DictionaryLabel>
@@ -76,7 +76,7 @@ export const WithContextAndData: React.FC = () => {
             </DictionaryEntry>
             <DictionaryEntry>
               <DictionaryLabel>Share Price</DictionaryLabel>
-              <DictionaryData>1.87775</DictionaryData>
+              <DictionaryData>1.87775 WETH</DictionaryData>
             </DictionaryEntry>
             <DictionaryDivider />
             <DictionaryEntry>
@@ -88,11 +88,11 @@ export const WithContextAndData: React.FC = () => {
               <DictionaryData>10.00%</DictionaryData>
             </DictionaryEntry>
             <DictionaryEntry>
-              <DictionaryLabel>Performence fee period</DictionaryLabel>
+              <DictionaryLabel>Performance fee period</DictionaryLabel>
               <DictionaryData>1 day</DictionaryData>
             </DictionaryEntry>
             <DictionaryEntry>
-              <DictionaryLabel>Start of next Performence</DictionaryLabel>
+              <DictionaryLabel>Start of next performance period</DictionaryLabel>
               <DictionaryData>01/08/2020 12:24</DictionaryData>
             </DictionaryEntry>
             <DictionaryDivider />

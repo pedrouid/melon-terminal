@@ -75,13 +75,13 @@ export const FundFactSheet: React.FC<FundFactSheetProps> = ({ address }) => {
         <DictionaryData>{fund.isShutDown ? 'Inactive' : 'Active'}</DictionaryData>
       </DictionaryEntry>
       <DictionaryEntry>
-        <DictionaryLabel>GAV</DictionaryLabel>
+        <DictionaryLabel>Gross asset value</DictionaryLabel>
         <DictionaryData>
           {accounting?.grossAssetValue ? `${accounting.grossAssetValue.toFixed(4)} WETH` : 'N/A'}
         </DictionaryData>
       </DictionaryEntry>
       <DictionaryEntry>
-        <DictionaryLabel>NAV</DictionaryLabel>
+        <DictionaryLabel>Net asset value</DictionaryLabel>
         <DictionaryData>
           {accounting?.netAssetValue ? `${accounting.netAssetValue.toFixed(4)} WETH` : 'N/A'}
         </DictionaryData>
