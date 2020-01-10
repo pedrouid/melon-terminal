@@ -386,10 +386,12 @@ export function useTransaction(environment: DeployedEnvironment, options?: Trans
       };
 
       const tx = transaction.send(opts);
-      tx.once('transactionHash', hash => executionReceived(dispatch, hash));
-      tx.once('error', error => executionError(dispatch, (error as any).error ? (error as any).error : error));
+      const receipt = await new Promise<TransactionReceipt>((resolve, reject) => {
+        tx.once('transactionHash', hash => executionReceived(dispatch, hash));
+        tx.once('receipt', receipt => resolve(receipt));
+        tx.once('error', error => reject((error as any).error ? (error as any).error : error));
+      });
 
-      const receipt = await tx;
       await Promise.resolve(options && options.onFinish && options.onFinish(receipt));
       executionFinished(dispatch, receipt);
     } catch (error) {

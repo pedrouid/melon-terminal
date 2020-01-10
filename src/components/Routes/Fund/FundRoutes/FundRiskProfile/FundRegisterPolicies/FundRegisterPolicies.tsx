@@ -43,7 +43,6 @@ export const RegisterPolicies: React.FC<RegisterPoliciesProps> = ({ address }) =
     onAcknowledge: receipt => {
       if (receipt.contractAddress && selectedPolicy) {
         const manager = new PolicyManager(environment, policyManager!.address);
-
         const signatures = selectedPolicy.signatures;
         const addresses = Array.from(Array(selectedPolicy.signatures.length).keys()).map(
           () => receipt.contractAddress!
