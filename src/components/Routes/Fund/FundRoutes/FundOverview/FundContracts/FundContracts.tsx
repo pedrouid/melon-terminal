@@ -10,6 +10,7 @@ import {
   DictionaryLabel,
   DictionaryData,
 } from '~/storybook/components/Dictionary/Dictionary';
+import { EtherscanLink } from '~/components/Common/EtherscanLink/EtherscanLink';
 
 export interface FundContractsProps {
   address: string;
@@ -61,7 +62,9 @@ export const FundContracts: React.FC<FundContractsProps> = ({ address }) => {
           return (
             <DictionaryEntry key={a.address}>
               <DictionaryLabel>{a.name}</DictionaryLabel>
-              <DictionaryData>{a.address}</DictionaryData>
+              <DictionaryData>
+                <EtherscanLink address={a.address} />
+              </DictionaryData>
             </DictionaryEntry>
           );
         })}

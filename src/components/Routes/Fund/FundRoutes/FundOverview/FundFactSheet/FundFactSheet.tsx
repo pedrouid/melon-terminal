@@ -11,6 +11,7 @@ import {
   DictionaryLabel,
 } from '~/storybook/components/Dictionary/Dictionary';
 import { Block } from '~/storybook/components/Block/Block';
+import { EtherscanLink } from '~/components/Common/EtherscanLink/EtherscanLink';
 
 export interface FundFactSheetProps {
   address: string;
@@ -55,11 +56,15 @@ export const FundFactSheet: React.FC<FundFactSheetProps> = ({ address }) => {
       </DictionaryEntry>
       <DictionaryEntry>
         <DictionaryLabel>Fund address</DictionaryLabel>
-        <DictionaryData>{address}</DictionaryData>
+        <DictionaryData>
+          <EtherscanLink address={address} />
+        </DictionaryData>
       </DictionaryEntry>
       <DictionaryEntry>
         <DictionaryLabel>Manager address</DictionaryLabel>
-        <DictionaryData>{fund.manager}</DictionaryData>
+        <DictionaryData>
+          <EtherscanLink address={fund.manager} />
+        </DictionaryData>
       </DictionaryEntry>
       <DictionaryEntry>
         <DictionaryLabel>Inception</DictionaryLabel>

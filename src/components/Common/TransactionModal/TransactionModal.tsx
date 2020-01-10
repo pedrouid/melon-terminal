@@ -4,7 +4,6 @@ import { FormContext } from 'react-hook-form';
 import { TransactionHookValues, TransactionProgress } from '~/hooks/useTransaction';
 import { ProgressBar } from '~/components/Common/ProgressBar/ProgressBar';
 import { ProgressBarStep } from '~/components/Common/ProgressBar/ProgressBarStep/ProgressBarStep';
-import { useEtherscanLink } from '~/hooks/useEtherscanLink';
 import { FormField } from '~/storybook/components/FormField/FormField';
 import { Input } from '~/storybook/components/Input/Input';
 import { Button } from '~/storybook/components/Button/Button';
@@ -12,6 +11,7 @@ import { NotificationBar } from '~/storybook/components/NotificationBar/Notifica
 import { Spinner } from '~/components/Common/Spinner/Spinner';
 import * as S from '~/storybook/components/Modal/Modal';
 import BigNumber from 'bignumber.js';
+import { EtherscanLink } from '../EtherscanLink/EtherscanLink';
 
 function progressToStep(progress: number) {
   if (progress >= TransactionProgress.EXECUTION_FINISHED) {
@@ -60,8 +60,6 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
   const open =
     state.progress < TransactionProgress.TRANSACTION_ACKNOWLEDGED &&
     state.progress > TransactionProgress.TRANSACTION_STARTED;
-
-  const etherscanLink = useEtherscanLink({ hash: state.hash });
 
   const setGasPrice = (value: number = 0) => {
     form.setValue('gasPrice', value);
@@ -141,9 +139,7 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
                         <S.TransactionModalMessagesTableRow>
                           <S.TransactionModalMessagesTableRowLabel>Hash</S.TransactionModalMessagesTableRowLabel>
                           <S.TransactionModalMessagesTableRowQuantity>
-                            <a target="_blank" href={etherscanLink || ''}>
-                              {hash}
-                            </a>
+                            <EtherscanLink hash={hash} />
                           </S.TransactionModalMessagesTableRowQuantity>
                         </S.TransactionModalMessagesTableRow>
                       )}
