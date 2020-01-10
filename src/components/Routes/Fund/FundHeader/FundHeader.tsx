@@ -37,8 +37,12 @@ export const FundHeader: React.FC<FundHeaderProps> = ({ address }) => {
         />
         <RequiresFundSetupComplete fallback={false}>
           <DataBlockSection>
-            <DataBlock label="Share price">{accounting?.sharePrice?.toFixed(4) || 0} WETH / share</DataBlock>
-            <DataBlock label="AUM">{accounting?.grossAssetValue?.toFixed(4) || 0}</DataBlock>
+            <DataBlock label="Share price per share">
+              {accounting?.sharePrice ? `${accounting.sharePrice.toFixed(4)} WETH` : 'N/A'}
+            </DataBlock>
+            <DataBlock label="Assets under management">
+              {accounting?.grossAssetValue ? `${accounting.grossAssetValue.toFixed(4)} WETH` : 'N/A'}
+            </DataBlock>
           </DataBlockSection>
         </RequiresFundSetupComplete>
       </BarContent>
