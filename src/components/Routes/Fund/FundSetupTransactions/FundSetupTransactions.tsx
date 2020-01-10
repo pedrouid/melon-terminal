@@ -1,7 +1,6 @@
 import React, { FormEvent, useEffect, useMemo, useState } from 'react';
 import * as R from 'ramda';
 import { TransactionModal } from '~/components/Common/TransactionModal/TransactionModal';
-import { ButtonBlock } from '~/components/Common/Form/ButtonBlock/ButtonBlock';
 import { SubmitButton } from '~/components/Common/Form/SubmitButton/SubmitButton';
 import { useTransaction } from '~/hooks/useTransaction';
 import { TransactionReceipt } from 'web3-core';
@@ -14,7 +13,7 @@ import { useHistory } from 'react-router';
 import { versionContract } from '~/utils/deploymentContracts';
 import { useAccount } from '~/hooks/useAccount';
 import { useOnChainQueryRefetcher } from '~/hooks/useOnChainQueryRefetcher';
-import { Block } from '~/storybook/components/Block/Block';
+import { Block, BlockActions } from '~/storybook/components/Block/Block';
 import { SectionTitle } from '~/storybook/components/Title/Title';
 import { GridCol, GridRow, Grid } from '~/storybook/components/Grid/Grid';
 
@@ -137,7 +136,7 @@ export const FundSetupTransactions: React.FC = () => {
   return (
     <Grid>
       <GridRow>
-        <GridCol>
+        <GridCol xs={12} sm={6} md={4} >
           <Block>
             <SectionTitle>Fund setup transactions</SectionTitle>
             {query.loading && <Spinner />}
@@ -163,9 +162,9 @@ export const FundSetupTransactions: React.FC = () => {
                 </ul>
                 {!step.end && (
                   <form onSubmit={submit}>
-                    <ButtonBlock>
+                    <BlockActions>
                       <SubmitButton label={step.name!} />
-                    </ButtonBlock>
+                    </BlockActions>
                   </form>
                 )}
               </>

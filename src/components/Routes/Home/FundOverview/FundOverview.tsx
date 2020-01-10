@@ -9,7 +9,7 @@ import { useFundOverviewQuery, FundProcessed } from '~/queries/FundOverview';
 import { usePagination } from '~/hooks/usePagination';
 import { useAccount } from '~/hooks/useAccount';
 import { Grid, GridRow, GridCol } from '~/storybook/components/Grid/Grid';
-import { Block } from '~/storybook/components/Block/Block';
+import { Block, BlockActions } from '~/storybook/components/Block/Block';
 import { Input } from '~/storybook/components/Input/Input';
 import { FormField } from '~/storybook/components/FormField/FormField';
 import { SectionTitle } from '~/storybook/components/Title/Title';
@@ -183,9 +183,11 @@ export const FundOverview: React.FC = () => {
               <Block>
                 <NoMatch />
                 {!account.fund && (
-                  <Link to="/wallet/setup">
-                    <Button>Create your own Melon fund</Button>
-                  </Link>
+                  <BlockActions>
+                    <Link to="/wallet/setup">
+                      <Button>Create your own Melon fund</Button>
+                    </Link>
+                  </BlockActions>
                 )}
               </Block>
             </GridCol>
@@ -276,9 +278,11 @@ export const FundOverview: React.FC = () => {
                 funds={filtered.funds.length}
               />
               {!account.fund && (
-                <Link to="/wallet/setup">
-                  <Button>Create your own Melon fund</Button>
-                </Link>
+                <BlockActions>
+                  <Link to="/wallet/setup">
+                    <Button>Create your own Melon fund</Button>
+                  </Link>
+                </BlockActions>
               )}
             </Block>
           </GridCol>

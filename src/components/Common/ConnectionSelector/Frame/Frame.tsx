@@ -24,7 +24,7 @@ import {
 } from 'rxjs/operators';
 import { networkFromId } from '~/utils/networkFromId';
 
-import { Title } from '~/storybook/components/Title/Title';
+import { SectionTitle } from '~/storybook/components/Title/Title';
 import { Button } from '~/storybook/components/Button/Button';
 
 interface EthResource extends Rx.Unsubscribable {
@@ -89,7 +89,7 @@ const connect = (): Rx.Observable<ConnectionAction> => {
 export const Frame: React.FC<any> = ({ select, active }) => {
   return (
     <>
-      <Title>Frame</Title>
+      <SectionTitle>Frame</SectionTitle>
       {!active ? (
         <Button lenght="stretch" onClick={() => select()}>
           Connect

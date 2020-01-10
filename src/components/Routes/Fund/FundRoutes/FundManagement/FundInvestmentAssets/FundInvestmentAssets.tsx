@@ -5,11 +5,10 @@ import { Participation } from '@melonproject/melonjs';
 import { AllowedInvestmentAsset } from '@melonproject/melongql';
 import { useEnvironment } from '~/hooks/useEnvironment';
 import { useTransaction } from '~/hooks/useTransaction';
-import { ButtonBlock } from '~/components/Common/Form/ButtonBlock/ButtonBlock';
 import { SubmitButton } from '~/components/Common/Form/SubmitButton/SubmitButton';
 import { TransactionModal } from '~/components/Common/TransactionModal/TransactionModal';
 import { useOnChainQueryRefetcher } from '~/hooks/useOnChainQueryRefetcher';
-import { Block } from '~/storybook/components/Block/Block';
+import { Block, BlockActions } from '~/storybook/components/Block/Block';
 import { SectionTitle } from '~/storybook/components/Title/Title';
 import { Spinner } from '~/components/Common/Spinner/Spinner';
 import { useAccount } from '~/hooks/useAccount';
@@ -125,9 +124,9 @@ export const InvestmentAssets: React.FC<InvestmentAssetsProps> = ({ address }) =
             ))}
           </ul>
 
-          <ButtonBlock>
+          <BlockActions>
             <SubmitButton type="button" label="Set investment assets" onClick={submit} />
-          </ButtonBlock>
+          </BlockActions>
         </form>
       </FormContext>
 

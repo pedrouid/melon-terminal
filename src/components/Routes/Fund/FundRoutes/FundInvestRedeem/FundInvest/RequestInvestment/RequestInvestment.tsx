@@ -12,6 +12,7 @@ import { useOnChainQueryRefetcher } from '~/hooks/useOnChainQueryRefetcher';
 import { useAccount } from '~/hooks/useAccount';
 import { FormField } from '~/storybook/components/FormField/FormField';
 import { Input } from '~/storybook/components/Input/Input';
+import { BlockActions } from '~/storybook/components/Block/Block';
 import { Button } from '~/storybook/components/Button/Button';
 import { Dropdown } from '~/storybook/components/Dropdown/Dropdown';
 import { Spinner } from '~/components/Common/Spinner/Spinner';
@@ -231,10 +232,11 @@ export const RequestInvestment: React.FC<RequestInvestmentProps> = props => {
                   onChange={handleInvestmentAmountChange}
                 />
               </FormField>
-
-              <Button type="submit" disabled={props.loading || !!form.errors.investmentAmount}>
-                Invest
-              </Button>
+              <BlockActions>
+                <Button type="submit" disabled={props.loading || !!form.errors.investmentAmount}>
+                  Invest
+                </Button>
+              </BlockActions>
             </>
           )}
         </form>

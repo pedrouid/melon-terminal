@@ -10,7 +10,7 @@ import {
   ConnectionAction,
   ConnectionMethod,
 } from '~/components/Contexts/Connection/Connection';
-import { Title } from '~/storybook/components/Title/Title';
+import { SectionTitle } from '~/storybook/components/Title/Title';
 import { Button } from '~/storybook/components/Button/Button';
 
 const connect = (): Rx.Observable<ConnectionAction> => {
@@ -46,7 +46,7 @@ const connect = (): Rx.Observable<ConnectionAction> => {
 export const MetaMask: React.FC<any> = ({ select, active }) => {
   return (
     <>
-      <Title>Metamask</Title>
+      <SectionTitle>Metamask</SectionTitle>
       {!active ? (
         <Button lenght="stretch" onClick={() => select()}>
           Connect

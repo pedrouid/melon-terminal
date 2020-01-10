@@ -9,7 +9,7 @@ import { TransactionModal } from '~/components/Common/TransactionModal/Transacti
 import { useEnvironment } from '~/hooks/useEnvironment';
 import { useAccount } from '~/hooks/useAccount';
 import { useOnChainQueryRefetcher } from '~/hooks/useOnChainQueryRefetcher';
-import { Block } from '~/storybook/components/Block/Block';
+import { Block, BlockActions } from '~/storybook/components/Block/Block';
 import { Title } from '~/storybook/components/Title/Title';
 import { FormField } from '~/storybook/components/FormField/FormField';
 import { Input } from '~/storybook/components/Input/Input';
@@ -60,7 +60,9 @@ export const WalletWrapEther: React.FC = () => {
             <Input id="quantity" name="quantity" type="number" step="any" />
           </FormField>
 
-          <Button type="submit">Wrap Ether</Button>
+          <BlockActions>
+            <Button type="submit">Wrap Ether</Button>
+          </BlockActions>
         </form>
       </FormContext>
 

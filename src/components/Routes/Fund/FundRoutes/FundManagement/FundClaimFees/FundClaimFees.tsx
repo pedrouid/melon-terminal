@@ -2,7 +2,6 @@ import React from 'react';
 import { useEnvironment } from '~/hooks/useEnvironment';
 import { useTransaction } from '~/hooks/useTransaction';
 import { useHistory } from 'react-router';
-import { ButtonBlock } from '~/components/Common/Form/ButtonBlock/ButtonBlock';
 import { Accounting, FeeManager } from '@melonproject/melonjs';
 import { SubmitButton } from '~/components/Common/Form/SubmitButton/SubmitButton';
 import { TransactionModal } from '~/components/Common/TransactionModal/TransactionModal';
@@ -10,7 +9,7 @@ import { useFundDetailsQuery } from '~/queries/FundDetails';
 import { Spinner } from '~/components/Common/Spinner/Spinner';
 import { useAccount } from '~/hooks/useAccount';
 import { useOnChainQueryRefetcher } from '~/hooks/useOnChainQueryRefetcher';
-import { Block } from '~/storybook/components/Block/Block';
+import { Block, BlockActions} from '~/storybook/components/Block/Block';
 import { Grid, GridRow, GridCol } from '~/storybook/components/Grid/Grid';
 import { SectionTitle } from '~/storybook/components/Title/Title';
 
@@ -70,10 +69,10 @@ export const ClaimFees: React.FC<ClaimFeesProps> = ({ address }) => {
         {feeManagerInfo && feeManagerInfo.performanceFee && feeManagerInfo.performanceFee.canUpdate}
       </p>
 
-      <ButtonBlock>
+      <BlockActions>
         <SubmitButton type="button" label="Claim all fees" onClick={() => submitAllFees()} />
         <SubmitButton type="button" label="Claim management fees" onClick={() => submitManagementFees()} />
-      </ButtonBlock>
+      </BlockActions>
 
       <TransactionModal transaction={transaction} />
     </Block>
