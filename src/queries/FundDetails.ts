@@ -12,16 +12,17 @@ export interface FundDetails {
       address: string;
       sharePrice: BigNumber;
       grossAssetValue: BigNumber;
+      netAssetValue: BigNumber;
     };
     feeManager?: {
       address: string;
       managementFeeAmount: BigNumber;
       performanceFeeAmount: BigNumber;
       managementFee?: {
-        rate: BigNumber;
+        rate: number;
       };
       performanceFee?: {
-        rate: BigNumber;
+        rate: number;
         period: number;
         canUpdate: boolean;
       };
@@ -37,12 +38,14 @@ export interface FundDetails {
     };
     shares?: {
       address: string;
+      totalSupply: BigNumber;
     };
     vault?: {
       address: string;
     };
     version?: {
       address: string;
+      name: string;
     };
     registry?: {
       address: string;
@@ -74,6 +77,7 @@ const FundDetailsQuery = gql`
         accounting {
           address
           grossAssetValue
+          netAssetValue
           sharePrice
         }
         feeManager {
@@ -97,6 +101,7 @@ const FundDetailsQuery = gql`
         }
         shares {
           address
+          totalSupply
         }
         trading {
           address
@@ -106,6 +111,7 @@ const FundDetailsQuery = gql`
         }
         version {
           address
+          name
         }
         registry {
           address

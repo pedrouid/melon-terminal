@@ -9,11 +9,10 @@ export const Block = styled.div`
   background: ${props => props.theme.mainColors.primary};
 `;
 
-
 export const BlockSection = styled.div`
   position: relative;
   width: 100%;
-  &:not(:last-child){
+  &:not(:last-child) {
     margin-bottom: ${props => props.theme.spaceUnits.xl};
   }
 `;

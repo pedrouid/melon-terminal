@@ -3,8 +3,7 @@ import { format } from 'date-fns';
 import BigNumber from 'bignumber.js';
 import { useTheGraphQuery } from '~/hooks/useQuery';
 import { weiToString } from '~/utils/weiToString';
-import { hexToString } from '~/utils/hexToString';
-import { Address } from '@melonproject/melonjs';
+import { hexToString, Address } from '@melonproject/melonjs';
 
 interface FundFields {
   id: string;

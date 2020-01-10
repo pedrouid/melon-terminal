@@ -1,10 +1,9 @@
 import gql from 'graphql-tag';
 import { format } from 'date-fns';
 import BigNumber from 'bignumber.js';
-
 import { useTheGraphQuery } from '~/hooks/useQuery';
 import { weiToString } from '~/utils/weiToString';
-import { hexToString } from '~/utils/hexToString';
+import { hexToString } from '@melonproject/melonjs';
 
 export interface SharePriceChange {
   color: string;

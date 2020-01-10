@@ -11,7 +11,6 @@ import {
   DictionaryLabel,
 } from '~/storybook/components/Dictionary/Dictionary';
 import { Block } from '~/storybook/components/Block/Block';
-import { useEtherscanLink } from '~/hooks/useEtherscanLink';
 
 export interface FundFactSheetProps {
   address: string;
@@ -33,9 +32,10 @@ export const FundFactSheet: React.FC<FundFactSheetProps> = ({ address }) => {
   }
 
   const routes = fund.routes;
-  const accounting = routes && routes.accounting;
-  // const shares = routes && routes.shares;
   const creation = fund.creationTime;
+  const accounting = routes && routes.accounting;
+  const shares = routes && routes.shares;
+  const version = routes && routes.version;
   const feeManager = routes && routes.feeManager;
   const managementFee = feeManager && feeManager.managementFee;
   const performanceFee = feeManager && feeManager.performanceFee;
@@ -51,7 +51,7 @@ export const FundFactSheet: React.FC<FundFactSheetProps> = ({ address }) => {
       </DictionaryEntry>
       <DictionaryEntry>
         <DictionaryLabel>Protocol version</DictionaryLabel>
-        <DictionaryData></DictionaryData>
+        <DictionaryData>{version?.name ? version.name : 'N/A'}</DictionaryData>
       </DictionaryEntry>
       <DictionaryEntry>
         <DictionaryLabel>Fund address</DictionaryLabel>
@@ -63,7 +63,7 @@ export const FundFactSheet: React.FC<FundFactSheetProps> = ({ address }) => {
       </DictionaryEntry>
       <DictionaryEntry>
         <DictionaryLabel>Inception</DictionaryLabel>
-        <DictionaryData>{creation && format(creation, 'yyyy-MM-dd hh:mm a')}</DictionaryData>
+        <DictionaryData>{creation ? format(creation, 'yyyy-MM-dd hh:mm a') : 'N/A'}</DictionaryData>
       </DictionaryEntry>
       <DictionaryEntry>
         <DictionaryLabel>Status</DictionaryLabel>
@@ -71,31 +71,35 @@ export const FundFactSheet: React.FC<FundFactSheetProps> = ({ address }) => {
       </DictionaryEntry>
       <DictionaryEntry>
         <DictionaryLabel>GAV</DictionaryLabel>
-        <DictionaryData></DictionaryData>
+        <DictionaryData>
+          {accounting?.grossAssetValue ? `${accounting.grossAssetValue.toFixed(4)} WETH` : 'N/A'}
+        </DictionaryData>
       </DictionaryEntry>
       <DictionaryEntry>
         <DictionaryLabel>NAV</DictionaryLabel>
-        <DictionaryData></DictionaryData>
+        <DictionaryData>
+          {accounting?.netAssetValue ? `${accounting.netAssetValue.toFixed(4)} WETH` : 'N/A'}
+        </DictionaryData>
       </DictionaryEntry>
-      {/* <DictionaryEntry>
-        <DictionaryLabel>Total number of shares</DictionaryLabel>
-        <DictionaryData>{shares?.totalSupply?.toFixed(4)}</DictionaryData>
-      </DictionaryEntry> */}
       <DictionaryEntry>
-        <DictionaryLabel>Share price</DictionaryLabel>
-        <DictionaryData>{accounting?.sharePrice?.toFixed(4) || 0} WETH / share</DictionaryData>
+        <DictionaryLabel>Total number of shares</DictionaryLabel>
+        <DictionaryData>{shares?.totalSupply ? shares.totalSupply.toFixed(4) : 'N/A'}</DictionaryData>
+      </DictionaryEntry>
+      <DictionaryEntry>
+        <DictionaryLabel>Share price per share</DictionaryLabel>
+        <DictionaryData>{accounting?.sharePrice ? `${accounting.sharePrice.toFixed(4)} WETH` : 'N/A'}</DictionaryData>
       </DictionaryEntry>
       <DictionaryEntry>
         <DictionaryLabel>Management fee</DictionaryLabel>
-        <DictionaryData>{`${managementFee?.rate ?? 0}%`}</DictionaryData>
+        <DictionaryData>{managementFee?.rate != null ? `${managementFee.rate}%` : 'N/A'}</DictionaryData>
       </DictionaryEntry>
       <DictionaryEntry>
         <DictionaryLabel>Performance fee</DictionaryLabel>
-        <DictionaryData>{`${performanceFee?.rate ?? 0}%`}</DictionaryData>
+        <DictionaryData>{performanceFee?.rate != null ? `${performanceFee.rate}%` : 'N/A'}</DictionaryData>
       </DictionaryEntry>
       <DictionaryEntry>
         <DictionaryLabel>Performance fee period</DictionaryLabel>
-        <DictionaryData>{`${performanceFee?.period ?? 0} days`}</DictionaryData>
+        <DictionaryData>{performanceFee?.period != null ? `${performanceFee.period} days` : 'N/A'}</DictionaryData>
       </DictionaryEntry>
     </Dictionary>
   );

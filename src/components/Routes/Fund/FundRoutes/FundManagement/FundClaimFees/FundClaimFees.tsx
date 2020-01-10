@@ -9,7 +9,7 @@ import { useFundDetailsQuery } from '~/queries/FundDetails';
 import { Spinner } from '~/components/Common/Spinner/Spinner';
 import { useAccount } from '~/hooks/useAccount';
 import { useOnChainQueryRefetcher } from '~/hooks/useOnChainQueryRefetcher';
-import { Block, BlockActions} from '~/storybook/components/Block/Block';
+import { Block, BlockActions } from '~/storybook/components/Block/Block';
 import { Grid, GridRow, GridCol } from '~/storybook/components/Grid/Grid';
 import { SectionTitle } from '~/storybook/components/Title/Title';
 
