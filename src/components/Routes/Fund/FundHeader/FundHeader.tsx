@@ -33,7 +33,7 @@ export const FundHeader: React.FC<FundHeaderProps> = ({ address }) => {
               {address}
             </a>
           }
-          icon="icon"
+          icon="fund"
         />
         <RequiresFundSetupComplete fallback={false}>
           <DataBlockSection>

@@ -1,4 +1,6 @@
 import styled from 'styled-components';
+import wallet from './wallet.jpg';
+import fund from './fund.jpg';
 
 export interface HeadlineIconProps {
   icon?: string;
@@ -12,11 +14,10 @@ export const Headline = styled.div`
 `;
 
 export const HeadlineIcon = styled.div<HeadlineIconProps>`
-  width: ${props => props.theme.spaceUnits.xxxl};
-  height: ${props => props.theme.spaceUnits.xxxl};
-  border: ${props => props.theme.border.borderDefault};
-  border-radius: 50%;
+  width: 50px;
+  height: 50px;
   margin-right: ${props => props.theme.spaceUnits.s};
+  background-image: ${props => (props.icon === 'wallet' ? `url(${wallet})` : `url(${fund})`)};
 `;
 
 export const HeadlineText = styled.div`

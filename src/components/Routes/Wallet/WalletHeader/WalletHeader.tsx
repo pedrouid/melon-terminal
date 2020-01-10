@@ -19,7 +19,7 @@ export const WalletHeader: React.FC = () => {
               {account.address}
             </a>
           }
-          icon="icon"
+          icon="wallet"
         />
       </BarContent>
     </Bar>
