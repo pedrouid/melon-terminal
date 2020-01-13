@@ -2,12 +2,12 @@ import React from 'react';
 
 import { useFundDetailsQuery } from '~/queries/FundDetails';
 import { useFundDailyChange } from '~/queries/FundDailyChange';
-import { RequiresFundSetupComplete } from '~/components/Common/Gates/RequiresFundSetupComplete/RequiresFundSetupComplete';
+import { RequiresFundSetupComplete } from '~/components/Gates/RequiresFundSetupComplete/RequiresFundSetupComplete';
 import { EtherscanLink } from '~/components/Common/EtherscanLink/EtherscanLink';
 import { DataBlock, DataBlockSection } from '~/storybook/components/DataBlock/DataBlock';
 import { Bar, BarContent } from '~/storybook/components/Bar/Bar';
 import { Headline } from '~/storybook/components/Headline/Headline';
-import { DailyChange } from '~/components/Common/DailyChange/DailyChange';
+import { NumberChange } from '~/storybook/components/NumberChange/NumberChange';
 
 export interface FundHeaderProps {
   address: string;
@@ -38,7 +38,7 @@ export const FundHeader: React.FC<FundHeaderProps> = ({ address }) => {
             </DataBlock>
             {dailyChange && (
               <DataBlock label="Daily change">
-                <DailyChange change={dailyChange} />
+                <NumberChange change={dailyChange} />
               </DataBlock>
             )}
           </DataBlockSection>

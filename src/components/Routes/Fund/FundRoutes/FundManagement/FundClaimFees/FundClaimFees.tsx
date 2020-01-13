@@ -3,14 +3,13 @@ import { useEnvironment } from '~/hooks/useEnvironment';
 import { useTransaction } from '~/hooks/useTransaction';
 import { useHistory } from 'react-router';
 import { Accounting, FeeManager } from '@melonproject/melonjs';
-import { SubmitButton } from '~/components/Common/Form/SubmitButton/SubmitButton';
+import { Button } from '~/storybook/components/Button/Button';
 import { TransactionModal } from '~/components/Common/TransactionModal/TransactionModal';
 import { useFundDetailsQuery } from '~/queries/FundDetails';
-import { Spinner } from '~/components/Common/Spinner/Spinner';
+import { Spinner } from '~/storybook/components/Spinner/Spinner';
 import { useAccount } from '~/hooks/useAccount';
 import { useOnChainQueryRefetcher } from '~/hooks/useOnChainQueryRefetcher';
 import { Block, BlockActions } from '~/storybook/components/Block/Block';
-import { Grid, GridRow, GridCol } from '~/storybook/components/Grid/Grid';
 import { SectionTitle } from '~/storybook/components/Title/Title';
 
 export interface ClaimFeesProps {
@@ -70,8 +69,12 @@ export const ClaimFees: React.FC<ClaimFeesProps> = ({ address }) => {
       </p>
 
       <BlockActions>
-        <SubmitButton type="button" label="Claim all fees" onClick={() => submitAllFees()} />
-        <SubmitButton type="button" label="Claim management fees" onClick={() => submitManagementFees()} />
+        <Button type="submit" onClick={() => submitAllFees()}>
+          Claim all fees
+        </Button>
+        <Button type="submit" onClick={() => submitManagementFees()}>
+          Claim management fees
+        </Button>
       </BlockActions>
 
       <TransactionModal transaction={transaction} />

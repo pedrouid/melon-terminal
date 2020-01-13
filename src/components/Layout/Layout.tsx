@@ -2,7 +2,7 @@ import React from 'react';
 import { useLocation } from 'react-router';
 import { format } from 'date-fns';
 import { usePriceFeedUpdateQuery } from '~/queries/PriceFeedUpdate';
-import { Link } from '~/components/Common/Link/Link';
+import { Link } from '~/storybook/components/Link/Link';
 import { useAccount } from '~/hooks/useAccount';
 import { useEnvironment } from '~/hooks/useEnvironment';
 import { Skeleton, SkeletonHead, SkeletonBody, SkeletonFeet } from '~/storybook/components/Skeleton/Skeleton';

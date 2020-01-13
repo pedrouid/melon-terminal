@@ -1,7 +1,7 @@
 import React from 'react';
 import * as Yup from 'yup';
 import useForm, { FormContext } from 'react-hook-form';
-import { SubmitButton } from '~/components/Common/Form/SubmitButton/SubmitButton';
+import { Button } from '~/storybook/components/Button/Button';
 import { useEnvironment } from '~/hooks/useEnvironment';
 import { Deployment, AssetBlacklist, PolicyDefinition, availableTokens } from '@melonproject/melonjs';
 import { AssetBlacklistBytecode } from '@melonproject/melonjs/abis/AssetBlacklist.bin';
@@ -61,7 +61,7 @@ export const AssetBlacklistConfiguration: React.FC<AssetBlacklistConfigurationPr
       <p>&nbsp;</p>
       <FormContext {...form}>
         <form onSubmit={submit}>
-          <SubmitButton label="Add asset blacklist policy" />
+          <Button type="submit">Add asset blacklist policy</Button>
         </form>
       </FormContext>
     </>

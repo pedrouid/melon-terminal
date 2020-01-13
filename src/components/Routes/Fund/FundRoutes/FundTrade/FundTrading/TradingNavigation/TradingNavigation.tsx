@@ -1,9 +1,9 @@
 import React, { createContext, useMemo, useState } from 'react';
-import * as S from './TabNavigation.styles';
+import * as S from './TradingNavigation.styles';
 
-const TabNavigationContext = createContext<string | undefined>(undefined);
+const TradingNavigationContext = createContext<string | undefined>(undefined);
 
-export const TabNavigation: React.FC = ({ children }) => {
+export const TradingNavigation: React.FC = ({ children }) => {
   const arrayChildren = useMemo(() => {
     return (React.Children.toArray(children).filter(child => React.isValidElement(child)) as any) as React.Component<
       any
@@ -27,7 +27,7 @@ export const TabNavigation: React.FC = ({ children }) => {
   const activeTab = arrayChildren.find(child => child.props.identifier === active);
 
   return (
-    <TabNavigationContext.Provider value={active}>
+    <TradingNavigationContext.Provider value={active}>
       <S.Menu>
         {items.map(item => (
           <S.MenuItem
@@ -41,6 +41,6 @@ export const TabNavigation: React.FC = ({ children }) => {
       </S.Menu>
 
       {activeTab && activeTab.props.children}
-    </TabNavigationContext.Provider>
+    </TradingNavigationContext.Provider>
   );
 };

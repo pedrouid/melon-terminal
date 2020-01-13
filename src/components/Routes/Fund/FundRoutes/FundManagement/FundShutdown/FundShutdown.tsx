@@ -1,8 +1,7 @@
 import React, { useMemo } from 'react';
 import { useEnvironment } from '~/hooks/useEnvironment';
 import { useTransaction } from '~/hooks/useTransaction';
-import { useHistory } from 'react-router';
-import { SubmitButton } from '~/components/Common/Form/SubmitButton/SubmitButton';
+import { Button } from '~/storybook/components/Button/Button';
 import { TransactionModal } from '~/components/Common/TransactionModal/TransactionModal';
 import { Hub, Version, Trading } from '@melonproject/melonjs';
 import { useAccount } from '~/hooks/useAccount';
@@ -10,7 +9,7 @@ import { useOnChainQueryRefetcher } from '~/hooks/useOnChainQueryRefetcher';
 import { Block, BlockActions } from '~/storybook/components/Block/Block';
 import { SectionTitle } from '~/storybook/components/Title/Title';
 import { useFundShutdownQuery } from '~/queries/FundShutdown';
-import { Spinner } from '~/components/Common/Spinner/Spinner';
+import { Spinner } from '~/storybook/components/Spinner/Spinner';
 import { Holding } from '@melonproject/melongql';
 
 export interface ShutdownProps {
@@ -59,7 +58,9 @@ export const Shutdown: React.FC<ShutdownProps> = ({ address }) => {
       <SectionTitle>Shut down fund</SectionTitle>
       {info?.address ? (
         <BlockActions>
-          <SubmitButton type="button" label="Shutdown fund" onClick={() => submit()} />
+          <Button type="submit" onClick={() => submit()}>
+            Shutdown fund
+          </Button>
         </BlockActions>
       ) : (
         <Spinner></Spinner>

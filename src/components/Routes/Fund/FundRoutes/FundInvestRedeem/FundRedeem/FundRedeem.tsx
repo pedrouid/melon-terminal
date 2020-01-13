@@ -7,7 +7,7 @@ import { useEnvironment } from '~/hooks/useEnvironment';
 import { useFundInvestQuery } from '~/queries/FundInvest';
 import { useTransaction } from '~/hooks/useTransaction';
 import { TransactionModal } from '~/components/Common/TransactionModal/TransactionModal';
-import { Spinner } from '~/components/Common/Spinner/Spinner';
+import { Spinner } from '~/storybook/components/Spinner/Spinner';
 import { useAccount } from '~/hooks/useAccount';
 import { useOnChainQueryRefetcher } from '~/hooks/useOnChainQueryRefetcher';
 import { FormField } from '~/storybook/components/FormField/FormField';

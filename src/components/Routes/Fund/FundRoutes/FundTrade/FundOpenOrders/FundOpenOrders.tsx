@@ -1,8 +1,8 @@
 import React from 'react';
 import { useFundOpenMakeOrdersQuery } from '~/queries/FundOpenMakeOrders';
 import OpenOrderItem from './OpenOrderItem/OpenOrderItem';
-import { Spinner } from '~/components/Common/Spinner/Spinner';
-import { Table, HeaderCell, HeaderCellRightAlign, HeaderRow, NoEntries } from '~/components/Common/Table/Table.styles';
+import { Spinner } from '~/storybook/components/Spinner/Spinner';
+import { Table, HeaderCell, HeaderCellRightAlign, HeaderRow, NoEntries } from '~/storybook/components/Table/Table';
 import { Block } from '~/storybook/components/Block/Block';
 import { SectionTitle } from '~/storybook/components/Title/Title';
 

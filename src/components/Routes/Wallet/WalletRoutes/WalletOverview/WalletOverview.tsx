@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Spinner } from '~/components/Common/Spinner/Spinner';
+import { Spinner } from '~/storybook/components/Spinner/Spinner';
 import * as S from './WalletOverview.styles';
 import { useFundParticipationOverviewQuery } from '~/queries/FundParticipationOverview';
 import { WalletOverviewInvestmentRequest } from './WalletOverviewInvestmentRequest/WalletOverviewInvestmentRequest';

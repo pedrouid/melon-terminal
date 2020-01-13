@@ -4,16 +4,16 @@ import { useMemo } from 'react';
 import { useEnvironment } from '~/hooks/useEnvironment';
 import { ExchangeDefinition } from '@melonproject/melonjs';
 
-export interface FundExchangesResult {
+export interface FundTradingResult {
   exchanges?: string[];
 }
 
-export interface FundExchangesVariables {
+export interface FundTradingVariables {
   fund?: string;
 }
 
-const FundExchanges = gql`
-  query FundExchanges($fund: String!) {
+const FundTrading = gql`
+  query FundTrading($fund: String!) {
     fund(address: $fund) {
       name
       routes {
@@ -27,9 +27,9 @@ const FundExchanges = gql`
   }
 `;
 
-export const useFundExchanges = (fund?: string) => {
+export const useFundTrading = (fund?: string) => {
   const environment = useEnvironment()!;
-  const result = useOnChainQuery<FundExchangesVariables>(FundExchanges, {
+  const result = useOnChainQuery<FundTradingVariables>(FundTrading, {
     skip: !fund,
     variables: { fund },
   });

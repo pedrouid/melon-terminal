@@ -3,7 +3,7 @@ import { Grid, GridRow, GridCol } from '~/storybook/components/Grid/Grid';
 import FundClaimFees from './FundClaimFees/FundClaimFees';
 import FundShutdown from './FundShutdown/FundShutdown';
 import FundIvestmentAssets from './FundInvestmentAssets/FundInvestmentAssets';
-import { RequiresFundNotShutDown } from '~/components/Common/Gates/RequiresFundNotShutDown/RequiresFundNotShutDown';
+import { RequiresFundNotShutDown } from '~/components/Gates/RequiresFundNotShutDown/RequiresFundNotShutDown';
 
 export interface FundManagementProps {
   address: string;

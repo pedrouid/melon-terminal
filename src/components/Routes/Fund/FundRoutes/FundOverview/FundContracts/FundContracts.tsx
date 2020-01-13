@@ -1,6 +1,6 @@
 import React from 'react';
 import { useFundDetailsQuery } from '~/queries/FundDetails';
-import { Spinner } from '~/components/Common/Spinner/Spinner';
+import { Spinner } from '~/storybook/components/Spinner/Spinner';
 import { Block } from '~/storybook/components/Block/Block';
 import { Grid, GridRow, GridCol } from '~/storybook/components/Grid/Grid';
 import { SectionTitle } from '~/storybook/components/Title/Title';

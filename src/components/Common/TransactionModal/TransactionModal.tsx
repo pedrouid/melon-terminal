@@ -8,7 +8,7 @@ import { FormField } from '~/storybook/components/FormField/FormField';
 import { Input } from '~/storybook/components/Input/Input';
 import { Button } from '~/storybook/components/Button/Button';
 import { NotificationBar } from '~/storybook/components/NotificationBar/NotificationBar';
-import { Spinner } from '~/components/Common/Spinner/Spinner';
+import { Spinner } from '~/storybook/components/Spinner/Spinner';
 import * as S from '~/storybook/components/Modal/Modal';
 import BigNumber from 'bignumber.js';
 import { EtherscanLink } from '../EtherscanLink/EtherscanLink';

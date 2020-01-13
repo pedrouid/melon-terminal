@@ -4,8 +4,8 @@ import { FundRedeem } from './FundRedeem/FundRedeem';
 import { FundInvestmentHistoryList } from './FundInvestmentHistoryList/FundInvestmentHistoryList';
 import { FundInvestorsList } from './FundInvestorsList/FundInvestorsList';
 import { Grid, GridRow, GridCol } from '~/storybook/components/Grid/Grid';
-import { RequiresFundNotShutDown } from '~/components/Common/Gates/RequiresFundNotShutDown/RequiresFundNotShutDown';
-import { RequiresFundShutDown } from '~/components/Common/Gates/RequiresFundShutDown/RequiresFundShutDown';
+import { RequiresFundNotShutDown } from '~/components/Gates/RequiresFundNotShutDown/RequiresFundNotShutDown';
+import { RequiresFundShutDown } from '~/components/Gates/RequiresFundShutDown/RequiresFundShutDown';
 
 export interface FundInvestProps {
   address: string;

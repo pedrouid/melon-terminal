@@ -1,5 +1,5 @@
 import React from 'react';
-import { Spinner } from '~/components/Common/Spinner/Spinner';
+import { Spinner } from '~/storybook/components/Spinner/Spinner';
 import {
   useFundPoliciesQuery,
   MaxConcentrationPolicy,
@@ -10,7 +10,7 @@ import {
   AssetBlacklistPolicy,
 } from '~/queries/FundPolicies';
 import { useEnvironment } from '~/hooks/useEnvironment';
-import { Table, HeaderCell, HeaderRow, BodyCell, BodyRow, NoEntries } from '~/components/Common/Table/Table.styles';
+import { Table, HeaderCell, HeaderRow, BodyCell, BodyRow, NoEntries } from '~/storybook/components/Table/Table';
 import { MaxConcentration } from './MaxConcentration/MaxConcentration';
 import { CustomPolicy } from './CustomPolicy/CustomPolicy';
 import { MaxPositions } from './MaxPositions/MaxPositions';

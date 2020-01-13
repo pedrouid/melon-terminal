@@ -1,5 +1,5 @@
 import React from 'react';
-import { Spinner } from '~/components/Common/Spinner/Spinner';
+import { Spinner } from '~/storybook/components/Spinner/Spinner';
 import { useFundHoldingsQuery } from '~/queries/FundHoldings';
 import * as S from './FundHoldings.styles';
 import BigNumber from 'bignumber.js';
@@ -11,7 +11,7 @@ import {
   BodyCellRightAlign,
   BodyRow,
   HeaderRow,
-} from '~/components/Common/Table/Table.styles';
+} from '~/storybook/components/Table/Table';
 
 import { SectionTitle } from '~/storybook/components/Title/Title';
 import { Block } from '~/storybook/components/Block/Block';

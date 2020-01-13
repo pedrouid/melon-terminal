@@ -1,6 +1,6 @@
 import React from 'react';
 import format from 'date-fns/format';
-import { Spinner } from '~/components/Common/Spinner/Spinner';
+import { Spinner } from '~/storybook/components/Spinner/Spinner';
 import { useFundDetailsQuery } from '~/queries/FundDetails';
 import { SectionTitle } from '~/storybook/components/Title/Title';
 import {

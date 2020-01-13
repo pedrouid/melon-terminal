@@ -1,10 +1,10 @@
 import React from 'react';
-import { TextArea } from './Textarea';
+import { Textarea } from './Textarea';
 
 export default { title: 'Atoms|TextArea' };
 
-export const Default = () => <TextArea />;
+export const Default = () => <Textarea name="default" />;
 
-export const Disabled = () => <TextArea disabled />;
+export const Disabled = () => <Textarea disabled name="disabled" />;
 
-export const Placeholder = () => <TextArea placeholder="placeholder" />;
+export const Placeholder = () => <Textarea name="placeholder" placeholder="placeholder" />;

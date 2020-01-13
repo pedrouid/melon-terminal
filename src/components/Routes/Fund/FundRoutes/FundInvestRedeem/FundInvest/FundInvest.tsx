@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { useFundInvestQuery } from '~/queries/FundInvest';
-import { Spinner } from '~/components/Common/Spinner/Spinner';
+import { Spinner } from '~/storybook/components/Spinner/Spinner';
 import RequestInvestment from './RequestInvestment/RequestInvestment';
 import ExecuteRequest from './ExecuteRequest/ExecuteRequest';
 import CancelRequest from './CancelRequest/CancelRequest';

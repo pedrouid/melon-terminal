@@ -1,7 +1,7 @@
 import React from 'react';
 import * as Yup from 'yup';
 import useForm, { FormContext } from 'react-hook-form';
-import { SubmitButton } from '~/components/Common/Form/SubmitButton/SubmitButton';
+import { Button } from '~/storybook/components/Button/Button';
 import { useEnvironment } from '~/hooks/useEnvironment';
 import { Deployment, AssetWhitelist, availableTokens, PolicyDefinition } from '@melonproject/melonjs';
 import { AssetWhitelistBytecode } from '@melonproject/melonjs/abis/AssetWhitelist.bin';
@@ -61,7 +61,7 @@ export const AssetWhitelistConfiguration: React.FC<AssetWhitelistConfigurationPr
       <p>&nbsp;</p>
       <FormContext {...form}>
         <form onSubmit={submit}>
-          <SubmitButton label="Add asset whitelist policy" />
+          <Button type="submit">Add asset whitelist policy</Button>
         </form>
       </FormContext>
     </>

@@ -1,13 +1,13 @@
 import React, { FormEvent, useEffect, useMemo, useState } from 'react';
 import * as R from 'ramda';
 import { TransactionModal } from '~/components/Common/TransactionModal/TransactionModal';
-import { SubmitButton } from '~/components/Common/Form/SubmitButton/SubmitButton';
+import { Button } from '~/storybook/components/Button/Button';
 import { useTransaction } from '~/hooks/useTransaction';
 import { TransactionReceipt } from 'web3-core';
 import { useEnvironment } from '~/hooks/useEnvironment';
 import { Transaction } from '@melonproject/melonjs';
 import { useAccountFundQuery } from '~/queries/AccountFund';
-import { Spinner } from '~/components/Common/Spinner/Spinner';
+import { Spinner } from '~/storybook/components/Spinner/Spinner';
 import { NoMatch } from '~/components/Routes/NoMatch/NoMatch';
 import { useHistory } from 'react-router';
 import { versionContract } from '~/utils/deploymentContracts';
@@ -163,7 +163,7 @@ export const FundSetupTransactions: React.FC = () => {
                 {!step.end && (
                   <form onSubmit={submit}>
                     <BlockActions>
-                      <SubmitButton label={step.name!} />
+                      <Button>{step.name!}</Button>
                     </BlockActions>
                   </form>
                 )}

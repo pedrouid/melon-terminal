@@ -1,8 +1,8 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { useHistory } from 'react-router';
 import { Link } from 'react-router-dom';
-import { DailyChange } from '~/components/Common/DailyChange/DailyChange';
-import { Spinner } from '~/components/Common/Spinner/Spinner';
+import { NumberChange } from '~/storybook/components/NumberChange/NumberChange';
+import { Spinner } from '~/storybook/components/Spinner/Spinner';
 import { NoMatch } from '~/components/Routes/NoMatch/NoMatch';
 import { FundOverviewPagination } from '~/components/Routes/Home/FundOverview/FundOverviewPagination/FundOverviewPagination';
 import { useFundOverviewQuery, FundProcessed } from '~/queries/FundOverview';
@@ -250,7 +250,7 @@ export const FundOverview: React.FC = () => {
                           <S.BodyCell>{fund.inception}</S.BodyCell>
                           <S.BodyCell>{fund.sharePrice}</S.BodyCell>
                           <S.BodyCell>
-                            <DailyChange change={fund.change} />
+                            <NumberChange change={fund.change} />
                           </S.BodyCell>
                           <S.BodyCell>{fund.aumEth}</S.BodyCell>
                           <S.BodyCell>{fund.shares}</S.BodyCell>

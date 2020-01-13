@@ -1,7 +1,7 @@
 import React from 'react';
 import { useHistory } from 'react-router';
 import { Fund } from '~/queries/FundParticipationOverview';
-import { BodyCell, BodyRowHover } from '~/components/Common/Table/Table.styles';
+import { BodyCell, BodyRowHover } from '~/storybook/components/Table/Table';
 
 export const WalletOverviewInvestedFund: React.FC<Fund> = props => {
   const history = useHistory();

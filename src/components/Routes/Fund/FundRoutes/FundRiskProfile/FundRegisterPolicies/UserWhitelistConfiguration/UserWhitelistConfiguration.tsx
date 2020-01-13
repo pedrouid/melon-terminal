@@ -4,7 +4,7 @@ import useForm, { FormContext } from 'react-hook-form';
 import { useEnvironment } from '~/hooks/useEnvironment';
 import { Deployment, UserWhitelist, PolicyDefinition } from '@melonproject/melonjs';
 import { UserWhitelistBytecode } from '@melonproject/melonjs/abis/UserWhitelist.bin';
-import { TextareaField } from '~/components/Common/Form/TextareaField/TextareaField';
+import { Textarea } from '~/storybook/components/Textarea/Textarea';
 import { useAccount } from '~/hooks/useAccount';
 import { SectionTitle } from '~/storybook/components/Title/Title';
 import { Button } from '~/storybook/components/Button/Button';
@@ -46,7 +46,7 @@ export const UserWhitelistConfiguration: React.FC<UserWhitelistConfigurationProp
       <FormContext {...form}>
         <form onSubmit={submit}>
           <Grid>
-            <TextareaField name="userWhitelist" placeholder="0x000000000000" id="userWhitelist" />
+            <Textarea name="userWhitelist" placeholder="0x000000000000" id="userWhitelist" />
             <GridRow>
               <GridCol>
                 <Button type="submit">Add user whitelist policy</Button>

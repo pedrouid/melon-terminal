@@ -12,9 +12,9 @@ import {
   ExchangeIdentifier,
 } from '@melonproject/melonjs';
 import { TransactionModal } from '~/components/Common/TransactionModal/TransactionModal';
-import { BodyCell, BodyCellRightAlign, BodyRow } from '~/components/Common/Table/Table.styles';
+import { BodyCell, BodyCellRightAlign, BodyRow } from '~/storybook/components/Table/Table';
 import { useAccount } from '~/hooks/useAccount';
-import { SubmitButton } from '~/components/Common/Form/SubmitButton/SubmitButton';
+import { Button } from '~/storybook/components/Button/Button';
 import { useOnChainQueryRefetcher } from '~/hooks/useOnChainQueryRefetcher';
 
 export interface OpenOrderItemProps {
@@ -75,7 +75,9 @@ export const OpenOrderItem: React.FC<OpenOrderItemProps> = ({ address, order }) 
       <BodyCellRightAlign>{price && !price.isNaN() ? price.toFixed(6) : 'N/A'}</BodyCellRightAlign>
       <BodyCellRightAlign>{makerAmount && !makerAmount.isNaN() ? makerAmount.toFixed(6) : 'N/A'}</BodyCellRightAlign>
       <BodyCell>
-        <SubmitButton type="button" label="Cancel" onClick={() => submit()} />
+        <Button type="submit" onClick={() => submit()}>
+          Cancel
+        </Button>
         <TransactionModal transaction={transaction} />
       </BodyCell>
     </BodyRow>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Spinner } from '~/components/Common/Spinner/Spinner';
+import { Spinner } from '~/storybook/components/Spinner/Spinner';
 import { useFundInvestments } from '~/queries/FundInvestments';
 import { weiToString } from '~/utils/weiToString';
 import {
@@ -11,7 +11,7 @@ import {
   BodyCellRightAlign,
   BodyRow,
   NoEntries,
-} from '~/components/Common/Table/Table.styles';
+} from '~/storybook/components/Table/Table';
 import { Block } from '~/storybook/components/Block/Block';
 import { SectionTitle } from '~/storybook/components/Title/Title';
 

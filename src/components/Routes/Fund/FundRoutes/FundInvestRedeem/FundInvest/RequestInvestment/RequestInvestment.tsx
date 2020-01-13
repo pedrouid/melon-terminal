@@ -15,7 +15,7 @@ import { Input } from '~/storybook/components/Input/Input';
 import { BlockActions } from '~/storybook/components/Block/Block';
 import { Button } from '~/storybook/components/Button/Button';
 import { Dropdown } from '~/storybook/components/Dropdown/Dropdown';
-import { Spinner } from '~/components/Common/Spinner/Spinner';
+import { Spinner } from '~/storybook/components/Spinner/Spinner';
 
 export interface RequestInvestmentProps {
   address: string;

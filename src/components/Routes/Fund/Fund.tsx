@@ -4,12 +4,12 @@ import { Switch, Route, useRouteMatch, Redirect } from 'react-router';
 import { FundProvider } from '~/components/Contexts/Fund/Fund';
 import { Container } from '~/storybook/components/Container/Container';
 import { ErrorFallback } from '~/components/Common/ErrorFallback/ErrorFallback';
-import { Spinner } from '~/components/Common/Spinner/Spinner';
+import { Spinner } from '~/storybook/components/Spinner/Spinner';
 import { FundNavigation } from './FundNavigation/FundNavigation';
 import { NotificationBar, NotificationContent } from '~/storybook/components/NotificationBar/NotificationBar';
-import { RequiresFundShutDown } from '~/components/Common/Gates/RequiresFundShutDown/RequiresFundShutDown';
-import { RequiresFundSetupInProgress } from '~/components/Common/Gates/RequiresFundSetupInProgress/RequiresFundSetupInProgress';
-import { RequiresFundSetupComplete } from '~/components/Common/Gates/RequiresFundSetupComplete/RequiresFundSetupComplete';
+import { RequiresFundShutDown } from '~/components/Gates/RequiresFundShutDown/RequiresFundShutDown';
+import { RequiresFundSetupInProgress } from '~/components/Gates/RequiresFundSetupInProgress/RequiresFundSetupInProgress';
+import { RequiresFundSetupComplete } from '~/components/Gates/RequiresFundSetupComplete/RequiresFundSetupComplete';
 import { FundHeader } from './FundHeader/FundHeader';
 
 const NoMatch = React.lazy(() => import('~/components/Routes/NoMatch/NoMatch'));

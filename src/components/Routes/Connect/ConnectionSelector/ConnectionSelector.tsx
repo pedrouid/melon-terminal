@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useConnectionState } from '~/hooks/useConnectionState';
 import { useHistory } from 'react-router';
 import { ConnectionStatus } from '~/components/Contexts/Connection/Connection';
-
 import { Block } from '~/storybook/components/Block/Block';
 import { GridRow, GridCol } from '~/storybook/components/Grid/Grid';
 

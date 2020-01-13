@@ -2,9 +2,9 @@ import React, { Suspense } from 'react';
 import ErrorBoundary from 'react-error-boundary';
 import { Route, Switch } from 'react-router-dom';
 import { OnChainApollo, TheGraphApollo } from './Contexts/Apollo/Apollo';
-import { RequiresAccount } from './Common/Gates/RequiresAccount/RequiresAccount';
-import { RequiresConnection } from './Common/Gates/RequiresConnection/RequiresConnection';
-import { Spinner } from './Common/Spinner/Spinner';
+import { RequiresAccount } from './Gates/RequiresAccount/RequiresAccount';
+import { RequiresConnection } from './Gates/RequiresConnection/RequiresConnection';
+import { Spinner } from '../storybook/components/Spinner/Spinner';
 import { ErrorFallback } from './Common/ErrorFallback/ErrorFallback';
 
 const Home = React.lazy(() => import('./Routes/Home/Home'));

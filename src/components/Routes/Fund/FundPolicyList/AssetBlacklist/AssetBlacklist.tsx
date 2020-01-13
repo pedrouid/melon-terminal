@@ -1,6 +1,6 @@
 import React from 'react';
 import { AssetBlacklistPolicy } from '~/queries/FundPolicies';
-import { BodyCell } from '~/components/Common/Table/Table.styles';
+import { BodyCell } from '~/storybook/components/Table/Table';
 import { DeployedEnvironment } from '@melonproject/melonjs';
 
 interface AssetBlacklistProps {
