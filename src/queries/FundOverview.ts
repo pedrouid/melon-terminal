@@ -4,12 +4,7 @@ import BigNumber from 'bignumber.js';
 import { useTheGraphQuery } from '~/hooks/useQuery';
 import { weiToString } from '~/utils/weiToString';
 import { hexToString } from '@melonproject/melonjs';
-
-export interface SharePriceChange {
-  color: string;
-  prefix: string;
-  dailyReturn: number;
-}
+import { calculateChangeFromSharePrice } from '~/utils/calculateChangeFromSharePrice';
 
 export interface SharePrice {
   sharePrice: string;
@@ -53,7 +48,7 @@ export interface FundProcessed {
   inception: string;
   aumEth: string;
   sharePrice: string;
-  change: SharePriceChange;
+  change: BigNumber;
   shares: string;
   denomination: string;
   investments: number;
@@ -107,23 +102,6 @@ const FundOverviewQuery = gql`
   }
 `;
 
-function calculateChangeFromSharePrice(current?: SharePrice, previous?: SharePrice): SharePriceChange {
-  if (current && previous) {
-    const bnCurrent = new BigNumber(current.sharePrice);
-    const bnPrevious = new BigNumber(previous.sharePrice);
-
-    const returnSinceLastPriceUpdate = bnCurrent.dividedBy(bnPrevious).toNumber() - 1;
-    const dailyReturn = 100 * returnSinceLastPriceUpdate;
-
-    const color = dailyReturn > 0 ? 'green' : dailyReturn < 0 ? 'red' : 'grey';
-    const prefix = dailyReturn > 0 ? '+' : '';
-
-    return { color, prefix, dailyReturn };
-  }
-
-  return { color: 'primary', prefix: '', dailyReturn: 0 };
-}
-
 export const useFundOverviewQuery = () => {
   const result = useTheGraphQuery<FundOverviewQueryResult, FundOverviewQueryVariables>(FundOverviewQuery);
 
@@ -136,7 +114,10 @@ export const useFundOverviewQuery = () => {
     inception: format(new Date(item.createdAt * 1000), 'yyyy/MM/dd hh:mm a'),
     aumEth: weiToString(item.gav, 4),
     sharePrice: weiToString(item.sharePrice, 4),
-    change: calculateChangeFromSharePrice(item.calculationsHistory[0] || 0, item.calculationsHistory[1] || 0),
+    change: calculateChangeFromSharePrice(
+      item.calculationsHistory[0]?.sharePrice,
+      item.calculationsHistory[1]?.sharePrice
+    ),
     shares: weiToString(item.totalSupply, 4),
     denomination: item.accounting.denominationAsset.symbol,
     investments: item.investments.length,

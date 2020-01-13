@@ -1,22 +1,24 @@
 import React from 'react';
 
 import { useFundDetailsQuery } from '~/queries/FundDetails';
+import { useFundDailyChange } from '~/queries/FundDailyChange';
 import { RequiresFundSetupComplete } from '~/components/Common/Gates/RequiresFundSetupComplete/RequiresFundSetupComplete';
-
+import { EtherscanLink } from '~/components/Common/EtherscanLink/EtherscanLink';
 import { DataBlock, DataBlockSection } from '~/storybook/components/DataBlock/DataBlock';
 import { Bar, BarContent } from '~/storybook/components/Bar/Bar';
 import { Headline } from '~/storybook/components/Headline/Headline';
-import { EtherscanLink } from '~/components/Common/EtherscanLink/EtherscanLink';
+import { DailyChange } from '~/components/Common/DailyChange/DailyChange';
 
 export interface FundHeaderProps {
   address: string;
 }
 
 export const FundHeader: React.FC<FundHeaderProps> = ({ address }) => {
-  const [fund] = useFundDetailsQuery(address);
+  const [fund, query] = useFundDetailsQuery(address);
+  const [dailyChange, queryDailyChange] = useFundDailyChange(address);
 
-  if (!fund) {
-    return null;
+  if (queryDailyChange.loading || query.loading || !fund) {
+    return <Bar />;
   }
 
   const routes = fund.routes;
@@ -34,6 +36,11 @@ export const FundHeader: React.FC<FundHeaderProps> = ({ address }) => {
             <DataBlock label="Assets under management">
               {accounting?.grossAssetValue ? `${accounting.grossAssetValue.toFixed(4)} WETH` : 'N/A'}
             </DataBlock>
+            {dailyChange && (
+              <DataBlock label="Daily Change">
+                <DailyChange change={dailyChange} />
+              </DataBlock>
+            )}
           </DataBlockSection>
         </RequiresFundSetupComplete>
       </BarContent>

@@ -12,7 +12,7 @@ export const WalletOverviewManagedFund: React.FC<Fund> = props => {
       <BodyCell>{props.inception}</BodyCell>
       <BodyCell>{props.gav}</BodyCell>
       <BodyCell>{props.sharePrice}</BodyCell>
-      <BodyCell>{props.change?.dailyReturn.toFixed(2)}</BodyCell>
+      <BodyCell>{props.change.toFixed(2)}</BodyCell>
       <BodyCell>{props.shares}</BodyCell>
       <BodyCell>{props.version}</BodyCell>
       <BodyCell>{props.isShutDown ? 'Inactive' : 'Active'}</BodyCell>

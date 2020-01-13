@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { useHistory } from 'react-router';
 import { Link } from 'react-router-dom';
-import { FundOverviewChange } from '~/components/Routes/Home/FundOverview/FundOverviewChange/FundOverviewChange';
+import { DailyChange } from '~/components/Common/DailyChange/DailyChange';
 import { Spinner } from '~/components/Common/Spinner/Spinner';
 import { NoMatch } from '~/components/Routes/NoMatch/NoMatch';
 import { FundOverviewPagination } from '~/components/Routes/Home/FundOverview/FundOverviewPagination/FundOverviewPagination';
@@ -43,11 +43,11 @@ function createSortNumberFromString(key: keyof FundProcessed) {
 }
 
 function sortChange(a: FundProcessed, b: FundProcessed): number {
-  if (a.change.dailyReturn === b.change.dailyReturn) {
+  if (a.change === b.change) {
     return 0;
   }
 
-  return a.change.dailyReturn < b.change.dailyReturn ? -1 : 1;
+  return a.change < b.change ? -1 : 1;
 }
 
 const sortChoice = {
@@ -250,11 +250,7 @@ export const FundOverview: React.FC = () => {
                           <S.BodyCell>{fund.inception}</S.BodyCell>
                           <S.BodyCell>{fund.sharePrice}</S.BodyCell>
                           <S.BodyCell>
-                            <FundOverviewChange
-                              prefix={fund.change.prefix}
-                              dailyReturn={fund.change.dailyReturn}
-                              color={fund.change.color}
-                            />
+                            <DailyChange change={fund.change} />
                           </S.BodyCell>
                           <S.BodyCell>{fund.aumEth}</S.BodyCell>
                           <S.BodyCell>{fund.shares}</S.BodyCell>
