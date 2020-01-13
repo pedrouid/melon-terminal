@@ -18,44 +18,35 @@ const requestHeadings = ['Fund name', 'Request date', 'Request asset', 'Request 
 export const WalletOverview: React.FC = () => {
   const account = useAccount();
   const [invested, requests, managed, query] = useFundParticipationOverviewQuery(account.address);
-
-  if (query.loading) {
-    return (
-      <Block>
-        <Spinner />
-      </Block>
-    );
-  }
-
   const managedHeader = fundHeadings.map((heading, index) => <S.HeaderCell key={index}>{heading}</S.HeaderCell>);
   const managedEmpty = !(managed && managed.length);
   const managedRows = !managedEmpty ? (
     managed.map(fund => <WalletOverviewManagedFund {...fund} key={fund.address} />)
   ) : (
-    <S.EmptyRow>
-      <S.EmptyCell colSpan={12}>You do not manage any funds.</S.EmptyCell>
-    </S.EmptyRow>
-  );
+      <S.EmptyRow>
+        <S.EmptyCell colSpan={12}>You do not manage any funds.</S.EmptyCell>
+      </S.EmptyRow>
+    );
 
   const investedHeader = redeemHeadings.map((heading, index) => <S.HeaderCell key={index}>{heading}</S.HeaderCell>);
   const investedEmpty = !(invested && invested.length);
   const investedRows = !investedEmpty ? (
     invested.map(fund => <WalletOverviewInvestedFund {...fund} key={fund.address} />)
   ) : (
-    <S.EmptyRow>
-      <S.EmptyCell colSpan={12}>You don't own any shares in any funds.</S.EmptyCell>
-    </S.EmptyRow>
-  );
+      <S.EmptyRow>
+        <S.EmptyCell colSpan={12}>You don't own any shares in any funds.</S.EmptyCell>
+      </S.EmptyRow>
+    );
 
   const requestsHeader = requestHeadings.map((heading, index) => <S.HeaderCell key={index}>{heading}</S.HeaderCell>);
   const requestsEmpty = !(requests && requests.length);
   const requestsRows = !requestsEmpty ? (
     requests.map(request => <WalletOverviewInvestmentRequest {...request} key={request.address} />)
   ) : (
-    <S.EmptyRow>
-      <S.EmptyCell colSpan={12}>You do not have any pending investment requests.</S.EmptyCell>
-    </S.EmptyRow>
-  );
+      <S.EmptyRow>
+        <S.EmptyCell colSpan={12}>You do not have any pending investment requests.</S.EmptyCell>
+      </S.EmptyRow>
+    );
 
   return (
     <Grid>
@@ -63,12 +54,16 @@ export const WalletOverview: React.FC = () => {
         <GridCol xs={12} sm={12}>
           <Block>
             <SectionTitle>Managed funds</SectionTitle>
-            <S.Table>
-              <thead>
-                <S.HeaderRow>{managedHeader}</S.HeaderRow>
-              </thead>
-              <tbody>{managedRows}</tbody>
-            </S.Table>
+            {query.loading && <Spinner />}
+
+            {!query.loading && (
+              <S.Table>
+                <thead>
+                  <S.HeaderRow>{managedHeader}</S.HeaderRow>
+                </thead>
+                <tbody>{managedRows}</tbody>
+              </S.Table>
+            )}
           </Block>
         </GridCol>
       </GridRow>
@@ -76,12 +71,16 @@ export const WalletOverview: React.FC = () => {
         <GridCol xs={12} sm={12}>
           <Block>
             <SectionTitle>Funds with owned shares</SectionTitle>
-            <S.Table>
-              <thead>
-                <S.HeaderRow>{investedHeader}</S.HeaderRow>
-              </thead>
-              <tbody>{investedRows}</tbody>
-            </S.Table>
+            {query.loading && <Spinner />}
+
+            {!query.loading && (
+              <S.Table>
+                <thead>
+                  <S.HeaderRow>{investedHeader}</S.HeaderRow>
+                </thead>
+                <tbody>{investedRows}</tbody>
+              </S.Table>
+            )}
           </Block>
         </GridCol>
       </GridRow>
@@ -89,12 +88,16 @@ export const WalletOverview: React.FC = () => {
         <GridCol xs={12} sm={12}>
           <Block>
             <SectionTitle>Pending investment requests</SectionTitle>
-            <S.Table>
-              <thead>
-                <S.HeaderRow>{requestsHeader}</S.HeaderRow>
-              </thead>
-              <tbody>{requestsRows}</tbody>
-            </S.Table>
+            {query.loading && <Spinner />}
+
+            {!query.loading && (
+              <S.Table>
+                <thead>
+                  <S.HeaderRow>{requestsHeader}</S.HeaderRow>
+                </thead>
+                <tbody>{requestsRows}</tbody>
+              </S.Table>
+            )}
           </Block>
         </GridCol>
       </GridRow>
