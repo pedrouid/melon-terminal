@@ -71,7 +71,7 @@ const FundTradingHistoryQuery = gql`
 
 export const useFundTradingHistoryQuery = (address: string) => {
   const options = {
-    variables: { address },
+    variables: { address: address?.toLowerCase() },
   };
 
   const result = useTheGraphQuery<FundTradingHistoryQueryResult, FundTradingHistoryQueryVariables>(

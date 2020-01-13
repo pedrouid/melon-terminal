@@ -98,11 +98,7 @@ export const FundMelonEngineTrading: React.FC<FundMelonEngineTradingProps> = pro
   });
 
   if (query.loading) {
-    return (
-      <Block>
-        <Spinner />
-      </Block>
-    );
+    return <Spinner />;
   }
 
   return (

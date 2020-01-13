@@ -31,6 +31,7 @@ if (!mainnet && !kovan && !testnet) {
 }
 
 module.exports = override(
+  // TODO: Consider disabling error overlay: https://github.com/pmmmwh/react-refresh-webpack-plugin/pull/33
   addReactRefresh({ disableRefreshCheck: true }),
   disableEsLint(),
   removeModuleScopePlugin(),

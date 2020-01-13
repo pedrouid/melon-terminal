@@ -9,9 +9,9 @@ import { FundKyberTrading } from './FundKyberTrading/FundKyberTrading';
 import { useFundExchanges } from './FundTrade.query';
 import { Block } from '~/storybook/components/Block/Block';
 import { Grid, GridRow, GridCol } from '~/storybook/components/Grid/Grid';
-import FundHoldings from '../../FundRoutes/FundOverview/FundHoldings/FundHoldings';
 import { FundMelonEngineTrading } from './FundMelonEngineTrading/FundMelonEngineTrading';
 import { RequiresFundNotShutDown } from '~/components/Common/Gates/RequiresFundNotShutDown/RequiresFundNotShutDown';
+import FundHoldings from '../../FundRoutes/FundOverview/FundHoldings/FundHoldings';
 
 export interface FundTradeProps {
   address: string;

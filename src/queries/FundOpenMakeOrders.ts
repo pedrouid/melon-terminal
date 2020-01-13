@@ -53,7 +53,7 @@ const FundOpenMakeOrdersQuery = gql`
 
 export const useFundOpenMakeOrdersQuery = (address: string) => {
   const options = {
-    variables: { address },
+    variables: { address: address?.toLowerCase() },
   };
 
   const result = useOnChainQuery<FundOpenMakeOrdersQueryVariables>(FundOpenMakeOrdersQuery, options);

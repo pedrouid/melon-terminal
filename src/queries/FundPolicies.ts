@@ -86,7 +86,7 @@ const FundPoliciesQuery = gql`
 
 export const useFundPoliciesQuery = (address: string) => {
   const options = {
-    variables: { address },
+    variables: { address: address?.toLowerCase() },
   };
 
   const result = useOnChainQuery<FundPoliciesQueryVariables>(FundPoliciesQuery, options);

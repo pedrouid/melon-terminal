@@ -27,7 +27,7 @@ const FundShutdownQuery = gql`
 
 export const useFundShutdownQuery = (address: string) => {
   const options = {
-    variables: { address },
+    variables: { address: address?.toLowerCase() },
   };
 
   const result = useOnChainQuery<FundShutdownQueryVariables>(FundShutdownQuery, options);

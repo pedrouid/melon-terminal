@@ -1,14 +1,13 @@
 import gql from 'graphql-tag';
 import { useOnChainQuery } from '~/hooks/useQuery';
-import { useAccount } from '~/hooks/useAccount';
 
 export interface FundInvestmentAssetsQueryVariables {
-  fund: string;
+  address: string;
 }
 
 const FundInvestmentAssetsQuery = gql`
-  query useFundInvestmentAssetsQuery($fund: Address!) {
-    fund(address: $fund) {
+  query useFundInvestmentAssetsQuery($address: Address!) {
+    fund(address: $address) {
       routes {
         participation {
           address
@@ -26,10 +25,9 @@ const FundInvestmentAssetsQuery = gql`
   }
 `;
 
-export const useFundInvestmentAssetsQuery = (fund: string) => {
-  const account = useAccount();
+export const useFundInvestmentAssetsQuery = (address: string) => {
   const options = {
-    variables: { fund },
+    variables: { address: address?.toLowerCase() },
   };
 
   const result = useOnChainQuery<FundInvestmentAssetsQueryVariables>(FundInvestmentAssetsQuery, options);

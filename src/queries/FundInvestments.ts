@@ -17,12 +17,12 @@ export interface FundInvestmentsQueryResult {
 }
 
 export interface FundInvestmentsQueryVariables {
-  id: string;
+  address: string;
 }
 
 const FundInvestmentsQuery = gql`
-  query FundDetailsQuery($id: ID!) {
-    fund(id: $id) {
+  query FundDetailsQuery($address: ID!) {
+    fund(id: $address) {
       name
       investments(orderBy: createdAt) {
         id
@@ -35,9 +35,9 @@ const FundInvestmentsQuery = gql`
   }
 `;
 
-export const useFundInvestments = (id: string) => {
+export const useFundInvestments = (address: string) => {
   const options = {
-    variables: { id },
+    variables: { address: address?.toLowerCase() },
   };
 
   const result = useTheGraphQuery<FundInvestmentsQueryResult, FundInvestmentsQueryVariables>(

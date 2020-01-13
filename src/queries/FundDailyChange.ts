@@ -15,12 +15,12 @@ export interface FundDailyChangeQueryResult {
 }
 
 export interface FundDailyChangeQueryVariables {
-  id: string;
+  address: string;
 }
 
 const FundDailyChangeQuery = gql`
-  query FundDailyChangeQuery($id: ID!) {
-    fund(id: $id) {
+  query FundDailyChangeQuery($address: ID!) {
+    fund(id: $address) {
       calculationsHistory(orderBy: timestamp, orderDirection: desc, first: 2) {
         id
         sharePrice
@@ -30,9 +30,9 @@ const FundDailyChangeQuery = gql`
   }
 `;
 
-export const useFundDailyChange = (id: string) => {
+export const useFundDailyChange = (address: string) => {
   const options = {
-    variables: { id },
+    variables: { address: address?.toLowerCase() },
   };
 
   const result = useTheGraphQuery<FundDailyChangeQueryResult, FundDailyChangeQueryVariables>(

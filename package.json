@@ -44,7 +44,7 @@
     "apollo-link-http": "^1.5.16",
     "bignumber.js": "^9.0.0",
     "date-fns": "^2.7.0",
-    "graphiql": "^0.16.0",
+    "graphiql": "^0.17.5",
     "graphql": "^14.5.4",
     "graphql-tag": "^2.10.1",
     "lru-cache": "^5.1.1",
