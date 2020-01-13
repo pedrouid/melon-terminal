@@ -37,7 +37,7 @@ export const FundHeader: React.FC<FundHeaderProps> = ({ address }) => {
               {accounting?.grossAssetValue ? `${accounting.grossAssetValue.toFixed(4)} WETH` : 'N/A'}
             </DataBlock>
             {dailyChange && (
-              <DataBlock label="Daily Change">
+              <DataBlock label="Daily change">
                 <DailyChange change={dailyChange} />
               </DataBlock>
             )}
