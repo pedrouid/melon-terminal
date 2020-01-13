@@ -3,7 +3,7 @@ require('dotenv-defaults').config();
 const fs = require('fs');
 const path = require('path');
 const webpack = require('webpack');
-const addHotLoader = require('react-app-rewire-hot-loader');
+const { addReactRefresh } = require('customize-cra-react-refresh');
 const {
   override,
   addBabelPlugin,
@@ -31,14 +31,13 @@ if (!mainnet && !kovan && !testnet) {
 }
 
 module.exports = override(
-  addHotLoader,
+  addReactRefresh({ disableRefreshCheck: true }),
   disableEsLint(),
   removeModuleScopePlugin(),
   addBabelPlugin(['styled-components', { ssr: false, displayName: true }]),
   addBabelPlugin('@babel/proposal-optional-chaining'),
   addBabelPlugin('@babel/proposal-nullish-coalescing-operator'),
   addWebpackAlias({
-    'react-dom': '@hot-loader/react-dom',
     'deployments/mainnet-deployment': mainnetDeploymentAlias || empty,
     'deployments/kovan-deployment': kovanDeploymentAlias || empty,
     'deployments/testnet-deployment': testnetDeploymentAlias || empty,

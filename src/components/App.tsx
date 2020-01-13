@@ -1,5 +1,4 @@
 import React, { useMemo } from 'react';
-import { hot } from 'react-hot-loader';
 import { ModalProvider } from 'styled-react-modal';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { Layout } from './Layout/Layout';
@@ -44,4 +43,4 @@ const AppComponent = () => {
   );
 };
 
-export const App = hot(module)(AppComponent);
+export const App = AppComponent;

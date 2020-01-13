@@ -1,5 +1,4 @@
 import React from 'react';
-
 import { FundOverview } from './FundOverview/FundOverview';
 import { Container } from '~/storybook/components/Container/Container';
 

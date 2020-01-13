@@ -30,7 +30,6 @@ export const Fund: React.FC = () => {
 
   return (
     <FundProvider address={match.params.address}>
-      <FundTitle />
       <FundHeader address={match.params.address} />
       <RequiresFundSetupComplete fallback={false}>
         <FundNavigation address={match.params.address} />
