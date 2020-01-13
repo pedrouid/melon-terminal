@@ -149,7 +149,8 @@ export const RequestInvestment: React.FC<RequestInvestmentProps> = props => {
     if (asset && token && requestedShares) {
       const shares = new BigNumber(event.target.value ?? 0)
         .multipliedBy(new BigNumber(10).exponentiatedBy(token.decimals))
-        .dividedBy(asset.shareCostInAsset!);
+        .dividedBy(asset.shareCostInAsset!)
+        .dividedBy(multiplier);
 
       form.setValue('requestedShares', shares.isNaN() ? 0 : shares.toNumber());
     }
