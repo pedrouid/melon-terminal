@@ -6,7 +6,6 @@ import { Container } from '~/storybook/components/Container/Container';
 import { ErrorFallback } from '~/components/Common/ErrorFallback/ErrorFallback';
 import { Spinner } from '~/components/Common/Spinner/Spinner';
 import { FundNavigation } from './FundNavigation/FundNavigation';
-import { FundTitle } from './FundTitle/FundTitle';
 import { NotificationBar, NotificationContent } from '~/storybook/components/NotificationBar/NotificationBar';
 import { RequiresFundShutDown } from '~/components/Common/Gates/RequiresFundShutDown/RequiresFundShutDown';
 import { RequiresFundSetupInProgress } from '~/components/Common/Gates/RequiresFundSetupInProgress/RequiresFundSetupInProgress';
