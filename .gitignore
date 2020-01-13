@@ -14,11 +14,11 @@ build/
 
 # Allowed dot files
 !.gitignore
+!.nowignore
 !.prettierrc
 !.prettierignore
 !.travis.yml
 !.editorconfig
-!.dockerignore
 !.env.defaults
 !.env.schema
 !.env.example

@@ -92,7 +92,7 @@
     "babel-plugin-styled-components": "^1.10.6",
     "customize-cra": "^0.9.1",
     "customize-cra-react-refresh": "^1.0.1",
-    "dotenv-defaults": "^1.0.2",
+    "dotenv-extended": "^2.7.1",
     "husky": "^3.0.9",
     "lint-staged": "^9.4.2",
     "prettier": "^1.19.1",

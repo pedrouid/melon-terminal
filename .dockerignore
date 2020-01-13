@@ -1,9 +1,0 @@
-*
-
-!src
-!public
-!package.json
-!yarn.lock
-!tsconfig.json
-!paths.json
-!config-overrides.js

@@ -1,12 +1,19 @@
 {
   "version": 2,
   "name": "interface",
-  "builds": [{ "src": "package.json", "use": "@now/static-build", "config": { "distDir": "build" } }],
-  "routes": [
-    { "src": "^/static/(.*)", "dest": "/static/$1" },
-    { "src": "^/favicon.png", "dest": "/favicon.png" },
-    { "src": "^/manifest.json", "dest": "/manifest.json" },
-    { "src": "^/robots.txt", "dest": "/robots.txt" },
-    { "src": "^/(.*)", "dest": "/index.html" }
-  ]
+  "rewrites": [
+    { "source": "^/static/(.*)", "destination": "/static/$1" },
+    { "source": "^/favicon.png", "destination": "/favicon.png" },
+    { "source": "^/manifest.json", "destination": "/manifest.json" },
+    { "source": "^/robots.txt", "destination": "/robots.txt" },
+    { "source": "^/(.*)", "destination": "/index.html" }
+  ],
+  "build": {
+    "env": {
+      "MELON_MAINNET_DEPLOYMENT": "./deployments/mainnet-deployment.json",
+      "MELON_MAINNET_SUBGRAPH": "https://api.thegraph.com/subgraphs/name/melonproject/melon",
+      "MELON_KOVAN_DEPLOYMENT": "./deployments/kovan-deployment.json",
+      "MELON_KOVAN_SUBGRAPH": "https://api.thegraph.com/subgraphs/name/melonproject/melon-kovan"
+    }
+  }
 }
