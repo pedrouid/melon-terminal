@@ -1,5 +1,4 @@
 import React from 'react';
-
 import { Bar, BarContent } from '~/storybook/components/Bar/Bar';
 import { Headline } from '~/storybook/components/Headline/Headline';
 import { useAccount } from '~/hooks/useAccount';

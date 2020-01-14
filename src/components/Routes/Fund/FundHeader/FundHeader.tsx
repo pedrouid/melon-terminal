@@ -1,5 +1,4 @@
 import React from 'react';
-
 import { useFundDetailsQuery } from '~/queries/FundDetails';
 import { useFundDailyChange } from '~/queries/FundDailyChange';
 import { RequiresFundSetupComplete } from '~/components/Gates/RequiresFundSetupComplete/RequiresFundSetupComplete';
