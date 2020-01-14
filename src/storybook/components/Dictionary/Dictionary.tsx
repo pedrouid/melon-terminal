@@ -8,7 +8,7 @@ export interface DictionaryProps {
   }[];
 }
 
-export const Dictionary = styled(Block)<DictionaryProps>``;
+export const Dictionary = styled(Block) <DictionaryProps>``;
 
 export const DictionaryDivider = styled.div`
   width: 100%;
@@ -35,7 +35,7 @@ export const DictionaryLabel = styled.div`
   font-size: ${props => props.theme.fontSizes.m};
   color: ${props => props.theme.mainColors.secondaryDark};
   @media (${props => props.theme.mediaQueries.s}) {
-    width: 40%;
+    width: 30%;
   }
 `;
 
@@ -44,7 +44,7 @@ export const DictionaryData = styled.div`
   font-size: ${props => props.theme.fontSizes.l};
   width: 100%;
   @media (${props => props.theme.mediaQueries.s}) {
-    width: 60%;
+    width: 70%;
     padding-left: ${props => props.theme.spaceUnits.s};
   }
 `;

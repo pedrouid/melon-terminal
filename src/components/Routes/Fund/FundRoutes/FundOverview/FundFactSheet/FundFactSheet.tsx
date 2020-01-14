@@ -5,7 +5,6 @@ import { useFundDetailsQuery } from '~/queries/FundDetails';
 import { SectionTitle } from '~/storybook/components/Title/Title';
 import {
   Dictionary,
-  DictionaryDivider,
   DictionaryEntry,
   DictionaryData,
   DictionaryLabel,
@@ -45,7 +44,6 @@ export const FundFactSheet: React.FC<FundFactSheetProps> = ({ address }) => {
   return (
     <Dictionary>
       <SectionTitle>Fund factsheet</SectionTitle>
-      <DictionaryDivider />
       <DictionaryEntry>
         <DictionaryLabel>Fund name</DictionaryLabel>
         <DictionaryData>{fund.name}</DictionaryData>

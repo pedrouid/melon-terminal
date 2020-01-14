@@ -21,15 +21,15 @@ export const FundContracts: React.FC<FundContractsProps> = ({ address }) => {
 
   const contracts = [
     { name: 'Accounting', field: 'accounting' },
-    { name: 'FeeManager', field: 'feeManager' },
+    { name: 'Fee manager', field: 'feeManager' },
     { name: 'Participation', field: 'participation' },
-    { name: 'PolicyManager', field: 'policyManager' },
+    { name: 'Policy manager', field: 'policyManager' },
     { name: 'Shares', field: 'shares' },
     { name: 'Trading', field: 'trading' },
     { name: 'Vault', field: 'vault' },
     { name: 'Registry', field: 'registry' },
     { name: 'Version', field: 'version' },
-    { name: 'PriceSource', field: 'priceSource' },
+    { name: 'Price source', field: 'priceSource' },
   ];
 
   const routes = fund?.routes;
