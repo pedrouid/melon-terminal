@@ -62,6 +62,7 @@
     "react-spring": "^8.0.27",
     "rxjs": "^6.5.3",
     "styled-components": "^5.0.0-rc.2",
+    "styled-icons": "^9.1.0",
     "styled-react-modal": "^2.0.0",
     "styled-reset": "^4.0.6",
     "web3": "^2.0.0-alpha.1",

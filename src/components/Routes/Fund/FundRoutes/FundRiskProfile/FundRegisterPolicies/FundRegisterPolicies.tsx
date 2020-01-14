@@ -25,6 +25,7 @@ import { useOnChainQueryRefetcher } from '~/hooks/useOnChainQueryRefetcher';
 import { Block } from '~/storybook/components/Block/Block';
 import { SectionTitle } from '~/storybook/components/Title/Title';
 import { Spinner } from '~/storybook/components/Spinner/Spinner';
+import { RadioButtonContainer, RadioButtonInput, RadioButtonMask, RadioButtonIcon, RadioButtonLabel } from '~/storybook/components/RadioButton/RadioButton';
 
 export interface FundRegisterPoliciesProps {
   address: string;
@@ -77,8 +78,13 @@ export const FundRegisterPolicies: React.FC<FundRegisterPoliciesProps> = ({ addr
         {environment.policies.map(policy => {
           return (
             <li key={policy.name}>
-              <input type="radio" id={policy.name} name="addPolicy" onClick={() => setSelectedPolicy(policy)} />
-              <label htmlFor={policy.name}>{policy.name}</label>
+              <RadioButtonContainer>
+                <RadioButtonInput type="radio" id={policy.name} name="addPolicy" onClick={() => setSelectedPolicy(policy)} />
+                <RadioButtonMask>
+                  <RadioButtonIcon />
+                </RadioButtonMask>
+                <RadioButtonLabel htmlFor={policy.name}>{policy.name}</RadioButtonLabel>
+              </RadioButtonContainer>
             </li>
           );
         })}

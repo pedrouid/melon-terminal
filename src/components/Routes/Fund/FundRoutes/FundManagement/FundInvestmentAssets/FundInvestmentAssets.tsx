@@ -11,6 +11,7 @@ import { useOnChainQueryRefetcher } from '~/hooks/useOnChainQueryRefetcher';
 import { Block, BlockActions } from '~/storybook/components/Block/Block';
 import { SectionTitle } from '~/storybook/components/Title/Title';
 import { Spinner } from '~/storybook/components/Spinner/Spinner';
+import { CheckboxContainer, CheckboxInput, CheckboxMask, CheckboxIcon, CheckboxLabel } from '~/storybook/components/Checkbox/Checkbox';
 import { useAccount } from '~/hooks/useAccount';
 import { useFundInvestmentAssetsQuery } from '~/queries/FundInvestmentAssets';
 
@@ -108,18 +109,22 @@ export const InvestmentAssets: React.FC<InvestmentAssetsProps> = ({ address }) =
           <ul>
             {environment.tokens.map((token, index) => (
               <li key={token.symbol}>
-                <input
-                  defaultChecked={defaultValues[index]}
-                  id={`assets[${index}]`}
-                  type="checkbox"
-                  name={`assets[${index}]`}
-                  value={token.address}
-                  key={token.address}
-                  ref={form.register}
-                />
-                <label htmlFor={`assets[${index}]`}>
-                  {token.symbol} ({token.name})
-                </label>
+                <CheckboxContainer>
+                  <CheckboxInput
+                    defaultChecked={defaultValues[index]}
+                    id={`assets[${index}]`}
+                    type="checkbox"
+                    name={`assets[${index}]`}
+                    value={token.address}
+                    key={token.address}
+                    ref={form.register}
+                  />
+                  <CheckboxMask>
+                    <CheckboxIcon>
+                    </CheckboxIcon>
+                  </CheckboxMask>
+                  <CheckboxLabel htmlFor={`assets[${index}]`}>{token.symbol} ({token.name})</CheckboxLabel>
+                </CheckboxContainer>
               </li>
             ))}
           </ul>

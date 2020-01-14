@@ -15,6 +15,7 @@ import { Button } from '~/storybook/components/Button/Button';
 import { Grid, GridRow, GridCol } from '~/storybook/components/Grid/Grid';
 import { SectionTitle } from '~/storybook/components/Title/Title';
 import { Block, BlockSection, BlockActions } from '~/storybook/components/Block/Block';
+import { CheckboxContainer, CheckboxInput, CheckboxMask, CheckboxIcon, CheckboxLabel } from '~/storybook/components/Checkbox/Checkbox';
 
 export interface WalletFundSetupForm {
   name: string;
@@ -149,17 +150,21 @@ export const WalletFundSetup: React.FC = () => {
                   <ul>
                     {environment.tokens.map((token, index) => (
                       <li key={token.symbol}>
-                        <input
-                          id={`assets[${index}]`}
-                          type="checkbox"
-                          name={`assets[${index}]`}
-                          value={token.symbol}
-                          key={token.symbol}
-                          ref={form.register}
-                        />
-                        <label htmlFor={`assets[${index}]`}>
-                          {token.symbol} ({token.name})
-                        </label>
+                        <CheckboxContainer>
+                          <CheckboxInput
+                            id={`assets[${index}]`}
+                            type="checkbox"
+                            name={`assets[${index}]`}
+                            value={token.symbol}
+                            key={token.symbol}
+                            ref={form.register}
+                          />
+                          <CheckboxMask>
+                            <CheckboxIcon>
+                            </CheckboxIcon>
+                          </CheckboxMask>
+                          <CheckboxLabel htmlFor={`assets[${index}]`}>{token.symbol} ({token.name})</CheckboxLabel>
+                        </CheckboxContainer>
                       </li>
                     ))}
                   </ul>
@@ -185,9 +190,19 @@ export const WalletFundSetup: React.FC = () => {
                     WITH RESPECT TO THE MELON PROTOCOL AND/OR THE UNDERLYING SOFTWARE AND THE USE THEREOF ARE
                     DISCLAIMED.
                   </p>
-
-                  <input id="termsAndConditions" type="checkbox" name="termsAndConditions" ref={form.register} />
-                  <label htmlFor="termsAndConditions">I accept the terms and conditions</label>
+                  <CheckboxContainer>
+                    <CheckboxInput
+                      id="termsAndConditions"
+                      type="checkbox"
+                      name="termsAndConditions"
+                      ref={form.register}
+                    />
+                    <CheckboxMask>
+                      <CheckboxIcon>
+                      </CheckboxIcon>
+                    </CheckboxMask>
+                    <CheckboxLabel htmlFor="termsAndConditions">I accept the terms and conditions</CheckboxLabel>
+                  </CheckboxContainer>
                   <BlockActions>
                     <Button type="submit">Create fund</Button>
                   </BlockActions>

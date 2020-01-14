@@ -7,6 +7,7 @@ import { Deployment, AssetBlacklist, PolicyDefinition, availableTokens } from '@
 import { AssetBlacklistBytecode } from '@melonproject/melonjs/abis/AssetBlacklist.bin';
 import { useAccount } from '~/hooks/useAccount';
 import { SectionTitle } from '~/storybook/components/Title/Title';
+import {CheckboxContainer, CheckboxInput, CheckboxMask, CheckboxIcon, CheckboxLabel } from '~/storybook/components/Checkbox/Checkbox';
 
 interface AssetBlacklistConfigurationForm {
   assetBlacklist: string[];
@@ -46,15 +47,21 @@ export const AssetBlacklistConfiguration: React.FC<AssetBlacklistConfigurationPr
       <ul>
         {tokens.map((token, index) => (
           <li key={token.address}>
-            <input
-              id={`assetBlacklist[${index}]`}
-              type="checkbox"
-              name={`assetBlacklist[${index}]`}
-              value={token.address}
-              key={token.symbol}
-              ref={form.register}
-            />
-            <label htmlFor={`assetBlacklist[${index}]`}>{token.symbol}</label>
+            <CheckboxContainer>
+              <CheckboxInput
+                id={`assetBlacklist[${index}]`}
+                type="checkbox"
+                name={`assetBlacklist[${index}]`}
+                value={token.address}
+                key={token.symbol}
+                ref={form.register}
+              />
+              <CheckboxMask>
+                <CheckboxIcon>
+                </CheckboxIcon>
+              </CheckboxMask>
+              <CheckboxLabel htmlFor={`assetBlacklist[${index}]`}>{token.symbol}</CheckboxLabel>
+            </CheckboxContainer>
           </li>
         ))}
       </ul>

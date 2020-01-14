@@ -7,6 +7,7 @@ import { Deployment, AssetWhitelist, availableTokens, PolicyDefinition } from '@
 import { AssetWhitelistBytecode } from '@melonproject/melonjs/abis/AssetWhitelist.bin';
 import { useAccount } from '~/hooks/useAccount';
 import { SectionTitle } from '~/storybook/components/Title/Title';
+import { CheckboxContainer, CheckboxInput, CheckboxMask, CheckboxIcon, CheckboxLabel } from '~/storybook/components/Checkbox/Checkbox';
 
 interface AssetWhitelistConfigurationForm {
   assetWhitelist: string[];
@@ -46,15 +47,21 @@ export const AssetWhitelistConfiguration: React.FC<AssetWhitelistConfigurationPr
       <ul>
         {tokens.map((token, index) => (
           <li key={token.address}>
-            <input
-              id={`assetWhitelist[${index}]`}
-              type="checkbox"
-              name={`assetWhitelist[${index}]`}
-              value={token.address}
-              key={token.symbol}
-              ref={form.register}
-            />
-            <label htmlFor={`assetWhitelist[${index}]`}>{token.symbol}</label>
+            <CheckboxContainer>
+              <CheckboxInput
+                id={`assetWhitelist[${index}]`}
+                type="checkbox"
+                name={`assetWhitelist[${index}]`}
+                value={token.address}
+                key={token.symbol}
+                ref={form.register}
+              />
+              <CheckboxMask>
+                <CheckboxIcon>
+                </CheckboxIcon>
+              </CheckboxMask>
+              <CheckboxLabel htmlFor={`assetWhitelist[${index}]`}>{token.symbol}</CheckboxLabel>
+            </CheckboxContainer>
           </li>
         ))}
       </ul>

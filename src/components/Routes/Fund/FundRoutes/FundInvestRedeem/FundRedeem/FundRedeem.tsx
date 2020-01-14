@@ -15,6 +15,7 @@ import { Input } from '~/storybook/components/Input/Input';
 import { Button } from '~/storybook/components/Button/Button';
 import { Block } from '~/storybook/components/Block/Block';
 import { SectionTitle } from '~/storybook/components/Title/Title';
+import { CheckboxContainer, CheckboxInput, CheckboxMask, CheckboxIcon, CheckboxLabel } from '~/storybook/components/Checkbox/Checkbox';
 
 export interface FundRedeemProps {
   address: string;
@@ -101,16 +102,20 @@ export const FundRedeem: React.FC<FundRedeemProps> = ({ address }) => {
                   disabled={redeemAll}
                 />
               </FormField>
-
-              <input
-                type="checkbox"
-                ref={form.register}
-                name="redeemAll"
-                id="redeemAll"
-                onClick={handleRedeemAllClick}
-              />
-              <label htmlFor="redeemAll">Redeem all shares</label>
-
+              <CheckboxContainer>
+                <CheckboxInput
+                  type="checkbox"
+                  ref={form.register}
+                  name="redeemAll"
+                  id="redeemAll"
+                  onClick={handleRedeemAllClick}
+                />
+                <CheckboxMask>
+                  <CheckboxIcon>
+                  </CheckboxIcon>
+                </CheckboxMask>
+                <CheckboxLabel htmlFor="redeemAll">Redeem all shares</CheckboxLabel>
+              </CheckboxContainer>
               <Button type="submit">Redeem</Button>
             </form>
           </FormContext>
