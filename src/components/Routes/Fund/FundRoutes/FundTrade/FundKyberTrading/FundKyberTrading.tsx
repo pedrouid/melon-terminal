@@ -96,6 +96,7 @@ export const FundKyberTrading: React.FC<FundKyberTradingProps> = props => {
       startWith(defaultValues),
       distinctUntilChanged((a, b) => equals(a, b))
     );
+
     return values$.pipe(
       tap(() => setLoading(true)),
       switchMap(async values => {
@@ -104,7 +105,7 @@ export const FundKyberTrading: React.FC<FundKyberTradingProps> = props => {
             const kyberEth = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee';
             const srcToken = values.takerAsset === weth.address ? kyberEth : values.takerAsset;
             const destToken = values.makerAsset === weth.address ? kyberEth : values.makerAsset;
-            const srcQty = new BigNumber(toWei(values.takerQuantity));
+            const srcQty = new BigNumber(values.takerQuantity).multipliedBy(new BigNumber(10).exponentiatedBy(18)).decimalPlaces(0);
             const result = await contract.getExpectedRate(srcToken, destToken, srcQty);
 
             resolve(result.expectedRate);
@@ -113,7 +114,7 @@ export const FundKyberTrading: React.FC<FundKyberTradingProps> = props => {
           }
         });
 
-        return new BigNumber(1).dividedBy(fromWei(expected.toString()));
+        return expected.dividedBy(new BigNumber(10).exponentiatedBy(18));
       }),
       tap(price => setPrice(price)),
       tap(() => setLoading(false))
@@ -126,20 +127,24 @@ export const FundKyberTrading: React.FC<FundKyberTradingProps> = props => {
   }, [stream$]);
 
   useLayoutEffect(() => {
-    const qty = new BigNumber(takerQuantity ?? 0).dividedBy(price).decimalPlaces(4);
-    form.setValue('makerQuantity', !qty.isZero() ? qty.toString() : '');
-  }, [price.toString(), takerQuantity]);
+    const qty = new BigNumber(takerQuantity ?? 0).multipliedBy(price);
+    form.setValue('makerQuantity', qty.toFixed(4));
+  }, [price, takerQuantity]);
 
   const submit = form.handleSubmit(async data => {
     const hub = new Hub(environment, props.address);
     const trading = new Trading(environment, (await hub.getRoutes()).trading);
     const adapter = await KyberTradingAdapter.create(trading, props.exchange.exchange);
 
+    // Don't use the maker quantity form value, it's rounded.
+    const takerQuantity = new BigNumber(data.takerQuantity);
+    const makerQuantity = takerQuantity.multipliedBy(price);
+
     const tx = adapter.takeOrder(account.address!, {
+      makerQuantity: makerQuantity.multipliedBy(new BigNumber(10).exponentiatedBy(makerAsset!.decimals)).decimalPlaces(0),
+      takerQuantity: takerQuantity.multipliedBy(new BigNumber(10).exponentiatedBy(takerAsset!.decimals)).decimalPlaces(0),
       makerAsset: data.makerAsset!,
       takerAsset: data.takerAsset!,
-      makerQuantity: new BigNumber(toWei(`${data.makerQuantity!}`)),
-      takerQuantity: new BigNumber(toWei(`${data.takerQuantity!}`)),
     });
 
     transaction.start(tx, 'Take order');
@@ -186,7 +191,7 @@ export const FundKyberTrading: React.FC<FundKyberTradingProps> = props => {
                 {!loading && !price.isFinite() && <div>No liquidity for this quantity.</div>}
                 {!loading && price.isFinite() && (
                   <div>
-                    1 {makerAsset?.symbol ?? 'N/A'} = {price.toFixed(4)} {takerAsset?.symbol ?? 'N/A'}
+                    1 {takerAsset?.symbol ?? 'N/A'} = {price.toFixed(4)} {makerAsset?.symbol ?? 'N/A'}
                   </div>
                 )}
               </GridCol>
