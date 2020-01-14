@@ -11,6 +11,7 @@ import {
 } from '~/storybook/components/Dictionary/Dictionary';
 import { Block } from '~/storybook/components/Block/Block';
 import { EtherscanLink } from '~/components/Common/EtherscanLink/EtherscanLink';
+import { FormattedNumber } from '~/components/Common/FormattedNumber/FormattedNumber';
 
 export interface FundFactSheetProps {
   address: string;
@@ -75,22 +76,26 @@ export const FundFactSheet: React.FC<FundFactSheetProps> = ({ address }) => {
       <DictionaryEntry>
         <DictionaryLabel>Gross asset value</DictionaryLabel>
         <DictionaryData>
-          {accounting?.grossAssetValue ? `${accounting.grossAssetValue.toFixed(4)} WETH` : 'N/A'}
+          <FormattedNumber value={accounting?.grossAssetValue} suffix="WETH" />
         </DictionaryData>
       </DictionaryEntry>
       <DictionaryEntry>
         <DictionaryLabel>Net asset value</DictionaryLabel>
         <DictionaryData>
-          {accounting?.netAssetValue ? `${accounting.netAssetValue.toFixed(4)} WETH` : 'N/A'}
+          <FormattedNumber value={accounting?.netAssetValue} suffix="WETH" />
         </DictionaryData>
       </DictionaryEntry>
       <DictionaryEntry>
         <DictionaryLabel>Total number of shares</DictionaryLabel>
-        <DictionaryData>{shares?.totalSupply ? shares.totalSupply.toFixed(4) : 'N/A'}</DictionaryData>
+        <DictionaryData>
+          <FormattedNumber value={shares?.totalSupply} />
+        </DictionaryData>
       </DictionaryEntry>
       <DictionaryEntry>
         <DictionaryLabel>Share price per share</DictionaryLabel>
-        <DictionaryData>{accounting?.sharePrice ? `${accounting.sharePrice.toFixed(4)} WETH` : 'N/A'}</DictionaryData>
+        <DictionaryData>
+          <FormattedNumber value={accounting?.sharePrice} suffix="WETH" />
+        </DictionaryData>
       </DictionaryEntry>
       <DictionaryEntry>
         <DictionaryLabel>Management fee</DictionaryLabel>
