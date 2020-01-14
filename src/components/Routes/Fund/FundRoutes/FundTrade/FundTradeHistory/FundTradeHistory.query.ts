@@ -7,8 +7,8 @@ export interface CallOnExchange {
   id: string;
   timestamp: number;
   exchange?: ExchangeDefinition;
-  makerAsset?: TokenDefinition;
-  takerAsset?: TokenDefinition;
+  buyAsset?: TokenDefinition;
+  sellAsset?: TokenDefinition;
 }
 
 export interface FundTradeHistoryQueryVariables {
@@ -51,9 +51,9 @@ export const useFundTradeHistoryQuery = (address: string) => {
       id: item.id,
       timestamp: item.timestamp,
       exchange: environment.getExchange(item.exchange?.id),
-      makerAsset: environment.getToken(item.orderAddress2?.id),
-      takerAsset: environment.getToken(item.orderAddress3?.id),
-    };
+      buyAsset: environment.getToken(item.orderAddress2?.id),
+      sellAsset: environment.getToken(item.orderAddress3?.id),
+    } as CallOnExchange;
   }) as CallOnExchange[];
 
   return [calls, result] as [typeof calls, typeof result];

@@ -1,15 +1,6 @@
 import React from 'react';
 import { Spinner } from '~/storybook/components/Spinner/Spinner';
-import {
-  Table,
-  HeaderCell,
-  HeaderCellRightAlign,
-  HeaderRow,
-  BodyCell,
-  BodyCellRightAlign,
-  BodyRow,
-  NoEntries,
-} from '~/storybook/components/Table/Table';
+import { Table, HeaderCell, HeaderRow, BodyCell, BodyRow, NoEntries } from '~/storybook/components/Table/Table';
 import { Block } from '~/storybook/components/Block/Block';
 import { SectionTitle } from '~/storybook/components/Title/Title';
 import { useFundTradeHistoryQuery } from './FundTradeHistory.query';
@@ -33,8 +24,8 @@ export const FundTradeHistory: React.FC<FundTradeHistoryProps> = ({ address }) =
             <HeaderRow>
               <HeaderCell>Time</HeaderCell>
               <HeaderCell>Exchange</HeaderCell>
-              <HeaderCell>Maker asset</HeaderCell>
-              <HeaderCell>Taker asset</HeaderCell>
+              <HeaderCell>Buy asset</HeaderCell>
+              <HeaderCell>Sell asset</HeaderCell>
             </HeaderRow>
           </thead>
           <tbody>
@@ -42,8 +33,8 @@ export const FundTradeHistory: React.FC<FundTradeHistoryProps> = ({ address }) =
               <BodyRow key={call.id}>
                 <BodyCell>{call.timestamp}</BodyCell>
                 <BodyCell>{call.exchange?.name}</BodyCell>
-                <BodyCell>{call.makerAsset?.symbol}</BodyCell>
-                <BodyCell>{call.takerAsset?.symbol}</BodyCell>
+                <BodyCell>{call.buyAsset?.symbol}</BodyCell>
+                <BodyCell>{call.sellAsset?.symbol}</BodyCell>
               </BodyRow>
             ))}
           </tbody>
