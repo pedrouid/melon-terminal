@@ -11,7 +11,7 @@ import { useAccount } from '~/hooks/useAccount';
 import { useOnChainQueryRefetcher } from '~/hooks/useOnChainQueryRefetcher';
 import { Block, BlockActions } from '~/storybook/components/Block/Block';
 import { SectionTitle } from '~/storybook/components/Title/Title';
-import { DictionaryData, DictionaryEntry, Dictionary, DictionaryLabel } from '~/storybook/components/Dictionary/Dictionary';
+import { DictionaryData, DictionaryEntry, DictionaryLabel } from '~/storybook/components/Dictionary/Dictionary';
 
 export interface ClaimFeesProps {
   address: string;

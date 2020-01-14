@@ -10,7 +10,6 @@ import { Block, BlockActions } from '~/storybook/components/Block/Block';
 import { SectionTitle } from '~/storybook/components/Title/Title';
 import { useFundShutdownQuery } from '~/queries/FundShutdown';
 import { Spinner } from '~/storybook/components/Spinner/Spinner';
-import { Holding } from '@melonproject/melongql';
 
 export interface ShutdownProps {
   address: string;

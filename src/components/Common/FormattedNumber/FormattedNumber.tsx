@@ -9,8 +9,7 @@ export interface FormattedNumberData {
 }
 
 export const FormattedNumber: React.FC<FormattedNumberData> = ({ value, prefix, suffix, decimals = 4 }) => {
-  const bn = BigNumber.isBigNumber(val) ? value : new BigNumber(value ?? 'NaN');
-  
+  const bn = BigNumber.isBigNumber(value) ? value : new BigNumber(value ?? 'NaN');
   if (bn.isNaN()) {
     return <>N/A</>;
   }
