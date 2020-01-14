@@ -39,10 +39,7 @@ const FundTradeHistoryQuery = gql`
           orderValue1
           orderValue2
           orderValue3
-          orderValue4
-          orderValue5
           orderValue6
-          orderValue7
           methodSignature
         }
       }
@@ -62,8 +59,10 @@ export const useFundTradeHistoryQuery = (address: string) => {
         const buyAsset = environment.getToken(item.orderAddress2?.id);
         const sellAsset = environment.getToken(item.orderAddress3?.id);
 
-        // Calculate the buy amount for partial fills.
         let buyAmount = new BigNumber(item.orderValue0 ?? 0);
+        const sellAmount = new BigNumber((item.orderValue6 || item.orderValue1) ?? 0);
+
+        // Adjust the buy amount for partial fills.
         if (item.orderValue6) {
           buyAmount = buyAmount.multipliedBy(item.orderValue6).dividedBy(item.orderValue1);
         }
@@ -71,7 +70,6 @@ export const useFundTradeHistoryQuery = (address: string) => {
         const buyQuantity =
           buyAsset && buyAmount.dividedBy(new BigNumber(10).exponentiatedBy(new BigNumber(buyAsset.decimals)));
 
-        const sellAmount = new BigNumber((item.orderValue6 || item.orderValue1) ?? 0);
         const sellQuantity =
           sellAsset && sellAmount.dividedBy(new BigNumber(10).exponentiatedBy(new BigNumber(sellAsset.decimals)));
 
