@@ -104,6 +104,8 @@ export const InvestmentAssets: React.FC<InvestmentAssetsProps> = ({ address }) =
         <form onSubmit={submit}>
           <SectionTitle>Define investment assets</SectionTitle>
 
+          <p>Investors will be able to invest in your funds using any of the assets selected below.</p>
+          
           {form.errors.assets && <p>{form.errors.assets.message}</p>}
 
           <ul>
