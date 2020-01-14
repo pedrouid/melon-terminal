@@ -1,14 +1,7 @@
 import styled from 'styled-components';
 import { Block } from '../Block/Block';
 
-export interface DictionaryProps {
-  entries?: {
-    label: React.ReactNode;
-    data: React.ReactNode;
-  }[];
-}
-
-export const Dictionary = styled(Block) <DictionaryProps>``;
+export const Dictionary = styled(Block)``;
 
 export const DictionaryDivider = styled.div`
   width: 100%;
