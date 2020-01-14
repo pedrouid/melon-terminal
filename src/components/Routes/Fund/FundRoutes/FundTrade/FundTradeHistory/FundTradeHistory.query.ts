@@ -1,6 +1,8 @@
 import gql from 'graphql-tag';
+import BigNumber from 'bignumber.js';
+import { useMemo } from 'react';
 import { useTheGraphQuery } from '~/hooks/useQuery';
-import { ExchangeDefinition, TokenDefinition } from '@melonproject/melonjs';
+import { decodeFunctionSignature, ExchangeDefinition, TokenDefinition } from '@melonproject/melonjs';
 import { useEnvironment } from '~/hooks/useEnvironment';
 
 export interface CallOnExchange {
@@ -9,6 +11,9 @@ export interface CallOnExchange {
   exchange?: ExchangeDefinition;
   buyAsset?: TokenDefinition;
   sellAsset?: TokenDefinition;
+  buyQuantity?: BigNumber;
+  sellQuantity?: BigNumber;
+  signature: string;
 }
 
 export interface FundTradeHistoryQueryVariables {
@@ -32,7 +37,12 @@ const FundTradeHistoryQuery = gql`
           }
           orderValue0
           orderValue1
+          orderValue2
+          orderValue3
+          orderValue4
+          orderValue5
           orderValue6
+          orderValue7
           methodSignature
         }
       }
@@ -46,15 +56,38 @@ export const useFundTradeHistoryQuery = (address: string) => {
     variables: { address: address?.toLowerCase() },
   });
 
-  const calls = (result.data?.fund?.trading?.calls || []).map((item: any) => {
-    return {
-      id: item.id,
-      timestamp: item.timestamp,
-      exchange: environment.getExchange(item.exchange?.id),
-      buyAsset: environment.getToken(item.orderAddress2?.id),
-      sellAsset: environment.getToken(item.orderAddress3?.id),
-    } as CallOnExchange;
-  }) as CallOnExchange[];
+  const calls = useMemo(
+    () =>
+      (result.data?.fund?.trading?.calls || []).map((item: any) => {
+        const buyAsset = environment.getToken(item.orderAddress2?.id);
+        const sellAsset = environment.getToken(item.orderAddress3?.id);
+
+        // Calculate the buy amount for partial fills.
+        let buyAmount = new BigNumber(item.orderValue0 ?? 0);
+        if (item.orderValue6) {
+          buyAmount = buyAmount.multipliedBy(item.orderValue6).dividedBy(item.orderValue1);
+        }
+
+        const buyQuantity =
+          buyAsset && buyAmount.dividedBy(new BigNumber(10).exponentiatedBy(new BigNumber(buyAsset.decimals)));
+
+        const sellAmount = new BigNumber((item.orderValue6 || item.orderValue1) ?? 0);
+        const sellQuantity =
+          sellAsset && sellAmount.dividedBy(new BigNumber(10).exponentiatedBy(new BigNumber(sellAsset.decimals)));
+
+        return {
+          buyAsset,
+          sellAsset,
+          buyQuantity,
+          sellQuantity,
+          id: item.id,
+          timestamp: item.timestamp,
+          signature: decodeFunctionSignature(item.methodSignature)?.function,
+          exchange: environment.getExchange(item.exchange?.id),
+        } as CallOnExchange;
+      }) as CallOnExchange[],
+    [result.data]
+  );
 
   return [calls, result] as [typeof calls, typeof result];
 };

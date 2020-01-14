@@ -27,15 +27,23 @@ export const FundTradeHistory: React.FC<FundTradeHistoryProps> = ({ address }) =
               <HeaderCell>Exchange</HeaderCell>
               <HeaderCell>Buy asset</HeaderCell>
               <HeaderCell>Sell asset</HeaderCell>
+              <HeaderCell>Buy quantity</HeaderCell>
+              <HeaderCell>Sell quantity</HeaderCell>
+              <HeaderCell>Call</HeaderCell>
             </HeaderRow>
           </thead>
           <tbody>
             {calls.map(call => (
               <BodyRow key={call.id}>
-                <BodyCell><FormattedDate timestamp={call.timestamp} /></BodyCell>
+                <BodyCell>
+                  <FormattedDate timestamp={call.timestamp} />
+                </BodyCell>
                 <BodyCell>{call.exchange?.name}</BodyCell>
                 <BodyCell>{call.buyAsset?.symbol}</BodyCell>
                 <BodyCell>{call.sellAsset?.symbol}</BodyCell>
+                <BodyCell>{call.buyQuantity?.toFixed(4)}</BodyCell>
+                <BodyCell>{call.sellQuantity?.toFixed(4)}</BodyCell>
+                <BodyCell>{call.signature}</BodyCell>
               </BodyRow>
             ))}
           </tbody>
