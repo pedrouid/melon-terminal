@@ -2,7 +2,6 @@ import React, { useMemo, useEffect, useState, useLayoutEffect } from 'react';
 import BigNumber from 'bignumber.js';
 import * as Yup from 'yup';
 import * as Rx from 'rxjs';
-import { toWei, fromWei } from 'web3-utils';
 import { equals } from 'ramda';
 import useForm, { FormContext } from 'react-hook-form';
 import {
@@ -25,6 +24,7 @@ import { useTransaction } from '~/hooks/useTransaction';
 import { useOnChainQueryRefetcher } from '~/hooks/useOnChainQueryRefetcher';
 import { TransactionModal } from '~/components/Common/TransactionModal/TransactionModal';
 import { Grid, GridRow, GridCol } from '~/storybook/components/Grid/Grid';
+import { FormattedNumber } from '~/components/Common/FormattedNumber/FormattedNumber';
 
 export interface FundKyberTradingProps {
   address: string;
@@ -197,7 +197,7 @@ export const FundKyberTrading: React.FC<FundKyberTradingProps> = props => {
                 {!loading && !price.isFinite() && <div>No liquidity for this quantity.</div>}
                 {!loading && price.isFinite() && (
                   <div>
-                    1 {takerAsset?.symbol ?? 'N/A'} = {price.toFixed(4)} {makerAsset?.symbol ?? 'N/A'}
+                    1 {takerAsset?.symbol ?? 'N/A'} = <FormattedNumber value={price} /> {makerAsset?.symbol ?? 'N/A'}
                   </div>
                 )}
               </GridCol>

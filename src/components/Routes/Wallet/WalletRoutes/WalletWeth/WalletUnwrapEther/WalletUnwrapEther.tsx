@@ -13,6 +13,7 @@ import { Block, BlockActions } from '~/storybook/components/Block/Block';
 import { Title } from '~/storybook/components/Title/Title';
 import { FormField } from '~/storybook/components/FormField/FormField';
 import { Input } from '~/storybook/components/Input/Input';
+import { FormattedNumber } from '~/components/Common/FormattedNumber/FormattedNumber';
 import { Button } from '~/storybook/components/Button/Button';
 import * as S from './WalletUnwrapEther.styles';
 
@@ -52,8 +53,12 @@ export const WalletUnwrapEther: React.FC = () => {
       <FormContext {...form}>
         <form onSubmit={submit}>
           <S.WalletUnwrapEtherBalances>
-            <S.WalletUnwrapEtherBalance>{account.eth?.toFixed(4)} ETH</S.WalletUnwrapEtherBalance>
-            <S.WalletUnwrapEtherBalance>{account.weth?.toFixed(4)} WETH</S.WalletUnwrapEtherBalance>
+            <S.WalletUnwrapEtherBalance>
+              <FormattedNumber value={account.eth} suffix="ETH" />
+            </S.WalletUnwrapEtherBalance>
+            <S.WalletUnwrapEtherBalance>
+              <FormattedNumber value={account.weth} suffix="WETH" />
+            </S.WalletUnwrapEtherBalance>
           </S.WalletUnwrapEtherBalances>
 
           <FormField name="quantity" label="Quantity">

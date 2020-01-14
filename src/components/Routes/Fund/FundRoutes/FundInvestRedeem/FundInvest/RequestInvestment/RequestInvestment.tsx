@@ -16,6 +16,7 @@ import { BlockActions } from '~/storybook/components/Block/Block';
 import { Button } from '~/storybook/components/Button/Button';
 import { Dropdown } from '~/storybook/components/Dropdown/Dropdown';
 import { Spinner } from '~/storybook/components/Spinner/Spinner';
+import { FormattedNumber } from '~/components/Common/FormattedNumber/FormattedNumber';
 
 export interface RequestInvestmentProps {
   address: string;
@@ -188,7 +189,7 @@ export const RequestInvestment: React.FC<RequestInvestmentProps> = props => {
           {(query.loading && <Spinner />) || (
             <>
               <div>
-                Your balance: {allowance?.balance?.toString() ?? 'N/A'} {asset?.token?.symbol}
+                Your balance: <FormattedNumber value={allowance?.balance} suffix={asset?.token?.symbol} />
               </div>
 
               <FormField name="requestedShares" label="Number of shares">

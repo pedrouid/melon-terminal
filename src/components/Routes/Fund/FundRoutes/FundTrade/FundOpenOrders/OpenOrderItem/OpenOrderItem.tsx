@@ -16,6 +16,7 @@ import { BodyCell, BodyCellRightAlign, BodyRow } from '~/storybook/components/Ta
 import { useAccount } from '~/hooks/useAccount';
 import { Button } from '~/storybook/components/Button/Button';
 import { useOnChainQueryRefetcher } from '~/hooks/useOnChainQueryRefetcher';
+import { FormattedNumber } from '~/components/Common/FormattedNumber/FormattedNumber';
 
 export interface OpenOrderItemProps {
   address: string;
@@ -72,8 +73,12 @@ export const OpenOrderItem: React.FC<OpenOrderItemProps> = ({ address, order }) 
       <BodyCell>{makerAsset?.symbol ?? order.makerAsset}</BodyCell>
       <BodyCell>{takerAsset?.symbol ?? order.takerAsset}</BodyCell>
       <BodyCell>{exchange?.name ?? order.exchange}</BodyCell>
-      <BodyCellRightAlign>{price && !price.isNaN() ? price.toFixed(6) : 'N/A'}</BodyCellRightAlign>
-      <BodyCellRightAlign>{makerAmount && !makerAmount.isNaN() ? makerAmount.toFixed(6) : 'N/A'}</BodyCellRightAlign>
+      <BodyCellRightAlign>
+        <FormattedNumber value={price} decimals={6} />
+      </BodyCellRightAlign>
+      <BodyCellRightAlign>
+        <FormattedNumber value={makerAmount} decimals={6} />
+      </BodyCellRightAlign>
       <BodyCell>
         <Button type="submit" onClick={() => submit()}>
           Cancel

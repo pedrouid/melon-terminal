@@ -14,6 +14,7 @@ import { Title } from '~/storybook/components/Title/Title';
 import { FormField } from '~/storybook/components/FormField/FormField';
 import { Input } from '~/storybook/components/Input/Input';
 import { Button } from '~/storybook/components/Button/Button';
+import { FormattedNumber } from '~/components/Common/FormattedNumber/FormattedNumber';
 import * as S from './WalletWrapEther.styles';
 
 const validationSchema = Yup.object().shape({
@@ -52,14 +53,16 @@ export const WalletWrapEther: React.FC = () => {
       <FormContext {...form}>
         <form onSubmit={submit}>
           <S.WalletWrapEtherBalances>
-            <S.WalletWrapEtherBalance>{account.eth?.toFixed(4)} ETH</S.WalletWrapEtherBalance>
-            <S.WalletWrapEtherBalance>{account.weth?.toFixed(4)} WETH</S.WalletWrapEtherBalance>
+            <S.WalletWrapEtherBalance>
+              <FormattedNumber value={account.eth} suffix="ETH" />
+            </S.WalletWrapEtherBalance>
+            <S.WalletWrapEtherBalance>
+              <FormattedNumber value={account.weth} suffix="WETH" />
+            </S.WalletWrapEtherBalance>
           </S.WalletWrapEtherBalances>
-
           <FormField name="quantity" label="Quantity">
             <Input id="quantity" name="quantity" type="number" step="any" />
           </FormField>
-
           <BlockActions>
             <Button type="submit">Wrap Ether</Button>
           </BlockActions>

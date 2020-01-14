@@ -13,7 +13,7 @@ import { useTransaction } from '~/hooks/useTransaction';
 import { useOnChainQueryRefetcher } from '~/hooks/useOnChainQueryRefetcher';
 import { TransactionModal } from '~/components/Common/TransactionModal/TransactionModal';
 import { useMelonEngineTradingQuery } from './FundMelonEngineTrading.query';
-import { Block } from '~/storybook/components/Block/Block';
+import { FormattedNumber } from '~/components/Common/FormattedNumber/FormattedNumber';
 
 export interface FundMelonEngineTradingProps {
   address: string;
@@ -114,7 +114,9 @@ export const FundMelonEngineTrading: React.FC<FundMelonEngineTradingProps> = pro
           </FormField>
 
           <div>1 MLN = {price.toFixed(4)} WETH</div>
-          <div>{liquid.toFixed(4)} WETH available</div>
+          <div>
+            <FormattedNumber value={liquid} suffix="WETH available" />
+          </div>
 
           <Button type="submit">Submit</Button>
         </form>
