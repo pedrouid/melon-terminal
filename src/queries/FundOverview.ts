@@ -1,5 +1,4 @@
 import gql from 'graphql-tag';
-import { format } from 'date-fns';
 import BigNumber from 'bignumber.js';
 import { useTheGraphQuery } from '~/hooks/useQuery';
 import { weiToString } from '~/utils/weiToString';
@@ -45,7 +44,7 @@ export interface FundProcessed {
   id: string;
   name: string;
   address: string;
-  inception: string;
+  inception: number;
   aumEth: string;
   sharePrice: string;
   change: BigNumber;
@@ -111,7 +110,7 @@ export const useFundOverviewQuery = () => {
     id: item.id,
     name: item.name,
     address: item.id.substr(0, 8),
-    inception: format(new Date(item.createdAt * 1000), 'yyyy/MM/dd hh:mm a'),
+    inception: item.createdAt,
     aumEth: weiToString(item.gav, 4),
     sharePrice: weiToString(item.sharePrice, 4),
     change: calculateChangeFromSharePrice(

@@ -10,6 +10,7 @@ import { useAccount } from '~/hooks/useAccount';
 import { Block } from '~/storybook/components/Block/Block';
 import { SectionTitle } from '~/storybook/components/Title/Title';
 import { GridRow, Grid, GridCol } from '~/storybook/components/Grid/Grid';
+import { FormattedDate } from '~/components/Common/FormattedDate/FormattedDate';
 
 const fundHeadings = ['Name', 'Inception', 'AUM [ETH]', 'Share price', 'Change', '# shares', 'Version', 'Status'];
 const redeemHeadings = ['Name', 'Inception', 'AUM [ETH]', 'Share price', 'Change', '# shares', 'Version', 'Status'];

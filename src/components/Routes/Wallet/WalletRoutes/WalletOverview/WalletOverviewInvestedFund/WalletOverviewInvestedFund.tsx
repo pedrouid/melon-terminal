@@ -2,6 +2,7 @@ import React from 'react';
 import { useHistory } from 'react-router';
 import { Fund } from '~/queries/FundParticipationOverview';
 import { BodyCell, BodyRowHover } from '~/storybook/components/Table/Table';
+import { FormattedDate } from '~/components/Common/FormattedDate/FormattedDate';
 
 export const WalletOverviewInvestedFund: React.FC<Fund> = props => {
   const history = useHistory();
@@ -9,7 +10,9 @@ export const WalletOverviewInvestedFund: React.FC<Fund> = props => {
   return (
     <BodyRowHover onClick={() => history.push(`/fund/${props.address}`)}>
       <BodyCell>{props.name}</BodyCell>
-      <BodyCell>{props.inception}</BodyCell>
+      <BodyCell>
+        <FormattedDate timestamp={props.inception} />
+      </BodyCell>
       <BodyCell>{props.gav}</BodyCell>
       <BodyCell>{props.sharePrice}</BodyCell>
       <BodyCell>{props.change.toFixed(2)}</BodyCell>

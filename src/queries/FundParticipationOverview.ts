@@ -1,5 +1,4 @@
 import gql from 'graphql-tag';
-import { format } from 'date-fns';
 import BigNumber from 'bignumber.js';
 import { useTheGraphQuery } from '~/hooks/useQuery';
 import { weiToString } from '~/utils/weiToString';
@@ -54,13 +53,13 @@ export interface InvestmentRequest extends Fund {
   requestAsset: string;
   requestShares: string;
   requestAmount: string;
-  requestCreatedAt: string;
+  requestCreatedAt: number;
 }
 
 export interface Fund {
   name: string;
   address: string;
-  inception: string;
+  inception: number;
   gav?: string;
   isShutDown?: boolean;
   sharePrice: string;
@@ -169,7 +168,7 @@ export const useFundParticipationOverviewQuery = (investor?: Address) => {
     const output: Fund = {
       address: item.fund.id,
       name: item.fund.name,
-      inception: format(new Date(item.fund.createdAt * 1000), 'yyyy/MM/dd hh:mm a'),
+      inception: item.fund.createdAt,
       sharePrice: weiToString(item.fund.sharePrice, 4),
       version: hexToString(item.fund.version.name),
       versionAddress: item.fund.version.id,
@@ -196,8 +195,8 @@ export const useFundParticipationOverviewQuery = (investor?: Address) => {
     const output: InvestmentRequest = {
       address: item.fund.id,
       name: item.fund.name,
-      inception: format(new Date(item.fund.createdAt * 1000), 'yyyy/MM/dd hh:mm a'),
-      requestCreatedAt: format(new Date(item.requestTimestamp * 1000), 'yyyy/MM/dd hh:mm a'),
+      inception: item.fund.createdAt,
+      requestCreatedAt: item.requestTimestamp,
       requestShares: weiToString(item.shares, 4),
       requestAmount: weiToString(item.amount, 4),
       requestAsset: item.asset.symbol,
@@ -223,7 +222,7 @@ export const useFundParticipationOverviewQuery = (investor?: Address) => {
     const output: Fund = {
       address: item.id,
       name: item.name,
-      inception: format(new Date(item.createdAt * 1000), 'yyyy/MM/dd hh:mm a'),
+      inception: item.createdAt,
       sharePrice: weiToString(item.sharePrice, 4),
       version: hexToString(item.version.name),
       versionAddress: item.version.id,

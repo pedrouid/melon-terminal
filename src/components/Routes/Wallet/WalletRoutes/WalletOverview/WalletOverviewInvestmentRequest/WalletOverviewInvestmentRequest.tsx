@@ -2,6 +2,7 @@ import React from 'react';
 import { useHistory } from 'react-router';
 import { InvestmentRequest } from '~/queries/FundParticipationOverview';
 import { BodyCell, BodyRowHover } from '~/storybook/components/Table/Table';
+import { FormattedDate } from '~/components/Common/FormattedDate/FormattedDate';
 
 export const WalletOverviewInvestmentRequest: React.FC<InvestmentRequest> = props => {
   const history = useHistory();
@@ -9,7 +10,9 @@ export const WalletOverviewInvestmentRequest: React.FC<InvestmentRequest> = prop
   return (
     <BodyRowHover onClick={() => history.push(`/fund/${props.address}`)}>
       <BodyCell>{props.name}</BodyCell>
-      <BodyCell>{props.requestCreatedAt}</BodyCell>
+      <BodyCell>
+        <FormattedDate timestamp={props.requestCreatedAt} />
+      </BodyCell>
       <BodyCell>{props.requestAsset}</BodyCell>
       <BodyCell>{props.requestAmount}</BodyCell>
       <BodyCell>{props.requestShares}</BodyCell>

@@ -14,6 +14,7 @@ import {
 } from '~/storybook/components/Table/Table';
 import { Block } from '~/storybook/components/Block/Block';
 import { SectionTitle } from '~/storybook/components/Title/Title';
+import { FormattedDate } from '~/components/Common/FormattedDate/FormattedDate';
 
 export interface FundInvestmentHistoryListProps {
   address: string;
@@ -60,7 +61,9 @@ export const FundInvestmentHistoryList: React.FC<FundInvestmentHistoryListProps>
           {fundInvestement.map(investement => {
             return (
               <BodyRow key={investement.id}>
-                <BodyCell>{new Date(investement.timestamp * 1000).toLocaleString()}</BodyCell>
+                <BodyCell>
+                  <FormattedDate timestamp={investement.timestamp} />
+                </BodyCell>
                 <BodyCell>{investement.owner.id.substr(0, 8)}...</BodyCell>
                 <BodyCell>{investement.action}</BodyCell>
                 <BodyCellRightAlign>{weiToString(investement.shares.toString(), 4)}</BodyCellRightAlign>

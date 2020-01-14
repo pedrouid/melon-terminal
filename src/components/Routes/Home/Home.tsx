@@ -16,6 +16,7 @@ import { SectionTitle } from '~/storybook/components/Title/Title';
 import { Button } from '~/storybook/components/Button/Button';
 import * as S from './Home.styles';
 import { Container } from '~/storybook/components/Container/Container';
+import { FormattedDate } from '~/components/Common/FormattedDate/FormattedDate';
 
 interface SortChoice {
   key: keyof typeof sortChoice;
@@ -247,7 +248,9 @@ export const Home: React.FC = () => {
                       pagination.data.map(fund => (
                         <S.BodyRow key={fund.id} onClick={() => history.push(`/fund/${fund.id}`)}>
                           <S.BodyCell>{fund.name}</S.BodyCell>
-                          <S.BodyCell>{fund.inception}</S.BodyCell>
+                          <S.BodyCell>
+                            <FormattedDate timestamp={fund.inception} />
+                          </S.BodyCell>
                           <S.BodyCell>{fund.sharePrice}</S.BodyCell>
                           <S.BodyCell>
                             <NumberChange change={fund.change} />
