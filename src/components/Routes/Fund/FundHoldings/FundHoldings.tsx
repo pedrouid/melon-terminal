@@ -12,10 +12,8 @@ import {
   BodyRow,
   HeaderRow,
 } from '~/storybook/components/Table/Table';
-
 import { SectionTitle } from '~/storybook/components/Title/Title';
 import { Block } from '~/storybook/components/Block/Block';
-import { Holding } from '@melonproject/melongql';
 
 export interface FundHoldingsProps {
   address: string;
@@ -71,5 +69,3 @@ export const FundHoldings: React.FC<FundHoldingsProps> = ({ address }) => {
     </Block>
   );
 };
-
-export default FundHoldings;

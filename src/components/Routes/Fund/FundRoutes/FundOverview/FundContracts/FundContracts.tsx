@@ -40,36 +40,20 @@ export const FundContracts: React.FC<FundContractsProps> = ({ address }) => {
     })
     .filter(item => !!item.address);
 
-  if (query.loading) {
-    return (
-      <Grid>
-        <GridRow justify="center">
-          <GridCol xs={12} sm={6} md={4} lg={4}>
-            <Block>
-              <SectionTitle>Portfolio holdings</SectionTitle>
-              <Spinner />
-            </Block>
-          </GridCol>
-        </GridRow>
-      </Grid>
-    );
-  }
   return (
     <Dictionary>
-      <SectionTitle>Fund Component Contracts</SectionTitle>
-      {addresses &&
-        addresses.map(a => {
-          return (
-            <DictionaryEntry key={a.address}>
-              <DictionaryLabel>{a.name}</DictionaryLabel>
-              <DictionaryData>
-                <EtherscanLink address={a.address} />
-              </DictionaryData>
-            </DictionaryEntry>
-          );
-        })}
+      <SectionTitle>Fund contracts</SectionTitle>
+      {query.loading && <Spinner />}
+
+      {!query.loading &&
+        addresses.map(a => (
+          <DictionaryEntry key={a.address}>
+            <DictionaryLabel>{a.name}</DictionaryLabel>
+            <DictionaryData>
+              <EtherscanLink address={a.address} />
+            </DictionaryData>
+          </DictionaryEntry>
+        ))}
     </Dictionary>
   );
 };
-
-export default FundContracts;

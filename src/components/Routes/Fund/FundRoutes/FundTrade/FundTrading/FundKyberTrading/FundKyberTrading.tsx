@@ -105,7 +105,9 @@ export const FundKyberTrading: React.FC<FundKyberTradingProps> = props => {
             const kyberEth = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee';
             const srcToken = values.takerAsset === weth.address ? kyberEth : values.takerAsset;
             const destToken = values.makerAsset === weth.address ? kyberEth : values.makerAsset;
-            const srcQty = new BigNumber(values.takerQuantity).multipliedBy(new BigNumber(10).exponentiatedBy(18)).decimalPlaces(0);
+            const srcQty = new BigNumber(values.takerQuantity)
+              .multipliedBy(new BigNumber(10).exponentiatedBy(18))
+              .decimalPlaces(0);
             const result = await contract.getExpectedRate(srcToken, destToken, srcQty);
 
             resolve(result.expectedRate);
@@ -141,8 +143,12 @@ export const FundKyberTrading: React.FC<FundKyberTradingProps> = props => {
     const makerQuantity = takerQuantity.multipliedBy(price);
 
     const tx = adapter.takeOrder(account.address!, {
-      makerQuantity: makerQuantity.multipliedBy(new BigNumber(10).exponentiatedBy(makerAsset!.decimals)).decimalPlaces(0),
-      takerQuantity: takerQuantity.multipliedBy(new BigNumber(10).exponentiatedBy(takerAsset!.decimals)).decimalPlaces(0),
+      makerQuantity: makerQuantity
+        .multipliedBy(new BigNumber(10).exponentiatedBy(makerAsset!.decimals))
+        .decimalPlaces(0),
+      takerQuantity: takerQuantity
+        .multipliedBy(new BigNumber(10).exponentiatedBy(takerAsset!.decimals))
+        .decimalPlaces(0),
       makerAsset: data.makerAsset!,
       takerAsset: data.takerAsset!,
     });

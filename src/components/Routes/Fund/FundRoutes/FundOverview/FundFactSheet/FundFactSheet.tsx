@@ -44,7 +44,7 @@ export const FundFactSheet: React.FC<FundFactSheetProps> = ({ address }) => {
 
   return (
     <Dictionary>
-      <SectionTitle>Fund Factsheet</SectionTitle>
+      <SectionTitle>Fund factsheet</SectionTitle>
       <DictionaryDivider />
       <DictionaryEntry>
         <DictionaryLabel>Fund name</DictionaryLabel>
@@ -109,5 +109,3 @@ export const FundFactSheet: React.FC<FundFactSheetProps> = ({ address }) => {
     </Dictionary>
   );
 };
-
-export default FundFactSheet;

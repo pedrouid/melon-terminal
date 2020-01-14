@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
-import * as S from './FundRegisterPolicies.styles';
 import { useEnvironment } from '~/hooks/useEnvironment';
 import { useFundPoliciesQuery } from '~/queries/FundPolicies';
-import { FundPolicyListParameters } from '../../../FundPolicyList/FundPolicyList';
 import {
   PolicyManager,
   PriceTolerance,
@@ -28,11 +26,11 @@ import { Block } from '~/storybook/components/Block/Block';
 import { SectionTitle } from '~/storybook/components/Title/Title';
 import { Spinner } from '~/storybook/components/Spinner/Spinner';
 
-export interface RegisterPoliciesProps {
+export interface FundRegisterPoliciesProps {
   address: string;
 }
 
-export const RegisterPolicies: React.FC<RegisterPoliciesProps> = ({ address }) => {
+export const FundRegisterPolicies: React.FC<FundRegisterPoliciesProps> = ({ address }) => {
   const environment = useEnvironment()!;
   const account = useAccount()!;
   const refetch = useOnChainQueryRefetcher();
@@ -139,5 +137,3 @@ export const RegisterPolicies: React.FC<RegisterPoliciesProps> = ({ address }) =
     </Block>
   );
 };
-
-export default RegisterPolicies;

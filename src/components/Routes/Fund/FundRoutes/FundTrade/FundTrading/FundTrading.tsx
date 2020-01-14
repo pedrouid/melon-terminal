@@ -3,11 +3,11 @@ import { ExchangeIdentifier } from '@melonproject/melonjs';
 import { TradingNavigation } from './TradingNavigation/TradingNavigation';
 import { TradingNavigationItem } from './TradingNavigation/TradingNavigationItem/TradingNavigationItem';
 import { Spinner } from '~/storybook/components/Spinner/Spinner';
-import { FundOrderbookTrading } from '../FundOrderbookTrading/FundOrderbookTrading';
-import { FundKyberTrading } from '../FundKyberTrading/FundKyberTrading';
+import { FundOrderbookTrading } from './FundOrderbookTrading/FundOrderbookTrading';
+import { FundKyberTrading } from './FundKyberTrading/FundKyberTrading';
 import { useFundTrading } from './FundTrading.query';
 import { Block } from '~/storybook/components/Block/Block';
-import { FundMelonEngineTrading } from '../FundMelonEngineTrading/FundMelonEngineTrading';
+import { FundMelonEngineTrading } from './FundMelonEngineTrading/FundMelonEngineTrading';
 
 export interface FundTradingProps {
   address: string;

@@ -39,10 +39,10 @@ export const WithContextAndData: React.FC = () => {
       <GridRow>
         <GridCol xs={12} md={6}>
           <Dictionary>
-            <SectionTitle>Fund Factsheet</SectionTitle>
+            <SectionTitle>Fund factsheet</SectionTitle>
             <DictionaryDivider />
             <DictionaryEntry>
-              <DictionaryLabel>Fund Name</DictionaryLabel>
+              <DictionaryLabel>Fund name</DictionaryLabel>
               <DictionaryData>My Second Melon Fund</DictionaryData>
             </DictionaryEntry>
             <DictionaryEntry>
@@ -50,11 +50,11 @@ export const WithContextAndData: React.FC = () => {
               <DictionaryData>1.0.5</DictionaryData>
             </DictionaryEntry>
             <DictionaryEntry>
-              <DictionaryLabel>Fund Adress</DictionaryLabel>
+              <DictionaryLabel>Fund address</DictionaryLabel>
               <DictionaryData>0xcf74a2f1778509fee75444da809</DictionaryData>
             </DictionaryEntry>
             <DictionaryEntry>
-              <DictionaryLabel>Manager Adress</DictionaryLabel>
+              <DictionaryLabel>Manager address</DictionaryLabel>
               <DictionaryData>0x56a2f1778509fee7547ca809</DictionaryData>
             </DictionaryEntry>
             <DictionaryEntry>
@@ -71,11 +71,11 @@ export const WithContextAndData: React.FC = () => {
               <DictionaryData>0.0000 WETH</DictionaryData>
             </DictionaryEntry>
             <DictionaryEntry>
-              <DictionaryLabel># shares</DictionaryLabel>
+              <DictionaryLabel>Number of shares</DictionaryLabel>
               <DictionaryData>0.0000 shares</DictionaryData>
             </DictionaryEntry>
             <DictionaryEntry>
-              <DictionaryLabel>Share Price</DictionaryLabel>
+              <DictionaryLabel>Share price</DictionaryLabel>
               <DictionaryData>1.87775 WETH</DictionaryData>
             </DictionaryEntry>
             <DictionaryDivider />

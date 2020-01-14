@@ -1,9 +1,10 @@
 import React from 'react';
 import { FundOpenOrders } from './FundOpenOrders/FundOpenOrders';
 import { Grid, GridRow, GridCol } from '~/storybook/components/Grid/Grid';
-import FundHoldings from '../../FundRoutes/FundOverview/FundHoldings/FundHoldings';
+import { FundHoldings } from '../../FundHoldings/FundHoldings';
 import { RequiresFundNotShutDown } from '~/components/Gates/RequiresFundNotShutDown/RequiresFundNotShutDown';
 import { FundTrading } from './FundTrading/FundTrading';
+import { FundTradeHistory } from './FundTradeHistory/FundTradeHistory';
 
 export interface FundTradeProps {
   address: string;
@@ -27,6 +28,11 @@ export const FundTrade: React.FC<FundTradeProps> = ({ address }) => {
           </GridCol>
         </GridRow>
       </RequiresFundNotShutDown>
+      <GridRow>
+        <GridCol xs={12} sm={12}>
+          <FundTradeHistory address={address} />
+        </GridCol>
+      </GridRow>
     </Grid>
   );
 };
