@@ -42,7 +42,7 @@ export const WalletWrapEther: React.FC = () => {
   const submit = form.handleSubmit(async data => {
     const token = environment.getToken('WETH')!;
     const weth = new Weth(environment, token.address);
-    const tx = weth.deposit(new BigNumber(toWei(data.quantity)), account.address!);
+    const tx = weth.deposit(account.address!, new BigNumber(toWei(data.quantity)));
     transaction.start(tx, 'Wrap Ether');
   });
 

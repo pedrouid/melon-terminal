@@ -42,7 +42,7 @@ export const WalletUnwrapEther: React.FC = () => {
   const submit = form.handleSubmit(async data => {
     const token = environment.getToken('WETH')!;
     const weth = new Weth(environment, token.address);
-    const tx = weth.withdraw(new BigNumber(toWei(data.quantity)), account.address!);
+    const tx = weth.withdraw(account.address!, new BigNumber(toWei(data.quantity)));
     transaction.start(tx, 'Unwrap Ether');
   });
 
