@@ -2,7 +2,12 @@ import gql from 'graphql-tag';
 import BigNumber from 'bignumber.js';
 import { useMemo } from 'react';
 import { useTheGraphQuery } from '~/hooks/useQuery';
-import { decodeFunctionSignature, ExchangeDefinition, TokenDefinition } from '@melonproject/melonjs';
+import {
+  decodeFunctionSignature,
+  ExchangeDefinition,
+  TokenDefinition,
+  DecodedFunctionSignature,
+} from '@melonproject/melonjs';
 import { useEnvironment } from '~/hooks/useEnvironment';
 
 export interface CallOnExchange {
@@ -13,7 +18,7 @@ export interface CallOnExchange {
   sellAsset?: TokenDefinition;
   buyQuantity?: BigNumber;
   sellQuantity?: BigNumber;
-  signature: string;
+  signature?: DecodedFunctionSignature;
 }
 
 export interface FundTradeHistoryQueryVariables {
@@ -80,7 +85,7 @@ export const useFundTradeHistoryQuery = (address: string) => {
           sellQuantity,
           id: item.id,
           timestamp: item.timestamp,
-          signature: decodeFunctionSignature(item.methodSignature)?.function,
+          signature: decodeFunctionSignature(item.methodSignature),
           exchange: environment.getExchange(item.exchange?.id),
         } as CallOnExchange;
       }) as CallOnExchange[],
