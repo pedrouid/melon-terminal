@@ -1,4 +1,4 @@
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import { Bar, BarContent } from '../Bar/Bar';
 import { NavLink } from '../Link/Link';
 

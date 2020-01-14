@@ -28,4 +28,4 @@ function createComponent<T = {}>(Component: React.ComponentType<T>): React.FC<Om
 }
 
 export const Link = createComponent(BaseLink);
-export const NavLink = BaseNavLink;
+export const NavLink = createComponent(BaseNavLink);

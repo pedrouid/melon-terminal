@@ -13,15 +13,19 @@ export interface ColorProviderProps {
   default: string;
 }
 
+function randomColor() {
+  return `#${Math.floor(Math.random() * 16777215).toString(16)}`;
+}
+
 export const ColorProvider: React.FC<ColorProviderProps> = props => {
   const location = useLocation()!;
   const [base, setBase] = useState(props.default);
   const [color, setColor] = useState(props.default);
   const reset = () => setColor(base);
-  const random = () => setColor(`#${Math.floor(Math.random() * 16777215).toString(16)}`);
+  const random = () => setColor(randomColor());
 
   useLayoutEffect(() => {
-    setBase(`#${Math.floor(Math.random() * 16777215).toString(16)}`);
+    setBase(color || randomColor());
   }, [location.pathname]);
 
   const context = {
