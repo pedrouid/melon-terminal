@@ -4,6 +4,7 @@ import { Table, HeaderCell, HeaderRow, BodyCell, BodyRow, NoEntries } from '~/st
 import { Block } from '~/storybook/components/Block/Block';
 import { SectionTitle } from '~/storybook/components/Title/Title';
 import { useFundTradeHistoryQuery } from './FundTradeHistory.query';
+import { FormattedDate } from '~/components/Common/FormattedDate/FormattedDate';
 
 export interface FundTradeHistoryProps {
   address: string;
@@ -31,7 +32,7 @@ export const FundTradeHistory: React.FC<FundTradeHistoryProps> = ({ address }) =
           <tbody>
             {calls.map(call => (
               <BodyRow key={call.id}>
-                <BodyCell>{call.timestamp}</BodyCell>
+                <BodyCell><FormattedDate timestamp={call.timestamp} /></BodyCell>
                 <BodyCell>{call.exchange?.name}</BodyCell>
                 <BodyCell>{call.buyAsset?.symbol}</BodyCell>
                 <BodyCell>{call.sellAsset?.symbol}</BodyCell>
