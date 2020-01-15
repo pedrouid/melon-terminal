@@ -30,11 +30,9 @@ export const Wallet: React.FC = () => {
               <Route path={`${match.path}/weth`} exact={true}>
                 <WalletWeth />
               </Route>
-              <RequiresFundSetupNotStarted fallback={true}>
-                <Route path={`${match.path}/setup`} exact={true}>
-                  <WalletFundSetup />
-                </Route>
-              </RequiresFundSetupNotStarted>
+              <Route path={`${match.path}/setup`} exact={true}>
+                <WalletFundSetup />
+              </Route>
               <Route>
                 <NoMatch />
               </Route>

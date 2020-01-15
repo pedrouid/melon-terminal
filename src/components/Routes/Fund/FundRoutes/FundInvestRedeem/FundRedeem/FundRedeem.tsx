@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import BigNumber from 'bignumber.js';
 import * as Yup from 'yup';
 import useForm, { FormContext } from 'react-hook-form';
@@ -99,21 +99,22 @@ export const FundRedeem: React.FC<FundRedeemProps> = ({ address }) => {
           <p>You own {shares?.balanceOf?.toFixed(18)} shares</p>
           <FormContext {...form}>
             <form onSubmit={submit}>
-              <FormField name="shareQuantity" label="Number of shares to redeem">
-                <Input
-                  id="shareQuantity"
-                  name="shareQuantity"
-                  type="number"
-                  step="any"
-                  min="0"
-                  max={shares?.balanceOf?.toString()}
-                  disabled={redeemAll}
-                />
-              </FormField>
+              <div hidden={redeemAll}>
+                <FormField name="shareQuantity" label="Number of shares to redeem">
+                  <Input
+                    id="shareQuantity"
+                    name="shareQuantity"
+                    type="number"
+                    step="any"
+                    min="0"
+                    max={shares?.balanceOf?.toString()}
+                  />
+                </FormField>
+              </div>
               <CheckboxContainer>
                 <CheckboxInput type="checkbox" ref={form.register} name="redeemAll" id="redeemAll" />
                 <CheckboxMask>
-                  <CheckboxIcon></CheckboxIcon>
+                  <CheckboxIcon />
                 </CheckboxMask>
                 <CheckboxLabel htmlFor="redeemAll">Redeem all shares</CheckboxLabel>
               </CheckboxContainer>

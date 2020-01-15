@@ -2,7 +2,14 @@ import React, { useEffect, useRef } from 'react';
 import BigNumber from 'bignumber.js';
 import * as Yup from 'yup';
 import useForm, { FormContext } from 'react-hook-form';
-import { TokenDefinition, MelonEngineTradingAdapter, Trading, Hub, ExchangeDefinition } from '@melonproject/melonjs';
+import {
+  TokenDefinition,
+  MelonEngineTradingAdapter,
+  Trading,
+  Hub,
+  ExchangeDefinition,
+  sameAddress,
+} from '@melonproject/melonjs';
 import { useEnvironment } from '~/hooks/useEnvironment';
 import { FormField } from '~/storybook/components/FormField/FormField';
 import { Input } from '~/storybook/components/Input/Input';
@@ -15,6 +22,7 @@ import { TransactionModal } from '~/components/Common/TransactionModal/Transacti
 import { useMelonEngineTradingQuery } from './FundMelonEngineTrading.query';
 import { FormattedNumber } from '~/components/Common/FormattedNumber/FormattedNumber';
 import { BlockActions } from '~/storybook/components/Block/Block';
+import { useFundHoldingsQuery } from '~/queries/FundHoldings';
 
 export interface FundMelonEngineTradingProps {
   address: string;
@@ -80,6 +88,22 @@ export const FundMelonEngineTrading: React.FC<FundMelonEngineTradingProps> = pro
     const makerQuantity = price.multipliedBy(takerQuantity);
     form.setValue('makerQuantity', !makerQuantity.isNaN() ? makerQuantity.toString() : '');
   }, [takerQuantity, price.toString()]);
+
+  const [holdings, _] = useFundHoldingsQuery(props.address);
+  const mlnHolding = holdings.find(holding => sameAddress(holding.token?.address, mln.address));
+  const mlnHoldingAmount = mlnHolding?.amount || new BigNumber(0);
+
+  useEffect(() => {
+    if (
+      mlnHoldingAmount.isLessThan(
+        new BigNumber(takerQuantity).multipliedBy(new BigNumber(10).exponentiatedBy(mln.decimals))
+      )
+    ) {
+      form.setError('takerQuantity', 'tooLow', `Your ${mln.symbol} balance is too low`);
+    } else {
+      form.clearError('takerQuantity');
+    }
+  }, [mlnHoldingAmount, takerQuantity]);
 
   const submit = form.handleSubmit(async data => {
     const hub = new Hub(environment, props.address);

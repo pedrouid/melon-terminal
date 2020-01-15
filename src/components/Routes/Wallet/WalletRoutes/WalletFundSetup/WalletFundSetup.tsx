@@ -65,7 +65,10 @@ export const WalletFundSetup: React.FC = () => {
       .min(0)
       .max(100),
     performanceFeePeriod: Yup.number().min(0),
-    termsAndConditions: Yup.boolean().oneOf([true]),
+    termsAndConditions: Yup.boolean().oneOf(
+      [true],
+      'You need to accept the Terms and conditions before you can continue'
+    ),
   });
 
   const defaultValues: WalletFundSetupForm = {
@@ -155,27 +158,34 @@ export const WalletFundSetup: React.FC = () => {
                 </BlockSection>
                 <BlockSection>
                   <SectionTitle>Supported exchanges</SectionTitle>
+                  <p>Exchanges can only be set up now, and cannot be changed later.</p>
+                  <Grid>
+                    <GridRow>
+                      {environment.exchanges.map((exchange, index) => (
+                        <GridCol xs={12} sm={12} md={6} key={exchange.id}>
+                          <CheckboxContainer>
+                            <CheckboxInput
+                              id={`exchanges[${index}]`}
+                              type="checkbox"
+                              name={`exchanges[${index}]`}
+                              value={exchange.id}
+                              key={exchange.id}
+                              ref={form.register}
+                            />
+                            <CheckboxMask>
+                              <CheckboxIcon></CheckboxIcon>
+                            </CheckboxMask>
+                            <CheckboxLabel htmlFor={`exchanges[${index}]`}>{exchange.name}</CheckboxLabel>
+                          </CheckboxContainer>
+                        </GridCol>
+                      ))}
+                    </GridRow>
+                  </Grid>
                   {form.errors.exchanges && <p>{form.errors.exchanges.message}</p>}
-                  {environment.exchanges.map((exchange, index) => (
-                    <CheckboxContainer>
-                      <CheckboxInput
-                        id={`exchanges[${index}]`}
-                        type="checkbox"
-                        name={`exchanges[${index}]`}
-                        value={exchange.id}
-                        key={exchange.id}
-                        ref={form.register}
-                      />
-                      <CheckboxMask>
-                        <CheckboxIcon />
-                      </CheckboxMask>
-                      <CheckboxLabel htmlFor={`exchanges[${index}]`}>{exchange.name}</CheckboxLabel>
-                    </CheckboxContainer>
-                  ))}
                 </BlockSection>
                 <BlockSection>
                   <SectionTitle>Allowed investment assets</SectionTitle>
-                  {form.errors.assets && <p>{form.errors.assets.message}</p>}
+                  <p>Investment assets can be set up now, and they can be changed later.</p>
                   <Grid>
                     <GridRow>
                       {environment.tokens.map((token, index) => (
@@ -200,6 +210,7 @@ export const WalletFundSetup: React.FC = () => {
                       ))}
                     </GridRow>
                   </Grid>
+                  {form.errors.assets && <p>{form.errors.assets.message}</p>}
                 </BlockSection>
                 <BlockSection>
                   <SectionTitle>Disclaimer</SectionTitle>
@@ -234,6 +245,8 @@ export const WalletFundSetup: React.FC = () => {
                     </CheckboxMask>
                     <CheckboxLabel htmlFor="termsAndConditions">I accept the terms and conditions</CheckboxLabel>
                   </CheckboxContainer>
+                  {form.errors.termsAndConditions && <p>{form.errors.termsAndConditions.message}</p>}
+
                   <BlockActions>
                     <Button type="submit">Create fund</Button>
                   </BlockActions>

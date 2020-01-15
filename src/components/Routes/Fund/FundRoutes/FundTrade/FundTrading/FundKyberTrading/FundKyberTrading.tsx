@@ -11,6 +11,7 @@ import {
   Hub,
   KyberTradingAdapter,
   ExchangeDefinition,
+  sameAddress,
 } from '@melonproject/melonjs';
 import { useEnvironment } from '~/hooks/useEnvironment';
 import { Dropdown } from '~/storybook/components/Dropdown/Dropdown';
@@ -25,6 +26,7 @@ import { useOnChainQueryRefetcher } from '~/hooks/useOnChainQueryRefetcher';
 import { TransactionModal } from '~/components/Common/TransactionModal/TransactionModal';
 import { Grid, GridRow, GridCol } from '~/storybook/components/Grid/Grid';
 import { FormattedNumber } from '~/components/Common/FormattedNumber/FormattedNumber';
+import { useFundHoldingsQuery } from '~/queries/FundHoldings';
 
 export interface FundKyberTradingProps {
   address: string;
@@ -64,8 +66,8 @@ export const FundKyberTrading: React.FC<FundKyberTradingProps> = props => {
   }));
 
   const defaultValues = {
-    makerAsset: options[0].value,
-    takerAsset: options[1].value,
+    makerAsset: options[1].value,
+    takerAsset: options[0].value,
     takerQuantity: '',
   };
 
@@ -87,6 +89,22 @@ export const FundKyberTrading: React.FC<FundKyberTradingProps> = props => {
   const makerAsset = makerAddress ? environment.getToken(makerAddress) : undefined;
   const takerAsset = takerAddress ? environment.getToken(takerAddress) : undefined;
 
+  const [holdings, _] = useFundHoldingsQuery(props.address);
+  const takerAssetHolding = holdings.find(holding => sameAddress(holding.token?.address, takerAddress));
+  const takerAssetHoldingAmount = takerAssetHolding?.amount || new BigNumber(0);
+
+  useEffect(() => {
+    if (
+      takerAssetHoldingAmount.isLessThan(
+        new BigNumber(takerQuantity).multipliedBy(new BigNumber(10).exponentiatedBy(takerAsset?.decimals || 18))
+      )
+    ) {
+      form.setError('takerQuantity', 'tooLow', `Your ${takerAsset?.symbol} balance is too low`);
+    } else {
+      form.clearError('takerQuantity');
+    }
+  }, [takerAssetHoldingAmount, takerQuantity]);
+
   const changes$ = useMemo(() => new Rx.Subject<[string, string]>(), []);
   const stream$ = useMemo(() => {
     const contract = new KyberNetworkProxy(environment, environment.deployment.kyber.addr.KyberNetworkProxy);
@@ -105,9 +123,9 @@ export const FundKyberTrading: React.FC<FundKyberTradingProps> = props => {
             const kyberEth = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee';
             const srcToken = values.takerAsset === weth.address ? kyberEth : values.takerAsset;
             const destToken = values.makerAsset === weth.address ? kyberEth : values.makerAsset;
-            const srcQty = new BigNumber(values.takerQuantity)
-              .multipliedBy(new BigNumber(10).exponentiatedBy(18))
-              .decimalPlaces(0);
+            const srcQty = new BigNumber(values.takerQuantity).multipliedBy(
+              new BigNumber(10).exponentiatedBy(takerAsset?.decimals || 18)
+            );
             const result = await contract.getExpectedRate(srcToken, destToken, srcQty);
 
             resolve(result.expectedRate);
@@ -143,12 +161,8 @@ export const FundKyberTrading: React.FC<FundKyberTradingProps> = props => {
     const makerQuantity = takerQuantity.multipliedBy(price);
 
     const tx = adapter.takeOrder(account.address!, {
-      makerQuantity: makerQuantity
-        .multipliedBy(new BigNumber(10).exponentiatedBy(makerAsset!.decimals))
-        .decimalPlaces(0),
-      takerQuantity: takerQuantity
-        .multipliedBy(new BigNumber(10).exponentiatedBy(takerAsset!.decimals))
-        .decimalPlaces(0),
+      makerQuantity: makerQuantity.multipliedBy(new BigNumber(10).exponentiatedBy(makerAsset!.decimals)),
+      takerQuantity: takerQuantity.multipliedBy(new BigNumber(10).exponentiatedBy(takerAsset!.decimals)),
       makerAsset: data.makerAsset!,
       takerAsset: data.takerAsset!,
     });
