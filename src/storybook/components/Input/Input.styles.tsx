@@ -1,6 +1,10 @@
 import styled, { css } from 'styled-components';
 
-export const Input = styled.input`
+export interface InputProps {
+  error?: boolean;
+}
+
+export const Input = styled.input<InputProps>`
   position: relative;
   width: 100%;
   padding: 0px ${props => props.theme.spaceUnits.m};
@@ -27,6 +31,13 @@ export const Input = styled.input`
         background: ${props => props.theme.mainColors.secondary};
         border-color: ${props => props.theme.mainColors.secondaryDarkAlpha};
         pointer-events: none;
+      `;
+    }
+  }}
+  ${props => {
+    if (props.error) {
+      return css`
+        border-color: ${props => props.theme.statusColors.primaryLoss};
       `;
     }
   }}
