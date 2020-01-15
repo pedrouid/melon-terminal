@@ -8,7 +8,13 @@ import { AssetBlacklistBytecode } from '@melonproject/melonjs/abis/AssetBlacklis
 import { useAccount } from '~/hooks/useAccount';
 import { SectionTitle } from '~/storybook/components/Title/Title';
 import { BlockActions } from '~/storybook/components/Block/Block';
-import { CheckboxContainer, CheckboxInput, CheckboxMask, CheckboxIcon, CheckboxLabel } from '~/storybook/components/Checkbox/Checkbox';
+import {
+  CheckboxContainer,
+  CheckboxInput,
+  CheckboxMask,
+  CheckboxIcon,
+  CheckboxLabel,
+} from '~/storybook/components/Checkbox/Checkbox';
 import { Grid, GridRow, GridCol } from '~/storybook/components/Grid/Grid';
 
 interface AssetBlacklistConfigurationForm {
@@ -62,8 +68,7 @@ export const AssetBlacklistConfiguration: React.FC<AssetBlacklistConfigurationPr
                       ref={form.register}
                     />
                     <CheckboxMask>
-                      <CheckboxIcon>
-                      </CheckboxIcon>
+                      <CheckboxIcon></CheckboxIcon>
                     </CheckboxMask>
                     <CheckboxLabel htmlFor={`assetBlacklist[${index}]`}>{token.symbol}</CheckboxLabel>
                   </CheckboxContainer>

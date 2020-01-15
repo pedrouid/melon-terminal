@@ -13,6 +13,6 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
 export const Button: React.FC<ButtonProps> = ({ loading, children, ...props }) => (
   <S.Button {...props}>
     {children}
-    {loading && (<SpinIcon />)}
+    {loading && <SpinIcon />}
   </S.Button>
 );

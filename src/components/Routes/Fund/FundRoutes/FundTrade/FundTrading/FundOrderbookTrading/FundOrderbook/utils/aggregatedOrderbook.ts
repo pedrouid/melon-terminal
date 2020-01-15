@@ -40,50 +40,54 @@ export function aggregatedOrderbook(
     const empty = [] as OrderbookItem[];
 
     const asksOnly = groups.map(item => item.asks);
-    const asksFlat = empty.concat.apply(empty, asksOnly);
-    const asksQuantity = asksFlat.reduce((carry, current) => carry.plus(current.quantity), new BigNumber(0));
-    const asks = asksFlat
+    const asksFlat = empty.concat
+      .apply(empty, asksOnly)
       .sort((a, b) => a.price.comparedTo(b.price))
-      .reduce((carry, current, index) => {
-        const previous = carry[index - 1]?.total ?? new BigNumber(0);
-        const total = current.quantity.plus(previous);
-        const relative = total
-          .dividedBy(asksQuantity)
-          .multipliedBy(100)
-          .decimalPlaces(0)
-          .toNumber();
+      .slice(0, 20);
 
-        const item: OrderbookItem = {
-          ...current,
-          total,
-          relative,
-        };
+    const asksQuantity = asksFlat.reduce((carry, current) => carry.plus(current.quantity), new BigNumber(0));
+    const asks = asksFlat.reduce((carry, current, index) => {
+      const previous = carry[index - 1]?.total ?? new BigNumber(0);
+      const total = current.quantity.plus(previous);
+      const relative = total
+        .dividedBy(asksQuantity)
+        .multipliedBy(100)
+        .decimalPlaces(0)
+        .toNumber();
 
-        return [...carry, item];
-      }, [] as OrderbookItem[]);
+      const item: OrderbookItem = {
+        ...current,
+        total,
+        relative,
+      };
+
+      return [...carry, item];
+    }, [] as OrderbookItem[]);
 
     const bidsOnly = groups.map(item => item.bids);
-    const bidsFlat = empty.concat.apply(empty, bidsOnly);
-    const bidsQuantity = bidsFlat.reduce((carry, current) => carry.plus(current.quantity), new BigNumber(0));
-    const bids = bidsFlat
+    const bidsFlat = empty.concat
+      .apply(empty, bidsOnly)
       .sort((a, b) => b.price.comparedTo(a.price))
-      .reduce((carry, current, index) => {
-        const previous = carry[index - 1]?.total ?? new BigNumber(0);
-        const total = current.quantity.plus(previous);
-        const relative = total
-          .dividedBy(bidsQuantity)
-          .multipliedBy(100)
-          .decimalPlaces(0)
-          .toNumber();
+      .slice(0, 20);
 
-        const item: OrderbookItem = {
-          ...current,
-          total,
-          relative,
-        };
+    const bidsQuantity = bidsFlat.reduce((carry, current) => carry.plus(current.quantity), new BigNumber(0));
+    const bids = bidsFlat.reduce((carry, current, index) => {
+      const previous = carry[index - 1]?.total ?? new BigNumber(0);
+      const total = current.quantity.plus(previous);
+      const relative = total
+        .dividedBy(bidsQuantity)
+        .multipliedBy(100)
+        .decimalPlaces(0)
+        .toNumber();
 
-        return [...carry, item];
-      }, [] as OrderbookItem[]);
+      const item: OrderbookItem = {
+        ...current,
+        total,
+        relative,
+      };
+
+      return [...carry, item];
+    }, [] as OrderbookItem[]);
 
     return { asks, bids } as Orderbook;
   });

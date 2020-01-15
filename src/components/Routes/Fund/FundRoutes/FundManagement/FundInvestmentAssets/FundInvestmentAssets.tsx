@@ -11,7 +11,13 @@ import { useOnChainQueryRefetcher } from '~/hooks/useOnChainQueryRefetcher';
 import { Block, BlockActions } from '~/storybook/components/Block/Block';
 import { SectionTitle } from '~/storybook/components/Title/Title';
 import { Spinner } from '~/storybook/components/Spinner/Spinner';
-import { CheckboxContainer, CheckboxInput, CheckboxMask, CheckboxIcon, CheckboxLabel } from '~/storybook/components/Checkbox/Checkbox';
+import {
+  CheckboxContainer,
+  CheckboxInput,
+  CheckboxMask,
+  CheckboxIcon,
+  CheckboxLabel,
+} from '~/storybook/components/Checkbox/Checkbox';
 import { useAccount } from '~/hooks/useAccount';
 import { useFundInvestmentAssetsQuery } from '~/queries/FundInvestmentAssets';
 import { Grid, GridRow, GridCol } from '~/storybook/components/Grid/Grid';
@@ -124,10 +130,11 @@ export const InvestmentAssets: React.FC<InvestmentAssetsProps> = ({ address }) =
                       ref={form.register}
                     />
                     <CheckboxMask>
-                      <CheckboxIcon>
-                      </CheckboxIcon>
+                      <CheckboxIcon></CheckboxIcon>
                     </CheckboxMask>
-                    <CheckboxLabel htmlFor={`assets[${index}]`}>{token.symbol} ({token.name})</CheckboxLabel>
+                    <CheckboxLabel htmlFor={`assets[${index}]`}>
+                      {token.symbol} ({token.name})
+                    </CheckboxLabel>
                   </CheckboxContainer>
                 </GridCol>
               ))}

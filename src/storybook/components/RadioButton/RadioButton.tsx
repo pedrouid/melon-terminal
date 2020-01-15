@@ -1,7 +1,7 @@
 import styled, { css } from 'styled-components';
 
 export const RadioButtonContainer = styled.div`
-  position:relative;
+  position: relative;
   display: block;
   margin-bottom: ${props => props.theme.spaceUnits.s};
   text-align: left;
@@ -17,33 +17,33 @@ export const RadioButtonInput = styled.input`
   opacity: 0;
   margin: 0px;
   cursor: pointer;
-  &:hover + span{
-    span{
+  &:hover + span {
+    span {
       background: ${props => props.theme.mainColors.primaryDark};
     }
   }
 
-  :checked + span{
-    background:${props => props.theme.mainColors.primaryDark};
-    span{
-      background:${props => props.theme.mainColors.primary};
+  :checked + span {
+    background: ${props => props.theme.mainColors.primaryDark};
+    span {
+      background: ${props => props.theme.mainColors.primary};
     }
   }
-  &:hover:checked + span{
+  &:hover:checked + span {
     background: ${props => props.theme.mainColors.secondaryDark};
   }
   ${props =>
     props.disabled &&
     css`
       pointer-events: none;
-      + span{
+      + span {
         border: 2px solid ${props => props.theme.mainColors.secondaryDark};
         background: ${props => props.theme.mainColors.secondary};
       }
-      :checked + span{
+      :checked + span {
         background: ${props => props.theme.mainColors.secondaryDark};
       }
-      ~ label{
+      ~ label {
         pointer-events: none;
       }
     `}
@@ -58,7 +58,7 @@ export const RadioButtonMask = styled.span`
   border-radius: 100%;
   border: 2px solid ${props => props.theme.mainColors.primaryDark};
   transition: all 0.2s ease-in-out;
-`
+`;
 
 export const RadioButtonIcon = styled.span`
   position: absolute;
@@ -67,7 +67,7 @@ export const RadioButtonIcon = styled.span`
   width: ${props => props.theme.spaceUnits.xxs};
   height: ${props => props.theme.spaceUnits.xxs};
   border-radius: 100%;
-  transform: translate(-50%,-50%);
+  transform: translate(-50%, -50%);
   background: transparent;
   transition: all 0.2s ease-in-out;
 `;

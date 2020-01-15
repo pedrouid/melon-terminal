@@ -138,7 +138,7 @@ export const FundOrderbookMarketForm: React.FC<FundOrderbookMarketFormProps> = p
           <FormField label="Price" name="price">
             <Input type="text" name="price" disabled={true} value={props.order.price.toFixed()} />
           </FormField>
-          
+
           <BlockActions>
             <Button type="button" onClick={submit}>
               Submit

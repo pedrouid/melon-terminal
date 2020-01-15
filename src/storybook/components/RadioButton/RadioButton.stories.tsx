@@ -1,5 +1,11 @@
 import React from 'react';
-import { RadioButtonContainer, RadioButtonInput, RadioButtonMask, RadioButtonIcon, RadioButtonLabel } from './RadioButton';
+import {
+  RadioButtonContainer,
+  RadioButtonInput,
+  RadioButtonMask,
+  RadioButtonIcon,
+  RadioButtonLabel,
+} from './RadioButton';
 
 export default { title: 'Atoms|RadioButton' };
 
@@ -18,7 +24,7 @@ export const Default: React.FC = () => {
 export const Disabled: React.FC = () => {
   return (
     <RadioButtonContainer>
-      <RadioButtonInput type="radio" id="idradio" name="my_RadioButton" value="1" disabled={true}/>
+      <RadioButtonInput type="radio" id="idradio" name="my_RadioButton" value="1" disabled={true} />
       <RadioButtonMask>
         <RadioButtonIcon />
       </RadioButtonMask>
@@ -30,7 +36,7 @@ export const Disabled: React.FC = () => {
 export const DisabledChecked: React.FC = () => {
   return (
     <RadioButtonContainer>
-      <RadioButtonInput type="radio" id="idradio" name="my_RadioButton" value="1" disabled={true} checked/>
+      <RadioButtonInput type="radio" id="idradio" name="my_RadioButton" value="1" disabled={true} checked />
       <RadioButtonMask>
         <RadioButtonIcon />
       </RadioButtonMask>

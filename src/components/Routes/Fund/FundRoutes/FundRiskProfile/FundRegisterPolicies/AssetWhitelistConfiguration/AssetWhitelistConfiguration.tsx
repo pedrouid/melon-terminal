@@ -7,7 +7,13 @@ import { Deployment, AssetWhitelist, availableTokens, PolicyDefinition } from '@
 import { AssetWhitelistBytecode } from '@melonproject/melonjs/abis/AssetWhitelist.bin';
 import { useAccount } from '~/hooks/useAccount';
 import { SectionTitle } from '~/storybook/components/Title/Title';
-import { CheckboxContainer, CheckboxInput, CheckboxMask, CheckboxIcon, CheckboxLabel } from '~/storybook/components/Checkbox/Checkbox';
+import {
+  CheckboxContainer,
+  CheckboxInput,
+  CheckboxMask,
+  CheckboxIcon,
+  CheckboxLabel,
+} from '~/storybook/components/Checkbox/Checkbox';
 import { BlockActions } from '~/storybook/components/Block/Block';
 import { Grid, GridRow, GridCol } from '~/storybook/components/Grid/Grid';
 
@@ -62,16 +68,15 @@ export const AssetWhitelistConfiguration: React.FC<AssetWhitelistConfigurationPr
                       ref={form.register}
                     />
                     <CheckboxMask>
-                      <CheckboxIcon>
-                      </CheckboxIcon>
+                      <CheckboxIcon></CheckboxIcon>
                     </CheckboxMask>
                     <CheckboxLabel htmlFor={`assetWhitelist[${index}]`}>{token.symbol}</CheckboxLabel>
                   </CheckboxContainer>
                 </GridCol>
               ))}
-              
+
               {form.errors.assetWhitelist && <p>{form.errors.assetWhitelist.message}</p>}
-              
+
               <BlockActions>
                 <Button type="submit">Add asset whitelist policy</Button>
               </BlockActions>

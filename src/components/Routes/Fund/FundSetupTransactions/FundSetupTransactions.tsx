@@ -16,7 +16,13 @@ import { useOnChainQueryRefetcher } from '~/hooks/useOnChainQueryRefetcher';
 import { Block, BlockActions } from '~/storybook/components/Block/Block';
 import { SectionTitle } from '~/storybook/components/Title/Title';
 import { GridCol, GridRow, Grid } from '~/storybook/components/Grid/Grid';
-import { CheckboxContainer, CheckboxInput, CheckboxMask, CheckboxIcon, CheckboxLabel } from '~/storybook/components/Checkbox/Checkbox';
+import {
+  CheckboxContainer,
+  CheckboxInput,
+  CheckboxMask,
+  CheckboxIcon,
+  CheckboxLabel,
+} from '~/storybook/components/Checkbox/Checkbox';
 
 interface TransactionPipelineItem {
   previous: string;
@@ -158,8 +164,7 @@ export const FundSetupTransactions: React.FC = () => {
                             disabled={true}
                           />
                           <CheckboxMask>
-                            <CheckboxIcon>
-                            </CheckboxIcon>
+                            <CheckboxIcon></CheckboxIcon>
                           </CheckboxMask>
                           <CheckboxLabel htmlFor="1">{pipeline[item].previous}</CheckboxLabel>
                         </CheckboxContainer>

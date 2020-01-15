@@ -15,7 +15,13 @@ import { Button } from '~/storybook/components/Button/Button';
 import { Grid, GridRow, GridCol } from '~/storybook/components/Grid/Grid';
 import { SectionTitle } from '~/storybook/components/Title/Title';
 import { Block, BlockSection, BlockActions } from '~/storybook/components/Block/Block';
-import { CheckboxContainer, CheckboxInput, CheckboxMask, CheckboxIcon, CheckboxLabel } from '~/storybook/components/Checkbox/Checkbox';
+import {
+  CheckboxContainer,
+  CheckboxInput,
+  CheckboxMask,
+  CheckboxIcon,
+  CheckboxLabel,
+} from '~/storybook/components/Checkbox/Checkbox';
 
 export interface WalletFundSetupForm {
   name: string;
@@ -183,10 +189,11 @@ export const WalletFundSetup: React.FC = () => {
                               ref={form.register}
                             />
                             <CheckboxMask>
-                              <CheckboxIcon>
-                              </CheckboxIcon>
+                              <CheckboxIcon></CheckboxIcon>
                             </CheckboxMask>
-                            <CheckboxLabel htmlFor={`assets[${index}]`}>{token.symbol} ({token.name})</CheckboxLabel>
+                            <CheckboxLabel htmlFor={`assets[${index}]`}>
+                              {token.symbol} ({token.name})
+                            </CheckboxLabel>
                           </CheckboxContainer>
                         </GridCol>
                       ))}
@@ -222,8 +229,7 @@ export const WalletFundSetup: React.FC = () => {
                       ref={form.register}
                     />
                     <CheckboxMask>
-                      <CheckboxIcon>
-                      </CheckboxIcon>
+                      <CheckboxIcon></CheckboxIcon>
                     </CheckboxMask>
                     <CheckboxLabel htmlFor="termsAndConditions">I accept the terms and conditions</CheckboxLabel>
                   </CheckboxContainer>

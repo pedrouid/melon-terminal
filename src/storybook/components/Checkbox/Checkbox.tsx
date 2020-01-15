@@ -1,9 +1,8 @@
 import styled, { css } from 'styled-components';
-import { Check } from 'styled-icons/fa-solid/Check'
-
+import { Check } from 'styled-icons/fa-solid/Check';
 
 export const CheckboxContainer = styled.div`
-  position:relative;
+  position: relative;
   display: block;
   margin-bottom: ${props => props.theme.spaceUnits.s};
   text-align: left;
@@ -19,32 +18,32 @@ export const CheckboxInput = styled.input`
   opacity: 0;
   margin: 0px;
   cursor: pointer;
-  &:hover + span{
-    svg{
+  &:hover + span {
+    svg {
       color: ${props => props.theme.mainColors.primaryDark};
     }
   }
-  :checked + span{
+  :checked + span {
     background: ${props => props.theme.mainColors.primaryDark};
-    svg{
+    svg {
       color: ${props => props.theme.mainColors.primary};
     }
   }
-  &:hover:checked + span{
+  &:hover:checked + span {
     background: ${props => props.theme.mainColors.secondaryDark};
   }
   ${props =>
     props.disabled &&
     css`
       pointer-events: none;
-      + span{
+      + span {
         border: 2px solid ${props => props.theme.mainColors.secondaryDark};
         background: ${props => props.theme.mainColors.secondary};
       }
-      :checked + span{
+      :checked + span {
         background: ${props => props.theme.mainColors.secondaryDark};
       }
-      ~ label{
+      ~ label {
         pointer-events: none;
       }
     `}
@@ -67,7 +66,7 @@ export const CheckboxIcon = styled(Check)`
   left: 50%;
   width: ${props => props.theme.spaceUnits.xs};
   height: ${props => props.theme.spaceUnits.xs};
-  transform: translate(-50%,-50%);
+  transform: translate(-50%, -50%);
   color: transparent;
   transition: all 0.2s ease-in-out;
 `;
