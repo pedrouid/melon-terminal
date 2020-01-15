@@ -9,7 +9,6 @@ import {
   DictionaryData,
   DictionaryLabel,
 } from '~/storybook/components/Dictionary/Dictionary';
-import { Block } from '~/storybook/components/Block/Block';
 import { EtherscanLink } from '~/components/Common/EtherscanLink/EtherscanLink';
 import { FormattedNumber } from '~/components/Common/FormattedNumber/FormattedNumber';
 
@@ -22,9 +21,10 @@ export const FundFactSheet: React.FC<FundFactSheetProps> = ({ address }) => {
 
   if (!query || query.loading) {
     return (
-      <Block>
+      <Dictionary>
+        <SectionTitle>Fund factsheet</SectionTitle>
         <Spinner />
-      </Block>
+      </Dictionary>
     );
   }
 
