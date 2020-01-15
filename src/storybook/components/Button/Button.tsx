@@ -10,11 +10,9 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
   loading?: boolean;
 }
 
-export const Button: React.FC<ButtonProps> = props => {
-  return (
-    <S.Button kind={props.kind} size={props.size} lenght={props.lenght}  disabled={props.disabled} loading={props.loading}>
-      {props.children}
-      {props.loading && (<SpinIcon />)}
-    </S.Button>
-  );
-};
+export const Button: React.FC<ButtonProps> = ({ loading, children, ...props }) => (
+  <S.Button {...props}>
+    {children}
+    {loading && (<SpinIcon />)}
+  </S.Button>
+);

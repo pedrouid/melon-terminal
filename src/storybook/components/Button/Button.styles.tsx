@@ -78,14 +78,14 @@ export const Button = styled.button<ButtonProps>`
       height: 32px;
     `}
     ${props =>
-      props.lenght === 'stretch' &&
-      css`
+    props.lenght === 'stretch' &&
+    css`
         width: 100%;
       `}
   & + & {
     margin-left: ${props => props.theme.spaceUnits.m};
   }
-  svg{
+  svg {
     margin-left: ${props => props.theme.spaceUnits.xs};
   }
 `;
