@@ -63,20 +63,12 @@ export const ClaimFees: React.FC<ClaimFeesProps> = ({ address }) => {
       <p>Claim management fees and performance fees for the fund.</p>
 
       <DictionaryEntry>
-        <DictionaryLabel>
-          Accrued management fee
-        </DictionaryLabel>
-        <DictionaryData>
-          {feeManagerInfo?.managementFeeAmount.dividedBy('1e18').toFixed(6)}
-        </DictionaryData>
+        <DictionaryLabel>Accrued management fee</DictionaryLabel>
+        <DictionaryData>{feeManagerInfo?.managementFeeAmount.dividedBy('1e18').toFixed(6)}</DictionaryData>
       </DictionaryEntry>
       <DictionaryEntry>
-        <DictionaryLabel>
-          Accrued performance fee
-        </DictionaryLabel>
-        <DictionaryData>
-          {feeManagerInfo?.performanceFeeAmount.dividedBy('1e18').toFixed(6)}
-        </DictionaryData>
+        <DictionaryLabel>Accrued performance fee</DictionaryLabel>
+        <DictionaryData>{feeManagerInfo?.performanceFeeAmount.dividedBy('1e18').toFixed(6)}</DictionaryData>
       </DictionaryEntry>
 
       <BlockActions>

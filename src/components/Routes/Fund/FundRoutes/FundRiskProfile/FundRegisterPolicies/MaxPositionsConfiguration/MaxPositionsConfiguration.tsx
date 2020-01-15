@@ -28,10 +28,16 @@ export const MaxPositionsConfiguration: React.FC<MaxPositionsConfigurationProps>
   const validationSchema = Yup.object().shape({
     maxPositions: Yup.number()
       .required()
-      .positive(),
+      .min(0)
+      .integer(),
   });
 
+  const defaultValues = {
+    maxPositions: 10,
+  };
+
   const form = useForm<MaxPositionsConfigurationForm>({
+    defaultValues,
     validationSchema,
     mode: 'onSubmit',
     reValidateMode: 'onBlur',
@@ -49,7 +55,7 @@ export const MaxPositionsConfiguration: React.FC<MaxPositionsConfigurationProps>
       <FormContext {...form}>
         <form onSubmit={submit}>
           <FormField name="maxPositions" label="Maximum number of positions">
-            <Input name="maxPositions" type="number" id="maxPositions" />
+            <Input name="maxPositions" type="number" min={0} step={1} id="maxPositions" />
           </FormField>
           <BlockActions>
             <Button type="submit">Add max positions policy</Button>

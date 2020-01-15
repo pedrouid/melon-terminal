@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import * as Yup from 'yup';
 import useForm, { FormContext } from 'react-hook-form';
 import { useEnvironment } from '~/hooks/useEnvironment';
@@ -8,6 +8,7 @@ import { Textarea } from '~/storybook/components/Textarea/Textarea';
 import { useAccount } from '~/hooks/useAccount';
 import { SectionTitle } from '~/storybook/components/Title/Title';
 import { Button } from '~/storybook/components/Button/Button';
+import { isAddress } from 'web3-utils';
 import { BlockActions } from '~/storybook/components/Block/Block';
 
 interface UserWhitelistConfigurationForm {
@@ -36,6 +37,15 @@ export const UserWhitelistConfiguration: React.FC<UserWhitelistConfigurationProp
 
   const submit = form.handleSubmit(async data => {
     const whitelistedUsers = data.userWhitelist!.replace(/^\s+|\s+$/g, '').split('\n');
+    const validAddresses = whitelistedUsers.map(user => isAddress(user));
+
+    if (validAddresses.some(valid => !valid)) {
+      form.setError('userWhitelist', 'wrongFormat', `Invalid address(es)`);
+      return;
+    } else {
+      form.clearError('userWhitelist');
+    }
+
     const tx = UserWhitelist.deploy(environment, UserWhitelistBytecode, account.address!, whitelistedUsers);
     props.startTransaction(tx, 'Deploy UserWhitelist Contract');
   });

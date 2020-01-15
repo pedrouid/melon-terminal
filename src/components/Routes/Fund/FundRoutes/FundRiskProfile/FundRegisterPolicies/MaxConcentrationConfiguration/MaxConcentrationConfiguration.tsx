@@ -29,11 +29,16 @@ export const MaxConcentrationConfiguration: React.FC<MaxConcentrationConfigurati
   const validationSchema = Yup.object().shape({
     maxConcentration: Yup.number()
       .required()
-      .positive()
+      .min(0)
       .max(100),
   });
 
+  const defaultValues = {
+    maxConcentration: 20,
+  };
+
   const form = useForm<MaxConcentrationConfigurationForm>({
+    defaultValues,
     validationSchema,
     mode: 'onSubmit',
     reValidateMode: 'onBlur',
@@ -56,7 +61,7 @@ export const MaxConcentrationConfiguration: React.FC<MaxConcentrationConfigurati
       <FormContext {...form}>
         <form onSubmit={submit}>
           <FormField name="maxConcentration" label="Maximum concentration (%)">
-            <Input name="maxConcentration" type="number" id="maxConcentration" />
+            <Input name="maxConcentration" type="number" min={0} step="any" id="maxConcentration" />
           </FormField>
           <BlockActions>
             <Button type="submit">Add max concentration policy</Button>

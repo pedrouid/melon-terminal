@@ -3,7 +3,7 @@ import BigNumber from 'bignumber.js';
 import * as Yup from 'yup';
 import useForm, { FormContext } from 'react-hook-form';
 import { useHistory } from 'react-router';
-import { Version } from '@melonproject/melonjs';
+import { Registry, Version } from '@melonproject/melonjs';
 import { useEnvironment } from '~/hooks/useEnvironment';
 import { TransactionModal } from '~/components/Common/TransactionModal/TransactionModal';
 import { useTransaction } from '~/hooks/useTransaction';
@@ -34,7 +34,18 @@ export const WalletFundSetup: React.FC = () => {
   const refetch = useOnChainQueryRefetcher();
 
   const validationSchema = Yup.object().shape({
-    name: Yup.string().min(1),
+    name: Yup.string()
+      .min(1)
+      .test('nameTest', 'Fund name not allowed', async function(value) {
+        const registry = new Registry(environment, environment.deployment.melon.addr.Registry);
+
+        // TODO: check why this always resolves to [true,true] even though the fund name is already taken
+        const [isValid, canUse] = await Promise.all([
+          registry.isValidFundName(value),
+          registry.canUseFundName(account.address!, value),
+        ]);
+        return isValid && canUse;
+      }),
     exchanges: Yup.array<string>()
       .compact()
       .min(1),
@@ -51,7 +62,18 @@ export const WalletFundSetup: React.FC = () => {
     termsAndConditions: Yup.boolean().oneOf([true]),
   });
 
+  const defaultValues: WalletFundSetupForm = {
+    name: '',
+    exchanges: [],
+    assets: [],
+    managementFee: 1,
+    performanceFee: 10,
+    performanceFeePeriod: 90,
+    termsAndConditions: false,
+  };
+
   const form = useForm<WalletFundSetupForm>({
+    defaultValues,
     validationSchema,
     reValidateMode: 'onBlur',
     mode: 'onSubmit',

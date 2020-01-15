@@ -27,18 +27,6 @@ export interface FundRedeemProps {
   address: string;
 }
 
-const validationSchema = Yup.object().shape({
-  shareQuantity: Yup.number()
-    .required()
-    .positive(),
-  redeemAll: Yup.boolean(),
-});
-
-const defaultValues = {
-  shareQuantity: 1,
-  redeemAll: false,
-};
-
 export const FundRedeem: React.FC<FundRedeemProps> = ({ address }) => {
   const environment = useEnvironment()!;
   const account = useAccount();
@@ -54,6 +42,24 @@ export const FundRedeem: React.FC<FundRedeemProps> = ({ address }) => {
   const transaction = useTransaction(environment, {
     onFinish: () => refetch(),
   });
+
+  const validationSchema = Yup.object().shape({
+    shareQuantity: Yup.mixed<BigNumber>()
+      .transform((value, _) => new BigNumber(value))
+      .test('positive', 'Number of shares has to be positive', (value: BigNumber) => !!value?.isGreaterThan(0))
+      .test(
+        'smallerThanBalance',
+        'Number of shares has to be equal or less than number of shares owned',
+        (value: BigNumber) => !!(shares?.balanceOf && value?.isLessThanOrEqualTo(shares?.balanceOf))
+      ),
+
+    redeemAll: Yup.boolean(),
+  });
+
+  const defaultValues = {
+    shareQuantity: new BigNumber(1),
+    redeemAll: false,
+  };
 
   const form = useForm<typeof defaultValues>({
     defaultValues,
@@ -71,14 +77,10 @@ export const FundRedeem: React.FC<FundRedeemProps> = ({ address }) => {
       return;
     }
 
-    const shareQuantity = new BigNumber(data.shareQuantity).times(new BigNumber(10).exponentiatedBy(18));
+    const shareQuantity = data.shareQuantity.times(new BigNumber('1e18'));
     const tx = participationContract.redeemQuantity(account.address!, shareQuantity);
     transaction.start(tx, 'Redeem shares');
   });
-
-  const handleRedeemAllClick = () => {
-    shares && shares.balanceOf && form.setValue('shareQuantity', shares!.balanceOf!.toNumber());
-  };
 
   if (query.loading) {
     return (
@@ -92,9 +94,9 @@ export const FundRedeem: React.FC<FundRedeemProps> = ({ address }) => {
   return (
     <Block>
       <SectionTitle>Redeem</SectionTitle>
-      {hasInvested && shares && (
+      {hasInvested && shares && !shares?.balanceOf?.isZero() && (
         <>
-          <p>You own {shares?.balanceOf?.toString()} shares!</p>
+          <p>You own {shares?.balanceOf?.toFixed(18)} shares</p>
           <FormContext {...form}>
             <form onSubmit={submit}>
               <FormField name="shareQuantity" label="Number of shares to redeem">
@@ -109,13 +111,7 @@ export const FundRedeem: React.FC<FundRedeemProps> = ({ address }) => {
                 />
               </FormField>
               <CheckboxContainer>
-                <CheckboxInput
-                  type="checkbox"
-                  ref={form.register}
-                  name="redeemAll"
-                  id="redeemAll"
-                  onClick={handleRedeemAllClick}
-                />
+                <CheckboxInput type="checkbox" ref={form.register} name="redeemAll" id="redeemAll" />
                 <CheckboxMask>
                   <CheckboxIcon></CheckboxIcon>
                 </CheckboxMask>

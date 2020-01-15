@@ -17,14 +17,6 @@ import { Button } from '~/storybook/components/Button/Button';
 import { FormattedNumber } from '~/components/Common/FormattedNumber/FormattedNumber';
 import * as S from './WalletWrapEther.styles';
 
-const validationSchema = Yup.object().shape({
-  quantity: Yup.mixed<number>(),
-});
-
-const defaultValues = {
-  quantity: '0.5',
-};
-
 export const WalletWrapEther: React.FC = () => {
   const environment = useEnvironment()!;
   const account = useAccount();
@@ -33,17 +25,28 @@ export const WalletWrapEther: React.FC = () => {
     onFinish: () => refetch(),
   });
 
+  const validationSchema = Yup.object().shape({
+    quantityEth: Yup.mixed<BigNumber>()
+      .transform((value, _) => new BigNumber(value))
+      .test('positive', 'Amount of ETH has to be positive', (value: BigNumber) => value.isGreaterThan(0))
+      .test('balance', 'Not enough ETH in wallet', (value: BigNumber) => !!account.eth?.isGreaterThanOrEqualTo(value)),
+  });
+
+  const defaultValues = {
+    quantityEth: account.eth?.isLessThan(new BigNumber(1)) ? account.eth : new BigNumber(1),
+  };
+
   const form = useForm<typeof defaultValues>({
     defaultValues,
     validationSchema,
     mode: 'onSubmit',
-    reValidateMode: 'onBlur',
+    reValidateMode: 'onChange',
   });
 
   const submit = form.handleSubmit(async data => {
     const token = environment.getToken('WETH')!;
     const weth = new Weth(environment, token.address);
-    const tx = weth.deposit(account.address!, new BigNumber(toWei(data.quantity)));
+    const tx = weth.deposit(account.address!, data.quantityEth.times(new BigNumber('1e18')));
     transaction.start(tx, 'Wrap Ether');
   });
 
@@ -60,11 +63,13 @@ export const WalletWrapEther: React.FC = () => {
               <FormattedNumber value={account.weth} suffix="WETH" />
             </S.WalletWrapEtherBalance>
           </S.WalletWrapEtherBalances>
-          <FormField name="quantity" label="Quantity">
-            <Input id="quantity" name="quantity" type="number" step="any" />
+          <FormField name="quantityEth" label="Quantity">
+            <Input id="quantityEth" name="quantityEth" type="number" step="any" />
           </FormField>
           <BlockActions>
-            <Button type="submit">Wrap Ether</Button>
+            <Button type="submit" disabled={!!form.errors.quantityEth}>
+              Wrap Ether
+            </Button>
           </BlockActions>
         </form>
       </FormContext>

@@ -6,6 +6,7 @@ import { Spinner } from '~/storybook/components/Spinner/Spinner';
 import { ErrorFallback } from '~/components/Common/ErrorFallback/ErrorFallback';
 import { WalletHeader } from './WalletHeader/WalletHeader';
 import { WalletNavigation } from './WalletNavigation/WalletNavigation';
+import { RequiresFundSetupNotStarted } from '~/components/Gates/RequiresFundSetupNotStarted/RequiresFundSetupNotStarted';
 
 const NoMatch = React.lazy(() => import('~/components/Routes/NoMatch/NoMatch'));
 const WalletOverview = React.lazy(() => import('./WalletRoutes/WalletOverview/WalletOverview'));
@@ -29,9 +30,11 @@ export const Wallet: React.FC = () => {
               <Route path={`${match.path}/weth`} exact={true}>
                 <WalletWeth />
               </Route>
-              <Route path={`${match.path}/setup`} exact={true}>
-                <WalletFundSetup />
-              </Route>
+              <RequiresFundSetupNotStarted fallback={true}>
+                <Route path={`${match.path}/setup`} exact={true}>
+                  <WalletFundSetup />
+                </Route>
+              </RequiresFundSetupNotStarted>
               <Route>
                 <NoMatch />
               </Route>

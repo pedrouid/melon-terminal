@@ -17,14 +17,6 @@ import { FormattedNumber } from '~/components/Common/FormattedNumber/FormattedNu
 import { Button } from '~/storybook/components/Button/Button';
 import * as S from './WalletUnwrapEther.styles';
 
-const validationSchema = Yup.object().shape({
-  quantity: Yup.mixed<number>(),
-});
-
-const defaultValues = {
-  quantity: '0.5',
-};
-
 export const WalletUnwrapEther: React.FC = () => {
   const environment = useEnvironment()!;
   const account = useAccount();
@@ -33,17 +25,32 @@ export const WalletUnwrapEther: React.FC = () => {
     onFinish: () => refetch(),
   });
 
+  const validationSchema = Yup.object().shape({
+    quantityWeth: Yup.mixed<BigNumber>()
+      .transform((value, _) => new BigNumber(value))
+      .test('positive', 'Amount of WETH has to be positive', (value: BigNumber) => value.isGreaterThan(0))
+      .test(
+        'balance',
+        'Not enough WETH in wallet',
+        (value: BigNumber) => !!account.weth?.isGreaterThanOrEqualTo(value)
+      ),
+  });
+
+  const defaultValues = {
+    quantityWeth: account.weth?.isLessThan(new BigNumber(1)) ? account.weth : new BigNumber(1),
+  };
+
   const form = useForm<typeof defaultValues>({
     defaultValues,
     validationSchema,
     mode: 'onSubmit',
-    reValidateMode: 'onBlur',
+    reValidateMode: 'onChange',
   });
 
   const submit = form.handleSubmit(async data => {
     const token = environment.getToken('WETH')!;
     const weth = new Weth(environment, token.address);
-    const tx = weth.withdraw(account.address!, new BigNumber(toWei(data.quantity)));
+    const tx = weth.withdraw(account.address!, data.quantityWeth.times(new BigNumber('1e18')));
     transaction.start(tx, 'Unwrap Ether');
   });
 
@@ -61,11 +68,13 @@ export const WalletUnwrapEther: React.FC = () => {
             </S.WalletUnwrapEtherBalance>
           </S.WalletUnwrapEtherBalances>
 
-          <FormField name="quantity" label="Quantity">
-            <Input id="quantity" name="quantity" type="number" step="any" />
+          <FormField name="quantityWeth" label="Quantity">
+            <Input id="quantityWeth" name="quantityWeth" />
           </FormField>
           <BlockActions>
-            <Button type="submit">Unwrap Ether</Button>
+            <Button type="submit" disabled={!!form.errors.quantityWeth}>
+              Unwrap Ether
+            </Button>
           </BlockActions>
         </form>
       </FormContext>

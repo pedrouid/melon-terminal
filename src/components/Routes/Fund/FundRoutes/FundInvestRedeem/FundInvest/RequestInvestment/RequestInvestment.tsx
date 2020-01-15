@@ -28,19 +28,9 @@ export interface RequestInvestmentProps {
 
 interface RequestInvestmentFormValues {
   investmentAsset?: string;
-  investmentAmount: number;
-  requestedShares: number;
+  investmentAmount: BigNumber;
+  requestedShares: BigNumber;
 }
-
-const validationSchema = Yup.object().shape({
-  investmentAmount: Yup.number()
-    .required()
-    .positive(),
-  requestedShares: Yup.number()
-    .required()
-    .positive(),
-  investmentAsset: Yup.string(),
-});
 
 export const RequestInvestment: React.FC<RequestInvestmentProps> = props => {
   const environment = useEnvironment()!;
@@ -55,25 +45,36 @@ export const RequestInvestment: React.FC<RequestInvestmentProps> = props => {
     return totalSupply?.isZero() ? new BigNumber(1) : new BigNumber(1.1);
   }, [totalSupply]);
 
+  const validationSchema = Yup.object().shape({
+    investmentAmount: Yup.mixed<BigNumber>()
+      .transform((value, _) => new BigNumber(value).decimalPlaces(initialAsset?.token?.decimals || 18))
+      .test('positive', 'Investment amount has to be positive', (value: BigNumber) => value.isGreaterThan(0)),
+    requestedShares: Yup.mixed<BigNumber>()
+      .transform((value, _) => new BigNumber(value))
+      .test('positive', 'Number of shares has to be positive', (value: BigNumber) => value.isGreaterThan(0)),
+    investmentAsset: Yup.string(),
+  });
+
+  const defaultValues = {
+    requestedShares: new BigNumber(1),
+    investmentAsset: initialAsset?.token?.address,
+    investmentAmount: initialAsset?.shareCostInAsset
+      ?.dividedBy(new BigNumber(10).exponentiatedBy(initialAsset?.token?.decimals || 18))
+      .multipliedBy(multiplier)
+      .decimalPlaces(initialAsset?.token?.decimals || 18),
+  };
+
   const form = useForm<RequestInvestmentFormValues>({
+    defaultValues,
     validationSchema,
     mode: 'onSubmit',
     reValidateMode: 'onBlur',
-    defaultValues: {
-      requestedShares: 1,
-      investmentAsset: initialAsset?.token?.address,
-      investmentAmount: initialAsset?.shareCostInAsset
-        ?.dividedBy(new BigNumber(10).exponentiatedBy(initialAsset?.token?.decimals || 18))
-        .multipliedBy(multiplier)
-        .decimalPlaces(initialAsset?.token?.decimals || 18)
-        .toNumber(),
-    },
   });
 
-  const investmentAsset = form.watch('investmentAsset') as string | undefined;
-  const investmentAmount = form.watch('investmentAmount') as number;
-  const requestedShares = form.watch('requestedShares') as number;
-  const token = (investmentAsset && environment.getToken(investmentAsset)) as TokenDefinition | undefined;
+  const investmentAsset = form.watch('investmentAsset') as string;
+  const investmentAmount = form.watch('investmentAmount') as BigNumber;
+
+  const token = (investmentAsset && environment.getToken(investmentAsset)) as TokenDefinition;
   const asset = allowedAssets.find(allowedAsset => sameAddress(allowedAsset.token?.address, investmentAsset));
   const participation = props.account?.participation?.address;
   const [allowance, query] = useAccountAllowanceQuery(account.address, investmentAsset, participation);
@@ -122,7 +123,7 @@ export const RequestInvestment: React.FC<RequestInvestmentProps> = props => {
     switch (action) {
       case 'approve': {
         const contract = new StandardToken(environment, values.investmentAsset);
-        const amount = new BigNumber(values.investmentAmount).times(new BigNumber(10).exponentiatedBy(token!.decimals));
+        const amount = values.investmentAmount.times(new BigNumber(10).exponentiatedBy(token!.decimals));
         const tx = contract.approve(account.address!, participation!, amount);
         transaction.start(tx, 'Approve');
         break;
@@ -130,10 +131,8 @@ export const RequestInvestment: React.FC<RequestInvestmentProps> = props => {
 
       case 'invest': {
         const contract = new Participation(environment, participation);
-        const sharesAmount = new BigNumber(values.requestedShares).times(new BigNumber(10).exponentiatedBy(18));
-        const investmentAmount = new BigNumber(values.investmentAmount).times(
-          new BigNumber(10).exponentiatedBy(token!.decimals)
-        );
+        const sharesAmount = values.requestedShares.times(new BigNumber('1e18'));
+        const investmentAmount = values.investmentAmount.times(new BigNumber(10).exponentiatedBy(token!.decimals));
         const tx = contract.requestInvestment(
           account.address!,
           sharesAmount,
@@ -147,13 +146,13 @@ export const RequestInvestment: React.FC<RequestInvestmentProps> = props => {
   });
 
   const handleInvestmentAmountChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (asset && token && requestedShares) {
+    if (asset && token) {
       const shares = new BigNumber(event.target.value ?? 0)
         .multipliedBy(new BigNumber(10).exponentiatedBy(token.decimals))
         .dividedBy(asset.shareCostInAsset!)
         .dividedBy(multiplier);
 
-      form.setValue('requestedShares', shares.isNaN() ? 0 : shares.toNumber());
+      form.setValue('requestedShares', shares.isNaN() ? new BigNumber(0) : shares);
     }
   };
 
@@ -164,7 +163,10 @@ export const RequestInvestment: React.FC<RequestInvestmentProps> = props => {
         .dividedBy(new BigNumber(10).exponentiatedBy(token.decimals))
         .multipliedBy(multiplier);
 
-      form.setValue('investmentAmount', amount.isNaN() ? 0 : parseFloat(amount.toFixed(token.decimals || 18)));
+      form.setValue(
+        'investmentAmount',
+        amount.isNaN() ? new BigNumber(0) : amount.decimalPlaces(asset?.token?.decimals || 18)
+      );
     }
   };
 
@@ -186,7 +188,7 @@ export const RequestInvestment: React.FC<RequestInvestmentProps> = props => {
             />
           </FormField>
 
-          {(query.loading && <Spinner />) || (
+          {(query.loading && !asset && <Spinner />) || (
             <>
               <div>
                 Your balance: <FormattedNumber value={allowance?.balance} suffix={asset?.token?.symbol} />
@@ -196,9 +198,6 @@ export const RequestInvestment: React.FC<RequestInvestmentProps> = props => {
                 <Input
                   id="requestedShares"
                   name="requestedShares"
-                  type="number"
-                  step="any"
-                  min="0"
                   disabled={props.loading}
                   onChange={handleRequestedSharesChange}
                 />
@@ -208,17 +207,10 @@ export const RequestInvestment: React.FC<RequestInvestmentProps> = props => {
                 <Input
                   id="sharePrice"
                   name="sharePrice"
-                  type="number"
-                  step="any"
-                  min="0"
-                  value={
-                    asset &&
-                    asset.shareCostInAsset &&
-                    asset?.shareCostInAsset
-                      .dividedBy(new BigNumber(10).exponentiatedBy(asset?.token?.decimals || 18))
-                      .multipliedBy(multiplier)
-                      .toString()
-                  }
+                  value={asset?.shareCostInAsset
+                    ?.dividedBy(new BigNumber(10).exponentiatedBy(asset?.token?.decimals || 18))
+                    .multipliedBy(multiplier)
+                    .toFixed(asset?.token?.decimals || 18)}
                   disabled={true}
                 />
               </FormField>
@@ -227,9 +219,6 @@ export const RequestInvestment: React.FC<RequestInvestmentProps> = props => {
                 <Input
                   id="investmentAmount"
                   name="investmentAmount"
-                  type="number"
-                  step="any"
-                  min="0"
                   disabled={props.loading}
                   onChange={handleInvestmentAmountChange}
                 />

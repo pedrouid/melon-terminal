@@ -46,34 +46,37 @@ export const AssetWhitelistConfiguration: React.FC<AssetWhitelistConfigurationPr
   return (
     <>
       <SectionTitle>Configure asset whitelist policy</SectionTitle>
-      <Grid>
-        <GridRow>
-          {tokens.map((token, index) => (
-            <GridCol xs={4} sm={3} md={2.4} key={token.address}>
-              <CheckboxContainer>
-                <CheckboxInput
-                  id={`assetWhitelist[${index}]`}
-                  type="checkbox"
-                  name={`assetWhitelist[${index}]`}
-                  value={token.address}
-                  key={token.symbol}
-                  ref={form.register}
-                />
-                <CheckboxMask>
-                  <CheckboxIcon>
-                  </CheckboxIcon>
-                </CheckboxMask>
-                <CheckboxLabel htmlFor={`assetWhitelist[${index}]`}>{token.symbol}</CheckboxLabel>
-              </CheckboxContainer>
-            </GridCol>
-          ))}
-        </GridRow>
-      </Grid>
       <FormContext {...form}>
         <form onSubmit={submit}>
-          <BlockActions>
-            <Button type="submit">Add asset whitelist policy</Button>
-          </BlockActions>
+          <Grid>
+            <GridRow>
+              {tokens.map((token, index) => (
+                <GridCol xs={4} sm={3} md={2.4} key={token.address}>
+                  <CheckboxContainer>
+                    <CheckboxInput
+                      id={`assetWhitelist[${index}]`}
+                      type="checkbox"
+                      name={`assetWhitelist[${index}]`}
+                      value={token.address}
+                      key={token.symbol}
+                      ref={form.register}
+                    />
+                    <CheckboxMask>
+                      <CheckboxIcon>
+                      </CheckboxIcon>
+                    </CheckboxMask>
+                    <CheckboxLabel htmlFor={`assetWhitelist[${index}]`}>{token.symbol}</CheckboxLabel>
+                  </CheckboxContainer>
+                </GridCol>
+              ))}
+              
+              {form.errors.assetWhitelist && <p>{form.errors.assetWhitelist.message}</p>}
+              
+              <BlockActions>
+                <Button type="submit">Add asset whitelist policy</Button>
+              </BlockActions>
+            </GridRow>
+          </Grid>
         </form>
       </FormContext>
     </>

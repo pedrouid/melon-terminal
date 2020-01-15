@@ -46,31 +46,34 @@ export const AssetBlacklistConfiguration: React.FC<AssetBlacklistConfigurationPr
   return (
     <>
       <SectionTitle>Configure asset blacklist policy</SectionTitle>
-      <Grid>
-        <GridRow>
-          {tokens.map((token, index) => (
-            <GridCol xs={4} sm={3} md={2.4} key={token.address}>
-              <CheckboxContainer>
-                <CheckboxInput
-                  id={`assetBlacklist[${index}]`}
-                  type="checkbox"
-                  name={`assetBlacklist[${index}]`}
-                  value={token.address}
-                  key={token.symbol}
-                  ref={form.register}
-                />
-                <CheckboxMask>
-                  <CheckboxIcon>
-                  </CheckboxIcon>
-                </CheckboxMask>
-                <CheckboxLabel htmlFor={`assetBlacklist[${index}]`}>{token.symbol}</CheckboxLabel>
-              </CheckboxContainer>
-            </GridCol>
-          ))}
-        </GridRow>
-      </Grid>
       <FormContext {...form}>
         <form onSubmit={submit}>
+          <Grid>
+            <GridRow>
+              {tokens.map((token, index) => (
+                <GridCol xs={4} sm={3} md={2.4} key={token.address}>
+                  <CheckboxContainer>
+                    <CheckboxInput
+                      id={`assetBlacklist[${index}]`}
+                      type="checkbox"
+                      name={`assetBlacklist[${index}]`}
+                      value={token.address}
+                      key={token.symbol}
+                      ref={form.register}
+                    />
+                    <CheckboxMask>
+                      <CheckboxIcon>
+                      </CheckboxIcon>
+                    </CheckboxMask>
+                    <CheckboxLabel htmlFor={`assetBlacklist[${index}]`}>{token.symbol}</CheckboxLabel>
+                  </CheckboxContainer>
+                </GridCol>
+              ))}
+            </GridRow>
+          </Grid>
+
+          {form.errors.assetBlacklist && <p>{form.errors.assetBlacklist.message}</p>}
+
           <BlockActions>
             <Button type="submit">Add asset blacklist policy</Button>
           </BlockActions>
