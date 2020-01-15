@@ -9,6 +9,7 @@ import { FormField } from '~/storybook/components/FormField/FormField';
 import { Input } from '~/storybook/components/Input/Input';
 import { Button } from '~/storybook/components/Button/Button';
 import { SectionTitle } from '~/storybook/components/Title/Title';
+import { BlockActions } from '~/storybook/components/Block/Block';
 
 interface PriceToleranceConfigurationForm {
   priceTolerance: number;
@@ -50,7 +51,9 @@ export const PriceToleranceConfiguration: React.FC<PriceToleranceConfigurationPr
           <FormField name="priceTolerance" label="Price tolerance (%)">
             <Input name="priceTolerance" type="number" id="priceTolerance" />
           </FormField>
-          <Button type="submit">Add price tolerance policy</Button>
+          <BlockActions>
+            <Button type="submit">Add price tolerance policy</Button>
+          </BlockActions>
         </form>
       </FormContext>
     </>

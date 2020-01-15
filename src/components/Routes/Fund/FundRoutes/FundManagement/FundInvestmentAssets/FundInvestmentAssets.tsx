@@ -14,6 +14,7 @@ import { Spinner } from '~/storybook/components/Spinner/Spinner';
 import { CheckboxContainer, CheckboxInput, CheckboxMask, CheckboxIcon, CheckboxLabel } from '~/storybook/components/Checkbox/Checkbox';
 import { useAccount } from '~/hooks/useAccount';
 import { useFundInvestmentAssetsQuery } from '~/queries/FundInvestmentAssets';
+import { Grid, GridRow, GridCol } from '~/storybook/components/Grid/Grid';
 
 export interface InvestmentAssetsProps {
   address: string;
@@ -105,31 +106,33 @@ export const InvestmentAssets: React.FC<InvestmentAssetsProps> = ({ address }) =
           <SectionTitle>Define investment assets</SectionTitle>
 
           <p>Investors will be able to invest in your funds using any of the assets selected below.</p>
-          
+
           {form.errors.assets && <p>{form.errors.assets.message}</p>}
 
-          <ul>
-            {environment.tokens.map((token, index) => (
-              <li key={token.symbol}>
-                <CheckboxContainer>
-                  <CheckboxInput
-                    defaultChecked={defaultValues[index]}
-                    id={`assets[${index}]`}
-                    type="checkbox"
-                    name={`assets[${index}]`}
-                    value={token.address}
-                    key={token.address}
-                    ref={form.register}
-                  />
-                  <CheckboxMask>
-                    <CheckboxIcon>
-                    </CheckboxIcon>
-                  </CheckboxMask>
-                  <CheckboxLabel htmlFor={`assets[${index}]`}>{token.symbol} ({token.name})</CheckboxLabel>
-                </CheckboxContainer>
-              </li>
-            ))}
-          </ul>
+          <Grid>
+            <GridRow>
+              {environment.tokens.map((token, index) => (
+                <GridCol xs={12} sm={12} md={6} key={token.symbol}>
+                  <CheckboxContainer>
+                    <CheckboxInput
+                      defaultChecked={defaultValues[index]}
+                      id={`assets[${index}]`}
+                      type="checkbox"
+                      name={`assets[${index}]`}
+                      value={token.address}
+                      key={token.address}
+                      ref={form.register}
+                    />
+                    <CheckboxMask>
+                      <CheckboxIcon>
+                      </CheckboxIcon>
+                    </CheckboxMask>
+                    <CheckboxLabel htmlFor={`assets[${index}]`}>{token.symbol} ({token.name})</CheckboxLabel>
+                  </CheckboxContainer>
+                </GridCol>
+              ))}
+            </GridRow>
+          </Grid>
 
           <BlockActions>
             <Button type="button" onClick={submit}>

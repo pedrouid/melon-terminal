@@ -10,6 +10,7 @@ import { FormField } from '~/storybook/components/FormField/FormField';
 import { Input } from '~/storybook/components/Input/Input';
 import { Button } from '~/storybook/components/Button/Button';
 import { SectionTitle } from '~/storybook/components/Title/Title';
+import { BlockActions } from '~/storybook/components/Block/Block';
 
 interface MaxConcentrationConfigurationForm {
   maxConcentration: number;
@@ -57,7 +58,9 @@ export const MaxConcentrationConfiguration: React.FC<MaxConcentrationConfigurati
           <FormField name="maxConcentration" label="Maximum concentration (%)">
             <Input name="maxConcentration" type="number" id="maxConcentration" />
           </FormField>
-          <Button type="submit">Add max concentration policy</Button>
+          <BlockActions>
+            <Button type="submit">Add max concentration policy</Button>
+          </BlockActions>
         </form>
       </FormContext>
     </>

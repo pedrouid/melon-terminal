@@ -24,6 +24,7 @@ import { useAccount } from '~/hooks/useAccount';
 import { MatchingMarketOrderbookItem } from '../../FundOrderbook/utils/matchingMarketOrderbook';
 import useForm, { FormContext } from 'react-hook-form';
 import BigNumber from 'bignumber.js';
+import { BlockActions } from '~/storybook/components/Block/Block';
 
 export interface FundOrderbookMarketFormProps {
   address: string;
@@ -137,10 +138,12 @@ export const FundOrderbookMarketForm: React.FC<FundOrderbookMarketFormProps> = p
           <FormField label="Price" name="price">
             <Input type="text" name="price" disabled={true} value={props.order.price.toFixed()} />
           </FormField>
-
-          <Button type="button" onClick={submit}>
-            Submit
-          </Button>
+          
+          <BlockActions>
+            <Button type="button" onClick={submit}>
+              Submit
+            </Button>
+          </BlockActions>
         </form>
       )}
 

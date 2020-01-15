@@ -9,6 +9,7 @@ import { Button } from '~/storybook/components/Button/Button';
 import { FormField } from '~/storybook/components/FormField/FormField';
 import { Input } from '~/storybook/components/Input/Input';
 import { SectionTitle } from '~/storybook/components/Title/Title';
+import { BlockActions } from '~/storybook/components/Block/Block';
 
 interface MaxPositionsConfigurationForm {
   maxPositions: number;
@@ -50,7 +51,9 @@ export const MaxPositionsConfiguration: React.FC<MaxPositionsConfigurationProps>
           <FormField name="maxPositions" label="Maximum number of positions">
             <Input name="maxPositions" type="number" id="maxPositions" />
           </FormField>
-          <Button type="submit">Add max positions policy</Button>
+          <BlockActions>
+            <Button type="submit">Add max positions policy</Button>
+          </BlockActions>
         </form>
       </FormContext>
     </>

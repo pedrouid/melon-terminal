@@ -147,27 +147,29 @@ export const WalletFundSetup: React.FC = () => {
                 <BlockSection>
                   <SectionTitle>Allowed investment assets</SectionTitle>
                   {form.errors.assets && <p>{form.errors.assets.message}</p>}
-                  <ul>
-                    {environment.tokens.map((token, index) => (
-                      <li key={token.symbol}>
-                        <CheckboxContainer>
-                          <CheckboxInput
-                            id={`assets[${index}]`}
-                            type="checkbox"
-                            name={`assets[${index}]`}
-                            value={token.symbol}
-                            key={token.symbol}
-                            ref={form.register}
-                          />
-                          <CheckboxMask>
-                            <CheckboxIcon>
-                            </CheckboxIcon>
-                          </CheckboxMask>
-                          <CheckboxLabel htmlFor={`assets[${index}]`}>{token.symbol} ({token.name})</CheckboxLabel>
-                        </CheckboxContainer>
-                      </li>
-                    ))}
-                  </ul>
+                  <Grid>
+                    <GridRow>
+                      {environment.tokens.map((token, index) => (
+                        <GridCol xs={12} sm={12} md={6} key={token.symbol}>
+                          <CheckboxContainer>
+                            <CheckboxInput
+                              id={`assets[${index}]`}
+                              type="checkbox"
+                              name={`assets[${index}]`}
+                              value={token.symbol}
+                              key={token.symbol}
+                              ref={form.register}
+                            />
+                            <CheckboxMask>
+                              <CheckboxIcon>
+                              </CheckboxIcon>
+                            </CheckboxMask>
+                            <CheckboxLabel htmlFor={`assets[${index}]`}>{token.symbol} ({token.name})</CheckboxLabel>
+                          </CheckboxContainer>
+                        </GridCol>
+                      ))}
+                    </GridRow>
+                  </Grid>
                 </BlockSection>
                 <BlockSection>
                   <SectionTitle>Disclaimer</SectionTitle>

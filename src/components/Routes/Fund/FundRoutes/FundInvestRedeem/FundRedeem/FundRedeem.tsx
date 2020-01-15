@@ -13,7 +13,7 @@ import { useOnChainQueryRefetcher } from '~/hooks/useOnChainQueryRefetcher';
 import { FormField } from '~/storybook/components/FormField/FormField';
 import { Input } from '~/storybook/components/Input/Input';
 import { Button } from '~/storybook/components/Button/Button';
-import { Block } from '~/storybook/components/Block/Block';
+import { Block , BlockActions } from '~/storybook/components/Block/Block';
 import { SectionTitle } from '~/storybook/components/Title/Title';
 import {
   CheckboxContainer,
@@ -121,7 +121,9 @@ export const FundRedeem: React.FC<FundRedeemProps> = ({ address }) => {
                 </CheckboxMask>
                 <CheckboxLabel htmlFor="redeemAll">Redeem all shares</CheckboxLabel>
               </CheckboxContainer>
-              <Button type="submit">Redeem</Button>
+              <BlockActions>
+                <Button type="submit">Redeem</Button>
+              </BlockActions>
             </form>
           </FormContext>
           <TransactionModal transaction={transaction} />

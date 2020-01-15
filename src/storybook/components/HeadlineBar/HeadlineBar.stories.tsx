@@ -1,7 +1,7 @@
 import React from 'react';
 import { Bar, BarContent } from '../Bar/Bar';
 import { Headline } from '../Headline/Headline';
-import { Button, ButtonGroup } from '../Button/Button';
+import { Button } from '../Button/Button';
 import { DataBlock, DataBlockSection } from '../DataBlock/DataBlock';
 
 export default { title: 'Layouts|HeadlineBar' };
@@ -31,12 +31,12 @@ export const WithButtons: React.FC = () => {
     <Bar>
       <BarContent justify="between">
         <Headline title="My title" text="My subtitle" icon="icon" />
-        <ButtonGroup justify="end">
+        <DataBlockSection>
           <Button>button 1</Button>
           <Button>button 2</Button>
           <Button>other button</Button>
           <Button kind="danger">button danger</Button>
-        </ButtonGroup>
+        </DataBlockSection>
       </BarContent>
     </Bar>
   );

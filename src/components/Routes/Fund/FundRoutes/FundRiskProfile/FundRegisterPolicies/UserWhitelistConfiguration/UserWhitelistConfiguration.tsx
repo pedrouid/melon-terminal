@@ -8,7 +8,7 @@ import { Textarea } from '~/storybook/components/Textarea/Textarea';
 import { useAccount } from '~/hooks/useAccount';
 import { SectionTitle } from '~/storybook/components/Title/Title';
 import { Button } from '~/storybook/components/Button/Button';
-import { Grid, GridRow, GridCol } from '~/storybook/components/Grid/Grid';
+import { BlockActions } from '~/storybook/components/Block/Block';
 
 interface UserWhitelistConfigurationForm {
   userWhitelist: string;
@@ -45,14 +45,10 @@ export const UserWhitelistConfiguration: React.FC<UserWhitelistConfigurationProp
       <SectionTitle>Configure user whitelist policy</SectionTitle>
       <FormContext {...form}>
         <form onSubmit={submit}>
-          <Grid>
-            <Textarea name="userWhitelist" placeholder="0x000000000000" id="userWhitelist" />
-            <GridRow>
-              <GridCol>
-                <Button type="submit">Add user whitelist policy</Button>
-              </GridCol>
-            </GridRow>
-          </Grid>
+          <Textarea name="userWhitelist" placeholder="0x000000000000" id="userWhitelist" />
+          <BlockActions>
+            <Button type="submit">Add user whitelist policy</Button>
+          </BlockActions>
         </form>
       </FormContext>
     </>

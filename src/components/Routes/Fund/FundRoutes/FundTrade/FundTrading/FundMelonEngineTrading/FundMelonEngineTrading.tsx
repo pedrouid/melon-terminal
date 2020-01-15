@@ -14,6 +14,7 @@ import { useOnChainQueryRefetcher } from '~/hooks/useOnChainQueryRefetcher';
 import { TransactionModal } from '~/components/Common/TransactionModal/TransactionModal';
 import { useMelonEngineTradingQuery } from './FundMelonEngineTrading.query';
 import { FormattedNumber } from '~/components/Common/FormattedNumber/FormattedNumber';
+import { BlockActions } from '~/storybook/components/Block/Block';
 
 export interface FundMelonEngineTradingProps {
   address: string;
@@ -117,8 +118,9 @@ export const FundMelonEngineTrading: React.FC<FundMelonEngineTradingProps> = pro
           <div>
             <FormattedNumber value={liquid} suffix="WETH available" />
           </div>
-
-          <Button type="submit">Submit</Button>
+          <BlockActions>
+            <Button type="submit">Submit</Button>
+          </BlockActions>
         </form>
       </FormContext>
       <TransactionModal transaction={transaction} />

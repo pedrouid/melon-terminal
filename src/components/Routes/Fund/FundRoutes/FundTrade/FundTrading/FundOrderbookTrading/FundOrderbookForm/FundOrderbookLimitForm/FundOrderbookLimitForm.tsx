@@ -21,6 +21,7 @@ import { Button } from '~/storybook/components/Button/Button';
 import { FormField } from '~/storybook/components/FormField/FormField';
 import { Input } from '~/storybook/components/Input/Input';
 import { OrderbookItem } from '../../FundOrderbook/utils/aggregatedOrderbook';
+import { BlockActions } from '~/storybook/components/Block/Block';
 
 export interface FundOrderbookLimitFormProps {
   address: string;
@@ -161,8 +162,9 @@ export const FundOrderbookLimitForm: React.FC<FundOrderbookLimitFormProps> = pro
           <FormField label="Price" name="price">
             <Input type="text" name="price" onChange={() => props.order && props.unsetOrder()} />
           </FormField>
-
-          <Button type="submit">Submit</Button>
+          <BlockActions>
+            <Button type="submit">Submit</Button>
+          </BlockActions>
         </form>
       </FormContext>
 

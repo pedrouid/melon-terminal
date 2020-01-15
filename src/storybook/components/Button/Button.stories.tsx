@@ -20,3 +20,5 @@ export const Danger = () => <Button kind="danger">danger Button</Button>;
 export const Success = () => <Button kind="success">success Button</Button>;
 
 export const Disabled = () => <Button disabled={true}>Disabled Button</Button>;
+
+export const Loading = () => <Button loading={true}>Loading Button</Button>;
