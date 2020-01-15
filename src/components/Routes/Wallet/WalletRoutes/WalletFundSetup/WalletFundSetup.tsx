@@ -156,21 +156,22 @@ export const WalletFundSetup: React.FC = () => {
                 <BlockSection>
                   <SectionTitle>Supported exchanges</SectionTitle>
                   {form.errors.exchanges && <p>{form.errors.exchanges.message}</p>}
-                  <ul>
-                    {environment.exchanges.map((exchange, index) => (
-                      <li key={exchange.id}>
-                        <input
-                          id={`exchanges[${index}]`}
-                          type="checkbox"
-                          name={`exchanges[${index}]`}
-                          value={exchange.id}
-                          key={exchange.id}
-                          ref={form.register}
-                        />
-                        <label htmlFor={`exchanges[${index}]`}>{exchange.name}</label>
-                      </li>
-                    ))}
-                  </ul>
+                  {environment.exchanges.map((exchange, index) => (
+                    <CheckboxContainer>
+                      <CheckboxInput
+                        id={`exchanges[${index}]`}
+                        type="checkbox"
+                        name={`exchanges[${index}]`}
+                        value={exchange.id}
+                        key={exchange.id}
+                        ref={form.register}
+                      />
+                      <CheckboxMask>
+                        <CheckboxIcon />
+                      </CheckboxMask>
+                      <CheckboxLabel htmlFor={`exchanges[${index}]`}>{exchange.name}</CheckboxLabel>
+                    </CheckboxContainer>
+                  ))}
                 </BlockSection>
                 <BlockSection>
                   <SectionTitle>Allowed investment assets</SectionTitle>
@@ -189,7 +190,7 @@ export const WalletFundSetup: React.FC = () => {
                               ref={form.register}
                             />
                             <CheckboxMask>
-                              <CheckboxIcon></CheckboxIcon>
+                              <CheckboxIcon />
                             </CheckboxMask>
                             <CheckboxLabel htmlFor={`assets[${index}]`}>
                               {token.symbol} ({token.name})

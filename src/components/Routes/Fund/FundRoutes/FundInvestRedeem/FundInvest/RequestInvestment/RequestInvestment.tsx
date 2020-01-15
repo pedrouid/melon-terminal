@@ -17,6 +17,8 @@ import { Button } from '~/storybook/components/Button/Button';
 import { Dropdown } from '~/storybook/components/Dropdown/Dropdown';
 import { Spinner } from '~/storybook/components/Spinner/Spinner';
 import { FormattedNumber } from '~/components/Common/FormattedNumber/FormattedNumber';
+import { NotificationBar } from '~/storybook/components/NotificationBar/NotificationBar';
+import { Link } from '~/storybook/components/Link/Link';
 
 export interface RequestInvestmentProps {
   address: string;
@@ -193,6 +195,12 @@ export const RequestInvestment: React.FC<RequestInvestmentProps> = props => {
               <div>
                 Your balance: <FormattedNumber value={allowance?.balance} suffix={asset?.token?.symbol} />
               </div>
+
+              {asset?.token?.symbol === 'WETH' && (
+                <NotificationBar kind="warning">
+                  Get WETH by wrapping your ether in the <Link to="/wallet/weth">wallet section</Link>.
+                </NotificationBar>
+              )}
 
               <FormField name="requestedShares" label="Number of shares">
                 <Input
