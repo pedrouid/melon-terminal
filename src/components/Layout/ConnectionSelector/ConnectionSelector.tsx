@@ -42,7 +42,7 @@ export const ConnectionSelector = () => {
                       <Block>
                         <Component active={active} connect={connect} disconnect={connection.disconnect} />
 
-                        {accounts && accounts.length && (
+                        {accounts && accounts.length > 1 && (
                           <Dropdown options={accounts} value={connection.account} onChange={(event) => connection.switch(event.target.value)} />
                         ) || null}
                       </Block>
