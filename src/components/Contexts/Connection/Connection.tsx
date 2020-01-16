@@ -145,25 +145,32 @@ export function reducer(state: ConnectionState, action: ConnectionAction): Conne
     }
 
     case ConnectionActionType.ACCOUNT_CHANGED: {
-      const accounts = (state.accounts || []);
+      const accounts = state.accounts || [];
       const account = action.account ? accounts.find(address => sameAddress(address, action.account)) : state.account;
       return { ...state, account, accounts };
     }
 
     case ConnectionActionType.ACCOUNTS_CHANGED: {
-      const accounts = (action.accounts || []);
+      const accounts = action.accounts || [];
       const account = state.account ? accounts.find(address => sameAddress(address, state.account)) : accounts[0];
       return { ...state, account, accounts };
     }
 
     case ConnectionActionType.CONNECTION_ESTABLISHED: {
-      const accounts = (action.accounts || []);
+      const accounts = action.accounts || [];
       const account = state.account ? accounts.find(address => sameAddress(address, state.account)) : accounts[0];
       return { ...state, account, network: action.network, accounts: action.accounts, eth: action.eth };
     }
 
     case ConnectionActionType.CONNECTION_LOST: {
-      return { ...state, network: undefined, account: undefined, accounts: undefined, eth: undefined, method: undefined };
+      return {
+        ...state,
+        network: undefined,
+        account: undefined,
+        accounts: undefined,
+        eth: undefined,
+        method: undefined,
+      };
     }
 
     case ConnectionActionType.DEPLOYMENT_LOADING: {
@@ -224,8 +231,8 @@ export const ConnectionProvider: React.FC<ConnectionProviderProps> = props => {
     // During local development, the default connection method is fetched from local storage for persistence
     // during testing sessions where the developer wants to refresh the browser window.
     return {
-      method: development && window.localStorage.getItem('connection.method') || props.default.name,
-      account: development && window.localStorage.getItem('connection.account') || props.default.name,
+      method: (development && window.localStorage.getItem('connection.method')) || props.default.name,
+      account: (development && window.localStorage.getItem('connection.account')) || undefined,
     };
   });
 
