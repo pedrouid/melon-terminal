@@ -66,10 +66,12 @@ export const FundFactSheet: React.FC<FundFactSheetProps> = ({ address }) => {
       index > 0
         ? new BigNumber(item.sharePrice).dividedBy(new BigNumber(array[index - 1].sharePrice)).toNumber() - 1
         : 0;
+
     let dailyReturn = returnSinceLastPriceUpdate;
     if (dailyReturn > 100 || dailyReturn <= -1) {
       dailyReturn = 0;
     }
+
     return {
       sharePrice: item.sharePrice,
       dailyReturn: index > 0 ? dailyReturn * 100 : 0,
@@ -86,14 +88,11 @@ export const FundFactSheet: React.FC<FundFactSheetProps> = ({ address }) => {
     firstChange && afterChange
       ? (new BigNumber(afterChange.sharePrice).dividedBy(new BigNumber(firstChange.sharePrice)).toNumber() - 1) * 100
       : null;
+
+  const oneYear = 60 * 60 * 24 * 365.25;
   const annualizedReturn =
     returnSinceInception &&
-    (Math.pow(
-      1 + returnSinceInception / 100,
-      (60 * 60 * 24 * 365.25) / (afterChange.timestamp - firstChange.timestamp)
-    ) -
-      1) *
-      100;
+    (Math.pow(1 + returnSinceInception / 100, oneYear / (afterChange.timestamp - firstChange.timestamp)) - 1) * 100;
 
   const volatility =
     normalizedCalculations &&
@@ -130,7 +129,7 @@ export const FundFactSheet: React.FC<FundFactSheetProps> = ({ address }) => {
       </DictionaryEntry>
       <DictionaryEntry>
         <DictionaryLabel>Inception</DictionaryLabel>
-        <DictionaryData>{creation ? <FormattedDate timestamp={creation.getTime() / 1000} /> : 'N/A'}</DictionaryData>
+        <DictionaryData>{creation ? <FormattedDate timestamp={creation} /> : 'N/A'}</DictionaryData>
       </DictionaryEntry>
       <DictionaryEntry>
         <DictionaryLabel>Status</DictionaryLabel>
@@ -170,15 +169,15 @@ export const FundFactSheet: React.FC<FundFactSheetProps> = ({ address }) => {
       </DictionaryEntry>
       <DictionaryEntry>
         <DictionaryLabel>Management fee</DictionaryLabel>
-        <DictionaryData>{managementFee?.rate != null ? `${managementFee.rate}%` : 'N/A'}</DictionaryData>
+        <DictionaryData><FormattedNumber value={managementFee?.rate} decimals={0} suffix="%" /></DictionaryData>
       </DictionaryEntry>
       <DictionaryEntry>
         <DictionaryLabel>Performance fee</DictionaryLabel>
-        <DictionaryData>{performanceFee?.rate != null ? `${performanceFee.rate}%` : 'N/A'}</DictionaryData>
+        <DictionaryData><FormattedNumber value={performanceFee?.rate} decimals={0} suffix="%" /></DictionaryData>
       </DictionaryEntry>
       <DictionaryEntry>
         <DictionaryLabel>Performance fee period</DictionaryLabel>
-        <DictionaryData>{performanceFee?.period != null ? `${performanceFee.period} days` : 'N/A'}</DictionaryData>
+        <DictionaryData><FormattedNumber value={performanceFee?.period} decimals={0} suffix="days" /></DictionaryData>
       </DictionaryEntry>
       <DictionaryEntry>
         <DictionaryLabel>Start of next performance fee period</DictionaryLabel>
@@ -192,15 +191,15 @@ export const FundFactSheet: React.FC<FundFactSheetProps> = ({ address }) => {
       </DictionaryEntry>
       <DictionaryEntry>
         <DictionaryLabel>Return since inception</DictionaryLabel>
-        <DictionaryData>{returnSinceInception?.toFixed(2)}%</DictionaryData>
+        <DictionaryData><FormattedNumber value={returnSinceInception} colorize={true} decimals={2} suffix="%" /></DictionaryData>
       </DictionaryEntry>
       <DictionaryEntry>
         <DictionaryLabel>Annualized return</DictionaryLabel>
-        <DictionaryData>{annualizedReturn?.toFixed(2)}%</DictionaryData>
+        <DictionaryData><FormattedNumber value={annualizedReturn} colorize={true} decimals={2} suffix="%" /></DictionaryData>
       </DictionaryEntry>
       <DictionaryEntry>
         <DictionaryLabel>Annual volatility</DictionaryLabel>
-        <DictionaryData>{volatility?.toFixed(2)}%</DictionaryData>
+        <DictionaryData><FormattedNumber value={volatility} colorize={true} decimals={2} suffix="%" /></DictionaryData>
       </DictionaryEntry>
       <DictionaryEntry>
         <DictionaryLabel>&nbsp;</DictionaryLabel>

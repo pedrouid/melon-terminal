@@ -44,15 +44,16 @@ export const Ganache: React.FC<ConnectionMethodProps> = ({ select, disconnect, a
   return (
     <>
       <SectionTitle>Ganache</SectionTitle>
+
       {!active ? (
         <Button lenght="stretch" onClick={() => select()}>
           Connect
         </Button>
       ) : (
-        <Button lenght="stretch" onClick={() => disconnect()}>
-          Disconnect
+          <Button lenght="stretch" onClick={() => disconnect()}>
+            Disconnect
         </Button>
-      )}
+        )}
     </>
   );
 };

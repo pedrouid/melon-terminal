@@ -1,7 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { useHistory } from 'react-router';
 import { Link } from 'react-router-dom';
-import { NumberChange } from '~/storybook/components/NumberChange/NumberChange';
 import { Spinner } from '~/storybook/components/Spinner/Spinner';
 import { NoMatch } from '~/components/Routes/NoMatch/NoMatch';
 import { FundOverviewPagination } from '~/components/Routes/Home/FundOverviewPagination/FundOverviewPagination';
@@ -17,6 +16,7 @@ import { Button } from '~/storybook/components/Button/Button';
 import * as S from './Home.styles';
 import { Container } from '~/storybook/components/Container/Container';
 import { FormattedDate } from '~/components/Common/FormattedDate/FormattedDate';
+import { FormattedNumber } from '~/components/Common/FormattedNumber/FormattedNumber';
 
 interface SortChoice {
   key: keyof typeof sortChoice;
@@ -253,7 +253,7 @@ export const Home: React.FC = () => {
                           </S.BodyCell>
                           <S.BodyCell>{fund.sharePrice}</S.BodyCell>
                           <S.BodyCell>
-                            <NumberChange change={fund.change} />
+                            <FormattedNumber value={fund.change} colorize={true} decimals={2} suffix="%" />
                           </S.BodyCell>
                           <S.BodyCell>{fund.aumEth}</S.BodyCell>
                           <S.BodyCell>{fund.shares}</S.BodyCell>
@@ -264,10 +264,10 @@ export const Home: React.FC = () => {
                         </S.BodyRow>
                       ))
                     ) : (
-                      <S.EmptyRow>
-                        <S.EmptyCell colSpan={12}>No records to display</S.EmptyCell>
-                      </S.EmptyRow>
-                    )}
+                        <S.EmptyRow>
+                          <S.EmptyCell colSpan={12}>No records to display</S.EmptyCell>
+                        </S.EmptyRow>
+                      )}
                   </tbody>
                 </S.Table>
               </S.ScrollableTable>
