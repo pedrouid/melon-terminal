@@ -12,65 +12,49 @@ const graphiql = JSON.parse(process.env.MELON_INCLUDE_GRAPHIQL || 'false');
 const Home = React.lazy(() => import('./Routes/Home/Home'));
 const Wallet = React.lazy(() => import('./Routes/Wallet/Wallet'));
 const Fund = React.lazy(() => import('./Routes/Fund/Fund'));
-const Connect = React.lazy(() => import('./Routes/Connect/Connect'));
 const Playground = React.lazy(() => import('./Routes/Playground/Playground'));
 const NoMatch = React.lazy(() => import('./Routes/NoMatch/NoMatch'));
 
-export const AppRouter = () => {
-  // TODO: Re-enable this again at some point.
-  //
-  // const connection = useConnectionState();
-  // const history = useHistory();
-  // useLayoutEffect(() => {
-  //   if (connection.environment?.network) {
-  //      history.push('/');
-  //   }
-  // }, [connection.environment?.network]);
+export const AppRouter = () => (
+  <ErrorBoundary FallbackComponent={ErrorFallback}>
+    <Suspense fallback={<Spinner size="large" positioning="overlay" />}>
+      <Switch>
+        <Route path="/" exact={true}>
+          <RequiresConnection>
+            <Home />
+          </RequiresConnection>
+        </Route>
+        <Route path="/wallet">
+          <RequiresAccount>
+            <Wallet />
+          </RequiresAccount>
+        </Route>
+        <Route path="/fund/:address">
+          <RequiresConnection>
+            <Fund />
+          </RequiresConnection>
+        </Route>
 
-  return (
-    <ErrorBoundary FallbackComponent={ErrorFallback}>
-      <Suspense fallback={<Spinner size="large" positioning="overlay" />}>
-        <Switch>
-          <Route path="/" exact={true}>
+        {graphiql && (
+          <Route path="/playground/onchain" exact={true}>
             <RequiresConnection>
-              <Home />
+              <Playground context={OnChainApollo} bucket="onchain" />
             </RequiresConnection>
           </Route>
-          <Route path="/connect" exact={true}>
-            <Connect />
-          </Route>
-          <Route path="/wallet">
-            <RequiresAccount>
-              <Wallet />
-            </RequiresAccount>
-          </Route>
-          <Route path="/fund/:address">
+        )}
+
+        {graphiql && (
+          <Route path="/playground/thegraph" exact={true}>
             <RequiresConnection>
-              <Fund />
+              <Playground context={TheGraphApollo} bucket="thegraph" />
             </RequiresConnection>
           </Route>
+        )}
 
-          {graphiql && (
-            <Route path="/playground/onchain" exact={true}>
-              <RequiresConnection>
-                <Playground context={OnChainApollo} bucket="onchain" />
-              </RequiresConnection>
-            </Route>
-          )}
-
-          {graphiql && (
-            <Route path="/playground/thegraph" exact={true}>
-              <RequiresConnection>
-                <Playground context={TheGraphApollo} bucket="thegraph" />
-              </RequiresConnection>
-            </Route>
-          )}
-
-          <Route>
-            <NoMatch />
-          </Route>
-        </Switch>
-      </Suspense>
-    </ErrorBoundary>
-  );
-};
+        <Route>
+          <NoMatch />
+        </Route>
+      </Switch>
+    </Suspense>
+  </ErrorBoundary>
+);

@@ -53,10 +53,10 @@ export const MetaMask: React.FC<ConnectionMethodProps> = ({ select, disconnect, 
           Connect
         </Button>
       ) : (
-          <Button lenght="stretch" onClick={() => disconnect()}>
-            Disconnect
+        <Button lenght="stretch" onClick={() => disconnect()}>
+          Disconnect
         </Button>
-        )}
+      )}
     </>
   );
 };

@@ -4,7 +4,12 @@ import { retryWhen, delay } from 'rxjs/operators';
 import { Eth } from 'web3-eth';
 import { HttpProvider } from 'web3-providers';
 import { networkFromId } from '~/utils/networkFromId';
-import { connectionEstablished, ConnectionAction, ConnectionMethod, ConnectionMethodProps } from '~/components/Contexts/Connection/Connection';
+import {
+  connectionEstablished,
+  ConnectionAction,
+  ConnectionMethod,
+  ConnectionMethodProps,
+} from '~/components/Contexts/Connection/Connection';
 import { SectionTitle } from '~/storybook/components/Title/Title';
 import { Button } from '~/storybook/components/Button/Button';
 
@@ -44,10 +49,10 @@ export const Ganache: React.FC<ConnectionMethodProps> = ({ select, disconnect, a
           Connect
         </Button>
       ) : (
-          <Button lenght="stretch" onClick={() => disconnect()}>
-            Disconnect
+        <Button lenght="stretch" onClick={() => disconnect()}>
+          Disconnect
         </Button>
-        )}
+      )}
     </>
   );
 };

@@ -7,7 +7,9 @@ import {
   ConnectionMethod,
   ConnectionAction,
   networkChanged,
+  accountsChanged,
   connectionEstablished,
+  ConnectionMethodProps,
 } from '~/components/Contexts/Connection/Connection';
 import {
   map,
@@ -31,7 +33,7 @@ interface EthResource extends Rx.Unsubscribable {
 
 const connect = (): Rx.Observable<ConnectionAction> => {
   const create = (): EthResource => {
-    const provider = new HttpProvider(process.env.MELON_DEFAULT_PROVIDER);
+    const provider = new HttpProvider('http://localhost:1248');
     const eth = new Eth(provider, undefined, {
       transactionConfirmationBlocks: 1,
     });
@@ -41,14 +43,33 @@ const connect = (): Rx.Observable<ConnectionAction> => {
 
   return Rx.using(create, resource => {
     const eth = (resource as EthResource).eth;
-    const connect$ = Rx.defer(async () => networkFromId(await eth.net.getId())).pipe(
+    const connect$ = Rx.defer(async () => {
+      const [id, accounts] = await Promise.all([eth.net.getId(), eth.getAccounts().catch(() => [])]);
+      const network = networkFromId(id);
+      return [network, accounts] as [typeof network, typeof accounts];
+    }).pipe(
       retryWhen(error => error.pipe(delay(1000))),
       take(1),
       share()
     );
 
-    const enable$ = connect$.pipe(map((network) => connectionEstablished(eth, network)));
+    const enable$ = connect$.pipe(map(([network, accounts]) => connectionEstablished(eth, network, accounts)));
+
+    const accounts$ = connect$.pipe(
+      map(([, accounts]) => accounts),
+      expand(() =>
+        Rx.timer(1000).pipe(
+          concatMap(() => eth.getAccounts()),
+          catchError(() => Rx.of([]))
+        )
+      ),
+      distinctUntilChanged((a, b) => equals(a, b)),
+      map(accounts => accountsChanged(accounts)),
+      skip(1)
+    );
+
     const network$ = connect$.pipe(
+      map(([network]) => network),
       expand(() =>
         Rx.timer(1000).pipe(
           concatMap(() => eth.net.getId()),
@@ -61,28 +82,30 @@ const connect = (): Rx.Observable<ConnectionAction> => {
       skip(1)
     );
 
-    return Rx.concat(enable$, network$);
+    return Rx.concat(enable$, Rx.merge(network$, accounts$));
   });
 };
 
-export const Anonymous: React.FC<any> = ({ select, active }) => {
+export const Frame: React.FC<ConnectionMethodProps> = ({ select, disconnect, active }) => {
   return (
     <>
-      <SectionTitle>Anonymous</SectionTitle>
+      <SectionTitle>Frame</SectionTitle>
       {!active ? (
         <Button lenght="stretch" onClick={() => select()}>
           Connect
         </Button>
       ) : (
-          <span>Currently selected</span>
-        )}
+        <Button lenght="stretch" onClick={() => disconnect()}>
+          Disconnect
+        </Button>
+      )}
     </>
   );
 };
 
 export const method: ConnectionMethod = {
   connect,
-  component: Anonymous,
-  name: 'anonymous',
-  label: 'Anonymous',
+  component: Frame,
+  name: 'frame',
+  label: 'Frame',
 };
