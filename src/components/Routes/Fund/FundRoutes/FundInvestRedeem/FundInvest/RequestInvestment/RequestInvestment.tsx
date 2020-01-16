@@ -223,7 +223,7 @@ export const RequestInvestment: React.FC<RequestInvestmentProps> = props => {
                 />
               </FormField>
 
-              <FormField name="investmentAmount" label={`Max investment amount in ${asset?.token?.symbol}`}>
+              <FormField name="investmentAmount" label={`Total investment amount in ${asset?.token?.symbol}`}>
                 <Input
                   id="investmentAmount"
                   name="investmentAmount"
