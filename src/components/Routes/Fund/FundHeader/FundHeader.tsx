@@ -6,7 +6,7 @@ import { EtherscanLink } from '~/components/Common/EtherscanLink/EtherscanLink';
 import { DataBlock, DataBlockSection } from '~/storybook/components/DataBlock/DataBlock';
 import { Bar, BarContent } from '~/storybook/components/Bar/Bar';
 import { Headline } from '~/storybook/components/Headline/Headline';
-import { NumberChange } from '~/storybook/components/NumberChange/NumberChange';
+import { FormattedNumber } from '~/components/Common/FormattedNumber/FormattedNumber';
 
 export interface FundHeaderProps {
   address: string;
@@ -37,7 +37,7 @@ export const FundHeader: React.FC<FundHeaderProps> = ({ address }) => {
             </DataBlock>
             {dailyChange && (
               <DataBlock label="Daily change">
-                <NumberChange change={dailyChange} />
+                <FormattedNumber value={dailyChange} colorize={true} decimals={2} suffix="%" />
               </DataBlock>
             )}
           </DataBlockSection>
