@@ -28,6 +28,7 @@ declare global {
       MELON_TESTNET_DEPLOYMENT?: string;
       MELON_TESTNET_PROVIDER: string;
       MELON_DEFAULT_PROVIDER: string;
+      MELON_INCLUDE_GRAPHIQL: string;
     }
   }
 }

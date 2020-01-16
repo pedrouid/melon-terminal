@@ -20,6 +20,8 @@ import {
 import { Footer, FooterNavigation, FooterItem } from '~/storybook/components/Footer/Footer';
 import { Logo } from '~/storybook/components/Logo/Logo';
 
+const graphiql = JSON.parse(process.env.MELON_INCLUDE_GRAPHIQL || 'false');
+
 export const Layout: React.FC = ({ children }) => {
   const [update] = usePriceFeedUpdateQuery();
   const environment = useEnvironment();
@@ -79,12 +81,18 @@ export const Layout: React.FC = ({ children }) => {
             <FooterItem>
               <a href="https://github.com/Avantgarde-Finance/manager-interface/issues">Report an issue</a>
             </FooterItem>
-            <FooterItem>
-              <Link to="/playground/onchain">Network explorer</Link>
-            </FooterItem>
-            <FooterItem>
-              <Link to="/playground/thegraph">Graph explorer</Link>
-            </FooterItem>
+
+            {graphiql && (
+              <>
+                <FooterItem>
+                  <Link to="/playground/onchain">Network explorer</Link>
+                </FooterItem>
+                <FooterItem>
+                  <Link to="/playground/thegraph">Graph explorer</Link>
+                </FooterItem>
+              </>
+            )}
+
             {update && (
               <FooterItem>
                 <span>Last pricefeed update at {format(update, 'yyyy-MM-dd hh:mm a')}</span>

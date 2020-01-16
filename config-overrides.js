@@ -57,6 +57,7 @@ module.exports = override(
   ),
   addWebpackPlugin(
     new webpack.DefinePlugin({
+      'process.env.MELON_INCLUDE_GRAPHIQL': JSON.stringify(process.env.MELON_INCLUDE_GRAPHIQL),
       'process.env.MELON_DEFAULT_PROVIDER': JSON.stringify(process.env.MELON_DEFAULT_PROVIDER),
       'process.env.MELON_MAINNET': JSON.stringify(mainnet),
       'process.env.MELON_KOVAN': JSON.stringify(kovan),

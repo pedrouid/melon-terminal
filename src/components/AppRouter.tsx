@@ -7,6 +7,8 @@ import { RequiresConnection } from './Gates/RequiresConnection/RequiresConnectio
 import { Spinner } from '../storybook/components/Spinner/Spinner';
 import { ErrorFallback } from './Common/ErrorFallback/ErrorFallback';
 
+const graphiql = JSON.parse(process.env.MELON_INCLUDE_GRAPHIQL || 'false');
+
 const Home = React.lazy(() => import('./Routes/Home/Home'));
 const Wallet = React.lazy(() => import('./Routes/Wallet/Wallet'));
 const Fund = React.lazy(() => import('./Routes/Fund/Fund'));
@@ -47,16 +49,23 @@ export const AppRouter = () => {
               <Fund />
             </RequiresConnection>
           </Route>
-          <Route path="/playground/onchain" exact={true}>
-            <RequiresConnection>
-              <Playground context={OnChainApollo} bucket="onchain" />
-            </RequiresConnection>
-          </Route>
-          <Route path="/playground/thegraph" exact={true}>
-            <RequiresConnection>
-              <Playground context={TheGraphApollo} bucket="thegraph" />
-            </RequiresConnection>
-          </Route>
+
+          {graphiql && (
+            <Route path="/playground/onchain" exact={true}>
+              <RequiresConnection>
+                <Playground context={OnChainApollo} bucket="onchain" />
+              </RequiresConnection>
+            </Route>
+          )}
+
+          {graphiql && (
+            <Route path="/playground/thegraph" exact={true}>
+              <RequiresConnection>
+                <Playground context={TheGraphApollo} bucket="thegraph" />
+              </RequiresConnection>
+            </Route>
+          )}
+
           <Route>
             <NoMatch />
           </Route>
