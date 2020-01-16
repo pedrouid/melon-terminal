@@ -55,6 +55,7 @@ const sortChoice = {
   name: createSortString('name'),
   inception: createSortString('inception'),
   aumEth: createSortNumberFromString('aumEth'),
+  aumUsd: createSortNumberFromString('aumEth'),
   sharePrice: createSortNumberFromString('sharePrice'),
   change: sortChange,
   shares: createSortNumberFromString('shares'),
@@ -106,42 +107,57 @@ const tableHeadings = [
   {
     value: 'Name',
     key: 'name',
+    align: 'left',
   },
   {
     value: 'Inception',
     key: 'inception',
+    align: 'left',
   },
   {
     value: 'Share price',
     key: 'sharePrice',
+    align: 'right',
   },
   {
     value: 'Daily change',
     key: 'change',
+    align: 'right',
   },
   {
     value: 'AUM [ETH]',
     key: 'aumEth',
+    align: 'right',
+  },
+  {
+    value: 'AUM [USD]',
+    key: 'aumUsd',
+    align: 'right',
   },
   {
     value: '# shares',
     key: 'shares',
+    align: 'right',
   },
   {
     value: 'Denomination asset',
     key: 'denomination',
+    align: 'left',
   },
   {
     value: 'Investments',
     key: 'investments',
+    align: 'right',
   },
   {
     value: 'Protocol version',
     key: 'version',
+    align: 'left',
   },
   {
     value: 'Status',
     key: 'status',
+    align: 'left',
   },
 ];
 
@@ -232,15 +248,27 @@ export const Home: React.FC = () => {
                 <S.Table>
                   <thead>
                     <S.HeaderRow>
-                      {tableHeadings.map((heading, key) => (
-                        <S.HeaderCell
-                          key={key}
-                          onClick={heading.key ? () => handleChangeSortableItem(heading.key) : undefined}
-                        >
-                          {heading.value}
-                          {sorted.item.key === heading.key && (sorted.item.order === 'asc' ? <>&uarr;</> : <>&darr;</>)}
-                        </S.HeaderCell>
-                      ))}
+                      {tableHeadings.map((heading, key) =>
+                        heading.align === 'left' ? (
+                          <S.HeaderCell
+                            key={key}
+                            onClick={heading.key ? () => handleChangeSortableItem(heading.key) : undefined}
+                          >
+                            {heading.value}
+                            {sorted.item.key === heading.key &&
+                              (sorted.item.order === 'asc' ? <>&uarr;</> : <>&darr;</>)}
+                          </S.HeaderCell>
+                        ) : (
+                          <S.HeaderCellNumber
+                            key={key}
+                            onClick={heading.key ? () => handleChangeSortableItem(heading.key) : undefined}
+                          >
+                            {heading.value}
+                            {sorted.item.key === heading.key &&
+                              (sorted.item.order === 'asc' ? <>&uarr;</> : <>&darr;</>)}
+                          </S.HeaderCellNumber>
+                        )
+                      )}
                     </S.HeaderRow>
                   </thead>
                   <tbody>
@@ -251,12 +279,13 @@ export const Home: React.FC = () => {
                           <S.BodyCell>
                             <FormattedDate timestamp={fund.inception} />
                           </S.BodyCell>
-                          <S.BodyCell>{fund.sharePrice}</S.BodyCell>
-                          <S.BodyCell>
+                          <S.BodyCellNumber>{fund.sharePrice}</S.BodyCellNumber>
+                          <S.BodyCellNumber>
                             <FormattedNumber value={fund.change} colorize={true} decimals={2} suffix="%" />
-                          </S.BodyCell>
-                          <S.BodyCell>{fund.aumEth}</S.BodyCell>
-                          <S.BodyCell>{fund.shares}</S.BodyCell>
+                          </S.BodyCellNumber>
+                          <S.BodyCellNumber>{fund.aumEth}</S.BodyCellNumber>
+                          <S.BodyCellNumber>{fund.aumUsd || ''}</S.BodyCellNumber>
+                          <S.BodyCellNumber>{fund.shares}</S.BodyCellNumber>
                           <S.BodyCell>{fund.denomination}</S.BodyCell>
                           <S.BodyCell>{fund.investments}</S.BodyCell>
                           <S.BodyCell>{fund.version}</S.BodyCell>
@@ -264,10 +293,10 @@ export const Home: React.FC = () => {
                         </S.BodyRow>
                       ))
                     ) : (
-                        <S.EmptyRow>
-                          <S.EmptyCell colSpan={12}>No records to display</S.EmptyCell>
-                        </S.EmptyRow>
-                      )}
+                      <S.EmptyRow>
+                        <S.EmptyCell colSpan={12}>No records to display</S.EmptyCell>
+                      </S.EmptyRow>
+                    )}
                   </tbody>
                 </S.Table>
               </S.ScrollableTable>

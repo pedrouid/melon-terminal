@@ -20,12 +20,25 @@ export const HeaderCell = styled.th`
   font-weight: ${props => props.theme.fontWeights.semiBold};
 `;
 
+export const HeaderCellNumber = styled.th`
+  padding: ${props => props.theme.spaceUnits.m} ${props => props.theme.spaceUnits.s}
+    ${props => props.theme.spaceUnits.s};
+  text-align: right;
+  cursor: pointer;
+  font-weight: ${props => props.theme.fontWeights.semiBold};
+`;
+
 export const HeaderRow = styled.tr`
   border-bottom: 1px solid ${props => props.theme.mainColors.border};
 `;
 
 export const BodyCell = styled.td`
   padding: ${props => props.theme.spaceUnits.s};
+`;
+
+export const BodyCellNumber = styled.td`
+  padding: ${props => props.theme.spaceUnits.s};
+  text-align: right;
 `;
 
 export const BodyRow = styled.tr`

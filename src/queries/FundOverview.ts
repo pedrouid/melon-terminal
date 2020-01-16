@@ -4,6 +4,7 @@ import { useTheGraphQuery } from '~/hooks/useQuery';
 import { weiToString } from '~/utils/weiToString';
 import { hexToString } from '@melonproject/melonjs';
 import { calculateChangeFromSharePrice } from '~/utils/calculateChangeFromSharePrice';
+import { useCoinAPI } from '~/hooks/useCoinAPI';
 
 export interface SharePrice {
   sharePrice: string;
@@ -46,6 +47,7 @@ export interface FundProcessed {
   address: string;
   inception: number;
   aumEth: string;
+  aumUsd: string;
   sharePrice: string;
   change: BigNumber;
   shares: string;
@@ -103,6 +105,9 @@ const FundOverviewQuery = gql`
 
 export const useFundOverviewQuery = () => {
   const result = useTheGraphQuery<FundOverviewQueryResult, FundOverviewQueryVariables>(FundOverviewQuery);
+  const coinApi = useCoinAPI();
+
+  const rate = coinApi.data.rate ?? 0;
 
   const funds = (result && result.data && result.data.funds) || [];
 
@@ -112,6 +117,7 @@ export const useFundOverviewQuery = () => {
     address: item.id.substr(0, 8),
     inception: item.createdAt,
     aumEth: weiToString(item.gav, 4),
+    aumUsd: (parseFloat(weiToString(item.gav)) * rate).toFixed(4),
     sharePrice: weiToString(item.sharePrice, 4),
     change: calculateChangeFromSharePrice(
       item.calculationsHistory[0]?.sharePrice,
