@@ -30,16 +30,16 @@ export const FundHeader: React.FC<FundHeaderProps> = ({ address }) => {
         <RequiresFundSetupComplete fallback={false}>
           <DataBlockSection>
             <DataBlock label="Share price">
-              {accounting?.sharePrice ? `${accounting.sharePrice.toFixed(4)} WETH` : 'N/A'}
+              <FormattedNumber value={accounting?.sharePrice} suffix="WETH" />
             </DataBlock>
+
             <DataBlock label="Assets under management">
-              {accounting?.grossAssetValue ? `${accounting.grossAssetValue.toFixed(4)} WETH` : 'N/A'}
+              <FormattedNumber value={accounting?.grossAssetValue} suffix="WETH" />
             </DataBlock>
-            {dailyChange && (
-              <DataBlock label="Daily change">
-                <FormattedNumber value={dailyChange} colorize={true} decimals={2} suffix="%" />
-              </DataBlock>
-            )}
+
+            <DataBlock label="Daily change">
+              <FormattedNumber value={dailyChange} colorize={true} decimals={2} suffix="%" />
+            </DataBlock>
           </DataBlockSection>
         </RequiresFundSetupComplete>
       </BarContent>
