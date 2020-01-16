@@ -60,28 +60,28 @@ export const Fund: React.FC = () => {
           </Switch>
         </RequiresFundSetupInProgress>
 
-        <RequiresFundManager fallback={false}>
-          <RequiresNoSharesCreated fallback={false} address={match.params.address}>
-            <NotificationBar kind="neutral">
-              <NotificationContent>
-                You have not invested into your fund yet. Go to{' '}
-                <Link to={`/fund/${match.params.address}/invest`}>Invest &amp; redeem</Link> to invest.
-              </NotificationContent>
-            </NotificationBar>
-          </RequiresNoSharesCreated>
-          <RequiresFundJustCreated fallback={false}>
-            <RequiresNoPoliciesDeployed fallback={false} address={match.params.address}>
+        <RequiresFundSetupComplete fallback={false}>
+          <RequiresFundManager fallback={false}>
+            <RequiresNoSharesCreated fallback={false} address={match.params.address}>
               <NotificationBar kind="neutral">
                 <NotificationContent>
-                  You have not defined any policies for your fund. Go to{' '}
-                  <Link to={`/fund/${match.params.address}/policies`}>Ruleset</Link> to define your policies.
+                  You have not invested into your fund yet. Go to{' '}
+                  <Link to={`/fund/${match.params.address}/invest`}>Invest &amp; redeem</Link> to invest.
                 </NotificationContent>
               </NotificationBar>
-            </RequiresNoPoliciesDeployed>
-          </RequiresFundJustCreated>
-        </RequiresFundManager>
+            </RequiresNoSharesCreated>
+            <RequiresFundJustCreated fallback={false}>
+              <RequiresNoPoliciesDeployed fallback={false} address={match.params.address}>
+                <NotificationBar kind="neutral">
+                  <NotificationContent>
+                    You have not defined any policies for your fund. Go to{' '}
+                    <Link to={`/fund/${match.params.address}/policies`}>Ruleset</Link> to define your policies.
+                  </NotificationContent>
+                </NotificationBar>
+              </RequiresNoPoliciesDeployed>
+            </RequiresFundJustCreated>
+          </RequiresFundManager>
 
-        <RequiresFundSetupComplete fallback={false}>
           <ErrorBoundary FallbackComponent={ErrorFallback}>
             <Suspense fallback={<Spinner />}>
               <Switch>
