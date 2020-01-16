@@ -187,6 +187,9 @@ export const WalletFundSetup: React.FC = () => {
                 </BlockSection>
                 <BlockSection>
                   <SectionTitle>Allowed investment assets</SectionTitle>
+                  <NotificationBar kind="neutral">
+                    Investment assets can be set up now and they can be changed later.
+                  </NotificationBar>
                   <Grid>
                     <GridRow>
                       {environment.tokens.map((token, index) => (
