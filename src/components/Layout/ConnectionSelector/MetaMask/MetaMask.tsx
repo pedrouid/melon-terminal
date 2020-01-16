@@ -44,19 +44,19 @@ const connect = (): Rx.Observable<ConnectionAction> => {
   return Rx.concat(initial$, Rx.merge(accounts$, network$));
 };
 
-export const MetaMask: React.FC<ConnectionMethodProps> = ({ select, disconnect, active }) => {
+export const MetaMask: React.FC<ConnectionMethodProps> = ({ connect, disconnect, active }) => {
   return (
     <>
       <SectionTitle>Metamask</SectionTitle>
       {!active ? (
-        <Button lenght="stretch" onClick={() => select()}>
+        <Button lenght="stretch" onClick={() => connect()}>
           Connect
         </Button>
       ) : (
-        <Button lenght="stretch" onClick={() => disconnect()}>
-          Disconnect
+          <Button lenght="stretch" onClick={() => disconnect()}>
+            Disconnect
         </Button>
-      )}
+        )}
     </>
   );
 };

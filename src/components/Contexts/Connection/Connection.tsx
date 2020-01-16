@@ -2,7 +2,7 @@ import * as Rx from 'rxjs';
 import React, { createContext, useReducer, useEffect, useMemo } from 'react';
 import { createEnvironment } from '~/environment';
 import { config } from '~/config';
-import { Address, DeploymentOutput, DeployedEnvironment } from '@melonproject/melonjs';
+import { Address, DeploymentOutput, DeployedEnvironment, sameAddress } from '@melonproject/melonjs';
 import { NetworkEnum } from '~/types';
 import { Eth } from 'web3-eth';
 
@@ -17,6 +17,7 @@ export interface ConnectionState {
   eth?: Eth;
   network?: NetworkEnum;
   accounts?: Address[];
+  account?: Address;
   method?: string;
   error?: Error;
 }
@@ -27,6 +28,7 @@ export enum ConnectionActionType {
   CONNECTION_LOST,
   NETWORK_CHANGED,
   ACCOUNTS_CHANGED,
+  ACCOUNT_CHANGED,
   DEPLOYMENT_LOADING,
   DEPLOYMENT_LOADED,
   DEPLOYMENT_ERROR,
@@ -37,6 +39,7 @@ export type ConnectionAction =
   | ConnectionEstablished
   | ConnectionLost
   | AccountsChanged
+  | AccountChanged
   | NetworkChanged
   | DeploymentLoading
   | DeploymentLoaded
@@ -63,6 +66,11 @@ export interface AccountsChanged {
   accounts?: Address[];
 }
 
+export interface AccountChanged {
+  type: ConnectionActionType.ACCOUNT_CHANGED;
+  account?: Address;
+}
+
 export interface NetworkChanged {
   type: ConnectionActionType.NETWORK_CHANGED;
   network?: NetworkEnum;
@@ -82,8 +90,12 @@ export interface DeploymentError {
   error: Error;
 }
 
-export function accountsChanged(accounts: Address[]): AccountsChanged {
+export function accountsChanged(accounts?: Address[]): AccountsChanged {
   return { accounts, type: ConnectionActionType.ACCOUNTS_CHANGED };
+}
+
+export function accountChanged(account?: Address): AccountChanged {
+  return { account, type: ConnectionActionType.ACCOUNT_CHANGED };
 }
 
 export function networkChanged(network?: NetworkEnum): NetworkChanged {
@@ -121,6 +133,7 @@ export function reducer(state: ConnectionState, action: ConnectionAction): Conne
         ...state,
         network: undefined,
         deployment: undefined,
+        account: undefined,
         accounts: undefined,
         method: action.method,
       };
@@ -131,16 +144,26 @@ export function reducer(state: ConnectionState, action: ConnectionAction): Conne
       return { ...state, deployment, network: action.network };
     }
 
+    case ConnectionActionType.ACCOUNT_CHANGED: {
+      const accounts = (state.accounts || []);
+      const account = action.account ? accounts.find(address => sameAddress(address, action.account)) : state.account;
+      return { ...state, account, accounts };
+    }
+
     case ConnectionActionType.ACCOUNTS_CHANGED: {
-      return { ...state, accounts: action.accounts };
+      const accounts = (action.accounts || []);
+      const account = state.account ? accounts.find(address => sameAddress(address, state.account)) : accounts[0];
+      return { ...state, account, accounts };
     }
 
     case ConnectionActionType.CONNECTION_ESTABLISHED: {
-      return { ...state, network: action.network, accounts: action.accounts, eth: action.eth };
+      const accounts = (action.accounts || []);
+      const account = state.account ? accounts.find(address => sameAddress(address, state.account)) : accounts[0];
+      return { ...state, account, network: action.network, accounts: action.accounts, eth: action.eth };
     }
 
     case ConnectionActionType.CONNECTION_LOST: {
-      return { ...state, network: undefined, accounts: undefined, eth: undefined, method: undefined };
+      return { ...state, network: undefined, account: undefined, accounts: undefined, eth: undefined, method: undefined };
     }
 
     case ConnectionActionType.DEPLOYMENT_LOADING: {
@@ -163,18 +186,20 @@ export function reducer(state: ConnectionState, action: ConnectionAction): Conne
 
 export interface ConnectionContext {
   environment?: DeployedEnvironment;
-  account?: string;
+  accounts?: Address[];
+  account?: Address;
   method?: string;
   status: ConnectionStatus;
   methods: ConnectionMethod[];
-  switch: (method: string) => void;
+  switch: (account?: Address) => void;
+  connect: (method: string) => void;
   disconnect: () => void;
 }
 
 export const Connection = createContext<ConnectionContext>({} as ConnectionContext);
 
 export interface ConnectionMethodProps {
-  select: () => void;
+  connect: () => void;
   disconnect: () => void;
   active: boolean;
 }
@@ -193,13 +218,16 @@ export interface ConnectionProviderProps {
 }
 
 export const ConnectionProvider: React.FC<ConnectionProviderProps> = props => {
-  const [state, dispatch] = useReducer(reducer, undefined, () => ({
+  const [state, dispatch] = useReducer(reducer, undefined, () => {
+    const development = process.env.NODE_ENV === 'development';
+
     // During local development, the default connection method is fetched from local storage for persistence
     // during testing sessions where the developer wants to refresh the browser window.
-    method:
-      (process.env.NODE_ENV === 'development' && window.localStorage.getItem('connection.method')) ||
-      props.default.name,
-  }));
+    return {
+      method: development && window.localStorage.getItem('connection.method') || props.default.name,
+      account: development && window.localStorage.getItem('connection.account') || props.default.name,
+    };
+  });
 
   useEffect(() => {
     // Only store the previously selected connection method on local development.
@@ -211,6 +239,17 @@ export const ConnectionProvider: React.FC<ConnectionProviderProps> = props => {
       window.localStorage.removeItem('connection.method');
     }
   }, [state.method]);
+
+  useEffect(() => {
+    // Only store the previously selected connection method on local development.
+    if (process.env.NODE_ENV === 'development' && state.account) {
+      window.localStorage.setItem('connection.account', state.account);
+    }
+
+    if (process.env.NODE_ENV === 'development' && !state.account) {
+      window.localStorage.removeItem('connection.account');
+    }
+  }, [state.account]);
 
   // Subscribe to the current connection method's observable whenever it changes.
   useEffect(() => {
@@ -264,18 +303,16 @@ export const ConnectionProvider: React.FC<ConnectionProviderProps> = props => {
     return undefined;
   }, [state.eth, state.network, state.deployment]);
 
-  const account = useMemo(() => {
-    return state.accounts && state.accounts[0];
-  }, [state.accounts]);
-
   const disconnect = props.disconnect.name;
   const context: ConnectionContext = {
     environment,
     status,
-    account,
+    account: state.account,
+    accounts: state.accounts,
     method: state.method,
     methods: props.methods,
-    switch: (method: string) => dispatch(methodChanged(method)),
+    switch: (account?: Address) => dispatch(accountChanged(account)),
+    connect: (method: string) => dispatch(methodChanged(method)),
     disconnect: () => dispatch(methodChanged(disconnect)),
   };
 

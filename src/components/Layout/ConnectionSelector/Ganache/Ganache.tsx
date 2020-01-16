@@ -40,13 +40,13 @@ const connect = (): Rx.Observable<ConnectionAction> => {
   });
 };
 
-export const Ganache: React.FC<ConnectionMethodProps> = ({ select, disconnect, active }) => {
+export const Ganache: React.FC<ConnectionMethodProps> = ({ connect, disconnect, active }) => {
   return (
     <>
       <SectionTitle>Ganache</SectionTitle>
 
       {!active ? (
-        <Button lenght="stretch" onClick={() => select()}>
+        <Button lenght="stretch" onClick={() => connect()}>
           Connect
         </Button>
       ) : (

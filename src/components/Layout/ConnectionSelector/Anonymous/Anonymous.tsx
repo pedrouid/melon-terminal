@@ -8,6 +8,7 @@ import {
   ConnectionAction,
   networkChanged,
   connectionEstablished,
+  ConnectionMethodProps,
 } from '~/components/Contexts/Connection/Connection';
 import {
   map,
@@ -65,17 +66,17 @@ const connect = (): Rx.Observable<ConnectionAction> => {
   });
 };
 
-export const Anonymous: React.FC<any> = ({ select, active }) => {
+export const Anonymous: React.FC<ConnectionMethodProps> = ({ connect, active }) => {
   return (
     <>
       <SectionTitle>Anonymous</SectionTitle>
       {!active ? (
-        <Button lenght="stretch" onClick={() => select()}>
+        <Button lenght="stretch" onClick={() => connect()}>
           Connect
         </Button>
       ) : (
-        <span>Currently selected</span>
-      )}
+          <span>Currently selected</span>
+        )}
     </>
   );
 };

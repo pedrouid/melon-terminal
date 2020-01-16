@@ -6,6 +6,7 @@ import { Block, BlockActions } from '~/storybook/components/Block/Block';
 import { useEnvironment } from '~/hooks/useEnvironment';
 import { Modal, ModalTitle, ModalContent } from '~/storybook/components/Modal/Modal';
 import { Button } from '~/storybook/components/Button/Button';
+import { Dropdown } from '~/storybook/components/Dropdown/Dropdown';
 import * as S from './ConnectionSelector.styles';
 
 export const ConnectionSelector = () => {
@@ -29,13 +30,21 @@ export const ConnectionSelector = () => {
               {connection.methods.map(method => {
                 const Component = method.component;
                 const active = method.name === connection.method;
-                const select = () => connection.switch(method.name);
+                const connect = () => connection.connect(method.name);
+                const accounts = active ? (connection.accounts || []).map((address, index) => ({
+                  name: `${index}: ${address}`,
+                  value: address,
+                })) : [];
 
                 return (
                   <GridRow key={method.name}>
                     <GridCol>
                       <Block>
-                        <Component active={active} select={select} disconnect={connection.disconnect} />
+                        <Component active={active} connect={connect} disconnect={connection.disconnect} />
+
+                        {accounts && accounts.length && (
+                          <Dropdown options={accounts} value={connection.account} onChange={(event) => connection.switch(event.target.value)} />
+                        ) || null}
                       </Block>
                     </GridCol>
                   </GridRow>

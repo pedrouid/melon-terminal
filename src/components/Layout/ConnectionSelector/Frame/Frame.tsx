@@ -86,19 +86,19 @@ const connect = (): Rx.Observable<ConnectionAction> => {
   });
 };
 
-export const Frame: React.FC<ConnectionMethodProps> = ({ select, disconnect, active }) => {
+export const Frame: React.FC<ConnectionMethodProps> = ({ connect, disconnect, active }) => {
   return (
     <>
       <SectionTitle>Frame</SectionTitle>
       {!active ? (
-        <Button lenght="stretch" onClick={() => select()}>
+        <Button lenght="stretch" onClick={() => connect()}>
           Connect
         </Button>
       ) : (
-        <Button lenght="stretch" onClick={() => disconnect()}>
-          Disconnect
+          <Button lenght="stretch" onClick={() => disconnect()}>
+            Disconnect
         </Button>
-      )}
+        )}
     </>
   );
 };
