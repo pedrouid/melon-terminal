@@ -1730,10 +1730,10 @@
     web3-providers "^2.0.0-alpha.1"
     web3-utils "^2.0.0-alpha.1"
 
-"@melonproject/melonjs@^0.0.76":
-  version "0.0.76"
-  resolved "https://registry.yarnpkg.com/@melonproject/melonjs/-/melonjs-0.0.76.tgz#291be39038ed3e61f207ec92243feb458d5fb0f0"
-  integrity sha512-ZBiwOmOTpitiF1kQUwKNK48mvk6EZuoA+FCR5FtmnblLwxt+81j3fVnQgyqLNKJlxD4PmmJFl8HUc6G4xG6POg==
+"@melonproject/melonjs@^0.0.77":
+  version "0.0.77"
+  resolved "https://registry.yarnpkg.com/@melonproject/melonjs/-/melonjs-0.0.77.tgz#6d1ff786dc9f9bd23e5d41ee0fdaa3be7f4fc716"
+  integrity sha512-Qc6j3YraRDuQryUgBRvX1o3SGCSqHlfu/KZMOSAbBBciBZSulw44UWDynybfG9a5s+87gDemtJgqCTLZ32U+6A==
   dependencies:
     "@0x/order-utils" "^8.4.0"
     "@0x/subproviders" "^5.0.4"
