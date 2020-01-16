@@ -18,12 +18,12 @@ export const FundNavigation: React.FC<FundNavigationProps> = ({ address }) => {
           <TabLink to={`/fund/${address}/invest`} exact={true} activeClassName="active">
             Invest &amp; redeem
           </TabLink>
+          <TabLink to={`/fund/${address}/trade`} exact={true} activeClassName="active">
+            Trade
+          </TabLink>
         </TabBarSection>
         <RequiresFundManager fallback={false}>
           <TabBarSection>
-            <TabLink to={`/fund/${address}/trade`} exact={true} activeClassName="active">
-              Trade
-            </TabLink>
             <RequiresFundNotShutDown fallback={false}>
               <TabLink to={`/fund/${address}/policies`} exact={true} activeClassName="active">
                 Ruleset
