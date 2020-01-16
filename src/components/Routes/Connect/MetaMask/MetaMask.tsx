@@ -9,6 +9,7 @@ import {
   connectionEstablished,
   ConnectionAction,
   ConnectionMethod,
+  ConnectionMethodProps,
 } from '~/components/Contexts/Connection/Connection';
 import { SectionTitle } from '~/storybook/components/Title/Title';
 import { Button } from '~/storybook/components/Button/Button';
@@ -43,7 +44,7 @@ const connect = (): Rx.Observable<ConnectionAction> => {
   return Rx.concat(initial$, Rx.merge(accounts$, network$));
 };
 
-export const MetaMask: React.FC<any> = ({ select, active }) => {
+export const MetaMask: React.FC<ConnectionMethodProps> = ({ select, disconnect, active }) => {
   return (
     <>
       <SectionTitle>Metamask</SectionTitle>
@@ -52,8 +53,10 @@ export const MetaMask: React.FC<any> = ({ select, active }) => {
           Connect
         </Button>
       ) : (
-        <span>Currently selected</span>
-      )}
+          <Button lenght="stretch" onClick={() => disconnect()}>
+            Disconnect
+        </Button>
+        )}
     </>
   );
 };
@@ -61,5 +64,6 @@ export const MetaMask: React.FC<any> = ({ select, active }) => {
 export const method: ConnectionMethod = {
   connect,
   component: MetaMask,
-  name: 'MetaMask',
+  name: 'metamask',
+  label: 'MetaMask',
 };

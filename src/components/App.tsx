@@ -1,33 +1,32 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import { ModalProvider } from 'styled-react-modal';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { Layout } from './Layout/Layout';
-import { method as metamask } from './Routes/Connect/MetaMask/MetaMask';
-import { method as frame } from './Routes/Connect/Frame/Frame';
-import { method as ganache } from './Routes/Connect/Ganache/Ganache';
 import { Theme, ModalBackground } from './App.styles';
 import { ApolloProvider } from './Contexts/Apollo/Apollo';
 import { ConnectionProvider } from './Contexts/Connection/Connection';
 import { AccountProvider } from './Contexts/Account/Account';
 import { PageTitleProvider } from './Contexts/PageTitle/PageTitle';
+
 // NOTE: Imported using root relative import to allow overrides with webpack.
 import { AppRouter } from '~/components/AppRouter';
 
-const AppComponent = () => {
-  const methods = useMemo(() => {
-    if (process.env.MELON_TESTNET) {
-      return [ganache, metamask, frame];
-    }
+// TODO: Consider excluding ganache in production builds entirely.
+import { method as metamask } from './Routes/Connect/MetaMask/MetaMask';
+import { method as frame } from './Routes/Connect/Frame/Frame';
+import { method as ganache } from './Routes/Connect/Ganache/Ganache';
+import { method as anonymous } from './Routes/Connect/Anonymous/Anonymous';
 
-    return [metamask, frame];
-  }, []);
+const AppComponent = () => {
+  const start = process.env.MELON_TESTNET ? ganache : anonymous;
+  const methods = process.env.MELON_TESTNET ? [ganache, metamask, frame] : [metamask, frame];
 
   return (
     <Router>
       <Theme>
         <PageTitleProvider>
           <ModalProvider backgroundComponent={ModalBackground}>
-            <ConnectionProvider methods={methods}>
+            <ConnectionProvider methods={methods} default={start} disconnect={anonymous}>
               <ApolloProvider>
                 <AccountProvider>
                   <Layout>

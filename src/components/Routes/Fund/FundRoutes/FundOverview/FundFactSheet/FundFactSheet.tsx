@@ -93,7 +93,7 @@ export const FundFactSheet: React.FC<FundFactSheetProps> = ({ address }) => {
       (60 * 60 * 24 * 365.25) / (afterChange.timestamp - firstChange.timestamp)
     ) -
       1) *
-      100;
+    100;
 
   const volatility =
     normalizedCalculations &&

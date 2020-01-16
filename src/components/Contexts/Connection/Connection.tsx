@@ -168,43 +168,60 @@ export interface ConnectionContext {
   status: ConnectionStatus;
   methods: ConnectionMethod[];
   switch: (method: string) => void;
+  disconnect: () => void;
 }
 
 export const Connection = createContext<ConnectionContext>({} as ConnectionContext);
 
+export interface ConnectionMethodProps {
+  select: () => void;
+  disconnect: () => void;
+  active: boolean;
+}
+
 export interface ConnectionMethod {
   name: string;
-  component: React.ComponentType<any>;
+  label: string;
+  component: React.ComponentType<ConnectionMethodProps>;
   connect: () => Rx.Observable<ConnectionAction>;
 }
 
 export interface ConnectionProviderProps {
   methods: ConnectionMethod[];
+  default: ConnectionMethod;
+  disconnect: ConnectionMethod;
 }
 
 export const ConnectionProvider: React.FC<ConnectionProviderProps> = props => {
   const [state, dispatch] = useReducer(reducer, undefined, () => ({
-    status: ConnectionStatus.OFFLINE,
-    method: window.localStorage.getItem('connection.method') || undefined,
+    // During local development, the default connection method is fetched from local storage for persistence
+    // during testing sessions where the developer wants to refresh the browser window.
+    method: process.env.NODE_ENV === 'development' && window.localStorage.getItem('connection.method') || props.default.name,
   }));
+
+  useEffect(() => {
+    // Only store the previously selected connection method on local development.
+    if (process.env.NODE_ENV === 'development' && state.method) {
+      window.localStorage.setItem('connection.method', state.method);
+    }
+
+    if (process.env.NODE_ENV === 'development' && !state.method) {
+      window.localStorage.removeItem('connection.method');
+    }
+  }, [state.method]);
 
   // Subscribe to the current connection method's observable whenever it changes.
   useEffect(() => {
-    const method = props.methods.find(item => item.name === state.method);
-    if (!method) {
-      return;
-    }
-
-    // By doing this here, we keep the reducer clean of side-effects.
-    window.localStorage.setItem('connection.method', state.method!);
-
+    const method = [...props.methods, props.default, props.disconnect].find(item => item.name === state.method) ?? props.default;
     const observable = method.connect();
     const subscription = observable.subscribe({
       next: action => dispatch(action),
     });
 
-    return () => subscription.unsubscribe();
-  }, [props.methods, state.method]);
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [props.methods, props.default, state.method]);
 
   // Load the deployment based on the current network whenever it changes.
   useEffect(() => {
@@ -248,6 +265,7 @@ export const ConnectionProvider: React.FC<ConnectionProviderProps> = props => {
     return state.accounts && state.accounts[0];
   }, [state.accounts]);
 
+  const disconnect = props.disconnect.name;
   const context: ConnectionContext = {
     environment,
     status,
@@ -255,6 +273,7 @@ export const ConnectionProvider: React.FC<ConnectionProviderProps> = props => {
     method: state.method,
     methods: props.methods,
     switch: (method: string) => dispatch(methodChanged(method)),
+    disconnect: () => dispatch(methodChanged(disconnect)),
   };
 
   return <Connection.Provider value={context}>{props.children}</Connection.Provider>;
