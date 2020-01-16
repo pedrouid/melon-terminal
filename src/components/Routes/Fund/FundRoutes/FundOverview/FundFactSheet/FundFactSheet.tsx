@@ -140,13 +140,13 @@ export const FundFactSheet: React.FC<FundFactSheetProps> = ({ address }) => {
         <DictionaryData />
       </DictionaryEntry>
       <DictionaryEntry>
-        <DictionaryLabel>GAV (gross asset value)</DictionaryLabel>
+        <DictionaryLabel>Gross asset value (GAV)</DictionaryLabel>
         <DictionaryData>
           <FormattedNumber value={accounting?.grossAssetValue} suffix="WETH" />
         </DictionaryData>
       </DictionaryEntry>
       <DictionaryEntry>
-        <DictionaryLabel>NAV (net asset value)</DictionaryLabel>
+        <DictionaryLabel>Net asset value (NAV)</DictionaryLabel>
         <DictionaryData>
           <FormattedNumber value={accounting?.netAssetValue} suffix="WETH" />
         </DictionaryData>
