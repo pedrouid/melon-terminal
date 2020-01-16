@@ -70,6 +70,12 @@ export const FundRedeem: React.FC<FundRedeemProps> = ({ address }) => {
 
   const redeemAll = form.watch('redeemAll') as boolean;
 
+  useEffect(() => {
+    if (redeemAll) {
+      form.setValue('shareQuantity', shares?.balanceOf || new BigNumber(0));
+    }
+  }, [redeemAll]);
+
   const submit = form.handleSubmit(async data => {
     if (redeemAll) {
       const tx = participationContract.redeem(account.address!);
@@ -99,18 +105,17 @@ export const FundRedeem: React.FC<FundRedeemProps> = ({ address }) => {
           <p>You own {shares?.balanceOf?.toFixed(18)} shares</p>
           <FormContext {...form}>
             <form onSubmit={submit}>
-              <div hidden={redeemAll}>
-                <FormField name="shareQuantity" label="Number of shares to redeem">
-                  <Input
-                    id="shareQuantity"
-                    name="shareQuantity"
-                    type="number"
-                    step="any"
-                    min="0"
-                    max={shares?.balanceOf?.toString()}
-                  />
-                </FormField>
-              </div>
+              <FormField name="shareQuantity" label="Number of shares to redeem">
+                <Input
+                  id="shareQuantity"
+                  name="shareQuantity"
+                  type="number"
+                  step="any"
+                  min="0"
+                  max={shares?.balanceOf?.toString()}
+                  disabled={redeemAll}
+                />
+              </FormField>
               <CheckboxContainer>
                 <CheckboxInput type="checkbox" ref={form.register} name="redeemAll" id="redeemAll" />
                 <CheckboxMask>

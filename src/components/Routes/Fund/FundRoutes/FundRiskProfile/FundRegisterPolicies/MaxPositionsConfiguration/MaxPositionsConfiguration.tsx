@@ -27,6 +27,7 @@ export const MaxPositionsConfiguration: React.FC<MaxPositionsConfigurationProps>
 
   const validationSchema = Yup.object().shape({
     maxPositions: Yup.number()
+      .label('Maximum number of positions')
       .required()
       .min(0)
       .integer(),
@@ -55,7 +56,7 @@ export const MaxPositionsConfiguration: React.FC<MaxPositionsConfigurationProps>
       <FormContext {...form}>
         <form onSubmit={submit}>
           <FormField name="maxPositions" label="Maximum number of positions">
-            <Input name="maxPositions" type="number" min={0} step={1} id="maxPositions" />
+            <Input name="maxPositions" type="number" step={1} id="maxPositions" />
           </FormField>
           <BlockActions>
             <Button type="submit">Add max positions policy</Button>

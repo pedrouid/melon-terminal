@@ -16,6 +16,7 @@ import {
 } from '~/storybook/components/Checkbox/Checkbox';
 import { BlockActions } from '~/storybook/components/Block/Block';
 import { Grid, GridRow, GridCol } from '~/storybook/components/Grid/Grid';
+import { NotificationBar } from '~/storybook/components/NotificationBar/NotificationBar';
 
 interface AssetWhitelistConfigurationForm {
   assetWhitelist: string[];
@@ -34,8 +35,9 @@ export const AssetWhitelistConfiguration: React.FC<AssetWhitelistConfigurationPr
 
   const validationSchema = Yup.object().shape({
     assetWhitelist: Yup.array<string>()
+      .label('Asset whitelist')
       .compact()
-      .min(1),
+      .min(1, 'Select at least one asset'),
   });
 
   const form = useForm<AssetWhitelistConfigurationForm>({
@@ -75,7 +77,9 @@ export const AssetWhitelistConfiguration: React.FC<AssetWhitelistConfigurationPr
                 </GridCol>
               ))}
 
-              {form.errors.assetWhitelist && <p>{form.errors.assetWhitelist.message}</p>}
+              {form.errors.assetWhitelist && (
+                <NotificationBar kind="error">{form.errors.assetWhitelist.message}</NotificationBar>
+              )}
 
               <BlockActions>
                 <Button type="submit">Add asset whitelist policy</Button>

@@ -22,6 +22,7 @@ import {
   CheckboxIcon,
   CheckboxLabel,
 } from '~/storybook/components/Checkbox/Checkbox';
+import { NotificationBar } from '~/storybook/components/NotificationBar/NotificationBar';
 
 export interface WalletFundSetupForm {
   name: string;
@@ -41,25 +42,22 @@ export const WalletFundSetup: React.FC = () => {
 
   const validationSchema = Yup.object().shape({
     name: Yup.string()
-      .min(1)
-      .test('nameTest', 'Fund name not allowed', async function(value) {
+      .min(1, 'Fund Name must be at least one character')
+      .test('nameTest', 'Fund name contains invalid characters', async function(value) {
         const registry = new Registry(environment, environment.deployment.melon.addr.Registry);
-
-        // TODO: check why this always resolves to [true,true] even though the fund name is already taken
-        const [isValid, canUse] = await Promise.all([
-          registry.isValidFundName(value),
-          registry.canUseFundName(account.address!, value),
-        ]);
-        return isValid && canUse;
+        return await registry.isValidFundName(value);
+      })
+      .test('nameTest', 'Fund name is reserved by another manager', async function(value) {
+        const registry = new Registry(environment, environment.deployment.melon.addr.Registry);
+        return await registry.canUseFundName(account.address!, value);
       }),
+
     exchanges: Yup.array<string>()
       .compact()
-      .min(1),
-    assets: Yup.array<string>()
-      .compact()
-      .min(1),
+      .min(1, 'Select at least one exchange'),
+    assets: Yup.array<string>().compact(),
     managementFee: Yup.number()
-      .min(0)
+      .min(0, 'Management Fee must be greater or equal to zero')
       .max(100),
     performanceFee: Yup.number()
       .min(0)
@@ -84,7 +82,7 @@ export const WalletFundSetup: React.FC = () => {
   const form = useForm<WalletFundSetupForm>({
     defaultValues,
     validationSchema,
-    reValidateMode: 'onBlur',
+    reValidateMode: 'onChange',
     mode: 'onSubmit',
   });
 
@@ -147,18 +145,20 @@ export const WalletFundSetup: React.FC = () => {
                 <BlockSection>
                   <SectionTitle>Fees</SectionTitle>
                   <FormField name="managementFee" label="Management Fee (%)">
-                    <Input id="managementFee" name="managementFee" type="number" />
+                    <Input id="managementFee" name="managementFee" type="number" step="any" />
                   </FormField>
                   <FormField name="performanceFee" label="Performance Fee (%)">
-                    <Input id="performanceFee" name="performanceFee" type="number" />
+                    <Input id="performanceFee" name="performanceFee" type="number" step="any" />
                   </FormField>
                   <FormField name="performanceFeePeriod" label="Performance Fee Period (days)">
-                    <Input id="performanceFeePeriod" name="performanceFeePeriod" type="number" />
+                    <Input id="performanceFeePeriod" name="performanceFeePeriod" type="number" step="any" />
                   </FormField>
                 </BlockSection>
                 <BlockSection>
                   <SectionTitle>Supported exchanges</SectionTitle>
-                  <p>Exchanges can only be set up now, and cannot be changed later.</p>
+                  <NotificationBar kind="neutral">
+                    Exchanges can only be set up now and they cannot be changed later.
+                  </NotificationBar>
                   <Grid>
                     <GridRow>
                       {environment.exchanges.map((exchange, index) => (
@@ -180,12 +180,16 @@ export const WalletFundSetup: React.FC = () => {
                         </GridCol>
                       ))}
                     </GridRow>
+                    {form.errors.exchanges && (
+                      <NotificationBar kind="error">{form.errors.exchanges.message}</NotificationBar>
+                    )}
                   </Grid>
-                  {form.errors.exchanges && <p>{form.errors.exchanges.message}</p>}
                 </BlockSection>
                 <BlockSection>
                   <SectionTitle>Allowed investment assets</SectionTitle>
-                  <p>Investment assets can be set up now, and they can be changed later.</p>
+                  <NotificationBar kind="neutral">
+                    Investment assets can be set up now and they can be changed later.
+                  </NotificationBar>
                   <Grid>
                     <GridRow>
                       {environment.tokens.map((token, index) => (
@@ -209,8 +213,8 @@ export const WalletFundSetup: React.FC = () => {
                         </GridCol>
                       ))}
                     </GridRow>
+                    {form.errors.assets && <NotificationBar kind="error">{form.errors.assets.message}</NotificationBar>}
                   </Grid>
-                  {form.errors.assets && <p>{form.errors.assets.message}</p>}
                 </BlockSection>
                 <BlockSection>
                   <SectionTitle>Disclaimer</SectionTitle>
@@ -245,7 +249,9 @@ export const WalletFundSetup: React.FC = () => {
                     </CheckboxMask>
                     <CheckboxLabel htmlFor="termsAndConditions">I accept the terms and conditions</CheckboxLabel>
                   </CheckboxContainer>
-                  {form.errors.termsAndConditions && <p>{form.errors.termsAndConditions.message}</p>}
+                  {form.errors.termsAndConditions && (
+                    <NotificationBar kind="error">{form.errors.termsAndConditions.message}</NotificationBar>
+                  )}
 
                   <BlockActions>
                     <Button type="submit">Create fund</Button>

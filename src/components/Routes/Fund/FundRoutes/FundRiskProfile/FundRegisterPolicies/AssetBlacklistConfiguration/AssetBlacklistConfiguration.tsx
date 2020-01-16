@@ -16,6 +16,7 @@ import {
   CheckboxLabel,
 } from '~/storybook/components/Checkbox/Checkbox';
 import { Grid, GridRow, GridCol } from '~/storybook/components/Grid/Grid';
+import { NotificationBar } from '~/storybook/components/NotificationBar/NotificationBar';
 
 interface AssetBlacklistConfigurationForm {
   assetBlacklist: string[];
@@ -34,8 +35,9 @@ export const AssetBlacklistConfiguration: React.FC<AssetBlacklistConfigurationPr
 
   const validationSchema = Yup.object().shape({
     assetBlacklist: Yup.array<string>()
+      .label('Asset blacklist')
       .compact()
-      .min(1),
+      .min(1, 'Select at least one asset'),
   });
 
   const form = useForm<AssetBlacklistConfigurationForm>({
@@ -77,7 +79,9 @@ export const AssetBlacklistConfiguration: React.FC<AssetBlacklistConfigurationPr
             </GridRow>
           </Grid>
 
-          {form.errors.assetBlacklist && <p>{form.errors.assetBlacklist.message}</p>}
+          {form.errors.assetBlacklist && (
+            <NotificationBar kind="error">{form.errors.assetBlacklist.message}</NotificationBar>
+          )}
 
           <BlockActions>
             <Button type="submit">Add asset blacklist policy</Button>

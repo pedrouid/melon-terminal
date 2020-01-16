@@ -19,7 +19,7 @@ export const FundTradeHistory: React.FC<FundTradeHistoryProps> = ({ address }) =
 
       {query.loading && <Spinner />}
       {!query.loading && !calls.length && <NoEntries>No entries.</NoEntries>}
-      {!query.loading && calls.length && (
+      {!query.loading && calls.length > 0 && (
         <Table>
           <thead>
             <HeaderRow>

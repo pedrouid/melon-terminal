@@ -1,6 +1,7 @@
 import React from 'react';
 import { useFormContext } from 'react-hook-form';
 import * as S from './FormField.styles';
+import { NotificationBar } from '../NotificationBar/NotificationBar';
 
 export interface FormFieldProps {
   name?: string;
@@ -16,7 +17,7 @@ export const FormField: React.FC<FormFieldProps> = props => {
     <S.FormField>
       {props.label && <S.FormFieldLabel>{props.label}</S.FormFieldLabel>}
       {props.children}
-      {error && <S.FormFieldError>{error.message}</S.FormFieldError>}
+      {error && <NotificationBar kind="error">{error.message}</NotificationBar>}
     </S.FormField>
   );
 };

@@ -21,6 +21,7 @@ import {
 import { useAccount } from '~/hooks/useAccount';
 import { useFundInvestmentAssetsQuery } from '~/queries/FundInvestmentAssets';
 import { Grid, GridRow, GridCol } from '~/storybook/components/Grid/Grid';
+import { NotificationBar } from '~/storybook/components/NotificationBar/NotificationBar';
 
 export interface InvestmentAssetsProps {
   address: string;
@@ -49,23 +50,8 @@ export const InvestmentAssets: React.FC<InvestmentAssetsProps> = ({ address }) =
     },
   });
 
-  useEffect(() => {
-    const participationAddress = details?.fund?.routes?.participation?.address;
-    const participation = new Participation(environment, participationAddress);
-
-    if (removeAssets && removeAssets.length) {
-      const tx = participation.disableInvestment(account.address!, removeAssets);
-      transaction.start(tx, 'Remove assets');
-    } else if (addAssets && addAssets.length) {
-      const tx = participation.enableInvestment(account.address!, addAssets);
-      transaction.start(tx, 'Add assets');
-    }
-  }, [addAssets, removeAssets]);
-
   const validationSchema = Yup.object().shape({
-    assets: Yup.array<string>()
-      .compact()
-      .min(1),
+    assets: Yup.array<string>().compact(),
   });
 
   const form = useForm<InvestmentAssetsForm>({
@@ -83,6 +69,21 @@ export const InvestmentAssets: React.FC<InvestmentAssetsProps> = ({ address }) =
     [environment, allowedAssets]
   );
 
+  useEffect(() => {
+    const participationAddress = details?.fund?.routes?.participation?.address;
+    const participation = new Participation(environment, participationAddress);
+
+    if (removeAssets.length) {
+      form.clearError('assets');
+      const tx = participation.disableInvestment(account.address!, removeAssets);
+      transaction.start(tx, 'Remove assets');
+    } else if (addAssets.length) {
+      form.clearError('assets');
+      const tx = participation.enableInvestment(account.address!, addAssets);
+      transaction.start(tx, 'Add assets');
+    }
+  }, [addAssets, removeAssets]);
+
   const submit = form.handleSubmit(async data => {
     const assetsToAdd = data.assets.filter(
       selected => selected && !allowedAssets?.some(available => available.token!.address === selected)
@@ -94,6 +95,10 @@ export const InvestmentAssets: React.FC<InvestmentAssetsProps> = ({ address }) =
 
     setRemoveAssets(assetsToRemove);
     setAddAssets(assetsToAdd);
+
+    if (!removeAssets.length && !addAssets.length) {
+      form.setError('assets', 'noChanges', 'No changes detected');
+    }
   });
 
   if (query.loading) {
@@ -140,6 +145,8 @@ export const InvestmentAssets: React.FC<InvestmentAssetsProps> = ({ address }) =
               ))}
             </GridRow>
           </Grid>
+
+          {form.errors.assets && <NotificationBar kind="error">{form.errors.assets.message}</NotificationBar>}
 
           <BlockActions>
             <Button type="button" onClick={submit}>

@@ -197,7 +197,7 @@ export const RequestInvestment: React.FC<RequestInvestmentProps> = props => {
               </div>
 
               {asset?.token?.symbol === 'WETH' && (
-                <NotificationBar kind="warning">
+                <NotificationBar kind="neutral">
                   Get WETH by wrapping your ether in the <Link to="/wallet/weth">wallet section</Link>.
                 </NotificationBar>
               )}

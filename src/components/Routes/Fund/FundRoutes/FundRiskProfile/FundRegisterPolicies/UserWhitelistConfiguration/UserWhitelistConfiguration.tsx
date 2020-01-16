@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import * as Yup from 'yup';
 import useForm, { FormContext } from 'react-hook-form';
 import { useEnvironment } from '~/hooks/useEnvironment';
-import { Deployment, UserWhitelist, PolicyDefinition } from '@melonproject/melonjs';
+import { Deployment, UserWhitelist, PolicyDefinition, zeroAddress } from '@melonproject/melonjs';
 import { UserWhitelistBytecode } from '@melonproject/melonjs/abis/UserWhitelist.bin';
 import { Textarea } from '~/storybook/components/Textarea/Textarea';
 import { useAccount } from '~/hooks/useAccount';
@@ -26,7 +26,9 @@ export const UserWhitelistConfiguration: React.FC<UserWhitelistConfigurationProp
   const account = useAccount();
 
   const validationSchema = Yup.object().shape({
-    userWhitelist: Yup.string(),
+    userWhitelist: Yup.string()
+      .label('User whitelist')
+      .required(),
   });
 
   const form = useForm<UserWhitelistConfigurationForm>({
@@ -40,7 +42,7 @@ export const UserWhitelistConfiguration: React.FC<UserWhitelistConfigurationProp
     const validAddresses = whitelistedUsers.map(user => isAddress(user));
 
     if (validAddresses.some(valid => !valid)) {
-      form.setError('userWhitelist', 'wrongFormat', `Invalid address(es)`);
+      form.setError('userWhitelist', 'wrongFormat', `Invalid address format`);
       return;
     } else {
       form.clearError('userWhitelist');
@@ -55,7 +57,7 @@ export const UserWhitelistConfiguration: React.FC<UserWhitelistConfigurationProp
       <SectionTitle>Configure user whitelist policy</SectionTitle>
       <FormContext {...form}>
         <form onSubmit={submit}>
-          <Textarea name="userWhitelist" placeholder="0x000000000000" id="userWhitelist" />
+          <Textarea name="userWhitelist" placeholder={`${zeroAddress}\n${zeroAddress}`} id="userWhitelist" />
           <BlockActions>
             <Button type="submit">Add user whitelist policy</Button>
           </BlockActions>

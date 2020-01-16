@@ -27,6 +27,7 @@ export const PriceToleranceConfiguration: React.FC<PriceToleranceConfigurationPr
 
   const validationSchema = Yup.object().shape({
     priceTolerance: Yup.number()
+      .label('Price tolerance (%)')
       .required()
       .min(0)
       .max(100),
@@ -54,7 +55,7 @@ export const PriceToleranceConfiguration: React.FC<PriceToleranceConfigurationPr
       <FormContext {...form}>
         <form onSubmit={submit}>
           <FormField name="priceTolerance" label="Price tolerance (%)">
-            <Input name="priceTolerance" type="number" min={0} step="any" id="priceTolerance" />
+            <Input name="priceTolerance" type="number" step="any" id="priceTolerance" />
           </FormField>
           <BlockActions>
             <Button type="submit">Add price tolerance policy</Button>
