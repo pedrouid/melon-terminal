@@ -20,7 +20,6 @@ import {
   share,
   skip,
   catchError,
-  tap,
 } from 'rxjs/operators';
 import { networkFromId } from '~/utils/networkFromId';
 import { SectionTitle } from '~/storybook/components/Title/Title';
@@ -62,7 +61,7 @@ const connect = (): Rx.Observable<ConnectionAction> => {
       skip(1)
     );
 
-    return Rx.concat(enable$, network$).pipe(tap((value) => console.log(value)));
+    return Rx.concat(enable$, network$);
   });
 };
 
