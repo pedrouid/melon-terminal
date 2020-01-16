@@ -32,9 +32,6 @@ export const ClaimFees: React.FC<ClaimFeesProps> = ({ address }) => {
 
   const transaction = useTransaction(environment, {
     onFinish: () => refetch(),
-    onAcknowledge: () => {
-      history.push(`/fund/${address}`);
-    },
   });
 
   const submitAllFees = () => {

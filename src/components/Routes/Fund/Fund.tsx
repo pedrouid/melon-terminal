@@ -11,6 +11,11 @@ import { RequiresFundShutDown } from '~/components/Gates/RequiresFundShutDown/Re
 import { RequiresFundSetupInProgress } from '~/components/Gates/RequiresFundSetupInProgress/RequiresFundSetupInProgress';
 import { RequiresFundSetupComplete } from '~/components/Gates/RequiresFundSetupComplete/RequiresFundSetupComplete';
 import { FundHeader } from './FundHeader/FundHeader';
+import { RequiresFundJustCreated } from '~/components/Gates/RequiresFundJustCreated/RequiresFundJustCreated';
+import { RequiresFundManager } from '~/components/Gates/RequiresFundManager/RequiresFundManager';
+import { RequiresNoSharesCreated } from '~/components/Gates/RequiresNoSharesCreated/RequiresNoSharesCreated';
+import { Link } from '~/storybook/components/Link/Link';
+import { RequiresNoPoliciesDeployed } from '~/components/Gates/RequiresNoPoliciesDeployed/RequiresNoPoliciesDeployed';
 
 const NoMatch = React.lazy(() => import('~/components/Routes/NoMatch/NoMatch'));
 const FundSetupTransactions = React.lazy(() => import('./FundSetupTransactions/FundSetupTransactions'));
@@ -54,6 +59,28 @@ export const Fund: React.FC = () => {
             </Route>
           </Switch>
         </RequiresFundSetupInProgress>
+
+        <RequiresFundManager fallback={false}>
+          <RequiresNoSharesCreated fallback={false} address={match.params.address}>
+            <NotificationBar kind="neutral">
+              <NotificationContent>
+                You have not invested into your fund yet. Go to{' '}
+                <Link to={`/fund/${match.params.address}/invest`}>Invest &amp; redeem</Link> to invest.
+              </NotificationContent>
+            </NotificationBar>
+          </RequiresNoSharesCreated>
+          <RequiresFundJustCreated fallback={false}>
+            <RequiresNoPoliciesDeployed fallback={false} address={match.params.address}>
+              <NotificationBar kind="neutral">
+                <NotificationContent>
+                  You have not defined any policies for your fund. Go to{' '}
+                  <Link to={`/fund/${match.params.address}/policies`}>Ruleset</Link> to define your policies.
+                </NotificationContent>
+              </NotificationBar>
+            </RequiresNoPoliciesDeployed>
+          </RequiresFundJustCreated>
+        </RequiresFundManager>
+
         <RequiresFundSetupComplete fallback={false}>
           <ErrorBoundary FallbackComponent={ErrorFallback}>
             <Suspense fallback={<Spinner />}>

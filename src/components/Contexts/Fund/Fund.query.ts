@@ -7,6 +7,7 @@ export interface FundContext {
   // TODO: Use enum here.
   progress?: string;
   isShutDown?: boolean;
+  creationTime?: Date;
 }
 
 export interface FundContextQueryResult {
@@ -24,6 +25,7 @@ const FundContextQuery = gql`
       manager
       progress
       isShutDown
+      creationTime
     }
   }
 `;
@@ -36,6 +38,7 @@ export const useFundContextQuery = (options: OnChainQueryHookOptions<FundContext
     manager: fund?.manager,
     progress: fund?.progress,
     isShutDown: fund?.isShutDown,
+    creationTime: fund?.creationTime,
   };
 
   return [output, result] as [typeof output, typeof result];
