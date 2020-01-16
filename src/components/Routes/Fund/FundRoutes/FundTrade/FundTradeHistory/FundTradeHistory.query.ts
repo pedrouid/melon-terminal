@@ -30,6 +30,7 @@ const FundTradeHistoryQuery = gql`
     fund(id: $address) {
       trading {
         calls(orderBy: timestamp, orderDirection: "desc") {
+          id
           timestamp
           exchange {
             id
