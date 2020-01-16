@@ -32,7 +32,7 @@ export const FundFactSheet: React.FC<FundFactSheetProps> = ({ address }) => {
   const environment = useEnvironment();
   const [calculations, calculationsQuery] = useFundCalculationHistoryQuery(address);
 
-  if (!fundQuery || fundQuery.loading || !calculationsQuery || !calculationsQuery.loading) {
+  if (!fundQuery || fundQuery.loading || !calculationsQuery || calculationsQuery.loading) {
     return (
       <Dictionary>
         <SectionTitle>Fund factsheet</SectionTitle>
