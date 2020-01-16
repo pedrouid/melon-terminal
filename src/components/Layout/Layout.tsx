@@ -1,9 +1,8 @@
 import React from 'react';
 import { format } from 'date-fns';
 import { usePriceFeedUpdateQuery } from '~/queries/PriceFeedUpdate';
-import { Link } from '~/storybook/components/Link/Link';
+import { Link, NavLink } from '~/storybook/components/Link/Link';
 import { useAccount } from '~/hooks/useAccount';
-import { useEnvironment } from '~/hooks/useEnvironment';
 import { Skeleton, SkeletonHead, SkeletonBody, SkeletonFeet } from '~/storybook/components/Skeleton/Skeleton';
 import {
   Header as HeaderContainer,
@@ -15,6 +14,7 @@ import {
 import { Footer, FooterNavigation, FooterItem } from '~/storybook/components/Footer/Footer';
 import { Logo } from '~/storybook/components/Logo/Logo';
 import { ConnectionSelector } from './ConnectionSelector/ConnectionSelector';
+import { FormattedNumber } from '~/components/Common/FormattedNumber/FormattedNumber';
 
 const graphiql = JSON.parse(process.env.MELON_INCLUDE_GRAPHIQL || 'false');
 
@@ -33,24 +33,31 @@ export const Layout: React.FC = ({ children }) => {
               </Link>
             </LogoContainer>
             <ConnectionInfo>
-              {account.fund && (
-                <ConnectionInfoItem>
-                  <Link to={`/fund/${account.fund}`} title={account.fund}>
-                    Your fund
-                  </Link>
-                </ConnectionInfoItem>
-              )}
-              {account.address && (
-                <ConnectionInfoItem>
-                  <Link to="/wallet" title={account.address}>
-                    Your wallet
-                  </Link>
-                </ConnectionInfoItem>
-              )}
               <ConnectionInfoItem>
                 <ConnectionSelector />
               </ConnectionInfoItem>
-              {account.eth && <ConnectionInfoItem>{account.eth.toFixed(4)} ETH</ConnectionInfoItem>}
+
+              {account.fund && (
+                <ConnectionInfoItem>
+                  <NavLink to={`/fund/${account.fund}`} title={account.fund} activeClassName="active">
+                    Your fund
+                  </NavLink>
+                </ConnectionInfoItem>
+              )}
+
+              {account.address && (
+                <ConnectionInfoItem>
+                  <NavLink to="/wallet" title={account.address} activeClassName="active">
+                    Your wallet
+                  </NavLink>
+                </ConnectionInfoItem>
+              )}
+
+              {account.eth && (
+                <ConnectionInfoItem>
+                  <FormattedNumber value={account.eth} suffix="ETH" />
+                </ConnectionInfoItem>
+              )}
             </ConnectionInfo>
           </HeaderContent>
         </HeaderContainer>
@@ -66,7 +73,7 @@ export const Layout: React.FC = ({ children }) => {
               <a href="https://docs.melonport.com">Documentation</a>
             </FooterItem>
             <FooterItem>
-              <a href="https://github.com/Avantgarde-Finance/manager-interface/issues">Report an issue</a>
+              <a href="https://github.com/avantgardefinance/interface/issues">Report an issue</a>
             </FooterItem>
 
             {graphiql && (

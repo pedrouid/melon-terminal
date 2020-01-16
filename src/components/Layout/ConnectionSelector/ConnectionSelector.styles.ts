@@ -5,7 +5,6 @@ export const ConnectionSelector = styled.div`
   position: relative;
 `;
 
-export const ConnectionLabel = styled.span`
-  text-decoration: underline;
+export const ConnectionLabel = styled.a`
   cursor: pointer;
 `;

@@ -12,11 +12,14 @@ export const ConnectionSelector = () => {
   const [open, setOpen] = useState(false);
   const connection = useConnectionState();
   const environment = useEnvironment();
-  const network = environment?.network ?? 'OFFLINE';
+  const network = (environment?.network ?? 'OFFLINE') as string;
+  const formatted = network.slice(0, 1).toUpperCase() + network.slice(1).toLowerCase();
 
   return (
     <S.ConnectionSelector>
-      <S.ConnectionLabel onClick={() => setOpen(!open)}>{network}</S.ConnectionLabel>
+      <S.ConnectionLabel onClick={() => setOpen(!open)} className={open ? 'active' : undefined}>
+        {formatted}
+      </S.ConnectionLabel>
 
       <ModalContainer isOpen={open} onBackgroundClick={() => setOpen(false)}>
         <Modal>
@@ -41,7 +44,9 @@ export const ConnectionSelector = () => {
             </Grid>
 
             <BlockActions>
-              <Button type="button" onClick={() => setOpen(false)}>Close</Button>
+              <Button type="button" onClick={() => setOpen(false)}>
+                Close
+              </Button>
             </BlockActions>
           </ModalContent>
         </Modal>

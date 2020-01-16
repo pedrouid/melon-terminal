@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Container } from '../Container/Container';
+import { Container } from '~/storybook/components/Container/Container';
 
 export const Header = styled.div`
   position: relative;
@@ -19,6 +19,7 @@ export const HeaderContent = styled(Container)`
 export const LogoContainer = styled.div`
   position: relative;
   padding: 0px ${props => props.theme.spaceUnits.m};
+
   @media (${props => props.theme.mediaQueries.l}) {
     position: absolute;
     top: 50%;
@@ -31,7 +32,6 @@ export const ConnectionInfo = styled.div`
   display: flex;
   flex-direction: column;
   padding: ${props => props.theme.spaceUnits.xs} 0px;
-  font-size: ${props => props.theme.fontSizes.s};
   justify-content: center;
 
   @media (${props => props.theme.mediaQueries.m}) {
@@ -43,20 +43,24 @@ export const ConnectionInfo = styled.div`
 `;
 
 export const ConnectionInfoItem = styled.div`
-  text-transform: uppercase;
+  margin-right: ${props => props.theme.spaceUnits.s};
 
-  @media (${props => props.theme.mediaQueries.m}) {
-    &::before {
-      content: '|';
-      margin-right: ${props => props.theme.spaceUnits.xxs};
-      padding-left: ${props => props.theme.spaceUnits.xxs};
-      color: ${props => props.theme.otherColors.grey};
+  a {
+    background: ${props => props.theme.mainColors.secondary};
+    font-size: ${props => props.theme.fontSizes.s};
+    text-transform: uppercase;
+    text-decoration: none;
+    padding: ${props => props.theme.spaceUnits.xs} ${props => props.theme.spaceUnits.s};
+    display: inline-block;
+    border-radius: 10px;
+
+    &.active {
+      background: ${props => props.theme.mainColors.secondaryDarkAlpha};
     }
 
-    &:first-child::before {
-      content: '';
-      margin-right: 0;
-      padding-left: 0;
+    &:hover {
+      opacity: 1;
+      background: ${props => props.theme.mainColors.secondaryDarkAlpha};
     }
   }
 `;
