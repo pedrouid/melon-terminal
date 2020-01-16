@@ -1,6 +1,6 @@
 import React from 'react';
 import { useEtherscanLink } from '~/hooks/useEtherscanLink';
-import { toChecksumAddress } from 'web3-utils';
+import { toChecksumAddress, isAddress } from 'web3-utils';
 
 export interface EtherscanLinkProps {
   address?: string;
@@ -9,8 +9,8 @@ export interface EtherscanLinkProps {
 
 export const EtherscanLink: React.FC<EtherscanLinkProps> = props => {
   const args: EtherscanLinkProps = {
-    ...(props.address && { address: toChecksumAddress(props.address) }),
-    ...(props.hash && { hash: toChecksumAddress(props.hash) }),
+    ...(props.address && { address: isAddress(props.address) ? toChecksumAddress(props.address) : props.address }),
+    ...(props.hash && { hash: props.hash }),
   };
 
   const link = useEtherscanLink(args);
