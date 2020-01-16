@@ -29,7 +29,7 @@ export const FundHeader: React.FC<FundHeaderProps> = ({ address }) => {
         <Headline title={fund.name} text={<EtherscanLink address={address} />} icon="fund" />
         <RequiresFundSetupComplete fallback={false}>
           <DataBlockSection>
-            <DataBlock label="Share price per share">
+            <DataBlock label="Share price">
               {accounting?.sharePrice ? `${accounting.sharePrice.toFixed(4)} WETH` : 'N/A'}
             </DataBlock>
             <DataBlock label="Assets under management">

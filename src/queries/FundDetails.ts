@@ -25,6 +25,7 @@ export interface FundDetails {
         rate: number;
         period: number;
         canUpdate: boolean;
+        initializeTime: Date;
       };
     };
     participation?: {
@@ -35,6 +36,12 @@ export interface FundDetails {
     };
     trading?: {
       address: string;
+      exchanges?: [
+        {
+          exchange?: string;
+          adapter?: string;
+        }
+      ];
     };
     shares?: {
       address: string;
@@ -91,6 +98,7 @@ const FundDetailsQuery = gql`
             rate
             period
             canUpdate
+            initializeTime
           }
         }
         participation {
@@ -105,6 +113,10 @@ const FundDetailsQuery = gql`
         }
         trading {
           address
+          exchanges {
+            exchange
+            adapter
+          }
         }
         vault {
           address

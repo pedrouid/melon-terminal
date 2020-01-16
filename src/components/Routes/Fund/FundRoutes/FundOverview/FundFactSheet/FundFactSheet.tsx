@@ -1,5 +1,4 @@
 import React from 'react';
-import format from 'date-fns/format';
 import { Spinner } from '~/storybook/components/Spinner/Spinner';
 import { useFundDetailsQuery } from '~/queries/FundDetails';
 import { SectionTitle } from '~/storybook/components/Title/Title';
@@ -11,15 +10,29 @@ import {
 } from '~/storybook/components/Dictionary/Dictionary';
 import { EtherscanLink } from '~/components/Common/EtherscanLink/EtherscanLink';
 import { FormattedNumber } from '~/components/Common/FormattedNumber/FormattedNumber';
+import { FormattedDate } from '~/components/Common/FormattedDate/FormattedDate';
+import { useEnvironment } from '~/hooks/useEnvironment';
+import { useFundCalculationHistoryQuery } from '~/queries/FundCalculationHistory';
+import BigNumber from 'bignumber.js';
+import { standardDeviation } from '~/utils/finance';
+
+export interface NormalizedCalculation {
+  sharePrice: BigNumber;
+  dailyReturn: number;
+  logReturn: number;
+  timestamp: number;
+}
 
 export interface FundFactSheetProps {
   address: string;
 }
 
 export const FundFactSheet: React.FC<FundFactSheetProps> = ({ address }) => {
-  const [fund, query] = useFundDetailsQuery(address);
+  const [fund, fundQuery] = useFundDetailsQuery(address);
+  const environment = useEnvironment();
+  const [calculations, calculationsQuery] = useFundCalculationHistoryQuery(address);
 
-  if (!query || query.loading) {
+  if (!fundQuery || fundQuery.loading || !calculationsQuery || !calculationsQuery.loading) {
     return (
       <Dictionary>
         <SectionTitle>Fund factsheet</SectionTitle>
@@ -34,13 +47,63 @@ export const FundFactSheet: React.FC<FundFactSheetProps> = ({ address }) => {
 
   const routes = fund.routes;
   const creation = fund.creationTime;
-  const accounting = routes && routes.accounting;
-  const shares = routes && routes.shares;
-  const version = routes && routes.version;
-  const feeManager = routes && routes.feeManager;
-  const managementFee = feeManager && feeManager.managementFee;
-  const performanceFee = feeManager && feeManager.performanceFee;
-  // const sharesOwned = account && account.shares && account.shares.balanceOf;
+  const accounting = routes?.accounting;
+  const shares = routes?.shares;
+  const version = routes?.version;
+  const feeManager = routes?.feeManager;
+  const managementFee = feeManager?.managementFee;
+  const performanceFee = feeManager?.performanceFee;
+
+  const initializeSeconds = (fund?.routes?.feeManager?.performanceFee?.initializeTime.getTime() || Date.now()) / 1000;
+  const secondsNow = Date.now() / 1000;
+  const secondsSinceInit = secondsNow - initializeSeconds;
+  const performanceFeePeriodInSeconds = (performanceFee?.period || 1) * 24 * 60 * 60;
+  const secondsSinceLastPeriod = secondsSinceInit % performanceFeePeriodInSeconds;
+  const nextPeriodStart = secondsNow + (performanceFeePeriodInSeconds - secondsSinceLastPeriod);
+
+  const normalizedCalculations = calculations.map((item, index, array) => {
+    const returnSinceLastPriceUpdate =
+      index > 0
+        ? new BigNumber(item.sharePrice).dividedBy(new BigNumber(array[index - 1].sharePrice)).toNumber() - 1
+        : 0;
+    let dailyReturn = returnSinceLastPriceUpdate;
+    if (dailyReturn > 100 || dailyReturn <= -1) {
+      dailyReturn = 0;
+    }
+    return {
+      sharePrice: item.sharePrice,
+      dailyReturn: index > 0 ? dailyReturn * 100 : 0,
+      logReturn: index > 0 ? Math.log(1 + dailyReturn) : 0,
+      timestamp: new BigNumber(item.timestamp).toNumber(),
+    };
+  });
+
+  const numbersLength = normalizedCalculations.length;
+  const firstChange = (normalizedCalculations?.[0] || []) as NormalizedCalculation;
+  const afterChange = (normalizedCalculations?.[numbersLength - 1] || []) as NormalizedCalculation;
+
+  const returnSinceInception =
+    firstChange && afterChange
+      ? (new BigNumber(afterChange.sharePrice).dividedBy(new BigNumber(firstChange.sharePrice)).toNumber() - 1) * 100
+      : null;
+  const annualizedReturn =
+    returnSinceInception &&
+    (Math.pow(
+      1 + returnSinceInception / 100,
+      (60 * 60 * 24 * 365.25) / (afterChange.timestamp - firstChange.timestamp)
+    ) -
+      1) *
+      100;
+
+  const volatility =
+    normalizedCalculations &&
+    standardDeviation(normalizedCalculations.map(item => item.logReturn)) * 100 * Math.sqrt(365.25);
+
+  const exchanges = routes?.trading?.exchanges;
+  const exchangeNames = exchanges?.map(exchange => {
+    const envExchange = environment?.getExchange(exchange.exchange || '');
+    return envExchange ? envExchange.name : '';
+  });
 
   return (
     <Dictionary>
@@ -67,20 +130,24 @@ export const FundFactSheet: React.FC<FundFactSheetProps> = ({ address }) => {
       </DictionaryEntry>
       <DictionaryEntry>
         <DictionaryLabel>Inception</DictionaryLabel>
-        <DictionaryData>{creation ? format(creation, 'yyyy-MM-dd hh:mm a') : 'N/A'}</DictionaryData>
+        <DictionaryData>{creation ? <FormattedDate timestamp={creation.getTime() / 1000} /> : 'N/A'}</DictionaryData>
       </DictionaryEntry>
       <DictionaryEntry>
         <DictionaryLabel>Status</DictionaryLabel>
         <DictionaryData>{fund.isShutDown ? 'Inactive' : 'Active'}</DictionaryData>
       </DictionaryEntry>
       <DictionaryEntry>
-        <DictionaryLabel>Gross asset value</DictionaryLabel>
+        <DictionaryLabel>&nbsp;</DictionaryLabel>
+        <DictionaryData />
+      </DictionaryEntry>
+      <DictionaryEntry>
+        <DictionaryLabel>GAV (gross asset value)</DictionaryLabel>
         <DictionaryData>
           <FormattedNumber value={accounting?.grossAssetValue} suffix="WETH" />
         </DictionaryData>
       </DictionaryEntry>
       <DictionaryEntry>
-        <DictionaryLabel>Net asset value</DictionaryLabel>
+        <DictionaryLabel>NAV (net asset value)</DictionaryLabel>
         <DictionaryData>
           <FormattedNumber value={accounting?.netAssetValue} suffix="WETH" />
         </DictionaryData>
@@ -92,10 +159,14 @@ export const FundFactSheet: React.FC<FundFactSheetProps> = ({ address }) => {
         </DictionaryData>
       </DictionaryEntry>
       <DictionaryEntry>
-        <DictionaryLabel>Share price per share</DictionaryLabel>
+        <DictionaryLabel>Share price</DictionaryLabel>
         <DictionaryData>
           <FormattedNumber value={accounting?.sharePrice} suffix="WETH" />
         </DictionaryData>
+      </DictionaryEntry>
+      <DictionaryEntry>
+        <DictionaryLabel>&nbsp;</DictionaryLabel>
+        <DictionaryData />
       </DictionaryEntry>
       <DictionaryEntry>
         <DictionaryLabel>Management fee</DictionaryLabel>
@@ -108,6 +179,36 @@ export const FundFactSheet: React.FC<FundFactSheetProps> = ({ address }) => {
       <DictionaryEntry>
         <DictionaryLabel>Performance fee period</DictionaryLabel>
         <DictionaryData>{performanceFee?.period != null ? `${performanceFee.period} days` : 'N/A'}</DictionaryData>
+      </DictionaryEntry>
+      <DictionaryEntry>
+        <DictionaryLabel>Start of next performance fee period</DictionaryLabel>
+        <DictionaryData>
+          {performanceFee?.initializeTime ? <FormattedDate timestamp={nextPeriodStart} /> : 'N/A'}
+        </DictionaryData>
+      </DictionaryEntry>
+      <DictionaryEntry>
+        <DictionaryLabel>&nbsp;</DictionaryLabel>
+        <DictionaryData />
+      </DictionaryEntry>
+      <DictionaryEntry>
+        <DictionaryLabel>Return since inception</DictionaryLabel>
+        <DictionaryData>{returnSinceInception?.toFixed(2)}%</DictionaryData>
+      </DictionaryEntry>
+      <DictionaryEntry>
+        <DictionaryLabel>Annualized return</DictionaryLabel>
+        <DictionaryData>{annualizedReturn?.toFixed(2)}%</DictionaryData>
+      </DictionaryEntry>
+      <DictionaryEntry>
+        <DictionaryLabel>Annual volatility</DictionaryLabel>
+        <DictionaryData>{volatility?.toFixed(2)}%</DictionaryData>
+      </DictionaryEntry>
+      <DictionaryEntry>
+        <DictionaryLabel>&nbsp;</DictionaryLabel>
+        <DictionaryData />
+      </DictionaryEntry>
+      <DictionaryEntry>
+        <DictionaryLabel>Authorized exchanges</DictionaryLabel>
+        <DictionaryData>{exchangeNames ? exchangeNames.join(', ') : 'N/A'}</DictionaryData>
       </DictionaryEntry>
     </Dictionary>
   );
