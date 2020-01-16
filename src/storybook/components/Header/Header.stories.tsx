@@ -1,5 +1,4 @@
 import React from 'react';
-import { SkeletonHead } from '../Skeleton/Skeleton';
 import { Logo } from '../Logo/Logo';
 import * as S from './Header';
 
@@ -12,15 +11,13 @@ export const Default: React.FC = () => {
         <S.LogoContainer>
           <Logo name="with-bottom-text" size="small" />
         </S.LogoContainer>
-        <S.Account>
-          <S.AccountName>Name</S.AccountName>
-          <S.AccountInfo>
-            <S.AccountAddress>link</S.AccountAddress>
-            <S.AccountNetwork>Live</S.AccountNetwork>
-            <S.AccountBalance>ETH 1.00000</S.AccountBalance>
-            <S.AccountInfoItem>Ready</S.AccountInfoItem>
-          </S.AccountInfo>
-        </S.Account>
+        <S.ConnectionInfo>
+          <S.ConnectionInfoItem>Name</S.ConnectionInfoItem>
+          <S.ConnectionInfoItem>link</S.ConnectionInfoItem>
+          <S.ConnectionInfoItem>Live</S.ConnectionInfoItem>
+          <S.ConnectionInfoItem>ETH 1.00000</S.ConnectionInfoItem>
+          <S.ConnectionInfoItem>Ready</S.ConnectionInfoItem>
+        </S.ConnectionInfo>
       </S.HeaderContent>
     </S.Header>
   );

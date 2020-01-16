@@ -12,10 +12,10 @@ import { PageTitleProvider } from './Contexts/PageTitle/PageTitle';
 import { AppRouter } from '~/components/AppRouter';
 
 // TODO: Consider excluding ganache in production builds entirely.
-import { method as metamask } from './Routes/Connect/MetaMask/MetaMask';
-import { method as frame } from './Routes/Connect/Frame/Frame';
-import { method as ganache } from './Routes/Connect/Ganache/Ganache';
-import { method as anonymous } from './Routes/Connect/Anonymous/Anonymous';
+import { method as metamask } from './Layout/ConnectionSelector/MetaMask/MetaMask';
+import { method as frame } from './Layout/ConnectionSelector/Frame/Frame';
+import { method as ganache } from './Layout/ConnectionSelector/Ganache/Ganache';
+import { method as anonymous } from './Layout/ConnectionSelector/Anonymous/Anonymous';
 
 const AppComponent = () => {
   const start = process.env.MELON_TESTNET ? ganache : anonymous;

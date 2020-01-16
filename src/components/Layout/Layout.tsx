@@ -1,5 +1,4 @@
 import React from 'react';
-import { useLocation } from 'react-router';
 import { format } from 'date-fns';
 import { usePriceFeedUpdateQuery } from '~/queries/PriceFeedUpdate';
 import { Link } from '~/storybook/components/Link/Link';
@@ -10,24 +9,18 @@ import {
   Header as HeaderContainer,
   HeaderContent,
   LogoContainer,
-  Account,
-  AccountAddress,
-  AccountBalance,
-  AccountInfo,
-  AccountNetwork,
-  AccountName,
+  ConnectionInfo,
+  ConnectionInfoItem,
 } from '~/storybook/components/Header/Header';
 import { Footer, FooterNavigation, FooterItem } from '~/storybook/components/Footer/Footer';
 import { Logo } from '~/storybook/components/Logo/Logo';
+import { ConnectionSelector } from './ConnectionSelector/ConnectionSelector';
 
 const graphiql = JSON.parse(process.env.MELON_INCLUDE_GRAPHIQL || 'false');
 
 export const Layout: React.FC = ({ children }) => {
   const [update] = usePriceFeedUpdateQuery();
-  const environment = useEnvironment();
-  const location = useLocation();
   const account = useAccount();
-  const network = environment ? environment.network : 'OFFLINE';
 
   return (
     <Skeleton>
@@ -39,32 +32,26 @@ export const Layout: React.FC = ({ children }) => {
                 <Logo name="with-bottom-text" size="small" />
               </Link>
             </LogoContainer>
-            <Account>
-              {/* TODO: Remove this component */}
-              <AccountName />
-              <AccountInfo>
-                {account.fund && (
-                  <AccountAddress>
-                    <Link to={`/fund/${account.fund}`} title={account.fund}>
-                      Your fund
-                    </Link>
-                  </AccountAddress>
-                )}
-                {account.address && (
-                  <AccountAddress>
-                    <Link to="/wallet" title={account.address}>
-                      Your wallet
-                    </Link>
-                  </AccountAddress>
-                )}
-                <AccountNetwork>
-                  <Link to={{ pathname: '/connect', state: { redirect: location } }} title="Change connection method">
-                    {network}
+            <ConnectionInfo>
+              {account.fund && (
+                <ConnectionInfoItem>
+                  <Link to={`/fund/${account.fund}`} title={account.fund}>
+                    Your fund
                   </Link>
-                </AccountNetwork>
-                {account.eth && <AccountBalance>{account.eth.toFixed(4)} ETH</AccountBalance>}
-              </AccountInfo>
-            </Account>
+                </ConnectionInfoItem>
+              )}
+              {account.address && (
+                <ConnectionInfoItem>
+                  <Link to="/wallet" title={account.address}>
+                    Your wallet
+                  </Link>
+                </ConnectionInfoItem>
+              )}
+              <ConnectionInfoItem>
+                <ConnectionSelector />
+              </ConnectionInfoItem>
+              {account.eth && <ConnectionInfoItem>{account.eth.toFixed(4)} ETH</ConnectionInfoItem>}
+            </ConnectionInfo>
           </HeaderContent>
         </HeaderContainer>
       </SkeletonHead>

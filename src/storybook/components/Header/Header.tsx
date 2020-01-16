@@ -19,7 +19,7 @@ export const HeaderContent = styled(Container)`
 export const LogoContainer = styled.div`
   position: relative;
   padding: 0px ${props => props.theme.spaceUnits.m};
-  @media (${props => props.theme.mediaQueries.m}) {
+  @media (${props => props.theme.mediaQueries.l}) {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -27,7 +27,7 @@ export const LogoContainer = styled.div`
   }
 `;
 
-export const Account = styled.div`
+export const ConnectionInfo = styled.div`
   display: flex;
   flex-direction: column;
   padding: ${props => props.theme.spaceUnits.xs} 0px;
@@ -35,7 +35,6 @@ export const Account = styled.div`
   justify-content: center;
 
   @media (${props => props.theme.mediaQueries.m}) {
-    flex: 1 0 auto;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
@@ -43,36 +42,21 @@ export const Account = styled.div`
   }
 `;
 
-export const AccountName = styled.div`
-  font-weight: ${props => props.theme.fontWeights.bold};
-  font-size: ${props => props.theme.fontSizes.m};
-  margin-bottom: ${props => props.theme.spaceUnits.xxs};
+export const ConnectionInfoItem = styled.div`
+  text-transform: uppercase;
 
   @media (${props => props.theme.mediaQueries.m}) {
-    margin-bottom: 0;
+    &::before {
+      content: '|';
+      margin-right: ${props => props.theme.spaceUnits.xxs};
+      padding-left: ${props => props.theme.spaceUnits.xxs};
+      color: ${props => props.theme.otherColors.grey};
+    }
+
+    &:first-child::before {
+      content: '';
+      margin-right: 0;
+      padding-left: 0;
+    }
   }
 `;
-
-export const AccountInfo = styled.div``;
-
-export const AccountInfoItem = styled.span`
-  text-transform: uppercase;
-  &::before {
-    content: '|';
-    margin-right: ${props => props.theme.spaceUnits.xxs};
-    padding-left: ${props => props.theme.spaceUnits.xxs};
-    color: ${props => props.theme.otherColors.grey};
-  }
-
-  &:first-child::before {
-    content: '';
-    margin-right: 0;
-    padding-left: 0;
-  }
-`;
-
-export const AccountAddress = styled(AccountInfoItem)``;
-
-export const AccountNetwork = styled(AccountInfoItem)``;
-
-export const AccountBalance = styled(AccountInfoItem)``;

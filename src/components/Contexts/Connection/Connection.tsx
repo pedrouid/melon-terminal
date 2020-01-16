@@ -196,7 +196,9 @@ export const ConnectionProvider: React.FC<ConnectionProviderProps> = props => {
   const [state, dispatch] = useReducer(reducer, undefined, () => ({
     // During local development, the default connection method is fetched from local storage for persistence
     // during testing sessions where the developer wants to refresh the browser window.
-    method: process.env.NODE_ENV === 'development' && window.localStorage.getItem('connection.method') || props.default.name,
+    method:
+      (process.env.NODE_ENV === 'development' && window.localStorage.getItem('connection.method')) ||
+      props.default.name,
   }));
 
   useEffect(() => {
@@ -212,7 +214,8 @@ export const ConnectionProvider: React.FC<ConnectionProviderProps> = props => {
 
   // Subscribe to the current connection method's observable whenever it changes.
   useEffect(() => {
-    const method = [...props.methods, props.default, props.disconnect].find(item => item.name === state.method) ?? props.default;
+    const method =
+      [...props.methods, props.default, props.disconnect].find(item => item.name === state.method) ?? props.default;
     const observable = method.connect();
     const subscription = observable.subscribe({
       next: action => dispatch(action),
