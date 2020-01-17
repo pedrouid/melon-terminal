@@ -21,9 +21,10 @@ import { FormattedNumber } from '~/components/Common/FormattedNumber/FormattedNu
 export interface OpenOrderItemProps {
   address: string;
   order: OpenMakeOrder;
+  manager: boolean;
 }
 
-export const OpenOrderItem: React.FC<OpenOrderItemProps> = ({ address, order }) => {
+export const OpenOrderItem: React.FC<OpenOrderItemProps> = ({ address, order, manager }) => {
   const environment = useEnvironment()!;
   const account = useAccount();
 
@@ -79,12 +80,14 @@ export const OpenOrderItem: React.FC<OpenOrderItemProps> = ({ address, order }) 
       <BodyCellRightAlign>
         <FormattedNumber value={makerAmount} decimals={6} />
       </BodyCellRightAlign>
-      <BodyCell>
-        <Button type="submit" onClick={() => submit()}>
-          Cancel
-        </Button>
-        <TransactionModal transaction={transaction} />
-      </BodyCell>
+      {manager && (
+        <BodyCell>
+          <Button type="submit" onClick={() => submit()}>
+            Cancel
+          </Button>
+          <TransactionModal transaction={transaction} />
+        </BodyCell>
+      )}
     </BodyRow>
   );
 };
