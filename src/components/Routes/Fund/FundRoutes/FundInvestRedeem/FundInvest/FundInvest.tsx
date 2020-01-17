@@ -47,16 +47,7 @@ export const FundInvest: React.FC<FundInvestProps> = ({ address }) => {
   }
 
   const totalSupply = result?.fund?.routes?.shares?.totalSupply;
-
-  const fallback = (
-    <>
-      Investing into funds that have been created before the Melon price feed update on December 2, 2019 is not
-      possible, see{' '}
-      <a href="https://medium.com/melonprotocol/melon-pricefeed-upgrade-81c5c8febae2">
-        https://medium.com/melonprotocol/melon-pricefeed-upgrade-81c5c8febae2
-      </a>
-    </>
-  );
+  const fallback = <>Investments in this fund have been disabled.</>;
 
   return (
     <Block>

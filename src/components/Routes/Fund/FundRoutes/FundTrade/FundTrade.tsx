@@ -20,11 +20,7 @@ export const FundTrade: React.FC<FundTradeProps> = ({ address }) => {
       <GridCol xs={12} sm={12}>
         <Block>
           <SectionTitle>Trading</SectionTitle>
-          Trading with funds that have been created before the Melon price feed update on December 2, 2019 is not
-          possible, see{' '}
-          <a href="https://medium.com/melonprotocol/melon-pricefeed-upgrade-81c5c8febae2">
-            https://medium.com/melonprotocol/melon-pricefeed-upgrade-81c5c8febae2
-          </a>
+          <>Trading has been disabled for this fund.</>
         </Block>
       </GridCol>
     </GridRow>
