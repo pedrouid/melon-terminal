@@ -6,8 +6,8 @@ export function useOnChainQueryRefetcher() {
   const client = useOnChainClient();
 
   return useCallback(
-    (names?: string[]) => {
-      return refetchQueries(client, names);
+    (block?: number, names?: string[]) => {
+      return refetchQueries(client, block, names);
     },
     [client]
   );

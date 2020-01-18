@@ -39,9 +39,9 @@ export const FundOrderbookMarketForm: React.FC<FundOrderbookMarketFormProps> = p
   const account = useAccount()!;
   const refetch = useOnChainQueryRefetcher();
   const transaction = useTransaction(environment, {
-    onFinish: () => {
+    onFinish: (receipt) => {
       props.unsetOrder();
-      return refetch();
+      return refetch(receipt.blockNumber);
     },
   });
 

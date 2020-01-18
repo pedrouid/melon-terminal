@@ -1,12 +1,5 @@
 import gql from 'graphql-tag';
 import { useOnChainQuery } from '~/hooks/useQuery';
-import { Maybe } from '~/types';
-
-export interface PriceFeedUpdateQueryResult {
-  prices: {
-    lastUpdate: Date;
-  };
-}
 
 const PriceFeedUpdateQuery = gql`
   query PriceFeedUpdateQuery {
@@ -17,6 +10,7 @@ const PriceFeedUpdateQuery = gql`
 `;
 
 export const usePriceFeedUpdateQuery = () => {
-  const result = useOnChainQuery<PriceFeedUpdateQueryResult>(PriceFeedUpdateQuery);
-  return [result.data && result.data.prices && result.data.prices.lastUpdate, result] as [Maybe<Date>, typeof result];
+  const result = useOnChainQuery(PriceFeedUpdateQuery);
+  const output = result.data?.prices?.lastUpdate;
+  return [output, result] as [typeof output, typeof result];
 };

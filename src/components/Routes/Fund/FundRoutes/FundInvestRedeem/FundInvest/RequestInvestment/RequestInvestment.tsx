@@ -101,7 +101,7 @@ export const RequestInvestment: React.FC<RequestInvestmentProps> = props => {
   }, [allowance, investmentAmount]);
 
   const transaction = useTransaction(environment, {
-    onFinish: () => refetch(),
+    onFinish: (receipt) => refetch(receipt.blockNumber),
     onAcknowledge: () => {
       const values = form.getValues();
       if (action === 'invest') {

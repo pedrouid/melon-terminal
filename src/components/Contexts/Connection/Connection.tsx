@@ -248,7 +248,7 @@ export const ConnectionProvider: React.FC<ConnectionProviderProps> = props => {
   }, [state.method]);
 
   useEffect(() => {
-    // Only store the previously selected connection method on local development.
+    // Only store the previously selected account on local development.
     if (process.env.NODE_ENV === 'development' && state.account) {
       window.localStorage.setItem('connection.account', state.account);
     }

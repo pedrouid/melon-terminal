@@ -31,7 +31,7 @@ export const ClaimFees: React.FC<ClaimFeesProps> = ({ address }) => {
   const feeManager = new FeeManager(environment, feeManagerAddress);
 
   const transaction = useTransaction(environment, {
-    onFinish: () => refetch(),
+    onFinish: (receipt) => refetch(receipt.blockNumber),
   });
 
   const submitAllFees = () => {

@@ -28,7 +28,7 @@ export const Shutdown: React.FC<ShutdownProps> = ({ address }) => {
   const hub = new Hub(environment, address);
 
   const transaction = useTransaction(environment, {
-    onFinish: () => refetch(),
+    onFinish: (receipt) => refetch(receipt.blockNumber),
     onAcknowledge: async () => {
       if (assetsInTrading) {
         const version = new Version(environment, await hub.getFundVersion());
@@ -66,8 +66,8 @@ export const Shutdown: React.FC<ShutdownProps> = ({ address }) => {
           </Button>
         </BlockActions>
       ) : (
-        <Spinner />
-      )}
+          <Spinner />
+        )}
 
       <TransactionModal transaction={transaction} />
     </Block>

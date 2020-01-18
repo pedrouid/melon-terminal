@@ -78,7 +78,7 @@ export const FundMelonEngineTrading: React.FC<FundMelonEngineTradingProps> = pro
   });
 
   const transaction = useTransaction(environment, {
-    onFinish: () => refetch(),
+    onFinish: (receipt) => refetch(receipt.blockNumber),
     onAcknowledge: () => form.reset(defaultValues),
   });
 

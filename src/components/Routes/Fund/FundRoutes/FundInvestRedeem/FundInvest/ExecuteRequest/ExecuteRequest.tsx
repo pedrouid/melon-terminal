@@ -19,7 +19,7 @@ export const ExecuteRequest: React.FC<ExecuteRequestProps> = props => {
   const account = useAccount();
   const refetch = useOnChainQueryRefetcher();
   const transaction = useTransaction(environment, {
-    onFinish: () => refetch(),
+    onFinish: (receipt) => refetch(receipt.blockNumber),
   });
 
   const execute = () => {

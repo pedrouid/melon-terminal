@@ -19,7 +19,7 @@ export const CancelRequest: React.FC<CancelRequestProps> = props => {
   const account = useAccount();
   const refetch = useOnChainQueryRefetcher();
   const transaction = useTransaction(environment, {
-    onFinish: () => refetch(),
+    onFinish: (receipt) => refetch(receipt.blockNumber),
   });
 
   const cancel = () => {

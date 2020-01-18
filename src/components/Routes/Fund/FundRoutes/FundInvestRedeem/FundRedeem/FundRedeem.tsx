@@ -40,7 +40,7 @@ export const FundRedeem: React.FC<FundRedeemProps> = ({ address }) => {
   const participationContract = new Participation(environment, participationAddress);
 
   const transaction = useTransaction(environment, {
-    onFinish: () => refetch(),
+    onFinish: (receipt) => refetch(receipt.blockNumber),
   });
 
   const validationSchema = Yup.object().shape({

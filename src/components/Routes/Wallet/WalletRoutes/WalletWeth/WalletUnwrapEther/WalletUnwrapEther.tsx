@@ -22,7 +22,7 @@ export const WalletUnwrapEther: React.FC = () => {
   const account = useAccount();
   const refetch = useOnChainQueryRefetcher();
   const transaction = useTransaction(environment!, {
-    onFinish: () => refetch(),
+    onFinish: (receipt) => refetch(receipt.blockNumber),
   });
 
   const validationSchema = Yup.object().shape({

@@ -36,7 +36,7 @@ export const OpenOrderItem: React.FC<OpenOrderItemProps> = ({ address, order, ma
   const exchange = environment.getExchange(order.exchange);
   const refetch = useOnChainQueryRefetcher();
   const transaction = useTransaction(environment, {
-    onFinish: () => refetch(),
+    onFinish: (receipt) => refetch(receipt.blockNumber),
   });
 
   const submit = async () => {

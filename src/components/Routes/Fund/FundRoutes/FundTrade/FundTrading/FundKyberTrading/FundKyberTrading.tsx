@@ -79,7 +79,7 @@ export const FundKyberTrading: React.FC<FundKyberTradingProps> = props => {
   });
 
   const transaction = useTransaction(environment, {
-    onFinish: () => refetch(),
+    onFinish: (receipt) => refetch(receipt.blockNumber),
     onAcknowledge: () => form.reset(defaultValues),
   });
 
