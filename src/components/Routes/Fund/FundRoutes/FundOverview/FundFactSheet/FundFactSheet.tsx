@@ -104,6 +104,9 @@ export const FundFactSheet: React.FC<FundFactSheetProps> = ({ address }) => {
     return envExchange ? envExchange.name : '';
   });
 
+  const allowedAssets = routes?.participation?.allowedAssets;
+  const allowedAssetsSymbols = allowedAssets?.map(asset => asset?.token?.symbol);
+
   return (
     <Dictionary>
       <SectionTitle>Fund factsheet</SectionTitle>
@@ -219,7 +222,11 @@ export const FundFactSheet: React.FC<FundFactSheetProps> = ({ address }) => {
       </DictionaryEntry>
       <DictionaryEntry>
         <DictionaryLabel>Authorized exchanges</DictionaryLabel>
-        <DictionaryData>{exchangeNames ? exchangeNames.join(', ') : 'N/A'}</DictionaryData>
+        <DictionaryData>{exchangeNames ? exchangeNames.sort().join(', ') : 'N/A'}</DictionaryData>
+      </DictionaryEntry>
+      <DictionaryEntry>
+        <DictionaryLabel>Allowed investment assets</DictionaryLabel>
+        <DictionaryData>{allowedAssetsSymbols ? allowedAssetsSymbols.sort().join(', ') : 'N/A'}</DictionaryData>
       </DictionaryEntry>
     </Dictionary>
   );

@@ -30,6 +30,13 @@ export interface FundDetails {
     };
     participation?: {
       address: string;
+      allowedAssets?: [
+        {
+          token?: {
+            symbol?: string;
+          };
+        }
+      ];
     };
     policyManager?: {
       address: string;
@@ -103,6 +110,11 @@ const FundDetailsQuery = gql`
         }
         participation {
           address
+          allowedAssets {
+            token {
+              symbol
+            }
+          }
         }
         policyManager {
           address
