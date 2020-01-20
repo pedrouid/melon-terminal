@@ -169,15 +169,21 @@ export const FundFactSheet: React.FC<FundFactSheetProps> = ({ address }) => {
       </DictionaryEntry>
       <DictionaryEntry>
         <DictionaryLabel>Management fee</DictionaryLabel>
-        <DictionaryData><FormattedNumber value={managementFee?.rate} decimals={0} suffix="%" /></DictionaryData>
+        <DictionaryData>
+          <FormattedNumber value={managementFee?.rate} decimals={0} suffix="%" />
+        </DictionaryData>
       </DictionaryEntry>
       <DictionaryEntry>
         <DictionaryLabel>Performance fee</DictionaryLabel>
-        <DictionaryData><FormattedNumber value={performanceFee?.rate} decimals={0} suffix="%" /></DictionaryData>
+        <DictionaryData>
+          <FormattedNumber value={performanceFee?.rate} decimals={0} suffix="%" />
+        </DictionaryData>
       </DictionaryEntry>
       <DictionaryEntry>
         <DictionaryLabel>Performance fee period</DictionaryLabel>
-        <DictionaryData><FormattedNumber value={performanceFee?.period} decimals={0} suffix="days" /></DictionaryData>
+        <DictionaryData>
+          <FormattedNumber value={performanceFee?.period} decimals={0} suffix="days" />
+        </DictionaryData>
       </DictionaryEntry>
       <DictionaryEntry>
         <DictionaryLabel>Start of next performance fee period</DictionaryLabel>
@@ -191,15 +197,21 @@ export const FundFactSheet: React.FC<FundFactSheetProps> = ({ address }) => {
       </DictionaryEntry>
       <DictionaryEntry>
         <DictionaryLabel>Return since inception</DictionaryLabel>
-        <DictionaryData><FormattedNumber value={returnSinceInception} colorize={true} decimals={2} suffix="%" /></DictionaryData>
+        <DictionaryData>
+          <FormattedNumber value={returnSinceInception} colorize={true} decimals={2} suffix="%" />
+        </DictionaryData>
       </DictionaryEntry>
       <DictionaryEntry>
         <DictionaryLabel>Annualized return</DictionaryLabel>
-        <DictionaryData><FormattedNumber value={annualizedReturn} colorize={true} decimals={2} suffix="%" /></DictionaryData>
+        <DictionaryData>
+          <FormattedNumber value={annualizedReturn} colorize={true} decimals={2} suffix="%" />
+        </DictionaryData>
       </DictionaryEntry>
       <DictionaryEntry>
         <DictionaryLabel>Annual volatility</DictionaryLabel>
-        <DictionaryData><FormattedNumber value={volatility} colorize={true} decimals={2} suffix="%" /></DictionaryData>
+        <DictionaryData>
+          <FormattedNumber value={volatility} colorize={false} decimals={2} suffix="%" />
+        </DictionaryData>
       </DictionaryEntry>
       <DictionaryEntry>
         <DictionaryLabel>&nbsp;</DictionaryLabel>
