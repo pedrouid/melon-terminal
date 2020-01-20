@@ -7,6 +7,7 @@ export interface FundInvestmentHistory {
   amountInDenominationAsset: BigNumber;
   asset: {
     symbol: string;
+    decimals: number;
   };
   owner: {
     id: string;
@@ -35,6 +36,7 @@ const FundInvestmentHistoryQuery = gql`
         id
         asset {
           symbol
+          decimals
         }
         amountInDenominationAsset
         timestamp

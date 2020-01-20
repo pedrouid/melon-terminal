@@ -9,6 +9,7 @@ import {
   DecodedFunctionSignature,
 } from '@melonproject/melonjs';
 import { useEnvironment } from '~/hooks/useEnvironment';
+import { fromTokenBaseUnit } from '~/utils/fromTokenBaseUnit';
 
 export interface CallOnExchange {
   id: string;
@@ -73,11 +74,9 @@ export const useFundTradeHistoryQuery = (address: string) => {
           buyAmount = buyAmount.multipliedBy(item.orderValue6).dividedBy(item.orderValue1);
         }
 
-        const buyQuantity =
-          buyAsset && buyAmount.dividedBy(new BigNumber(10).exponentiatedBy(new BigNumber(buyAsset.decimals)));
+        const buyQuantity = buyAsset && fromTokenBaseUnit(buyAmount, buyAsset.decimals);
 
-        const sellQuantity =
-          sellAsset && sellAmount.dividedBy(new BigNumber(10).exponentiatedBy(new BigNumber(sellAsset.decimals)));
+        const sellQuantity = sellAsset && fromTokenBaseUnit(sellAmount, sellAsset.decimals);
 
         return {
           buyAsset,

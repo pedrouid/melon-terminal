@@ -1,7 +1,6 @@
 import React from 'react';
 import { Spinner } from '~/storybook/components/Spinner/Spinner';
 import { useFundInvestmentHistory } from '~/queries/FundTradingInvestmentsHistory';
-import { weiToString } from '~/utils/weiToString';
 import {
   Table,
   HeaderCell,
@@ -15,15 +14,17 @@ import {
 import { Block } from '~/storybook/components/Block/Block';
 import { SectionTitle } from '~/storybook/components/Title/Title';
 import { FormattedDate } from '~/components/Common/FormattedDate/FormattedDate';
+import { fromTokenBaseUnit } from '~/utils/fromTokenBaseUnit';
+import { FormattedNumber } from '~/components/Common/FormattedNumber/FormattedNumber';
 
 export interface FundInvestmentHistoryListProps {
   address: string;
 }
 
 export const FundInvestmentHistoryList: React.FC<FundInvestmentHistoryListProps> = ({ address }) => {
-  const [fundInvestement, investementQuery] = useFundInvestmentHistory(address);
+  const [fundInvestment, fundInvestmentQuery] = useFundInvestmentHistory(address);
 
-  if (investementQuery.loading) {
+  if (fundInvestmentQuery.loading) {
     return (
       <Block>
         <SectionTitle>Investment history</SectionTitle>
@@ -32,7 +33,7 @@ export const FundInvestmentHistoryList: React.FC<FundInvestmentHistoryListProps>
     );
   }
 
-  if (!fundInvestement || !fundInvestement.length) {
+  if (!fundInvestment || !fundInvestment.length) {
     return (
       <Block>
         <SectionTitle>Investment history</SectionTitle>
@@ -50,27 +51,39 @@ export const FundInvestmentHistoryList: React.FC<FundInvestmentHistoryListProps>
             <HeaderCell>Time</HeaderCell>
             <HeaderCell>Investor</HeaderCell>
             <HeaderCell>Action</HeaderCell>
-            <HeaderCellRightAlign>Shares</HeaderCellRightAlign>
-            <HeaderCellRightAlign>Shares Price</HeaderCellRightAlign>
+            <HeaderCellRightAlign>Number of shares</HeaderCellRightAlign>
+            <HeaderCellRightAlign>Share price</HeaderCellRightAlign>
             <HeaderCellRightAlign>Amount</HeaderCellRightAlign>
             <HeaderCell>Asset</HeaderCell>
-            <HeaderCellRightAlign>Amount in ETH</HeaderCellRightAlign>
+            <HeaderCellRightAlign>Value in ETH</HeaderCellRightAlign>
           </HeaderRow>
         </thead>
         <tbody>
-          {fundInvestement.map(investement => {
+          {fundInvestment.map(investment => {
             return (
-              <BodyRow key={investement.id}>
+              <BodyRow key={investment.id}>
                 <BodyCell>
-                  <FormattedDate timestamp={investement.timestamp} />
+                  <FormattedDate timestamp={investment.timestamp} />
                 </BodyCell>
-                <BodyCell>{investement.owner.id.substr(0, 8)}...</BodyCell>
-                <BodyCell>{investement.action}</BodyCell>
-                <BodyCellRightAlign>{weiToString(investement.shares.toString(), 4)}</BodyCellRightAlign>
-                <BodyCellRightAlign>{weiToString(investement.sharePrice.toString(), 4)}</BodyCellRightAlign>
-                <BodyCellRightAlign>{weiToString(investement.amount.toString(), 4)}</BodyCellRightAlign>
-                <BodyCell>{investement.asset.symbol}</BodyCell>
-                <BodyCellRightAlign>{weiToString(investement.amount.toString(), 4)}</BodyCellRightAlign>
+                <BodyCell>{investment.owner.id.substr(0, 8)}...</BodyCell>
+                <BodyCell>{investment.action}</BodyCell>
+                <BodyCellRightAlign>
+                  <FormattedNumber value={fromTokenBaseUnit(investment.shares, 18)}></FormattedNumber>
+                </BodyCellRightAlign>
+                <BodyCellRightAlign>
+                  <FormattedNumber value={fromTokenBaseUnit(investment.sharePrice, 18)}></FormattedNumber>
+                </BodyCellRightAlign>
+                <BodyCellRightAlign>
+                  <FormattedNumber
+                    value={fromTokenBaseUnit(investment.amount, investment.asset.decimals)}
+                  ></FormattedNumber>
+                </BodyCellRightAlign>
+                <BodyCell>{investment.asset.symbol}</BodyCell>
+                <BodyCellRightAlign>
+                  <FormattedNumber
+                    value={fromTokenBaseUnit(investment.amountInDenominationAsset, 18)}
+                  ></FormattedNumber>
+                </BodyCellRightAlign>
               </BodyRow>
             );
           })}

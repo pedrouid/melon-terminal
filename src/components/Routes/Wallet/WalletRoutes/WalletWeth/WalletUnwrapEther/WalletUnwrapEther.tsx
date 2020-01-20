@@ -16,13 +16,15 @@ import { Input } from '~/storybook/components/Input/Input';
 import { FormattedNumber } from '~/components/Common/FormattedNumber/FormattedNumber';
 import { Button } from '~/storybook/components/Button/Button';
 import * as S from './WalletUnwrapEther.styles';
+import { toTokenBaseUnit } from '~/utils/toTokenBaseUnit';
+import { fromTokenBaseUnit } from '~/utils/fromTokenBaseUnit';
 
 export const WalletUnwrapEther: React.FC = () => {
   const environment = useEnvironment()!;
   const account = useAccount();
   const refetch = useOnChainQueryRefetcher();
   const transaction = useTransaction(environment!, {
-    onFinish: (receipt) => refetch(receipt.blockNumber),
+    onFinish: receipt => refetch(receipt.blockNumber),
   });
 
   const validationSchema = Yup.object().shape({
@@ -50,7 +52,7 @@ export const WalletUnwrapEther: React.FC = () => {
   const submit = form.handleSubmit(async data => {
     const token = environment.getToken('WETH')!;
     const weth = new Weth(environment, token.address);
-    const tx = weth.withdraw(account.address!, data.quantityWeth.times(new BigNumber('1e18')));
+    const tx = weth.withdraw(account.address!, toTokenBaseUnit(data.quantityWeth, 18));
     transaction.start(tx, 'Unwrap Ether');
   });
 
@@ -61,10 +63,10 @@ export const WalletUnwrapEther: React.FC = () => {
         <form onSubmit={submit}>
           <S.WalletUnwrapEtherBalances>
             <S.WalletUnwrapEtherBalance>
-              <FormattedNumber value={account.eth} suffix="ETH" />
+              <FormattedNumber value={fromTokenBaseUnit(account.eth!, 18)} suffix="ETH" />
             </S.WalletUnwrapEtherBalance>
             <S.WalletUnwrapEtherBalance>
-              <FormattedNumber value={account.weth} suffix="WETH" />
+              <FormattedNumber value={fromTokenBaseUnit(account.weth!, 18)} suffix="WETH" />
             </S.WalletUnwrapEtherBalance>
           </S.WalletUnwrapEtherBalances>
 

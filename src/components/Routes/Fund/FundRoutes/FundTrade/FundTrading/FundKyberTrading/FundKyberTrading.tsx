@@ -27,6 +27,8 @@ import { TransactionModal } from '~/components/Common/TransactionModal/Transacti
 import { Grid, GridRow, GridCol } from '~/storybook/components/Grid/Grid';
 import { FormattedNumber } from '~/components/Common/FormattedNumber/FormattedNumber';
 import { useFundHoldingsQuery } from '~/queries/FundHoldings';
+import { toTokenBaseUnit } from '~/utils/toTokenBaseUnit';
+import { fromTokenBaseUnit } from '~/utils/fromTokenBaseUnit';
 
 export interface FundKyberTradingProps {
   address: string;
@@ -79,7 +81,7 @@ export const FundKyberTrading: React.FC<FundKyberTradingProps> = props => {
   });
 
   const transaction = useTransaction(environment, {
-    onFinish: (receipt) => refetch(receipt.blockNumber),
+    onFinish: receipt => refetch(receipt.blockNumber),
     onAcknowledge: () => form.reset(defaultValues),
   });
 
@@ -94,11 +96,7 @@ export const FundKyberTrading: React.FC<FundKyberTradingProps> = props => {
   const takerAssetHoldingAmount = takerAssetHolding?.amount || new BigNumber(0);
 
   useEffect(() => {
-    if (
-      takerAssetHoldingAmount.isLessThan(
-        new BigNumber(takerQuantity).multipliedBy(new BigNumber(10).exponentiatedBy(takerAsset?.decimals || 18))
-      )
-    ) {
+    if (takerAssetHoldingAmount.isLessThan(toTokenBaseUnit(takerQuantity, takerAsset!.decimals))) {
       form.setError('takerQuantity', 'tooLow', `Your ${takerAsset?.symbol} balance is too low`);
     } else {
       form.clearError('takerQuantity');
@@ -123,9 +121,7 @@ export const FundKyberTrading: React.FC<FundKyberTradingProps> = props => {
             const kyberEth = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee';
             const srcToken = values.takerAsset === weth.address ? kyberEth : values.takerAsset;
             const destToken = values.makerAsset === weth.address ? kyberEth : values.makerAsset;
-            const srcQty = new BigNumber(values.takerQuantity).multipliedBy(
-              new BigNumber(10).exponentiatedBy(takerAsset?.decimals || 18)
-            );
+            const srcQty = toTokenBaseUnit(values.takerQuantity, takerAsset!.decimals);
             const result = await contract.getExpectedRate(srcToken, destToken, srcQty);
 
             resolve(result.expectedRate);
@@ -134,7 +130,7 @@ export const FundKyberTrading: React.FC<FundKyberTradingProps> = props => {
           }
         });
 
-        return expected.dividedBy(new BigNumber(10).exponentiatedBy(18));
+        return fromTokenBaseUnit(expected, 18);
       }),
       tap(price => setPrice(price)),
       tap(() => setLoading(false))
@@ -161,8 +157,8 @@ export const FundKyberTrading: React.FC<FundKyberTradingProps> = props => {
     const makerQuantity = takerQuantity.multipliedBy(price);
 
     const tx = adapter.takeOrder(account.address!, {
-      makerQuantity: makerQuantity.multipliedBy(new BigNumber(10).exponentiatedBy(makerAsset!.decimals)),
-      takerQuantity: takerQuantity.multipliedBy(new BigNumber(10).exponentiatedBy(takerAsset!.decimals)),
+      makerQuantity: toTokenBaseUnit(makerQuantity, makerAsset!.decimals),
+      takerQuantity: toTokenBaseUnit(takerQuantity, takerAsset!.decimals),
       makerAsset: data.makerAsset!,
       takerAsset: data.takerAsset!,
     });

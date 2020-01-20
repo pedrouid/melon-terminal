@@ -15,6 +15,7 @@ import {
 import { SectionTitle } from '~/storybook/components/Title/Title';
 import { Block } from '~/storybook/components/Block/Block';
 import { FormattedNumber } from '~/components/Common/FormattedNumber/FormattedNumber';
+import { fromTokenBaseUnit } from '~/utils/fromTokenBaseUnit';
 
 export interface FundHoldingsProps {
   address: string;
@@ -38,7 +39,7 @@ export const FundHoldings: React.FC<FundHoldingsProps> = ({ address }) => {
     return {
       ...holding,
       // TODO: This should be done in the graphql api.
-      divided: decimals && amount ? amount.dividedBy(new BigNumber(10).exponentiatedBy(decimals)) : new BigNumber(0),
+      divided: decimals && amount ? fromTokenBaseUnit(amount, decimals) : new BigNumber(0),
     };
   });
 

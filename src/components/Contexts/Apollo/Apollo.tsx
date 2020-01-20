@@ -48,10 +48,12 @@ export const TheGraphApollo = createContext<ApolloClient<NormalizedCacheObject>>
 const useOnChainApollo = (environment?: DeployedEnvironment) => {
   const schema = useMemo(() => environment && createSchema(environment!), [environment]);
   const apollo = useMemo(() => {
-    const data = schema ? createSchemaLink({
-      schema,
-      context: createQueryContext(environment!),
-    }) : nullLink;
+    const data = schema
+      ? createSchemaLink({
+          schema,
+          context: createQueryContext(environment!),
+        })
+      : nullLink;
 
     const error = createErrorLink();
     const link = ApolloLink.from([error, data]);
@@ -95,8 +97,8 @@ const useTheGraphApollo = (environment?: DeployedEnvironment) => {
     const subgraph = network && config[network] && config[network].subgraph;
     const data = subgraph
       ? createHttpLink({
-        uri: subgraph,
-      })
+          uri: subgraph,
+        })
       : nullLink;
 
     const error = createErrorLink();

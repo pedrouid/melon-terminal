@@ -95,10 +95,10 @@ export const Frame: React.FC<ConnectionMethodProps> = ({ connect, disconnect, ac
           Connect
         </Button>
       ) : (
-          <Button lenght="stretch" onClick={() => disconnect()}>
-            Disconnect
+        <Button lenght="stretch" onClick={() => disconnect()}>
+          Disconnect
         </Button>
-        )}
+      )}
     </>
   );
 };

@@ -10,6 +10,7 @@ import {
 } from '@melonproject/melonjs';
 import { concatMap, expand, distinctUntilChanged, map, catchError } from 'rxjs/operators';
 import { Orderbook, OrderbookItem } from './aggregatedOrderbook';
+import { fromTokenBaseUnit } from '~/utils/fromTokenBaseUnit';
 
 export interface MatchingMarketOrderbookItem extends OrderbookItem {
   type: ExchangeIdentifier.OasisDex;
@@ -22,19 +23,16 @@ function mapOrders(
   takerAsset: TokenDefinition,
   side: 'bid' | 'ask'
 ) {
-  const makerAssetDecimals = new BigNumber(10).exponentiatedBy(makerAsset.decimals);
-  const takerAssetDecimals = new BigNumber(10).exponentiatedBy(takerAsset.decimals);
-
   return orders.map(order => {
     const quantity =
       side === 'bid'
-        ? order.buyQuantity.dividedBy(makerAssetDecimals)
-        : order.sellQuantity.dividedBy(takerAssetDecimals);
+        ? fromTokenBaseUnit(order.buyQuantity, makerAsset.decimals)
+        : fromTokenBaseUnit(order.sellQuantity, takerAsset.decimals);
 
     const price =
       side === 'bid'
-        ? order.sellQuantity.dividedBy(takerAssetDecimals).dividedBy(quantity)
-        : order.buyQuantity.dividedBy(makerAssetDecimals).dividedBy(quantity);
+        ? fromTokenBaseUnit(order.sellQuantity, takerAsset.decimals).dividedBy(quantity)
+        : fromTokenBaseUnit(order.buyQuantity, makerAsset.decimals).dividedBy(quantity);
 
     return {
       order,

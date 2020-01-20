@@ -22,6 +22,7 @@ import { FormField } from '~/storybook/components/FormField/FormField';
 import { Input } from '~/storybook/components/Input/Input';
 import { OrderbookItem } from '../FundOrderbook/utils/aggregatedOrderbook';
 import { BlockActions } from '~/storybook/components/Block/Block';
+import { toTokenBaseUnit } from '~/utils/toTokenBaseUnit';
 
 export interface FundOrderbookLimitFormProps {
   address: string;
@@ -52,7 +53,7 @@ export const FundOrderbookLimitForm: React.FC<FundOrderbookLimitFormProps> = pro
   const account = useAccount();
   const refetch = useOnChainQueryRefetcher();
   const transaction = useTransaction(environment, {
-    onFinish: (receipt) => refetch(receipt.blockNumber),
+    onFinish: receipt => refetch(receipt.blockNumber),
   });
 
   const form = useForm<FundOrderbookLimitFormValues>({
@@ -89,10 +90,8 @@ export const FundOrderbookLimitForm: React.FC<FundOrderbookLimitFormProps> = pro
     const taker = data.direction === 'buy' ? base : quote;
     const exchange = environment.getExchange(data.exchange);
 
-    const makerQuantity = new BigNumber(10)
-      .exponentiatedBy(maker.decimals)
-      .multipliedBy(new BigNumber(data.quantity).multipliedBy(data.price));
-    const takerQuantity = new BigNumber(10).exponentiatedBy(taker.decimals).multipliedBy(data.quantity);
+    const makerQuantity = toTokenBaseUnit(data.quantity, maker.decimals).multipliedBy(data.price);
+    const takerQuantity = toTokenBaseUnit(data.quantity, taker.decimals);
 
     if (exchange && exchange.id === ExchangeIdentifier.OasisDex) {
       const adapter = await OasisDexTradingAdapter.create(trading, exchange.exchange);

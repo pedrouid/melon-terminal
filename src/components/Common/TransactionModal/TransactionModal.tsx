@@ -10,9 +10,9 @@ import { Button } from '~/storybook/components/Button/Button';
 import { NotificationBar } from '~/storybook/components/NotificationBar/NotificationBar';
 import { Spinner } from '~/storybook/components/Spinner/Spinner';
 import * as S from '~/storybook/components/Modal/Modal';
-import BigNumber from 'bignumber.js';
 import { EtherscanLink } from '../EtherscanLink/EtherscanLink';
 import { FormattedNumber } from '~/components/Common/FormattedNumber/FormattedNumber';
+import { fromTokenBaseUnit } from '~/utils/fromTokenBaseUnit';
 
 function progressToStep(progress: number) {
   if (progress >= TransactionProgress.EXECUTION_FINISHED) {
@@ -122,13 +122,13 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
                     {options && options.amgu && (
                       <div>
                         Asset management gas:{' '}
-                        <FormattedNumber value={options.amgu.dividedBy(new BigNumber('1e18'))} suffix="ETH" />
+                        <FormattedNumber value={fromTokenBaseUnit(options.amgu, 18)} suffix="ETH" />
                       </div>
                     )}
                     {options && options.incentive && (
                       <div>
                         Incentive for request execution:{' '}
-                        <FormattedNumber value={options.incentive.dividedBy(new BigNumber('1e18'))} suffix="ETH" />
+                        <FormattedNumber value={fromTokenBaseUnit(options.incentive, 18)} suffix="ETH" />
                       </div>
                     )}
                   </S.TransactionModalFeeForm>

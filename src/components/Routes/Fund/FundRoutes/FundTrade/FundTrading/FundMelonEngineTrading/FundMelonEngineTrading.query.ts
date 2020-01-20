@@ -2,6 +2,7 @@ import gql from 'graphql-tag';
 import { useOnChainQuery } from '~/hooks/useQuery';
 import BigNumber from 'bignumber.js';
 import { useEnvironment } from '~/hooks/useEnvironment';
+import { fromTokenBaseUnit } from '~/utils/fromTokenBaseUnit';
 
 export interface MelonEngineTradingQueryVariables {
   address?: string;
@@ -32,9 +33,9 @@ export const useMelonEngineTradingQuery = (address?: string) => {
   const enginePrice = engine?.enginePrice;
   const liquidEther = engine?.liquidEther;
 
-  return [
-    (enginePrice ?? new BigNumber(0)).dividedBy(new BigNumber(10).exponentiatedBy(weth.decimals)),
-    (liquidEther ?? new BigNumber(0)).dividedBy(new BigNumber(10).exponentiatedBy(weth.decimals)),
-    result,
-  ] as [BigNumber, BigNumber, typeof result];
+  return [fromTokenBaseUnit(enginePrice!, weth.decimals), fromTokenBaseUnit(liquidEther!, weth.decimals), result] as [
+    BigNumber,
+    BigNumber,
+    typeof result
+  ];
 };

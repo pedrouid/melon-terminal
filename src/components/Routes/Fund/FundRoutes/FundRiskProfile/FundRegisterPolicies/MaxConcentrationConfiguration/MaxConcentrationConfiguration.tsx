@@ -11,6 +11,7 @@ import { Input } from '~/storybook/components/Input/Input';
 import { Button } from '~/storybook/components/Button/Button';
 import { SectionTitle } from '~/storybook/components/Title/Title';
 import { BlockActions } from '~/storybook/components/Block/Block';
+import { toTokenBaseUnit } from '~/utils/toTokenBaseUnit';
 
 interface MaxConcentrationConfigurationForm {
   maxConcentration: number;
@@ -50,7 +51,7 @@ export const MaxConcentrationConfiguration: React.FC<MaxConcentrationConfigurati
       environment,
       MaxConcentrationBytecode,
       account.address!,
-      new BigNumber(data.maxConcentration!).times(new BigNumber('1e16'))
+      new BigNumber(data.maxConcentration!).multipliedBy('1e16')
     );
     props.startTransaction(tx, 'Deploy MaxConcentration Contract');
   });

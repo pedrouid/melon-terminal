@@ -50,10 +50,10 @@ export const Ganache: React.FC<ConnectionMethodProps> = ({ connect, disconnect, 
           Connect
         </Button>
       ) : (
-          <Button lenght="stretch" onClick={() => disconnect()}>
-            Disconnect
+        <Button lenght="stretch" onClick={() => disconnect()}>
+          Disconnect
         </Button>
-        )}
+      )}
     </>
   );
 };

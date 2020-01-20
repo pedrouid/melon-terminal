@@ -1,10 +1,20 @@
 import React from 'react';
 import { Spinner } from '~/storybook/components/Spinner/Spinner';
-import { Table, HeaderCell, HeaderRow, BodyCell, BodyRow, NoEntries } from '~/storybook/components/Table/Table';
+import {
+  Table,
+  HeaderCell,
+  HeaderRow,
+  BodyCell,
+  BodyRow,
+  NoEntries,
+  HeaderCellRightAlign,
+  BodyCellRightAlign,
+} from '~/storybook/components/Table/Table';
 import { Block } from '~/storybook/components/Block/Block';
 import { SectionTitle } from '~/storybook/components/Title/Title';
 import { useFundTradeHistoryQuery } from './FundTradeHistory.query';
 import { FormattedDate } from '~/components/Common/FormattedDate/FormattedDate';
+import { FormattedNumber } from '~/components/Common/FormattedNumber/FormattedNumber';
 
 export interface FundTradeHistoryProps {
   address: string;
@@ -27,8 +37,8 @@ export const FundTradeHistory: React.FC<FundTradeHistoryProps> = ({ address }) =
               <HeaderCell>Exchange</HeaderCell>
               <HeaderCell>Buy asset</HeaderCell>
               <HeaderCell>Sell asset</HeaderCell>
-              <HeaderCell>Buy quantity</HeaderCell>
-              <HeaderCell>Sell quantity</HeaderCell>
+              <HeaderCellRightAlign>Buy quantity</HeaderCellRightAlign>
+              <HeaderCellRightAlign>Sell quantity</HeaderCellRightAlign>
               <HeaderCell>Order type</HeaderCell>
             </HeaderRow>
           </thead>
@@ -41,8 +51,12 @@ export const FundTradeHistory: React.FC<FundTradeHistoryProps> = ({ address }) =
                 <BodyCell>{call.exchange?.name}</BodyCell>
                 <BodyCell>{call.buyAsset?.symbol}</BodyCell>
                 <BodyCell>{call.sellAsset?.symbol}</BodyCell>
-                <BodyCell>{call.buyQuantity?.toFixed(4)}</BodyCell>
-                <BodyCell>{call.sellQuantity?.toFixed(4)}</BodyCell>
+                <BodyCellRightAlign>
+                  <FormattedNumber value={call.buyQuantity}></FormattedNumber>
+                </BodyCellRightAlign>
+                <BodyCellRightAlign>
+                  <FormattedNumber value={call.sellQuantity}></FormattedNumber>
+                </BodyCellRightAlign>
                 <BodyCell>{call.signature?.label}</BodyCell>
               </BodyRow>
             ))}

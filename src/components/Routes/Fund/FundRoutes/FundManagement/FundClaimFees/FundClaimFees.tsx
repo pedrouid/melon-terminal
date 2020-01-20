@@ -12,6 +12,8 @@ import { useOnChainQueryRefetcher } from '~/hooks/useOnChainQueryRefetcher';
 import { Block, BlockActions } from '~/storybook/components/Block/Block';
 import { SectionTitle } from '~/storybook/components/Title/Title';
 import { DictionaryData, DictionaryEntry, DictionaryLabel } from '~/storybook/components/Dictionary/Dictionary';
+import { fromTokenBaseUnit } from '~/utils/fromTokenBaseUnit';
+import { FormattedNumber } from '~/components/Common/FormattedNumber/FormattedNumber';
 
 export interface ClaimFeesProps {
   address: string;
@@ -31,7 +33,7 @@ export const ClaimFees: React.FC<ClaimFeesProps> = ({ address }) => {
   const feeManager = new FeeManager(environment, feeManagerAddress);
 
   const transaction = useTransaction(environment, {
-    onFinish: (receipt) => refetch(receipt.blockNumber),
+    onFinish: receipt => refetch(receipt.blockNumber),
   });
 
   const submitAllFees = () => {
@@ -61,11 +63,15 @@ export const ClaimFees: React.FC<ClaimFeesProps> = ({ address }) => {
 
       <DictionaryEntry>
         <DictionaryLabel>Accrued management fee</DictionaryLabel>
-        <DictionaryData>{feeManagerInfo?.managementFeeAmount.dividedBy('1e18').toFixed(6)}</DictionaryData>
+        <DictionaryData>
+          <FormattedNumber value={fromTokenBaseUnit(feeManagerInfo!.managementFeeAmount, 18)}></FormattedNumber>
+        </DictionaryData>
       </DictionaryEntry>
       <DictionaryEntry>
         <DictionaryLabel>Accrued performance fee</DictionaryLabel>
-        <DictionaryData>{feeManagerInfo?.performanceFeeAmount.dividedBy('1e18').toFixed(6)}</DictionaryData>
+        <DictionaryData>
+          <FormattedNumber value={fromTokenBaseUnit(feeManagerInfo!.performanceFeeAmount, 18)}></FormattedNumber>
+        </DictionaryData>
       </DictionaryEntry>
 
       <BlockActions>

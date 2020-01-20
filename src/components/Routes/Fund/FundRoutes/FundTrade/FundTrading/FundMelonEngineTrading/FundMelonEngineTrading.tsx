@@ -23,6 +23,8 @@ import { useMelonEngineTradingQuery } from './FundMelonEngineTrading.query';
 import { FormattedNumber } from '~/components/Common/FormattedNumber/FormattedNumber';
 import { BlockActions } from '~/storybook/components/Block/Block';
 import { useFundHoldingsQuery } from '~/queries/FundHoldings';
+import { toTokenBaseUnit } from '~/utils/toTokenBaseUnit';
+import { fromTokenBaseUnit } from '~/utils/fromTokenBaseUnit';
 
 export interface FundMelonEngineTradingProps {
   address: string;
@@ -68,7 +70,7 @@ export const FundMelonEngineTrading: React.FC<FundMelonEngineTradingProps> = pro
       makerQuantity: Yup.string()
         .required()
         .test('liquid-ether-exceeded', 'Liquid ether balance exceeded.', value => {
-          return liquidRef.current.dividedBy(new BigNumber(10).exponentiatedBy(weth.decimals)).isGreaterThan(value);
+          return fromTokenBaseUnit(liquidRef.current, weth.decimals).isGreaterThan(value);
         })
         .test('positive-number', 'Value must be a positive number.', value => {
           const number = new BigNumber(value);
@@ -78,7 +80,7 @@ export const FundMelonEngineTrading: React.FC<FundMelonEngineTradingProps> = pro
   });
 
   const transaction = useTransaction(environment, {
-    onFinish: (receipt) => refetch(receipt.blockNumber),
+    onFinish: receipt => refetch(receipt.blockNumber),
     onAcknowledge: () => form.reset(defaultValues),
   });
 
@@ -94,11 +96,7 @@ export const FundMelonEngineTrading: React.FC<FundMelonEngineTradingProps> = pro
   const mlnHoldingAmount = mlnHolding?.amount || new BigNumber(0);
 
   useEffect(() => {
-    if (
-      mlnHoldingAmount.isLessThan(
-        new BigNumber(takerQuantity).multipliedBy(new BigNumber(10).exponentiatedBy(mln.decimals))
-      )
-    ) {
+    if (mlnHoldingAmount.isLessThan(toTokenBaseUnit(takerQuantity, mln.decimals))) {
       form.setError('takerQuantity', 'tooLow', `Your ${mln.symbol} balance is too low`);
     } else {
       form.clearError('takerQuantity');
@@ -113,10 +111,8 @@ export const FundMelonEngineTrading: React.FC<FundMelonEngineTradingProps> = pro
     const tx = adapter.takeOrder(account.address!, {
       makerAsset: weth.address,
       takerAsset: mln.address,
-      makerQuantity: new BigNumber(data.makerQuantity)
-        .multipliedBy(price)
-        .multipliedBy(new BigNumber(10).exponentiatedBy(weth.decimals)),
-      takerQuantity: new BigNumber(data.takerQuantity).multipliedBy(new BigNumber(10).exponentiatedBy(mln.decimals)),
+      makerQuantity: toTokenBaseUnit(data.makerQuantity, weth.decimals).multipliedBy(price),
+      takerQuantity: toTokenBaseUnit(data.takerQuantity, mln.decimals),
     });
 
     transaction.start(tx, 'Take order');

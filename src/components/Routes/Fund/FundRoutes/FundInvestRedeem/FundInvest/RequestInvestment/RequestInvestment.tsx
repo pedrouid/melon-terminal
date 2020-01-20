@@ -19,6 +19,8 @@ import { Spinner } from '~/storybook/components/Spinner/Spinner';
 import { FormattedNumber } from '~/components/Common/FormattedNumber/FormattedNumber';
 import { NotificationBar } from '~/storybook/components/NotificationBar/NotificationBar';
 import { Link } from '~/storybook/components/Link/Link';
+import { toTokenBaseUnit } from '~/utils/toTokenBaseUnit';
+import { fromTokenBaseUnit } from '~/utils/fromTokenBaseUnit';
 
 export interface RequestInvestmentProps {
   address: string;
@@ -60,8 +62,7 @@ export const RequestInvestment: React.FC<RequestInvestmentProps> = props => {
   const defaultValues = {
     requestedShares: new BigNumber(1),
     investmentAsset: initialAsset?.token?.address,
-    investmentAmount: initialAsset?.shareCostInAsset
-      ?.dividedBy(new BigNumber(10).exponentiatedBy(initialAsset?.token?.decimals || 18))
+    investmentAmount: fromTokenBaseUnit(initialAsset!.shareCostInAsset!, initialAsset!.token!.decimals!)
       .multipliedBy(multiplier)
       .decimalPlaces(initialAsset?.token?.decimals || 18),
   };
@@ -101,15 +102,13 @@ export const RequestInvestment: React.FC<RequestInvestmentProps> = props => {
   }, [allowance, investmentAmount]);
 
   const transaction = useTransaction(environment, {
-    onFinish: (receipt) => refetch(receipt.blockNumber),
+    onFinish: receipt => refetch(receipt.blockNumber),
     onAcknowledge: () => {
       const values = form.getValues();
       if (action === 'invest') {
         const contract = new Participation(environment, participation);
-        const sharesAmount = new BigNumber(values.requestedShares).times(new BigNumber(10).exponentiatedBy(18));
-        const investmentAmount = new BigNumber(values.investmentAmount).times(
-          new BigNumber(10).exponentiatedBy(token!.decimals)
-        );
+        const sharesAmount = toTokenBaseUnit(values.requestedShares, 18);
+        const investmentAmount = toTokenBaseUnit(values.investmentAmount, token!.decimals);
         const tx = contract.requestInvestment(
           account.address!,
           sharesAmount,
@@ -125,7 +124,7 @@ export const RequestInvestment: React.FC<RequestInvestmentProps> = props => {
     switch (action) {
       case 'approve': {
         const contract = new StandardToken(environment, values.investmentAsset);
-        const amount = values.investmentAmount.times(new BigNumber(10).exponentiatedBy(token!.decimals));
+        const amount = toTokenBaseUnit(values.investmentAmount, token!.decimals);
         const tx = contract.approve(account.address!, participation!, amount);
         transaction.start(tx, 'Approve');
         break;
@@ -133,8 +132,8 @@ export const RequestInvestment: React.FC<RequestInvestmentProps> = props => {
 
       case 'invest': {
         const contract = new Participation(environment, participation);
-        const sharesAmount = values.requestedShares.times(new BigNumber('1e18'));
-        const investmentAmount = values.investmentAmount.times(new BigNumber(10).exponentiatedBy(token!.decimals));
+        const sharesAmount = toTokenBaseUnit(values.requestedShares, 18);
+        const investmentAmount = toTokenBaseUnit(values.investmentAmount, token!.decimals);
         const tx = contract.requestInvestment(
           account.address!,
           sharesAmount,
@@ -149,8 +148,7 @@ export const RequestInvestment: React.FC<RequestInvestmentProps> = props => {
 
   const handleInvestmentAmountChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (asset && token) {
-      const shares = new BigNumber(event.target.value ?? 0)
-        .multipliedBy(new BigNumber(10).exponentiatedBy(token.decimals))
+      const shares = toTokenBaseUnit(event.target.value, token.decimals)
         .dividedBy(asset.shareCostInAsset!)
         .dividedBy(multiplier);
 
@@ -161,13 +159,12 @@ export const RequestInvestment: React.FC<RequestInvestmentProps> = props => {
   const handleRequestedSharesChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (asset && token) {
       const amount = new BigNumber(event.target.value ?? 0)
-        .multipliedBy(asset.shareCostInAsset!)
-        .dividedBy(new BigNumber(10).exponentiatedBy(token.decimals))
+        .multipliedBy(fromTokenBaseUnit(asset.shareCostInAsset!, token.decimals))
         .multipliedBy(multiplier);
 
       form.setValue(
         'investmentAmount',
-        amount.isNaN() ? new BigNumber(0) : amount.decimalPlaces(asset?.token?.decimals || 18)
+        amount.isNaN() ? new BigNumber(0) : amount.decimalPlaces(asset!.token!.decimals!)
       );
     }
   };
@@ -193,7 +190,11 @@ export const RequestInvestment: React.FC<RequestInvestmentProps> = props => {
           {(query.loading && !asset && <Spinner />) || (
             <>
               <div>
-                Your balance: <FormattedNumber value={allowance?.balance} suffix={asset?.token?.symbol} />
+                Your balance:{' '}
+                <FormattedNumber
+                  value={fromTokenBaseUnit(allowance?.balance, asset!.token!.decimals!)}
+                  suffix={asset?.token?.symbol}
+                />
               </div>
 
               {asset?.token?.symbol === 'WETH' && (
@@ -215,10 +216,9 @@ export const RequestInvestment: React.FC<RequestInvestmentProps> = props => {
                 <Input
                   id="sharePrice"
                   name="sharePrice"
-                  value={asset?.shareCostInAsset
-                    ?.dividedBy(new BigNumber(10).exponentiatedBy(asset?.token?.decimals || 18))
+                  value={fromTokenBaseUnit(asset!.shareCostInAsset!, asset!.token!.decimals!)
                     .multipliedBy(multiplier)
-                    .toFixed(asset?.token?.decimals || 18)}
+                    .toFixed(asset?.token?.decimals!)}
                   disabled={true}
                 />
               </FormField>

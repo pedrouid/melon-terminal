@@ -15,6 +15,7 @@ import { Footer, FooterNavigation, FooterItem } from '~/storybook/components/Foo
 import { Logo } from '~/storybook/components/Logo/Logo';
 import { ConnectionSelector } from './ConnectionSelector/ConnectionSelector';
 import { FormattedNumber } from '~/components/Common/FormattedNumber/FormattedNumber';
+import { fromTokenBaseUnit } from '~/utils/fromTokenBaseUnit';
 
 const graphiql = JSON.parse(process.env.MELON_INCLUDE_GRAPHIQL || 'false');
 
@@ -55,7 +56,7 @@ export const Layout: React.FC = ({ children }) => {
 
               {account.eth && (
                 <ConnectionInfoItem>
-                  <FormattedNumber value={account.eth} suffix="ETH" />
+                  <FormattedNumber value={fromTokenBaseUnit(account.eth!, 18)} suffix="ETH" />
                 </ConnectionInfoItem>
               )}
             </ConnectionInfo>

@@ -25,6 +25,7 @@ import { MatchingMarketOrderbookItem } from '../FundOrderbook/utils/matchingMark
 import useForm, { FormContext } from 'react-hook-form';
 import BigNumber from 'bignumber.js';
 import { BlockActions } from '~/storybook/components/Block/Block';
+import { toTokenBaseUnit } from '~/utils/toTokenBaseUnit';
 
 export interface FundOrderbookMarketFormProps {
   address: string;
@@ -39,7 +40,7 @@ export const FundOrderbookMarketForm: React.FC<FundOrderbookMarketFormProps> = p
   const account = useAccount()!;
   const refetch = useOnChainQueryRefetcher();
   const transaction = useTransaction(environment, {
-    onFinish: (receipt) => {
+    onFinish: receipt => {
       props.unsetOrder();
       return refetch(receipt.blockNumber);
     },
@@ -100,7 +101,7 @@ export const FundOrderbookMarketForm: React.FC<FundOrderbookMarketFormProps> = p
       const adapter = await OasisDexTradingAdapter.create(trading, exchange.exchange);
       const offer = await market.getOffer((order as MatchingMarketOrderbookItem).order.id);
       const quantity = !offer.takerQuantity.isEqualTo(values.quantity)
-        ? order.price.multipliedBy(values.quantity).multipliedBy(new BigNumber(10).exponentiatedBy(taker.decimals))
+        ? toTokenBaseUnit(values.quantity, taker.decimals).multipliedBy(order.price)
         : undefined;
 
       const tx = adapter.takeOrder(account.address!, order.order.id, offer, quantity);
@@ -111,7 +112,7 @@ export const FundOrderbookMarketForm: React.FC<FundOrderbookMarketFormProps> = p
       const adapter = await ZeroExTradingAdapter.create(trading, exchange.exchange);
       const offer = order.order as ZeroExOrder;
       const quantity = !offer.takerAssetAmount.isEqualTo(values.quantity)
-        ? order.price.multipliedBy(values.quantity).multipliedBy(new BigNumber(10).exponentiatedBy(taker.decimals))
+        ? toTokenBaseUnit(values.quantity, taker.decimals).multipliedBy(order.price)
         : undefined;
 
       const tx = adapter.takeOrder(account.address!, order.order, quantity);

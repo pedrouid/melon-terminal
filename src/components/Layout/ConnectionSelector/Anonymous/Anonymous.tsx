@@ -75,8 +75,8 @@ export const Anonymous: React.FC<ConnectionMethodProps> = ({ connect, active }) 
           Connect
         </Button>
       ) : (
-          <span>Currently selected</span>
-        )}
+        <span>Currently selected</span>
+      )}
     </>
   );
 };

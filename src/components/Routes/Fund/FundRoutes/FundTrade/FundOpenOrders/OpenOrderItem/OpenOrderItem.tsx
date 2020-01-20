@@ -17,6 +17,7 @@ import { useAccount } from '~/hooks/useAccount';
 import { Button } from '~/storybook/components/Button/Button';
 import { useOnChainQueryRefetcher } from '~/hooks/useOnChainQueryRefetcher';
 import { FormattedNumber } from '~/components/Common/FormattedNumber/FormattedNumber';
+import { fromTokenBaseUnit } from '~/utils/fromTokenBaseUnit';
 
 export interface OpenOrderItemProps {
   address: string;
@@ -30,13 +31,13 @@ export const OpenOrderItem: React.FC<OpenOrderItemProps> = ({ address, order, ma
 
   const makerAsset = environment.getToken(order.makerAsset);
   const takerAsset = environment.getToken(order.takerAsset);
-  const makerAmount = order.makerQuantity.dividedBy(new BigNumber(10).exponentiatedBy(makerAsset?.decimals ?? 'NaN'));
-  const takerAmount = order.takerQuantity.dividedBy(new BigNumber(10).exponentiatedBy(takerAsset?.decimals ?? 'NaN'));
+  const makerAmount = fromTokenBaseUnit(order.makerQuantity, makerAsset?.decimals);
+  const takerAmount = fromTokenBaseUnit(order.takerQuantity, takerAsset?.decimals);
   const price = takerAmount.dividedBy(makerAmount);
   const exchange = environment.getExchange(order.exchange);
   const refetch = useOnChainQueryRefetcher();
   const transaction = useTransaction(environment, {
-    onFinish: (receipt) => refetch(receipt.blockNumber),
+    onFinish: receipt => refetch(receipt.blockNumber),
   });
 
   const submit = async () => {

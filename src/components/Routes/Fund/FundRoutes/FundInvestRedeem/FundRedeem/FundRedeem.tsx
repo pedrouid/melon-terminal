@@ -22,6 +22,8 @@ import {
   CheckboxIcon,
   CheckboxLabel,
 } from '~/storybook/components/Checkbox/Checkbox';
+import { toTokenBaseUnit } from '~/utils/toTokenBaseUnit';
+import { FormattedNumber } from '~/components/Common/FormattedNumber/FormattedNumber';
 
 export interface FundRedeemProps {
   address: string;
@@ -40,7 +42,7 @@ export const FundRedeem: React.FC<FundRedeemProps> = ({ address }) => {
   const participationContract = new Participation(environment, participationAddress);
 
   const transaction = useTransaction(environment, {
-    onFinish: (receipt) => refetch(receipt.blockNumber),
+    onFinish: receipt => refetch(receipt.blockNumber),
   });
 
   const validationSchema = Yup.object().shape({
@@ -83,7 +85,7 @@ export const FundRedeem: React.FC<FundRedeemProps> = ({ address }) => {
       return;
     }
 
-    const shareQuantity = data.shareQuantity.times(new BigNumber('1e18'));
+    const shareQuantity = toTokenBaseUnit(data.shareQuantity, 18);
     const tx = participationContract.redeemQuantity(account.address!, shareQuantity);
     transaction.start(tx, 'Redeem shares');
   });
@@ -102,7 +104,9 @@ export const FundRedeem: React.FC<FundRedeemProps> = ({ address }) => {
       <SectionTitle>Redeem</SectionTitle>
       {hasInvested && shares && !shares?.balanceOf?.isZero() && (
         <>
-          <p>You own {shares?.balanceOf?.toFixed(18)} shares</p>
+          <p>
+            You own <FormattedNumber value={shares?.balanceOf}></FormattedNumber> shares
+          </p>
           <FormContext {...form}>
             <form onSubmit={submit}>
               <FormField name="shareQuantity" label="Number of shares to redeem">

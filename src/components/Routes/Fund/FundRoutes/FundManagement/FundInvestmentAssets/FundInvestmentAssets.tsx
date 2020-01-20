@@ -40,7 +40,7 @@ export const InvestmentAssets: React.FC<InvestmentAssetsProps> = ({ address }) =
   const [removeAssets, setRemoveAssets] = useState<string[]>([]);
 
   const transaction = useTransaction(environment, {
-    onFinish: (receipt) => refetch(receipt.blockNumber),
+    onFinish: receipt => refetch(receipt.blockNumber),
     onAcknowledge: () => {
       if (removeAssets?.length) {
         setRemoveAssets([]);

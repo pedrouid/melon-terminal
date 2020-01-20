@@ -8,6 +8,7 @@ import { TokenDefinition, DeployedEnvironment, ExchangeIdentifier } from '@melon
 import { concatMap, expand, distinctUntilChanged, map, catchError } from 'rxjs/operators';
 import { NetworkEnum } from '~/types';
 import { Orderbook, OrderbookItem } from './aggregatedOrderbook';
+import { fromTokenBaseUnit } from '~/utils/fromTokenBaseUnit';
 
 const endpoints = {
   [NetworkEnum.MAINNET]: {
@@ -31,12 +32,9 @@ function mapOrders(
   takerAsset: TokenDefinition,
   side: 'bid' | 'ask'
 ) {
-  const makerAssetDecimals = new BigNumber(10).exponentiatedBy(makerAsset.decimals);
-  const takerAssetDecimals = new BigNumber(10).exponentiatedBy(takerAsset.decimals);
-
   return orders.map(order => {
-    const quantity = order.order.makerAssetAmount.dividedBy(makerAssetDecimals);
-    const price = order.order.takerAssetAmount.dividedBy(takerAssetDecimals).dividedBy(quantity);
+    const quantity = fromTokenBaseUnit(order.order.makerAssetAmount, makerAsset.decimals);
+    const price = fromTokenBaseUnit(order.order.takerAssetAmount, takerAsset.decimals).dividedBy(quantity);
 
     return {
       order,

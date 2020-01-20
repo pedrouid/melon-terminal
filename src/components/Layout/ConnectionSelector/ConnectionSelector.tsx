@@ -31,10 +31,12 @@ export const ConnectionSelector = () => {
                 const Component = method.component;
                 const active = method.name === connection.method;
                 const connect = () => connection.connect(method.name);
-                const accounts = active ? (connection.accounts || []).map((address, index) => ({
-                  name: `${index}: ${address}`,
-                  value: address,
-                })) : [];
+                const accounts = active
+                  ? (connection.accounts || []).map((address, index) => ({
+                      name: `${index}: ${address}`,
+                      value: address,
+                    }))
+                  : [];
 
                 return (
                   <GridRow key={method.name}>
@@ -42,9 +44,14 @@ export const ConnectionSelector = () => {
                       <Block>
                         <Component active={active} connect={connect} disconnect={connection.disconnect} />
 
-                        {accounts && accounts.length > 1 && (
-                          <Dropdown options={accounts} value={connection.account} onChange={(event) => connection.switch(event.target.value)} />
-                        ) || null}
+                        {(accounts && accounts.length > 1 && (
+                          <Dropdown
+                            options={accounts}
+                            value={connection.account}
+                            onChange={event => connection.switch(event.target.value)}
+                          />
+                        )) ||
+                          null}
                       </Block>
                     </GridCol>
                   </GridRow>

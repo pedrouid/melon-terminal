@@ -23,6 +23,7 @@ import {
   CheckboxLabel,
 } from '~/storybook/components/Checkbox/Checkbox';
 import { NotificationBar } from '~/storybook/components/NotificationBar/NotificationBar';
+import { toTokenBaseUnit } from '~/utils/toTokenBaseUnit';
 
 export interface WalletFundSetupForm {
   name: string;
@@ -43,11 +44,11 @@ export const WalletFundSetup: React.FC = () => {
   const validationSchema = Yup.object().shape({
     name: Yup.string()
       .min(1, 'Fund Name must be at least one character')
-      .test('nameTest', 'Fund name contains invalid characters', async function (value) {
+      .test('nameTest', 'Fund name contains invalid characters', async function(value) {
         const registry = new Registry(environment, environment.deployment.melon.addr.Registry);
         return await registry.isValidFundName(value);
       })
-      .test('nameTest', 'Fund name is reserved by another manager', async function (value) {
+      .test('nameTest', 'Fund name is reserved by another manager', async function(value) {
         const registry = new Registry(environment, environment.deployment.melon.addr.Registry);
         return await registry.canUseFundName(account.address!, value);
       }),
@@ -87,7 +88,7 @@ export const WalletFundSetup: React.FC = () => {
   });
 
   const transaction = useTransaction(environment, {
-    onFinish: (receipt) => refetch(receipt.blockNumber),
+    onFinish: receipt => refetch(receipt.blockNumber),
     onAcknowledge: () => {
       if (!account.fund) {
         history.push('/wallet');
