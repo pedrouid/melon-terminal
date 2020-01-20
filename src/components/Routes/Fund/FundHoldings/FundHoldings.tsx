@@ -15,7 +15,6 @@ import {
 import { SectionTitle } from '~/storybook/components/Title/Title';
 import { Block } from '~/storybook/components/Block/Block';
 import { FormattedNumber } from '~/components/Common/FormattedNumber/FormattedNumber';
-import { fromTokenBaseUnit } from '~/utils/fromTokenBaseUnit';
 
 export interface FundHoldingsProps {
   address: string;
@@ -32,16 +31,9 @@ export const FundHoldings: React.FC<FundHoldingsProps> = ({ address }) => {
     );
   }
 
-  const mapped = holdings.map(holding => {
-    const decimals = holding.token?.decimals;
-    const amount = holding.amount;
-
-    return {
-      ...holding,
-      // TODO: This should be done in the graphql api.
-      divided: decimals && amount ? fromTokenBaseUnit(amount, decimals) : new BigNumber(0),
-    };
-  });
+  const totalValue = holdings.reduce((acc, current) => {
+    return acc.plus(current.valueInDenominationAsset || new BigNumber(0));
+  }, new BigNumber(0));
 
   return (
     <Block>
@@ -52,10 +44,12 @@ export const FundHoldings: React.FC<FundHoldingsProps> = ({ address }) => {
             <HeaderCell>Asset</HeaderCell>
             <HeaderCellRightAlign>Price</HeaderCellRightAlign>
             <HeaderCellRightAlign>Balance</HeaderCellRightAlign>
+            <HeaderCellRightAlign>Value in ETH</HeaderCellRightAlign>
+            <HeaderCellRightAlign>% allocation</HeaderCellRightAlign>
           </HeaderRow>
         </thead>
         <tbody>
-          {mapped.map(holding => (
+          {holdings.map(holding => (
             <BodyRow key={holding.token?.address}>
               <BodyCell>
                 <S.HoldingSymbol>{holding.token?.symbol}</S.HoldingSymbol>
@@ -66,7 +60,17 @@ export const FundHoldings: React.FC<FundHoldingsProps> = ({ address }) => {
                 <FormattedNumber value={holding.token?.price} />
               </BodyCellRightAlign>
               <BodyCellRightAlign>
-                <FormattedNumber value={holding.divided} />
+                <FormattedNumber value={holding.amount?.dividedBy('1e18').toFixed(4)} />
+              </BodyCellRightAlign>
+              <BodyCellRightAlign>
+                <FormattedNumber value={holding.valueInDenominationAsset?.dividedBy('1e18').toFixed(4)} />
+              </BodyCellRightAlign>
+              <BodyCellRightAlign>
+                <FormattedNumber
+                  value={holding.valueInDenominationAsset?.dividedBy(totalValue).times(100)}
+                  decimals={2}
+                  suffix="%"
+                />
               </BodyCellRightAlign>
             </BodyRow>
           ))}

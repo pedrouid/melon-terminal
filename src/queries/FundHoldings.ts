@@ -5,6 +5,7 @@ import { Holding } from '@melonproject/melongql';
 
 export interface FundHolding {
   amount: BigNumber;
+  valueInDenominationAsset: BigNumber;
   token: {
     address: string;
     symbol: string;
@@ -25,6 +26,7 @@ const FundHoldingsQuery = gql`
         accounting {
           holdings {
             amount
+            valueInDenominationAsset
             token {
               address
               symbol
