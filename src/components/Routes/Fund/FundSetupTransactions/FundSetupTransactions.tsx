@@ -113,7 +113,7 @@ export const FundSetupTransactions: React.FC = () => {
 
   const [checked, setChecked] = useState<boolean[]>();
 
-  const [acknowledged, setAcknowledged] = useState(!!(history.location.state && history.location.state.start));
+  const [acknowledged, setAcknowledged] = useState(!!history.location.state);
   const refetch = useOnChainQueryRefetcher();
   const transaction = useTransaction(environment, {
     onStart: () => setAcknowledged(false),
