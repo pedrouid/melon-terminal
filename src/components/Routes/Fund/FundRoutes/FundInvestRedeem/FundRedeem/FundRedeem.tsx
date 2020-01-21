@@ -135,7 +135,7 @@ export const FundRedeem: React.FC<FundRedeemProps> = ({ address }) => {
           <TransactionModal transaction={transaction} />
         </>
       )}
-      {(!hasInvested || shares?.balanceOf?.isZero() || !shares?.balanceOf) && <p>You don't own any shares.</p>}
+      {(!hasInvested || shares?.balanceOf?.isZero() || !shares?.balanceOf) && <>You don't own any shares.</>}
     </Block>
   );
 };
