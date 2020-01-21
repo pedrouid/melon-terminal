@@ -76,7 +76,6 @@ export const RequestInvestment: React.FC<RequestInvestmentProps> = props => {
 
   const investmentAsset = form.watch('investmentAsset') as string;
   const investmentAmount = form.watch('investmentAmount') as BigNumber;
-
   const token = (investmentAsset && environment.getToken(investmentAsset)) as TokenDefinition;
   const asset = allowedAssets.find(allowedAsset => sameAddress(allowedAsset.token?.address, investmentAsset));
   const participation = props.account?.participation?.address;

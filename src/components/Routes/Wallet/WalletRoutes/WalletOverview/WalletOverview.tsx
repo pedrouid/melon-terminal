@@ -4,6 +4,7 @@ import { useFundParticipationOverviewQuery } from '~/queries/FundParticipationOv
 import { WalletOverviewInvestmentRequest } from './WalletOverviewInvestmentRequest/WalletOverviewInvestmentRequest';
 import { WalletOverviewManagedFund } from './WalletOverviewManagedFund/WalletOverviewManagedFund';
 import { WalletOverviewInvestedFund } from './WalletOverviewInvestedFund/WalletOverviewInvestedFund';
+import { WalletOverviewAccountBalance } from './WalletOverviewAccountBalance/WalletOverviewAccountBalance';
 import { useAccount } from '~/hooks/useAccount';
 import { Block } from '~/storybook/components/Block/Block';
 import { SectionTitle } from '~/storybook/components/Title/Title';
@@ -98,6 +99,11 @@ export const WalletOverview: React.FC = () => {
               </Table>
             )}
           </Block>
+        </GridCol>
+      </GridRow>
+      <GridRow>
+        <GridCol xs={12} sm={12}>
+          <WalletOverviewAccountBalance account={account.address} />
         </GridCol>
       </GridRow>
     </Grid>
