@@ -78,7 +78,7 @@
     },
     "conf": {
       "WETH": {
-        "name": "Eth Token",
+        "name": "Wrapped Ether",
         "decimals": 18,
         "initialDepositAmount": "10000000000000000000"
       },
@@ -99,7 +99,7 @@
         "decimals": 18
       },
       "MKR": {
-        "name": "MakerDao",
+        "name": "Maker token",
         "decimals": 18
       },
       "REP": {
@@ -107,7 +107,7 @@
         "decimals": 18
       },
       "ZRX": {
-        "name": "ZeroX Protocol Token",
+        "name": "0x protocol token",
         "decimals": 18
       },
       "USDC": {

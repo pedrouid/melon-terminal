@@ -122,27 +122,29 @@ export const InvestmentAssets: React.FC<InvestmentAssetsProps> = ({ address }) =
 
           <Grid>
             <GridRow>
-              {environment.tokens.map((token, index) => (
-                <GridCol xs={12} sm={12} md={6} key={token.symbol}>
-                  <CheckboxContainer>
-                    <CheckboxInput
-                      defaultChecked={defaultValues[index]}
-                      id={`assets[${index}]`}
-                      type="checkbox"
-                      name={`assets[${index}]`}
-                      value={token.address}
-                      key={token.address}
-                      ref={form.register}
-                    />
-                    <CheckboxMask>
-                      <CheckboxIcon></CheckboxIcon>
-                    </CheckboxMask>
-                    <CheckboxLabel htmlFor={`assets[${index}]`}>
-                      {token.symbol} ({token.name})
-                    </CheckboxLabel>
-                  </CheckboxContainer>
-                </GridCol>
-              ))}
+              {environment.tokens
+                .filter(token => !token.historic)
+                .map((token, index) => (
+                  <GridCol xs={12} sm={12} md={6} key={token.symbol}>
+                    <CheckboxContainer>
+                      <CheckboxInput
+                        defaultChecked={defaultValues[index]}
+                        id={`assets[${index}]`}
+                        type="checkbox"
+                        name={`assets[${index}]`}
+                        value={token.address}
+                        key={token.address}
+                        ref={form.register}
+                      />
+                      <CheckboxMask>
+                        <CheckboxIcon></CheckboxIcon>
+                      </CheckboxMask>
+                      <CheckboxLabel htmlFor={`assets[${index}]`}>
+                        {token.symbol} ({token.name})
+                      </CheckboxLabel>
+                    </CheckboxContainer>
+                  </GridCol>
+                ))}
             </GridRow>
           </Grid>
 

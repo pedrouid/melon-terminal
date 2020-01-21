@@ -162,24 +162,26 @@ export const WalletFundSetup: React.FC = () => {
                   </NotificationBar>
                   <Grid>
                     <GridRow>
-                      {environment.exchanges.map((exchange, index) => (
-                        <GridCol xs={12} sm={12} md={6} key={exchange.id}>
-                          <CheckboxContainer>
-                            <CheckboxInput
-                              id={`exchanges[${index}]`}
-                              type="checkbox"
-                              name={`exchanges[${index}]`}
-                              value={exchange.id}
-                              key={exchange.id}
-                              ref={form.register}
-                            />
-                            <CheckboxMask>
-                              <CheckboxIcon></CheckboxIcon>
-                            </CheckboxMask>
-                            <CheckboxLabel htmlFor={`exchanges[${index}]`}>{exchange.name}</CheckboxLabel>
-                          </CheckboxContainer>
-                        </GridCol>
-                      ))}
+                      {environment.exchanges
+                        .filter(exchange => !exchange.historic)
+                        .map((exchange, index) => (
+                          <GridCol xs={12} sm={12} md={6} key={exchange.id}>
+                            <CheckboxContainer>
+                              <CheckboxInput
+                                id={`exchanges[${index}]`}
+                                type="checkbox"
+                                name={`exchanges[${index}]`}
+                                value={exchange.id}
+                                key={exchange.id}
+                                ref={form.register}
+                              />
+                              <CheckboxMask>
+                                <CheckboxIcon></CheckboxIcon>
+                              </CheckboxMask>
+                              <CheckboxLabel htmlFor={`exchanges[${index}]`}>{exchange.name}</CheckboxLabel>
+                            </CheckboxContainer>
+                          </GridCol>
+                        ))}
                     </GridRow>
                     {form.errors.exchanges && (
                       <NotificationBar kind="error">{form.errors.exchanges.message}</NotificationBar>
@@ -193,26 +195,28 @@ export const WalletFundSetup: React.FC = () => {
                   </NotificationBar>
                   <Grid>
                     <GridRow>
-                      {environment.tokens.map((token, index) => (
-                        <GridCol xs={12} sm={12} md={6} key={token.symbol}>
-                          <CheckboxContainer>
-                            <CheckboxInput
-                              id={`assets[${index}]`}
-                              type="checkbox"
-                              name={`assets[${index}]`}
-                              value={token.symbol}
-                              key={token.symbol}
-                              ref={form.register}
-                            />
-                            <CheckboxMask>
-                              <CheckboxIcon />
-                            </CheckboxMask>
-                            <CheckboxLabel htmlFor={`assets[${index}]`}>
-                              {token.symbol} ({token.name})
-                            </CheckboxLabel>
-                          </CheckboxContainer>
-                        </GridCol>
-                      ))}
+                      {environment.tokens
+                        .filter(token => !token.historic)
+                        .map((token, index) => (
+                          <GridCol xs={12} sm={12} md={6} key={token.symbol}>
+                            <CheckboxContainer>
+                              <CheckboxInput
+                                id={`assets[${index}]`}
+                                type="checkbox"
+                                name={`assets[${index}]`}
+                                value={token.symbol}
+                                key={token.symbol}
+                                ref={form.register}
+                              />
+                              <CheckboxMask>
+                                <CheckboxIcon />
+                              </CheckboxMask>
+                              <CheckboxLabel htmlFor={`assets[${index}]`}>
+                                {token.symbol} ({token.name})
+                              </CheckboxLabel>
+                            </CheckboxContainer>
+                          </GridCol>
+                        ))}
                     </GridRow>
                     {form.errors.assets && <NotificationBar kind="error">{form.errors.assets.message}</NotificationBar>}
                   </Grid>

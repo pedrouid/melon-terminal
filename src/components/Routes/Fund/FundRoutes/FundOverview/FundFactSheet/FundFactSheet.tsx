@@ -100,8 +100,8 @@ export const FundFactSheet: React.FC<FundFactSheetProps> = ({ address }) => {
 
   const exchanges = routes?.trading?.exchanges;
   const exchangeNames = exchanges?.map(exchange => {
-    const envExchange = environment?.getExchange(exchange.exchange || '');
-    return envExchange ? envExchange.name : '';
+    const envExchange = environment?.getExchange(exchange.exchange!);
+    return envExchange?.name;
   });
 
   const allowedAssets = routes?.participation?.allowedAssets;
