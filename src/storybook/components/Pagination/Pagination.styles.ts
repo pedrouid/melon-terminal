@@ -1,6 +1,14 @@
 import styled from 'styled-components';
 
-export const Container = styled.div``;
+export const Container = styled.div`
+  width: 200px;
+  background: ${props => props.theme.mainColors.secondary};
+  border-radius: 10px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  height: 35px;
+`;
 
 export const Button = styled.button`
   font-size: ${props => props.theme.fontSizes.xl};
@@ -10,3 +18,5 @@ export const Button = styled.button`
 `;
 
 export const Span = styled.span``;
+
+export const ButtonWrapper = styled.div``;

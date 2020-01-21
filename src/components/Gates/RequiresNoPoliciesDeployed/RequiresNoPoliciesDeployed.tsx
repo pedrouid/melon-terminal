@@ -1,5 +1,4 @@
 import React from 'react';
-import BigNumber from 'bignumber.js';
 import { useFundPoliciesQuery } from '~/queries/FundPolicies';
 
 export interface RequiresNoPoliciesDeployedProps {

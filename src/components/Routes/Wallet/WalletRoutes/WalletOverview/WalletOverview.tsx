@@ -1,7 +1,5 @@
 import React from 'react';
-
 import { Spinner } from '~/storybook/components/Spinner/Spinner';
-import * as S from './WalletOverview.styles';
 import { useFundParticipationOverviewQuery } from '~/queries/FundParticipationOverview';
 import { WalletOverviewInvestmentRequest } from './WalletOverviewInvestmentRequest/WalletOverviewInvestmentRequest';
 import { WalletOverviewManagedFund } from './WalletOverviewManagedFund/WalletOverviewManagedFund';
@@ -10,7 +8,7 @@ import { useAccount } from '~/hooks/useAccount';
 import { Block } from '~/storybook/components/Block/Block';
 import { SectionTitle } from '~/storybook/components/Title/Title';
 import { GridRow, Grid, GridCol } from '~/storybook/components/Grid/Grid';
-import { FormattedDate } from '~/components/Common/FormattedDate/FormattedDate';
+import { BodyRow, BodyCell, HeaderCell, Table, HeaderRow } from '~/storybook/components/Table/Table';
 
 const fundHeadings = ['Name', 'Inception', 'AUM [ETH]', 'Share price', 'Change', '# shares', 'Version', 'Status'];
 const redeemHeadings = ['Name', 'Inception', 'AUM [ETH]', 'Share price', 'Change', '# shares', 'Version', 'Status'];
@@ -19,34 +17,34 @@ const requestHeadings = ['Fund name', 'Request date', 'Request asset', 'Request 
 export const WalletOverview: React.FC = () => {
   const account = useAccount();
   const [invested, requests, managed, query] = useFundParticipationOverviewQuery(account.address);
-  const managedHeader = fundHeadings.map((heading, index) => <S.HeaderCell key={index}>{heading}</S.HeaderCell>);
+  const managedHeader = fundHeadings.map((heading, index) => <HeaderCell key={index}>{heading}</HeaderCell>);
   const managedEmpty = !(managed && managed.length);
   const managedRows = !managedEmpty ? (
     managed.map(fund => <WalletOverviewManagedFund {...fund} key={fund.address} />)
   ) : (
-    <S.EmptyRow>
-      <S.EmptyCell colSpan={12}>You do not manage any funds.</S.EmptyCell>
-    </S.EmptyRow>
+    <BodyRow>
+      <BodyCell colSpan={12}>You do not manage any funds.</BodyCell>
+    </BodyRow>
   );
 
-  const investedHeader = redeemHeadings.map((heading, index) => <S.HeaderCell key={index}>{heading}</S.HeaderCell>);
+  const investedHeader = redeemHeadings.map((heading, index) => <HeaderCell key={index}>{heading}</HeaderCell>);
   const investedEmpty = !(invested && invested.length);
   const investedRows = !investedEmpty ? (
     invested.map(fund => <WalletOverviewInvestedFund {...fund} key={fund.address} />)
   ) : (
-    <S.EmptyRow>
-      <S.EmptyCell colSpan={12}>You don't own any shares in any funds.</S.EmptyCell>
-    </S.EmptyRow>
+    <BodyRow>
+      <BodyCell colSpan={12}>You don't own any shares in any funds.</BodyCell>
+    </BodyRow>
   );
 
-  const requestsHeader = requestHeadings.map((heading, index) => <S.HeaderCell key={index}>{heading}</S.HeaderCell>);
+  const requestsHeader = requestHeadings.map((heading, index) => <HeaderCell key={index}>{heading}</HeaderCell>);
   const requestsEmpty = !(requests && requests.length);
   const requestsRows = !requestsEmpty ? (
     requests.map(request => <WalletOverviewInvestmentRequest {...request} key={request.address} />)
   ) : (
-    <S.EmptyRow>
-      <S.EmptyCell colSpan={12}>You do not have any pending investment requests.</S.EmptyCell>
-    </S.EmptyRow>
+    <BodyRow>
+      <BodyCell colSpan={12}>You do not have any pending investment requests.</BodyCell>
+    </BodyRow>
   );
 
   return (
@@ -58,12 +56,12 @@ export const WalletOverview: React.FC = () => {
             {query.loading && <Spinner />}
 
             {!query.loading && (
-              <S.Table>
+              <Table>
                 <thead>
-                  <S.HeaderRow>{managedHeader}</S.HeaderRow>
+                  <HeaderRow>{managedHeader}</HeaderRow>
                 </thead>
                 <tbody>{managedRows}</tbody>
-              </S.Table>
+              </Table>
             )}
           </Block>
         </GridCol>
@@ -75,12 +73,12 @@ export const WalletOverview: React.FC = () => {
             {query.loading && <Spinner />}
 
             {!query.loading && (
-              <S.Table>
+              <Table>
                 <thead>
-                  <S.HeaderRow>{investedHeader}</S.HeaderRow>
+                  <HeaderRow>{investedHeader}</HeaderRow>
                 </thead>
                 <tbody>{investedRows}</tbody>
-              </S.Table>
+              </Table>
             )}
           </Block>
         </GridCol>
@@ -92,12 +90,12 @@ export const WalletOverview: React.FC = () => {
             {query.loading && <Spinner />}
 
             {!query.loading && (
-              <S.Table>
+              <Table>
                 <thead>
-                  <S.HeaderRow>{requestsHeader}</S.HeaderRow>
+                  <HeaderRow>{requestsHeader}</HeaderRow>
                 </thead>
                 <tbody>{requestsRows}</tbody>
-              </S.Table>
+              </Table>
             )}
           </Block>
         </GridCol>

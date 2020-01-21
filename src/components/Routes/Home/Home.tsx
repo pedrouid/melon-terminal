@@ -13,10 +13,18 @@ import { Input } from '~/storybook/components/Input/Input';
 import { FormField } from '~/storybook/components/FormField/FormField';
 import { SectionTitle } from '~/storybook/components/Title/Title';
 import { Button } from '~/storybook/components/Button/Button';
-import * as S from './Home.styles';
 import { Container } from '~/storybook/components/Container/Container';
 import { FormattedDate } from '~/components/Common/FormattedDate/FormattedDate';
 import { FormattedNumber } from '~/components/Common/FormattedNumber/FormattedNumber';
+import {
+  Table,
+  HeaderRow,
+  HeaderCell,
+  HeaderCellRightAlign,
+  BodyCellRightAlign,
+  BodyRow,
+  BodyCell,
+} from '~/storybook/components/Table/Table';
 
 interface SortChoice {
   key: keyof typeof sortChoice;
@@ -244,62 +252,59 @@ export const Home: React.FC = () => {
                 funds={filtered.funds.length}
               />
 
-              <S.ScrollableTable>
-                <S.Table>
-                  <thead>
-                    <S.HeaderRow>
-                      {tableHeadings.map((heading, key) =>
-                        heading.align === 'left' ? (
-                          <S.HeaderCell
-                            key={key}
-                            onClick={heading.key ? () => handleChangeSortableItem(heading.key) : undefined}
-                          >
-                            {heading.value}
-                            {sorted.item.key === heading.key &&
-                              (sorted.item.order === 'asc' ? <>&uarr;</> : <>&darr;</>)}
-                          </S.HeaderCell>
-                        ) : (
-                          <S.HeaderCellNumber
-                            key={key}
-                            onClick={heading.key ? () => handleChangeSortableItem(heading.key) : undefined}
-                          >
-                            {heading.value}
-                            {sorted.item.key === heading.key &&
-                              (sorted.item.order === 'asc' ? <>&uarr;</> : <>&darr;</>)}
-                          </S.HeaderCellNumber>
-                        )
-                      )}
-                    </S.HeaderRow>
-                  </thead>
-                  <tbody>
-                    {pagination.data.length ? (
-                      pagination.data.map(fund => (
-                        <S.BodyRow key={fund.id} onClick={() => history.push(`/fund/${fund.id}`)}>
-                          <S.BodyCell>{fund.name}</S.BodyCell>
-                          <S.BodyCell>
-                            <FormattedDate timestamp={fund.inception} />
-                          </S.BodyCell>
-                          <S.BodyCellNumber>{fund.sharePrice}</S.BodyCellNumber>
-                          <S.BodyCellNumber>
-                            <FormattedNumber value={fund.change} colorize={true} decimals={2} suffix="%" />
-                          </S.BodyCellNumber>
-                          <S.BodyCellNumber>{fund.aumEth}</S.BodyCellNumber>
-                          <S.BodyCellNumber>{fund.aumUsd || ''}</S.BodyCellNumber>
-                          <S.BodyCellNumber>{fund.shares}</S.BodyCellNumber>
-                          <S.BodyCell>{fund.denomination}</S.BodyCell>
-                          <S.BodyCell>{fund.investments}</S.BodyCell>
-                          <S.BodyCell>{fund.version}</S.BodyCell>
-                          <S.BodyCell>{fund.status}</S.BodyCell>
-                        </S.BodyRow>
-                      ))
-                    ) : (
-                      <S.EmptyRow>
-                        <S.EmptyCell colSpan={12}>No records to display</S.EmptyCell>
-                      </S.EmptyRow>
+              <Table>
+                <thead>
+                  <HeaderRow>
+                    {tableHeadings.map((heading, key) =>
+                      heading.align === 'left' ? (
+                        <HeaderCell
+                          key={key}
+                          onClick={heading.key ? () => handleChangeSortableItem(heading.key) : undefined}
+                        >
+                          {heading.value}
+                          {sorted.item.key === heading.key && (sorted.item.order === 'asc' ? <>&uarr;</> : <>&darr;</>)}
+                        </HeaderCell>
+                      ) : (
+                        <HeaderCellRightAlign
+                          key={key}
+                          onClick={heading.key ? () => handleChangeSortableItem(heading.key) : undefined}
+                        >
+                          {heading.value}
+                          {sorted.item.key === heading.key && (sorted.item.order === 'asc' ? <>&uarr;</> : <>&darr;</>)}
+                        </HeaderCellRightAlign>
+                      )
                     )}
-                  </tbody>
-                </S.Table>
-              </S.ScrollableTable>
+                  </HeaderRow>
+                </thead>
+                <tbody>
+                  {pagination.data.length ? (
+                    pagination.data.map(fund => (
+                      <BodyRow key={fund.id} onClick={() => history.push(`/fund/${fund.id}`)}>
+                        <BodyCell>{fund.name}</BodyCell>
+                        <BodyCell>
+                          <FormattedDate timestamp={fund.inception} />
+                        </BodyCell>
+                        <BodyCellRightAlign>{fund.sharePrice}</BodyCellRightAlign>
+                        <BodyCellRightAlign>
+                          <FormattedNumber value={fund.change} colorize={true} decimals={2} suffix="%" />
+                        </BodyCellRightAlign>
+                        <BodyCellRightAlign>{fund.aumEth}</BodyCellRightAlign>
+                        <BodyCellRightAlign>{fund.aumUsd || ''}</BodyCellRightAlign>
+                        <BodyCellRightAlign>{fund.shares}</BodyCellRightAlign>
+                        <BodyCell>{fund.denomination}</BodyCell>
+                        <BodyCell>{fund.investments}</BodyCell>
+                        <BodyCell>{fund.version}</BodyCell>
+                        <BodyCell>{fund.status}</BodyCell>
+                      </BodyRow>
+                    ))
+                  ) : (
+                    <BodyRow>
+                      <BodyCell colSpan={12}>No records to display</BodyCell>
+                    </BodyRow>
+                  )}
+                </tbody>
+              </Table>
+
               <FundOverviewPagination
                 offset={pagination.offset}
                 setOffset={pagination.setOffset}
