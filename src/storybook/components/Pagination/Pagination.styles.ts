@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
-  width: 200px;
+  width: 250px;
   background: ${props => props.theme.mainColors.secondary};
   border-radius: 10px;
   display: flex;

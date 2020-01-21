@@ -49,6 +49,12 @@ export const CheckboxInput = styled.input`
     `}
 `;
 
+export const CheckboxPositioning = styled.div`
+  position: relative;
+  display: inline-block;
+  vertical-align: middle;
+`;
+
 export const CheckboxMask = styled.span`
   position: relative;
   display: inline-block;

@@ -14,7 +14,11 @@ interface ColorProps {
   color: 'red' | 'green' | 'grey';
 }
 
-const Color = styled.span<ColorProps>`
+const NoWrap = styled.span`
+  white-space: nowrap;
+`;
+
+const Color = styled(NoWrap)<ColorProps>`
   color: ${props => props.theme.otherColors[props.color]};
 `;
 
@@ -33,5 +37,5 @@ export const FormattedNumber: React.FC<FormattedNumberData> = ({
     return <Color color={color}>{output}</Color>;
   }
 
-  return <>{output}</>;
+  return <NoWrap>{output}</NoWrap>;
 };

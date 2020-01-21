@@ -1,26 +1,40 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import ModalContainer from 'styled-react-modal';
 import { useConnectionState } from '~/hooks/useConnectionState';
 import { Grid, GridRow, GridCol } from '~/storybook/components/Grid/Grid';
 import { Block, BlockActions } from '~/storybook/components/Block/Block';
-import { useEnvironment } from '~/hooks/useEnvironment';
 import { Modal, ModalTitle, ModalContent } from '~/storybook/components/Modal/Modal';
 import { Button } from '~/storybook/components/Button/Button';
 import { Dropdown } from '~/storybook/components/Dropdown/Dropdown';
 import * as S from './ConnectionSelector.styles';
+import { Icons } from '~/storybook/components/Icons/Icons';
 
 export const ConnectionSelector = () => {
   const [open, setOpen] = useState(false);
   const connection = useConnectionState();
-  const environment = useEnvironment();
-  const network = (environment?.network ?? 'OFFLINE') as string;
-  const formatted = network.slice(0, 1).toUpperCase() + network.slice(1).toLowerCase();
+
+  const icon = useMemo(() => {
+    switch (connection.method) {
+      case 'metamask':
+        return 'METAMASK';
+      case 'frame':
+        return 'FRAME';
+      case 'ganache':
+        return 'GANACHE';
+      default:
+        return null;
+    }
+  }, [connection.method]);
 
   return (
     <S.ConnectionSelector>
-      <S.ConnectionLabel onClick={() => setOpen(!open)} className={open ? 'active' : undefined}>
-        {formatted}
-      </S.ConnectionLabel>
+      {icon ? (
+        <Icons name={icon} onClick={() => setOpen(!open)} className={open ? 'active' : undefined} />
+      ) : (
+        <S.ConnectionLabel onClick={() => setOpen(!open)} className={open ? 'active' : undefined}>
+          Login
+        </S.ConnectionLabel>
+      )}
 
       <ModalContainer isOpen={open} onBackgroundClick={() => setOpen(false)}>
         <Modal>

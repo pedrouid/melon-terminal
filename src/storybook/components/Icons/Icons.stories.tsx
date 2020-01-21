@@ -19,8 +19,8 @@ export const REP: React.FC = () => <Icons name="REP" />;
 
 export const ZRX: React.FC = () => <Icons name="ZRX" />;
 
-export const Metamask: React.FC = () => <Icons name="Metamask" />;
+export const Metamask: React.FC = () => <Icons name="METAMASK" />;
 
-export const Frame: React.FC = () => <Icons name="Frame" />;
+export const Frame: React.FC = () => <Icons name="FRAME" />;
 
-export const Ganache: React.FC = () => <Icons name="Ganache" />;
+export const Ganache: React.FC = () => <Icons name="GANACHE" />;

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Spinner } from '~/storybook/components/Spinner/Spinner';
 import {
+  ScrollableTable,
   Table,
   HeaderCell,
   HeaderRow,
@@ -30,38 +31,40 @@ export const FundTradeHistory: React.FC<FundTradeHistoryProps> = ({ address }) =
       {query.loading && <Spinner />}
       {!query.loading && !calls.length && <NoEntries>No entries.</NoEntries>}
       {!query.loading && calls.length > 0 && (
-        <Table>
-          <thead>
-            <HeaderRow>
-              <HeaderCell>Time</HeaderCell>
-              <HeaderCell>Exchange</HeaderCell>
-              <HeaderCell>Buy asset</HeaderCell>
-              <HeaderCell>Sell asset</HeaderCell>
-              <HeaderCellRightAlign>Buy quantity</HeaderCellRightAlign>
-              <HeaderCellRightAlign>Sell quantity</HeaderCellRightAlign>
-              <HeaderCell>Order type</HeaderCell>
-            </HeaderRow>
-          </thead>
-          <tbody>
-            {calls.map(call => (
-              <BodyRow key={call.id}>
-                <BodyCell>
-                  <FormattedDate timestamp={call.timestamp} />
-                </BodyCell>
-                <BodyCell>{call.exchange?.name}</BodyCell>
-                <BodyCell>{call.buyAsset?.symbol}</BodyCell>
-                <BodyCell>{call.sellAsset?.symbol}</BodyCell>
-                <BodyCellRightAlign>
-                  <FormattedNumber value={call.buyQuantity}></FormattedNumber>
-                </BodyCellRightAlign>
-                <BodyCellRightAlign>
-                  <FormattedNumber value={call.sellQuantity}></FormattedNumber>
-                </BodyCellRightAlign>
-                <BodyCell>{call.signature?.label}</BodyCell>
-              </BodyRow>
-            ))}
-          </tbody>
-        </Table>
+        <ScrollableTable>
+          <Table>
+            <thead>
+              <HeaderRow>
+                <HeaderCell>Time</HeaderCell>
+                <HeaderCell>Exchange</HeaderCell>
+                <HeaderCell>Buy asset</HeaderCell>
+                <HeaderCell>Sell asset</HeaderCell>
+                <HeaderCellRightAlign>Buy quantity</HeaderCellRightAlign>
+                <HeaderCellRightAlign>Sell quantity</HeaderCellRightAlign>
+                <HeaderCell>Order type</HeaderCell>
+              </HeaderRow>
+            </thead>
+            <tbody>
+              {calls.map(call => (
+                <BodyRow key={call.id}>
+                  <BodyCell>
+                    <FormattedDate timestamp={call.timestamp} />
+                  </BodyCell>
+                  <BodyCell>{call.exchange?.name}</BodyCell>
+                  <BodyCell>{call.buyAsset?.symbol}</BodyCell>
+                  <BodyCell>{call.sellAsset?.symbol}</BodyCell>
+                  <BodyCellRightAlign>
+                    <FormattedNumber value={call.buyQuantity}></FormattedNumber>
+                  </BodyCellRightAlign>
+                  <BodyCellRightAlign>
+                    <FormattedNumber value={call.sellQuantity}></FormattedNumber>
+                  </BodyCellRightAlign>
+                  <BodyCell>{call.signature?.label}</BodyCell>
+                </BodyRow>
+              ))}
+            </tbody>
+          </Table>
+        </ScrollableTable>
       )}
     </Block>
   );

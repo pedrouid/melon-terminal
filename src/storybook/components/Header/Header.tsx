@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { Container } from '~/storybook/components/Container/Container';
+import { Title } from '~/storybook/components/Title/Title';
 
 export const Header = styled.div`
   position: relative;
@@ -19,7 +20,6 @@ export const HeaderContent = styled(Container)`
 export const LogoContainer = styled.div`
   position: relative;
   padding: 0px ${props => props.theme.spaceUnits.m};
-
   @media (${props => props.theme.mediaQueries.l}) {
     position: absolute;
     top: 50%;
@@ -30,16 +30,11 @@ export const LogoContainer = styled.div`
 
 export const ConnectionInfo = styled.div`
   display: flex;
-  flex-direction: column;
   padding: ${props => props.theme.spaceUnits.xs} 0px;
-  justify-content: center;
-
-  @media (${props => props.theme.mediaQueries.m}) {
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    flex-direction: row;
-  }
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: row;
 `;
 
 export const ConnectionInfoItem = styled.div`
@@ -52,7 +47,6 @@ export const ConnectionInfoItem = styled.div`
     text-decoration: none;
     padding: ${props => props.theme.spaceUnits.xs} ${props => props.theme.spaceUnits.s};
     display: inline-block;
-    border-radius: 10px;
 
     &.active {
       background: ${props => props.theme.mainColors.secondaryDarkAlpha};
@@ -62,5 +56,18 @@ export const ConnectionInfoItem = styled.div`
       opacity: 1;
       background: ${props => props.theme.mainColors.secondaryDarkAlpha};
     }
+  }
+`;
+
+export const HeaderTitle = styled(Title)`
+  display: none;
+
+  a {
+    text-decoration: none;
+  }
+
+  @media (${props => props.theme.mediaQueries.m}) {
+    display: block;
+    margin-bottom: 0;
   }
 `;

@@ -2,6 +2,7 @@ import React from 'react';
 import { Spinner } from '~/storybook/components/Spinner/Spinner';
 import { useFundInvestmentHistory } from '~/queries/FundTradingInvestmentsHistory';
 import {
+  ScrollableTable,
   Table,
   HeaderCell,
   HeaderCellRightAlign,
@@ -45,50 +46,52 @@ export const FundInvestmentHistoryList: React.FC<FundInvestmentHistoryListProps>
   return (
     <Block>
       <SectionTitle>Investment history</SectionTitle>
-      <Table>
-        <thead>
-          <HeaderRow>
-            <HeaderCell>Time</HeaderCell>
-            <HeaderCell>Investor</HeaderCell>
-            <HeaderCell>Action</HeaderCell>
-            <HeaderCellRightAlign>Number of shares</HeaderCellRightAlign>
-            <HeaderCellRightAlign>Share price</HeaderCellRightAlign>
-            <HeaderCellRightAlign>Amount</HeaderCellRightAlign>
-            <HeaderCell>Asset</HeaderCell>
-            <HeaderCellRightAlign>Value in ETH</HeaderCellRightAlign>
-          </HeaderRow>
-        </thead>
-        <tbody>
-          {fundInvestment.map(investment => {
-            return (
-              <BodyRow key={investment.id}>
-                <BodyCell>
-                  <FormattedDate timestamp={investment.timestamp} />
-                </BodyCell>
-                <BodyCell>{investment.owner.id.substr(0, 8)}...</BodyCell>
-                <BodyCell>{investment.action}</BodyCell>
-                <BodyCellRightAlign>
-                  <FormattedNumber value={fromTokenBaseUnit(investment.shares, 18)}></FormattedNumber>
-                </BodyCellRightAlign>
-                <BodyCellRightAlign>
-                  <FormattedNumber value={fromTokenBaseUnit(investment.sharePrice, 18)}></FormattedNumber>
-                </BodyCellRightAlign>
-                <BodyCellRightAlign>
-                  <FormattedNumber
-                    value={fromTokenBaseUnit(investment.amount, investment.asset.decimals)}
-                  ></FormattedNumber>
-                </BodyCellRightAlign>
-                <BodyCell>{investment.asset.symbol}</BodyCell>
-                <BodyCellRightAlign>
-                  <FormattedNumber
-                    value={fromTokenBaseUnit(investment.amountInDenominationAsset, 18)}
-                  ></FormattedNumber>
-                </BodyCellRightAlign>
-              </BodyRow>
-            );
-          })}
-        </tbody>
-      </Table>
+      <ScrollableTable>
+        <Table>
+          <thead>
+            <HeaderRow>
+              <HeaderCell>Time</HeaderCell>
+              <HeaderCell>Investor</HeaderCell>
+              <HeaderCell>Action</HeaderCell>
+              <HeaderCellRightAlign>Number of shares</HeaderCellRightAlign>
+              <HeaderCellRightAlign>Share price</HeaderCellRightAlign>
+              <HeaderCellRightAlign>Amount</HeaderCellRightAlign>
+              <HeaderCell>Asset</HeaderCell>
+              <HeaderCellRightAlign>Value in ETH</HeaderCellRightAlign>
+            </HeaderRow>
+          </thead>
+          <tbody>
+            {fundInvestment.map(investment => {
+              return (
+                <BodyRow key={investment.id}>
+                  <BodyCell>
+                    <FormattedDate timestamp={investment.timestamp} />
+                  </BodyCell>
+                  <BodyCell>{investment.owner.id.substr(0, 8)}...</BodyCell>
+                  <BodyCell>{investment.action}</BodyCell>
+                  <BodyCellRightAlign>
+                    <FormattedNumber value={fromTokenBaseUnit(investment.shares, 18)}></FormattedNumber>
+                  </BodyCellRightAlign>
+                  <BodyCellRightAlign>
+                    <FormattedNumber value={fromTokenBaseUnit(investment.sharePrice, 18)}></FormattedNumber>
+                  </BodyCellRightAlign>
+                  <BodyCellRightAlign>
+                    <FormattedNumber
+                      value={fromTokenBaseUnit(investment.amount, investment.asset.decimals)}
+                    ></FormattedNumber>
+                  </BodyCellRightAlign>
+                  <BodyCell>{investment.asset.symbol}</BodyCell>
+                  <BodyCellRightAlign>
+                    <FormattedNumber
+                      value={fromTokenBaseUnit(investment.amountInDenominationAsset, 18)}
+                    ></FormattedNumber>
+                  </BodyCellRightAlign>
+                </BodyRow>
+              );
+            })}
+          </tbody>
+        </Table>
+      </ScrollableTable>
     </Block>
   );
 };

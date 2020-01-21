@@ -12,11 +12,13 @@ export default { title: 'Atoms|Checkbox' };
 export const Default: React.FC = () => {
   return (
     <CheckboxContainer>
-      <CheckboxInput type="checkbox" id="idcheckbox" name="my_checkbox" value="1" />
+      <CheckboxLabel htmlFor="idcheckbox">I'm a label</CheckboxLabel>
+
       <CheckboxMask>
+        <CheckboxInput type="checkbox" id="idcheckbox" name="my_checkbox" value="1" />
+
         <CheckboxIcon></CheckboxIcon>
       </CheckboxMask>
-      <CheckboxLabel htmlFor="idcheckbox">I'm a label</CheckboxLabel>
     </CheckboxContainer>
   );
 };

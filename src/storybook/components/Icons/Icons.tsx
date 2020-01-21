@@ -8,19 +8,19 @@ import MKR from './svg/MKR.svg';
 import MLN from './svg/MLN.svg';
 import REP from './svg/REP.svg';
 import ZRX from './svg/ZRX.svg';
-import Metamask from './svg/Metamask.svg';
-import Frame from './svg/Frame.svg';
-import Ganache from './svg/Ganache.svg';
+import METAMASK from './svg/Metamask.svg';
+import FRAME from './svg/Frame.svg';
+import GANACHE from './svg/Ganache.svg';
 
-export interface IconsProps {
-  name: 'BAT' | 'DAI' | 'ETH' | 'KNC' | 'MKR' | 'MLN' | 'REP' | 'ZRX' | 'Metamask' | 'Frame' | 'Ganache';
-}
+export type IconsProps = React.ComponentProps<typeof L.IconsWrapper> & {
+  name: 'BAT' | 'DAI' | 'ETH' | 'KNC' | 'MKR' | 'MLN' | 'REP' | 'ZRX' | 'METAMASK' | 'FRAME' | 'GANACHE';
+};
 
-const icons = { BAT, DAI, ETH, KNC, MKR, MLN, REP, ZRX, Metamask, Frame, Ganache };
+const icons = { BAT, DAI, ETH, KNC, MKR, MLN, REP, ZRX, METAMASK, FRAME, GANACHE };
 
-export const Icons: React.FC<IconsProps> = ({ name }) => {
+export const Icons: React.FC<IconsProps> = ({ name, ...props }) => {
   return (
-    <L.IconsWrapper>
+    <L.IconsWrapper {...props}>
       <L.Img src={icons[name]} />
     </L.IconsWrapper>
   );

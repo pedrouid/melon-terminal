@@ -14,8 +14,8 @@ export const Headline = styled.div`
 `;
 
 export const HeadlineIcon = styled.div<HeadlineIconProps>`
-  width: 50px;
-  height: 50px;
+  width: 52px;
+  height: 52px;
   margin-right: ${props => props.theme.spaceUnits.s};
   background-image: ${props => (props.icon === 'wallet' ? `url(${wallet})` : `url(${fund})`)};
 `;

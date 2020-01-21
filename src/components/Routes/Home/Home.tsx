@@ -17,6 +17,7 @@ import { Container } from '~/storybook/components/Container/Container';
 import { FormattedDate } from '~/components/Common/FormattedDate/FormattedDate';
 import { FormattedNumber } from '~/components/Common/FormattedNumber/FormattedNumber';
 import {
+  ScrollableTable,
   Table,
   HeaderRow,
   HeaderCell,
@@ -24,7 +25,16 @@ import {
   BodyCellRightAlign,
   BodyRow,
   BodyCell,
+  BodyRowHover,
 } from '~/storybook/components/Table/Table';
+import {
+  CheckboxMask,
+  CheckboxLabel,
+  CheckboxContainer,
+  CheckboxPositioning,
+  CheckboxInput,
+  CheckboxIcon,
+} from '~/storybook/components/Checkbox/Checkbox';
 
 interface SortChoice {
   key: keyof typeof sortChoice;
@@ -67,24 +77,25 @@ const sortChoice = {
   sharePrice: createSortNumberFromString('sharePrice'),
   change: sortChange,
   shares: createSortNumberFromString('shares'),
-  denomination: createSortString('denomination'),
-  investments: createSortString('investments'),
   version: createSortString('version'),
   status: createSortString('status'),
 };
 
-const useFilteredFunds = (funds: FundProcessed[], search: string) => {
-  const filteredFunds = useMemo(() => {
-    if (!funds || !search) {
+const useFilteredFunds = (funds: FundProcessed[], search: string, filter: boolean) => {
+  const filtered = useMemo(() => {
+    if (!search && !filter) {
       return funds;
     }
 
-    return funds.filter(({ name }) => name.toLowerCase().includes(search));
-  }, [funds, search]);
+    return funds.filter(({ name, status }) => {
+      const matches = !search || name.toLowerCase().includes(search);
+      return matches && (!filter || status === 'Active');
+    });
+  }, [funds, search, filter]);
 
   return {
     search,
-    funds: filteredFunds,
+    funds: filtered,
   };
 };
 
@@ -148,17 +159,7 @@ const tableHeadings = [
     align: 'right',
   },
   {
-    value: 'Denomination asset',
-    key: 'denomination',
-    align: 'left',
-  },
-  {
-    value: 'Investments',
-    key: 'investments',
-    align: 'right',
-  },
-  {
-    value: 'Protocol version',
+    value: 'Version',
     key: 'version',
     align: 'left',
   },
@@ -173,10 +174,11 @@ export const Home: React.FC = () => {
   const history = useHistory();
   const [funds, query] = useFundOverviewQuery();
   const [search, setSearch] = useState('');
+  const [filter, setFilter] = useState(false);
 
-  const filtered = useFilteredFunds(funds, search);
+  const filtered = useFilteredFunds(funds, search, filter);
   const sorted = useSortedFunds(filtered.funds);
-  const pagination = usePagination(sorted.funds);
+  const pagination = usePagination(sorted.funds, 15);
   const account = useAccount();
 
   useEffect(() => {
@@ -191,29 +193,6 @@ export const Home: React.FC = () => {
             <GridCol>
               <Block>
                 <Spinner />
-              </Block>
-            </GridCol>
-          </GridRow>
-        </Grid>
-      </Container>
-    );
-  }
-
-  if (!funds) {
-    return (
-      <Container>
-        <Grid>
-          <GridRow>
-            <GridCol>
-              <Block>
-                <NoMatch />
-                {!account.fund && (
-                  <BlockActions>
-                    <Link to="/wallet/setup">
-                      <Button>Create your own Melon fund</Button>
-                    </Link>
-                  </BlockActions>
-                )}
               </Block>
             </GridCol>
           </GridRow>
@@ -242,81 +221,110 @@ export const Home: React.FC = () => {
         <GridRow>
           <GridCol>
             <Block>
-              <SectionTitle>Melon fund universe</SectionTitle>
-              <FormField label="Search">
-                <Input id="search" name="search" type="text" onChange={event => setSearch(event.target.value)} />
-              </FormField>
-              <FundOverviewPagination
-                offset={pagination.offset}
-                setOffset={pagination.setOffset}
-                funds={filtered.funds.length}
-              />
-
-              <Table>
-                <thead>
-                  <HeaderRow>
-                    {tableHeadings.map((heading, key) =>
-                      heading.align === 'left' ? (
-                        <HeaderCell
-                          key={key}
-                          onClick={heading.key ? () => handleChangeSortableItem(heading.key) : undefined}
-                        >
-                          {heading.value}
-                          {sorted.item.key === heading.key && (sorted.item.order === 'asc' ? <>&uarr;</> : <>&darr;</>)}
-                        </HeaderCell>
-                      ) : (
-                        <HeaderCellRightAlign
-                          key={key}
-                          onClick={heading.key ? () => handleChangeSortableItem(heading.key) : undefined}
-                        >
-                          {heading.value}
-                          {sorted.item.key === heading.key && (sorted.item.order === 'asc' ? <>&uarr;</> : <>&darr;</>)}
-                        </HeaderCellRightAlign>
-                      )
-                    )}
-                  </HeaderRow>
-                </thead>
-                <tbody>
-                  {pagination.data.length ? (
-                    pagination.data.map(fund => (
-                      <BodyRow key={fund.id} onClick={() => history.push(`/fund/${fund.id}`)}>
-                        <BodyCell>{fund.name}</BodyCell>
-                        <BodyCell>
-                          <FormattedDate timestamp={fund.inception} />
-                        </BodyCell>
-                        <BodyCellRightAlign>{fund.sharePrice}</BodyCellRightAlign>
-                        <BodyCellRightAlign>
-                          <FormattedNumber value={fund.change} colorize={true} decimals={2} suffix="%" />
-                        </BodyCellRightAlign>
-                        <BodyCellRightAlign>{fund.aumEth}</BodyCellRightAlign>
-                        <BodyCellRightAlign>{fund.aumUsd || ''}</BodyCellRightAlign>
-                        <BodyCellRightAlign>{fund.shares}</BodyCellRightAlign>
-                        <BodyCell>{fund.denomination}</BodyCell>
-                        <BodyCell>{fund.investments}</BodyCell>
-                        <BodyCell>{fund.version}</BodyCell>
-                        <BodyCell>{fund.status}</BodyCell>
-                      </BodyRow>
-                    ))
-                  ) : (
-                    <BodyRow>
-                      <BodyCell colSpan={12}>No records to display</BodyCell>
-                    </BodyRow>
-                  )}
-                </tbody>
-              </Table>
-
-              <FundOverviewPagination
-                offset={pagination.offset}
-                setOffset={pagination.setOffset}
-                funds={filtered.funds.length}
-              />
-              {!account.fund && (
-                <BlockActions>
+              <SectionTitle>
+                <span>Melon fund universe</span>
+                {!account.fund && (
                   <Link to="/wallet/setup">
                     <Button>Create your own Melon fund</Button>
                   </Link>
-                </BlockActions>
-              )}
+                )}
+              </SectionTitle>
+              <Grid>
+                <GridRow>
+                  <GridCol>
+                    <Input
+                      id="search"
+                      name="search"
+                      type="text"
+                      placeholder="Search"
+                      value={search}
+                      onChange={event => setSearch(event.target.value)}
+                    />
+                  </GridCol>
+
+                  <GridCol>
+                    <CheckboxContainer>
+                      <CheckboxLabel htmlFor="filter">Show only active funds </CheckboxLabel>
+
+                      <CheckboxPositioning>
+                        <CheckboxInput
+                          type="checkbox"
+                          id="filter"
+                          name="filter"
+                          checked={filter}
+                          onChange={event => setFilter(!filter)}
+                        />
+
+                        <CheckboxMask>
+                          <CheckboxIcon />
+                        </CheckboxMask>
+                      </CheckboxPositioning>
+                    </CheckboxContainer>
+                  </GridCol>
+                </GridRow>
+              </Grid>
+
+              <ScrollableTable>
+                <Table>
+                  <thead>
+                    <HeaderRow>
+                      {tableHeadings.map((heading, key) =>
+                        heading.align === 'left' ? (
+                          <HeaderCell
+                            key={key}
+                            onClick={heading.key ? () => handleChangeSortableItem(heading.key) : undefined}
+                          >
+                            {heading.value}
+                            {sorted.item.key === heading.key &&
+                              (sorted.item.order === 'asc' ? <>&uarr;</> : <>&darr;</>)}
+                          </HeaderCell>
+                        ) : (
+                          <HeaderCellRightAlign
+                            key={key}
+                            onClick={heading.key ? () => handleChangeSortableItem(heading.key) : undefined}
+                          >
+                            {heading.value}
+                            {sorted.item.key === heading.key &&
+                              (sorted.item.order === 'asc' ? <>&uarr;</> : <>&darr;</>)}
+                          </HeaderCellRightAlign>
+                        )
+                      )}
+                    </HeaderRow>
+                  </thead>
+                  <tbody>
+                    {pagination.data.length ? (
+                      pagination.data.map(fund => (
+                        <BodyRowHover key={fund.id} title={fund.name} onClick={() => history.push(`/fund/${fund.id}`)}>
+                          <BodyCell maxWidth="200px">{fund.name}</BodyCell>
+                          <BodyCell>
+                            <FormattedDate timestamp={fund.inception} format="yyyy/MM/dd" />
+                          </BodyCell>
+                          <BodyCellRightAlign>{fund.sharePrice}</BodyCellRightAlign>
+                          <BodyCellRightAlign>
+                            <FormattedNumber value={fund.change} colorize={true} decimals={2} suffix="%" />
+                          </BodyCellRightAlign>
+                          <BodyCellRightAlign>{fund.aumEth}</BodyCellRightAlign>
+                          <BodyCellRightAlign>{fund.aumUsd || ''}</BodyCellRightAlign>
+                          <BodyCellRightAlign>{fund.shares}</BodyCellRightAlign>
+                          <BodyCell>{fund.version}</BodyCell>
+                          <BodyCell>{fund.status}</BodyCell>
+                        </BodyRowHover>
+                      ))
+                    ) : (
+                      <BodyRow>
+                        <BodyCell colSpan={12}>No records to display</BodyCell>
+                      </BodyRow>
+                    )}
+                  </tbody>
+                </Table>
+              </ScrollableTable>
+              <BlockActions>
+                <FundOverviewPagination
+                  offset={pagination.offset}
+                  setOffset={pagination.setOffset}
+                  funds={filtered.funds.length}
+                />
+              </BlockActions>
             </Block>
           </GridCol>
         </GridRow>

@@ -4,6 +4,7 @@ import { useFundHoldingsQuery } from '~/queries/FundHoldings';
 import * as S from './FundHoldings.styles';
 import BigNumber from 'bignumber.js';
 import {
+  ScrollableTable,
   Table,
   HeaderCell,
   HeaderCellRightAlign,
@@ -38,44 +39,46 @@ export const FundHoldings: React.FC<FundHoldingsProps> = ({ address }) => {
   return (
     <Block>
       <SectionTitle>Portfolio holdings</SectionTitle>
-      <Table>
-        <thead>
-          <HeaderRow>
-            <HeaderCell>Asset</HeaderCell>
-            <HeaderCellRightAlign>Price</HeaderCellRightAlign>
-            <HeaderCellRightAlign>Balance</HeaderCellRightAlign>
-            <HeaderCellRightAlign>Value in ETH</HeaderCellRightAlign>
-            <HeaderCellRightAlign>% allocation</HeaderCellRightAlign>
-          </HeaderRow>
-        </thead>
-        <tbody>
-          {holdings.map(holding => (
-            <BodyRow key={holding.token?.address}>
-              <BodyCell>
-                <S.HoldingSymbol>{holding.token?.symbol}</S.HoldingSymbol>
-                <br />
-                <S.HoldingName>{holding.token?.name}</S.HoldingName>
-              </BodyCell>
-              <BodyCellRightAlign>
-                <FormattedNumber value={holding.token?.price} />
-              </BodyCellRightAlign>
-              <BodyCellRightAlign>
-                <FormattedNumber value={holding.amount?.dividedBy('1e18').toFixed(4)} />
-              </BodyCellRightAlign>
-              <BodyCellRightAlign>
-                <FormattedNumber value={holding.valueInDenominationAsset?.dividedBy('1e18').toFixed(4)} />
-              </BodyCellRightAlign>
-              <BodyCellRightAlign>
-                <FormattedNumber
-                  value={holding.valueInDenominationAsset?.dividedBy(totalValue).times(100)}
-                  decimals={2}
-                  suffix="%"
-                />
-              </BodyCellRightAlign>
-            </BodyRow>
-          ))}
-        </tbody>
-      </Table>
+      <ScrollableTable>
+        <Table>
+          <thead>
+            <HeaderRow>
+              <HeaderCell>Asset</HeaderCell>
+              <HeaderCellRightAlign>Price</HeaderCellRightAlign>
+              <HeaderCellRightAlign>Balance</HeaderCellRightAlign>
+              <HeaderCellRightAlign>Value in ETH</HeaderCellRightAlign>
+              <HeaderCellRightAlign>% allocation</HeaderCellRightAlign>
+            </HeaderRow>
+          </thead>
+          <tbody>
+            {holdings.map(holding => (
+              <BodyRow key={holding.token?.address}>
+                <BodyCell>
+                  <S.HoldingSymbol>{holding.token?.symbol}</S.HoldingSymbol>
+                  <br />
+                  <S.HoldingName>{holding.token?.name}</S.HoldingName>
+                </BodyCell>
+                <BodyCellRightAlign>
+                  <FormattedNumber value={holding.token?.price} />
+                </BodyCellRightAlign>
+                <BodyCellRightAlign>
+                  <FormattedNumber value={holding.amount?.dividedBy('1e18').toFixed(4)} />
+                </BodyCellRightAlign>
+                <BodyCellRightAlign>
+                  <FormattedNumber value={holding.valueInDenominationAsset?.dividedBy('1e18').toFixed(4)} />
+                </BodyCellRightAlign>
+                <BodyCellRightAlign>
+                  <FormattedNumber
+                    value={holding.valueInDenominationAsset?.dividedBy(totalValue).times(100)}
+                    decimals={2}
+                    suffix="%"
+                  />
+                </BodyCellRightAlign>
+              </BodyRow>
+            ))}
+          </tbody>
+        </Table>
+      </ScrollableTable>
     </Block>
   );
 };

@@ -10,7 +10,15 @@ import {
   AssetBlacklistPolicy,
 } from '~/queries/FundPolicies';
 import { useEnvironment } from '~/hooks/useEnvironment';
-import { Table, HeaderCell, HeaderRow, BodyCell, BodyRow, NoEntries } from '~/storybook/components/Table/Table';
+import {
+  ScrollableTable,
+  Table,
+  HeaderCell,
+  HeaderRow,
+  BodyCell,
+  BodyRow,
+  NoEntries,
+} from '~/storybook/components/Table/Table';
 import { MaxConcentration } from './MaxConcentration/MaxConcentration';
 import { CustomPolicy } from './CustomPolicy/CustomPolicy';
 import { MaxPositions } from './MaxPositions/MaxPositions';
@@ -86,22 +94,24 @@ export const FundPolicies: React.FC<FundPoliciesProps> = ({ address }) => {
     <Block>
       <SectionTitle>Fund ruleset</SectionTitle>
       {policies && policies.length ? (
-        <Table>
-          <thead>
-            <HeaderRow>
-              <HeaderCell>Name</HeaderCell>
-              <HeaderCell>Parameter(s)</HeaderCell>
-            </HeaderRow>
-          </thead>
-          <tbody>
-            {policies.map(policy => (
-              <BodyRow key={policy.address}>
-                <BodyCell>{policy.identifier}</BodyCell>
-                <FundPoliciesParameters policy={policy} environment={environment} />
-              </BodyRow>
-            ))}
-          </tbody>
-        </Table>
+        <ScrollableTable>
+          <Table>
+            <thead>
+              <HeaderRow>
+                <HeaderCell>Name</HeaderCell>
+                <HeaderCell>Parameter(s)</HeaderCell>
+              </HeaderRow>
+            </thead>
+            <tbody>
+              {policies.map(policy => (
+                <BodyRow key={policy.address}>
+                  <BodyCell>{policy.identifier}</BodyCell>
+                  <FundPoliciesParameters policy={policy} environment={environment} />
+                </BodyRow>
+              ))}
+            </tbody>
+          </Table>
+        </ScrollableTable>
       ) : (
         <NoEntries>No fund rules registered.</NoEntries>
       )}

@@ -10,17 +10,19 @@ import {
   LogoContainer,
   ConnectionInfo,
   ConnectionInfoItem,
+  HeaderTitle,
 } from '~/storybook/components/Header/Header';
 import { Footer, FooterNavigation, FooterItem } from '~/storybook/components/Footer/Footer';
 import { Logo } from '~/storybook/components/Logo/Logo';
 import { ConnectionSelector } from './ConnectionSelector/ConnectionSelector';
-import { FormattedNumber } from '~/components/Common/FormattedNumber/FormattedNumber';
-import { fromTokenBaseUnit } from '~/utils/fromTokenBaseUnit';
+import { useConnectionState } from '~/hooks/useConnectionState';
+import { useEnvironment } from '~/hooks/useEnvironment';
 
 const graphiql = JSON.parse(process.env.MELON_INCLUDE_GRAPHIQL || 'false');
 
 export const Layout: React.FC = ({ children }) => {
   const [update] = usePriceFeedUpdateQuery();
+  const environment = useEnvironment();
   const account = useAccount();
 
   return (
@@ -28,16 +30,15 @@ export const Layout: React.FC = ({ children }) => {
       <SkeletonHead>
         <HeaderContainer>
           <HeaderContent>
+            <HeaderTitle>
+              <Link to="/">Melon Manager Interface</Link>
+            </HeaderTitle>
             <LogoContainer>
               <Link to="/">
                 <Logo name="with-bottom-text" size="small" />
               </Link>
             </LogoContainer>
             <ConnectionInfo>
-              <ConnectionInfoItem>
-                <ConnectionSelector />
-              </ConnectionInfoItem>
-
               {account.fund && (
                 <ConnectionInfoItem>
                   <NavLink to={`/fund/${account.fund}`} title={account.fund} activeClassName="active">
@@ -53,12 +54,9 @@ export const Layout: React.FC = ({ children }) => {
                   </NavLink>
                 </ConnectionInfoItem>
               )}
-
-              {account.eth && (
-                <ConnectionInfoItem>
-                  <FormattedNumber value={fromTokenBaseUnit(account.eth!, 18)} suffix="ETH" />
-                </ConnectionInfoItem>
-              )}
+              <ConnectionInfoItem>
+                <ConnectionSelector />
+              </ConnectionInfoItem>
             </ConnectionInfo>
           </HeaderContent>
         </HeaderContainer>
@@ -93,6 +91,8 @@ export const Layout: React.FC = ({ children }) => {
                 <span>Last pricefeed update at {format(update, 'yyyy-MM-dd hh:mm a')}</span>
               </FooterItem>
             )}
+
+            {environment?.network && <FooterItem>{environment.network}</FooterItem>}
           </FooterNavigation>
         </Footer>
       </SkeletonFeet>

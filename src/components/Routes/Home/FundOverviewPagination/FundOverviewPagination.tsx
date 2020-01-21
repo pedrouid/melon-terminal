@@ -12,11 +12,11 @@ export const FundOverviewPagination: React.FC<FundOverviewPaginationProps> = ({ 
   return (
     <Pagination
       hasPrevious={offset <= 0}
-      hasNext={offset + 20 >= funds}
-      previous={() => setOffset(offset - 20)}
-      next={() => setOffset(offset + 20)}
+      hasNext={offset + 15 >= funds}
+      previous={() => setOffset(offset - 15)}
+      next={() => setOffset(offset + 15)}
       first={() => setOffset(0)}
-      last={() => setOffset(funds - (funds % 20))}
+      last={() => setOffset(funds - (funds % 15))}
       actual={offset}
       totalItems={funds}
     />

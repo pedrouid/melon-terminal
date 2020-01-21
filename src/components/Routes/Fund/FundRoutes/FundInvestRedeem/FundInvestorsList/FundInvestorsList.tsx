@@ -3,6 +3,7 @@ import { Spinner } from '~/storybook/components/Spinner/Spinner';
 import { useFundInvestments } from '~/queries/FundInvestments';
 import { weiToString } from '~/utils/weiToString';
 import {
+  ScrollableTable,
   Table,
   HeaderCell,
   HeaderCellRightAlign,
@@ -43,24 +44,26 @@ export const FundInvestorsList: React.FC<FundInvestorsListProps> = ({ address })
   return (
     <Block>
       <SectionTitle>Investors</SectionTitle>
-      <Table>
-        <thead>
-          <HeaderRow>
-            <HeaderCell>Investor</HeaderCell>
-            <HeaderCellRightAlign>Shares</HeaderCellRightAlign>
-          </HeaderRow>
-        </thead>
-        <tbody>
-          {fundInvestements.map(investement => {
-            return (
-              <BodyRow key={investement.id}>
-                <BodyCell>{investement.owner.id}</BodyCell>
-                <BodyCellRightAlign>{weiToString(investement.shares.toString(), 4)}</BodyCellRightAlign>
-              </BodyRow>
-            );
-          })}
-        </tbody>
-      </Table>
+      <ScrollableTable>
+        <Table>
+          <thead>
+            <HeaderRow>
+              <HeaderCell>Investor</HeaderCell>
+              <HeaderCellRightAlign>Shares</HeaderCellRightAlign>
+            </HeaderRow>
+          </thead>
+          <tbody>
+            {fundInvestements.map(investement => {
+              return (
+                <BodyRow key={investement.id}>
+                  <BodyCell>{investement.owner.id}</BodyCell>
+                  <BodyCellRightAlign>{weiToString(investement.shares.toString(), 4)}</BodyCellRightAlign>
+                </BodyRow>
+              );
+            })}
+          </tbody>
+        </Table>
+      </ScrollableTable>
     </Block>
   );
 };

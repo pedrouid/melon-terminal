@@ -137,7 +137,7 @@ export const Global = createGlobalStyle`
 
   body {
     position: relative;
-    font-family: 'Source Serif Pro', serif;
+    font-family: monospace;
     font-size: 14px;
     line-height: 1.4;
     margin: 0;

@@ -9,7 +9,7 @@ import { useAccount } from '~/hooks/useAccount';
 import { Block } from '~/storybook/components/Block/Block';
 import { SectionTitle } from '~/storybook/components/Title/Title';
 import { GridRow, Grid, GridCol } from '~/storybook/components/Grid/Grid';
-import { BodyRow, BodyCell, HeaderCell, Table, HeaderRow } from '~/storybook/components/Table/Table';
+import { ScrollableTable, BodyRow, BodyCell, HeaderCell, Table, HeaderRow } from '~/storybook/components/Table/Table';
 
 const fundHeadings = ['Name', 'Inception', 'AUM [ETH]', 'Share price', 'Change', '# shares', 'Version', 'Status'];
 const redeemHeadings = ['Name', 'Inception', 'AUM [ETH]', 'Share price', 'Change', '# shares', 'Version', 'Status'];
@@ -57,12 +57,14 @@ export const WalletOverview: React.FC = () => {
             {query.loading && <Spinner />}
 
             {!query.loading && (
-              <Table>
-                <thead>
-                  <HeaderRow>{managedHeader}</HeaderRow>
-                </thead>
-                <tbody>{managedRows}</tbody>
-              </Table>
+              <ScrollableTable>
+                <Table>
+                  <thead>
+                    <HeaderRow>{managedHeader}</HeaderRow>
+                  </thead>
+                  <tbody>{managedRows}</tbody>
+                </Table>
+              </ScrollableTable>
             )}
           </Block>
         </GridCol>
@@ -74,12 +76,14 @@ export const WalletOverview: React.FC = () => {
             {query.loading && <Spinner />}
 
             {!query.loading && (
-              <Table>
-                <thead>
-                  <HeaderRow>{investedHeader}</HeaderRow>
-                </thead>
-                <tbody>{investedRows}</tbody>
-              </Table>
+              <ScrollableTable>
+                <Table>
+                  <thead>
+                    <HeaderRow>{investedHeader}</HeaderRow>
+                  </thead>
+                  <tbody>{investedRows}</tbody>
+                </Table>
+              </ScrollableTable>
             )}
           </Block>
         </GridCol>
@@ -91,12 +95,14 @@ export const WalletOverview: React.FC = () => {
             {query.loading && <Spinner />}
 
             {!query.loading && (
-              <Table>
-                <thead>
-                  <HeaderRow>{requestsHeader}</HeaderRow>
-                </thead>
-                <tbody>{requestsRows}</tbody>
-              </Table>
+              <ScrollableTable>
+                <Table>
+                  <thead>
+                    <HeaderRow>{requestsHeader}</HeaderRow>
+                  </thead>
+                  <tbody>{requestsRows}</tbody>
+                </Table>
+              </ScrollableTable>
             )}
           </Block>
         </GridCol>

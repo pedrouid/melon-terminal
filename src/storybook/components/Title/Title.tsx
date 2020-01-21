@@ -19,4 +19,12 @@ export const SectionTitle = styled.h2`
   padding-bottom: ${props => props.theme.spaceUnits.xs};
   border-bottom : ${props => props.theme.border.borderSecondary};
   margin-bottom: ${props => props.theme.spaceUnits.m};
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+
+  @media (${props => props.theme.mediaQueries.s}) {
+    display: flex;
+    justify-content: space-between;
+  }
 `;

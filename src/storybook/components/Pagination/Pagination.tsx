@@ -27,7 +27,7 @@ export const Pagination: React.FC<PaginationProps> = ({
       {!hasPrevious && <S.Button onClick={first}>|&lt;</S.Button>}
       {!hasPrevious && <S.Button onClick={previous}>&lt;</S.Button>}
     </S.ButtonWrapper>
-    <S.Span>{`${actual + 1}-${actual + 20 > totalItems ? totalItems : actual + 20} of ${totalItems}`}</S.Span>
+    <S.Span>{`${actual + 1}-${actual + 15 > totalItems ? totalItems : actual + 15} of ${totalItems}`}</S.Span>
     <S.ButtonWrapper>
       {!hasNext && <S.Button onClick={next}>&gt;</S.Button>}
       {!hasNext && <S.Button onClick={last}>&gt;|</S.Button>}

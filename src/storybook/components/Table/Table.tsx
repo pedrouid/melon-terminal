@@ -1,12 +1,18 @@
 import styled, { css } from 'styled-components';
 
+export const ScrollableTable = styled.div`
+  overflow: auto;
+  display: block;
+  overflow-x: auto;
+  white-space: nowrap;
+`;
+
 export const Table = styled.table`
   background-color: ${props => props.theme.otherColors.white};
   margin-top: ${props => props.theme.spaceUnits.m};
   margin-bottom: ${props => props.theme.spaceUnits.m};
   width: 100%;
   border-spacing: 0;
-  border-collapse: collapse;
 `;
 
 export const HeaderCell = styled.th`
@@ -24,7 +30,20 @@ export const HeaderRow = styled.tr`
   border-bottom: 1px solid ${props => props.theme.mainColors.border};
 `;
 
-export const BodyCell = styled.td`
+export interface BodyCellProps {
+  maxWidth?: string;
+}
+
+export const BodyCell = styled.td<BodyCellProps>`
+  ${props =>
+    props.maxWidth &&
+    `
+    max-width: ${props.maxWidth};
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  `}
+  
   padding: ${props => props.theme.spaceUnits.s};
 `;
 
@@ -38,6 +57,7 @@ export interface BodyRowProps {
 }
 
 export const BodyRow = styled.tr<BodyRowProps>`
+  line-height: 1;
   border-top: 1px solid ${props => props.theme.mainColors.secondaryDarkAlpha};
 
   &:not(:last-child) {

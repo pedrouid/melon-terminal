@@ -1,11 +1,20 @@
 import React from 'react';
 import { useEtherscanLink } from '~/hooks/useEtherscanLink';
 import { toChecksumAddress, isAddress } from 'web3-utils';
+import styled from 'styled-components';
 
 export interface EtherscanLinkProps {
   address?: string;
   hash?: string;
 }
+
+const OverflowEllipsis = styled.a`
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  display: block;
+  cursor: pointer;
+`;
 
 export const EtherscanLink: React.FC<EtherscanLinkProps> = props => {
   const args: EtherscanLinkProps = {
@@ -16,8 +25,8 @@ export const EtherscanLink: React.FC<EtherscanLinkProps> = props => {
   const link = useEtherscanLink(args);
 
   return (
-    <a href={link!} target="_blank">
+    <OverflowEllipsis href={link!} target="_blank">
       {args.address || args.hash}
-    </a>
+    </OverflowEllipsis>
   );
 };
