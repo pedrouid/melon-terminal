@@ -24,20 +24,16 @@ export const DictionaryEntry = styled.div`
 `;
 
 export const DictionaryLabel = styled.div`
-  align-self: flex-end;
-  font-size: ${props => props.theme.fontSizes.m};
   color: ${props => props.theme.mainColors.secondaryDark};
   @media (${props => props.theme.mediaQueries.s}) {
-    width: 30%;
+    width: 40%;
   }
 `;
 
 export const DictionaryData = styled.div`
-  align-self: flex-end;
-  font-size: ${props => props.theme.fontSizes.l};
   width: 100%;
   @media (${props => props.theme.mediaQueries.s}) {
-    width: 70%;
+    width: 60%;
     padding-left: ${props => props.theme.spaceUnits.s};
   }
 `;

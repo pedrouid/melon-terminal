@@ -16,15 +16,15 @@ export const FundOverview: React.FC<FundOverviewProps> = ({ address }) => (
         <FundFactSheet address={address} />
       </GridCol>
       <GridCol xs={12} sm={6}>
-        <FundContracts address={address} />
+        <FundHoldings address={address} />
       </GridCol>
     </GridRow>
     <GridRow>
       <GridCol xs={12} sm={6}>
-        <FundHoldings address={address} />
+        <FundPolicies address={address} />
       </GridCol>
       <GridCol xs={12} sm={6}>
-        <FundPolicies address={address} />
+        <FundContracts address={address} />
       </GridCol>
     </GridRow>
   </Grid>

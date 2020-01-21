@@ -225,7 +225,7 @@ export const FundFactSheet: React.FC<FundFactSheetProps> = ({ address }) => {
         <DictionaryData>{exchangeNames ? exchangeNames.sort().join(', ') : 'N/A'}</DictionaryData>
       </DictionaryEntry>
       <DictionaryEntry>
-        <DictionaryLabel>Allowed investment assets</DictionaryLabel>
+        <DictionaryLabel>Investable assets</DictionaryLabel>
         <DictionaryData>{allowedAssetsSymbols ? allowedAssetsSymbols.sort().join(', ') : 'N/A'}</DictionaryData>
       </DictionaryEntry>
     </Dictionary>

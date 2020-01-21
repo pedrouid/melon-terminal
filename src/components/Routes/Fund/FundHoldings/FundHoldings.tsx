@@ -46,8 +46,8 @@ export const FundHoldings: React.FC<FundHoldingsProps> = ({ address }) => {
               <HeaderCell>Asset</HeaderCell>
               <HeaderCellRightAlign>Price</HeaderCellRightAlign>
               <HeaderCellRightAlign>Balance</HeaderCellRightAlign>
-              <HeaderCellRightAlign>Value in ETH</HeaderCellRightAlign>
-              <HeaderCellRightAlign>% allocation</HeaderCellRightAlign>
+              <HeaderCellRightAlign>Value [ETH]</HeaderCellRightAlign>
+              <HeaderCellRightAlign>Allocation</HeaderCellRightAlign>
             </HeaderRow>
           </thead>
           <tbody>
