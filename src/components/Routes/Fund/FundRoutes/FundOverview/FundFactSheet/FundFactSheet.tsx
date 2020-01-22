@@ -94,6 +94,10 @@ export const FundFactSheet: React.FC<FundFactSheetProps> = ({ address }) => {
     returnSinceInception &&
     (Math.pow(1 + returnSinceInception / 100, oneYear / (afterChange.timestamp - firstChange.timestamp)) - 1) * 100;
 
+  const creationTime = creation.getTime() || Date.now();
+  const oneMonthAgo = Date.now() - 30 * 24 * 60 * 60 * 1000;
+  const olderThanOneMonth = creationTime < oneMonthAgo;
+
   const volatility =
     normalizedCalculations &&
     standardDeviation(normalizedCalculations.map(item => item.logReturn)) * 100 * Math.sqrt(365.25);
@@ -207,13 +211,21 @@ export const FundFactSheet: React.FC<FundFactSheetProps> = ({ address }) => {
       <DictionaryEntry>
         <DictionaryLabel>Annualized return</DictionaryLabel>
         <DictionaryData>
-          <FormattedNumber value={annualizedReturn} colorize={true} decimals={2} suffix="%" />
+          {olderThanOneMonth ? (
+            <FormattedNumber value={annualizedReturn} colorize={true} decimals={2} suffix="%" />
+          ) : (
+            <>Too early to tell</>
+          )}
         </DictionaryData>
       </DictionaryEntry>
       <DictionaryEntry>
         <DictionaryLabel>Annual volatility</DictionaryLabel>
         <DictionaryData>
-          <FormattedNumber value={volatility} colorize={false} decimals={2} suffix="%" />
+          {olderThanOneMonth ? (
+            <FormattedNumber value={volatility} colorize={false} decimals={2} suffix="%" />
+          ) : (
+            <>Too early to tell</>
+          )}
         </DictionaryData>
       </DictionaryEntry>
       <DictionaryEntry>
