@@ -31,11 +31,15 @@ export const WalletWrapEther: React.FC = () => {
     quantityEth: Yup.mixed<BigNumber>()
       .transform((value, _) => new BigNumber(value))
       .test('positive', 'Amount of ETH has to be positive', (value: BigNumber) => value.isGreaterThan(0))
-      .test('balance', 'Not enough ETH in wallet', (value: BigNumber) => !!account.eth?.isGreaterThanOrEqualTo(value)),
+      .test(
+        'balance',
+        'Not enough ETH in wallet',
+        (value: BigNumber) => !!account.eth?.isGreaterThanOrEqualTo(toTokenBaseUnit(value, 18))
+      ),
   });
 
   const defaultValues = {
-    quantityEth: account.eth?.isLessThan(new BigNumber(1)) ? account.eth : new BigNumber(1),
+    quantityEth: account.eth?.isLessThan(new BigNumber('1e18')) ? fromTokenBaseUnit(account.eth, 18) : new BigNumber(1),
   };
 
   const form = useForm<typeof defaultValues>({

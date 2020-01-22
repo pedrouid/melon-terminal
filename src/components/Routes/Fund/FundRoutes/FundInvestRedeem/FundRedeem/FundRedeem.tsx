@@ -52,7 +52,7 @@ export const FundRedeem: React.FC<FundRedeemProps> = ({ address }) => {
       .test(
         'smallerThanBalance',
         'Number of shares has to be equal or less than number of shares owned',
-        (value: BigNumber) => !!(shares?.balanceOf && value?.isLessThanOrEqualTo(shares?.balanceOf))
+        (value: BigNumber) => !!(shares?.balanceOf && value.isLessThanOrEqualTo(shares?.balanceOf))
       ),
 
     redeemAll: Yup.boolean(),
@@ -110,15 +110,7 @@ export const FundRedeem: React.FC<FundRedeemProps> = ({ address }) => {
           <FormContext {...form}>
             <form onSubmit={submit}>
               <FormField name="shareQuantity" label="Number of shares to redeem">
-                <Input
-                  id="shareQuantity"
-                  name="shareQuantity"
-                  type="number"
-                  step="any"
-                  min="0"
-                  max={shares?.balanceOf?.toString()}
-                  disabled={redeemAll}
-                />
+                <Input id="shareQuantity" name="shareQuantity" type="number" step="any" disabled={redeemAll} />
               </FormField>
               <CheckboxContainer>
                 <CheckboxInput type="checkbox" ref={form.register} name="redeemAll" id="redeemAll" />

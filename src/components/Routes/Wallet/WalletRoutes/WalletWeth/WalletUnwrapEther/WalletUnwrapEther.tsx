@@ -34,12 +34,14 @@ export const WalletUnwrapEther: React.FC = () => {
       .test(
         'balance',
         'Not enough WETH in wallet',
-        (value: BigNumber) => !!account.weth?.isGreaterThanOrEqualTo(value)
+        (value: BigNumber) => !!account.weth?.isGreaterThanOrEqualTo(toTokenBaseUnit(value, 18))
       ),
   });
 
   const defaultValues = {
-    quantityWeth: account.weth?.isLessThan(new BigNumber(1)) ? account.weth : new BigNumber(1),
+    quantityWeth: account.weth?.isLessThan(new BigNumber('1e18'))
+      ? fromTokenBaseUnit(account.weth, 18)
+      : new BigNumber(1),
   };
 
   const form = useForm<typeof defaultValues>({

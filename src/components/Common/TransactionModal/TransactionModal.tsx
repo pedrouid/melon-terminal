@@ -13,6 +13,9 @@ import * as S from '~/storybook/components/Modal/Modal';
 import { EtherscanLink } from '../EtherscanLink/EtherscanLink';
 import { FormattedNumber } from '~/components/Common/FormattedNumber/FormattedNumber';
 import { fromTokenBaseUnit } from '~/utils/fromTokenBaseUnit';
+import { BigNumber } from 'bignumber.js';
+import { useCoinAPI } from '~/hooks/useCoinAPI';
+import { useEnvironment } from '~/hooks/useEnvironment';
 
 function progressToStep(progress: number) {
   if (progress >= TransactionProgress.EXECUTION_FINISHED) {
@@ -47,7 +50,10 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
   ...rest
 }) => {
   const gas = state.ethGasStation;
-  const price = state.defaultGasPrice;
+  const defaultGasPrice = state.defaultGasPrice;
+
+  const coinApi = useCoinAPI();
+  const environment = useEnvironment();
 
   const hash = state.hash;
   const receipt = state.receipt;
@@ -62,6 +68,17 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
     state.progress < TransactionProgress.TRANSACTION_ACKNOWLEDGED &&
     state.progress > TransactionProgress.TRANSACTION_STARTED;
 
+  const price = form.watch('gasPrice') ?? defaultGasPrice;
+
+  const gasPriceEth = new BigNumber(options?.gas ?? 'NaN').multipliedBy(new BigNumber(price)).multipliedBy('1e9');
+  const gasPriceUsd = gasPriceEth.multipliedBy(coinApi.data.rate);
+
+  const amguUsd = options?.amgu?.multipliedBy(coinApi.data.rate) ?? new BigNumber('NaN');
+  const incentiveUsd = options?.incentive?.multipliedBy(coinApi.data.rate) ?? new BigNumber('NaN');
+
+  const totalEth = gasPriceEth?.plus(options?.amgu ?? 0).plus(options?.incentive ?? 0);
+  const totalUsd = totalEth.multipliedBy(coinApi.data.rate);
+
   const setGasPrice = (value: number = 0) => {
     form.setValue('gasPrice', value);
   };
@@ -72,7 +89,10 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
     <FormContext {...form}>
       <Modal isOpen={open} {...rest}>
         <S.TransactionModal>
-          <S.TransactionModalTitle>{state.name}</S.TransactionModalTitle>
+          <S.TransactionModalTitle>
+            <S.TransactionModalName>{state.name}</S.TransactionModalName>
+            <S.TransactionModalNetwork>{environment?.network} </S.TransactionModalNetwork>
+          </S.TransactionModalTitle>
 
           {error && (
             <NotificationBar kind="error">
@@ -80,10 +100,20 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
             </NotificationBar>
           )}
 
+          {error && (
+            <NotificationBar kind="error">
+              <a
+                href={`https://github.com/avantgardefinance/interface/issues/new?title=Error in transaction "${state.name}";body=${error.name}`}
+              >
+                Report error
+              </a>
+            </NotificationBar>
+          )}
+
           <S.TransactionModalContent>
             {!estimated && !error && <Spinner />}
 
-            {estimated && (
+            {estimated && !finished && (
               <ProgressBar step={currentStep} loading={loadingStep(state.progress)}>
                 <ProgressBarStep />
                 <ProgressBarStep />
@@ -119,25 +149,81 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
                         type="number"
                         name="gasPrice"
                         step=".01"
-                        defaultValue={price}
+                        defaultValue={defaultGasPrice}
                         disabled={!!loading && estimated}
                       />
                     </FormField>
-                    {options && options.amgu && (
-                      <div>
-                        Asset management gas:{' '}
-                        <FormattedNumber value={fromTokenBaseUnit(options.amgu, 18)} suffix="ETH" />
-                      </div>
-                    )}
-                    {options && options.incentive && (
-                      <div>
-                        Incentive for request execution:{' '}
-                        <FormattedNumber value={fromTokenBaseUnit(options.incentive, 18)} suffix="ETH" />
-                      </div>
-                    )}
+                    <S.CostsTable>
+                      <S.CostsTableHead>
+                        <S.CostsTableRow>
+                          <S.CostsTableHeaderCellText></S.CostsTableHeaderCellText>
+                          <S.CostsTableHeaderCell>Amount</S.CostsTableHeaderCell>
+                          <S.CostsTableHeaderCell>Costs [ETH]</S.CostsTableHeaderCell>
+                          <S.CostsTableHeaderCell>Costs [USD]</S.CostsTableHeaderCell>
+                        </S.CostsTableRow>
+                      </S.CostsTableHead>
+
+                      <S.CostsTableBody>
+                        {options && options.gas && gasPriceEth && (
+                          <S.CostsTableRow>
+                            <S.CostsTableCellText>Gas</S.CostsTableCellText>
+                            <S.CostsTableCell>
+                              <FormattedNumber value={options.gas} decimals={0} />
+                            </S.CostsTableCell>
+                            <S.CostsTableCell>
+                              <FormattedNumber value={fromTokenBaseUnit(gasPriceEth, 18)} suffix="ETH" />
+                            </S.CostsTableCell>
+                            <S.CostsTableCell>
+                              <FormattedNumber value={fromTokenBaseUnit(gasPriceUsd, 18)} suffix="USD" />
+                            </S.CostsTableCell>
+                          </S.CostsTableRow>
+                        )}
+
+                        {options && options.amgu && (
+                          <S.CostsTableRow>
+                            <S.CostsTableCellText>Asset management gas</S.CostsTableCellText>
+                            <S.CostsTableCell></S.CostsTableCell>
+                            <S.CostsTableCell>
+                              <FormattedNumber value={fromTokenBaseUnit(options.amgu, 18)} suffix="ETH" />
+                            </S.CostsTableCell>
+                            <S.CostsTableCell>
+                              <FormattedNumber value={fromTokenBaseUnit(amguUsd, 18)} suffix="USD" />
+                            </S.CostsTableCell>
+                          </S.CostsTableRow>
+                        )}
+
+                        {options && options.incentive && (
+                          <S.CostsTableRow>
+                            <S.CostsTableCellText>Asset management gas</S.CostsTableCellText>
+                            <S.CostsTableCell></S.CostsTableCell>
+                            <S.CostsTableCell>
+                              <FormattedNumber value={fromTokenBaseUnit(options.incentive, 18)} suffix="ETH" />
+                            </S.CostsTableCell>
+                            <S.CostsTableCell>
+                              <FormattedNumber value={fromTokenBaseUnit(incentiveUsd, 18)} suffix="USD" />
+                            </S.CostsTableCell>
+                          </S.CostsTableRow>
+                        )}
+
+                        {totalEth && (
+                          <S.CostsTableRowTotal>
+                            <S.CostsTableCellText>Total</S.CostsTableCellText>
+                            <S.CostsTableCell></S.CostsTableCell>
+                            <S.CostsTableCell>
+                              <FormattedNumber value={fromTokenBaseUnit(totalEth, 18)} suffix="ETH" />
+                            </S.CostsTableCell>
+                            <S.CostsTableCell>
+                              <FormattedNumber value={fromTokenBaseUnit(totalUsd, 18)} suffix="USD" />
+                            </S.CostsTableCell>
+                          </S.CostsTableRowTotal>
+                        )}
+                      </S.CostsTableBody>
+                    </S.CostsTable>
                   </S.TransactionModalFeeForm>
                 </>
               )}
+
+              {finished && <NotificationBar kind="success">Transaction successful!</NotificationBar>}
 
               {output && (
                 <S.TransactionModalMessages>
@@ -166,16 +252,6 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
                           <S.TransactionModalMessagesTableRowLabel>Gas used</S.TransactionModalMessagesTableRowLabel>
                           <S.TransactionModalMessagesTableRowQuantity>
                             {receipt.gasUsed}
-                          </S.TransactionModalMessagesTableRowQuantity>
-                        </S.TransactionModalMessagesTableRow>
-                      )}
-                      {receipt && (
-                        <S.TransactionModalMessagesTableRow>
-                          <S.TransactionModalMessagesTableRowLabel>
-                            Cumulative gas used
-                          </S.TransactionModalMessagesTableRowLabel>
-                          <S.TransactionModalMessagesTableRowQuantity>
-                            {receipt.cumulativeGasUsed}
                           </S.TransactionModalMessagesTableRowQuantity>
                         </S.TransactionModalMessagesTableRow>
                       )}
@@ -210,13 +286,14 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
                       onClick={() => acknowledge()}
                       disabled={loading}
                     >
-                      Close
+                      Acknowledge
                     </Button>
                   </S.TransactionModalAction>
                 )}
               </S.TransactionModalActions>
             </S.TransactionModalForm>
           </S.TransactionModalContent>
+          {error && <NotificationBar kind="error">Stack trace: {error.stack}</NotificationBar>}
         </S.TransactionModal>
       </Modal>
     </FormContext>

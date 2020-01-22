@@ -38,6 +38,12 @@ export const ModalContent = styled.div`
 // TODO: Move the transaction modal styles into a separate component structure.
 export const TransactionModal = Modal;
 export const TransactionModalTitle = ModalTitle;
+export const TransactionModalName = styled.span``;
+export const TransactionModalNetwork = styled.span`
+  float: right;
+  font-weight: 400;
+  color: ${props => props.theme.otherColors.grey};
+`;
 export const TransactionModalContent = ModalContent;
 
 export const TransactionModalForm = styled.form`
@@ -80,6 +86,7 @@ export const TransactionModalMessagesTableRow = styled.tr`
 
 export const TransactionModalMessagesTableRowLabel = styled.td`
   margin: 0;
+  white-space: nowrap;
 `;
 
 export const TransactionModalMessagesTableRowQuantity = styled.td`
@@ -110,4 +117,40 @@ export const EthGasStationButtonGwei = styled.span`
 
 export const EthGasStationButtonText = styled.span`
   font-size: 10px;
+`;
+
+export const CostsTable = styled.table`
+  width: 100%;
+  font-size: ${props => props.theme.fontSizes.m};
+`;
+
+export const CostsTableHead = styled.thead`
+  font-weight: bold;
+  border-bottom: 1px dashed ${props => props.theme.otherColors.grey};
+`;
+
+export const CostsTableBody = styled.tbody``;
+
+export const CostsTableRow = styled.tr``;
+
+export const CostsTableRowTotal = styled.tr`
+  font-weight: bold;
+  border-top: 1px dashed ${props => props.theme.otherColors.grey};
+  border-bottom: 1px solid ${props => props.theme.otherColors.grey};
+`;
+
+export const CostsTableHeaderCellText = styled.th`
+  text-align: left;
+`;
+
+export const CostsTableHeaderCell = styled.th`
+  text-align: right;
+`;
+
+export const CostsTableCellText = styled.td`
+  text-align: left;
+`;
+
+export const CostsTableCell = styled.td`
+  text-align: right;
 `;
