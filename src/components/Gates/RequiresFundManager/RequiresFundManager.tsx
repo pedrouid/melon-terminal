@@ -2,6 +2,7 @@ import React from 'react';
 import { sameAddress } from '@melonproject/melonjs';
 import { useAccount } from '~/hooks/useAccount';
 import { useFund } from '~/hooks/useFund';
+import { Fallback } from '~/components/Common/Fallback/Fallback';
 
 export interface RequireFundManagerProps {
   loader?: React.ReactElement;
@@ -20,6 +21,7 @@ export const RequiresFundManager: React.FC<RequireFundManagerProps> = ({ loader,
     return <>{children}</>;
   }
 
-  const output = fallback === true ? 'You have to be the fund manager to access this page.' : fallback;
+  const output =
+    fallback === true ? <Fallback>You have to be the fund manager to access this page.</Fallback> : fallback;
   return <>{output || null}</>;
 };

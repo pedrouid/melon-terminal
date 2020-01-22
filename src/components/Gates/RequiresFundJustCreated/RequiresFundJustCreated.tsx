@@ -1,5 +1,6 @@
 import React from 'react';
 import { useFund } from '~/hooks/useFund';
+import { Fallback } from '~/components/Common/Fallback/Fallback';
 
 export interface RequiresFundJustCreatedProps {
   loader?: React.ReactElement;
@@ -24,6 +25,7 @@ export const RequiresFundJustCreated: React.FC<RequiresFundJustCreatedProps> = (
     return <>{children}</>;
   }
 
-  const output = fallback === true ? 'The fund needs to be younger than one day to access this page' : fallback;
+  const output =
+    fallback === true ? <Fallback>The fund needs to be younger than one day to access this page.</Fallback> : fallback;
   return <>{output || null}</>;
 };

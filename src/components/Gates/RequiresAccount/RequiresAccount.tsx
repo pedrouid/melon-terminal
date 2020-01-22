@@ -1,5 +1,7 @@
 import React from 'react';
 import { useAccount } from '~/hooks/useAccount';
+import { Fallback } from '~/components/Common/Fallback/Fallback';
+import { Container } from '~/storybook/components/Container/Container';
 
 export interface RequiresAccountProps {
   loader?: React.ReactElement;
@@ -17,6 +19,13 @@ export const RequiresAccount: React.FC<RequiresAccountProps> = ({ loader, childr
     return <>{children}</>;
   }
 
-  const output = fallback === true ? 'You have to be logged in to see this page.' : fallback;
+  const output =
+    fallback === true ? (
+      <Container>
+        <Fallback>You have to be logged in to see this page.</Fallback>
+      </Container>
+    ) : (
+      fallback
+    );
   return <>{output || null}</>;
 };

@@ -23,6 +23,9 @@ const ButtonBase = css`
   white-space: nowrap;
   cursor: pointer;
   transition: ${props => props.theme.transition.defaultAll};
+  a {
+    text-decoration: none;
+  }
 `;
 
 export const Button = styled.button<ButtonProps>`

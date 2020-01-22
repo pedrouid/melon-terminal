@@ -1,6 +1,7 @@
 import React from 'react';
 import { useEnvironment } from '~/hooks/useEnvironment';
 import { useFund } from '~/hooks/useFund';
+import { Fallback } from '~/components/Common/Fallback/Fallback';
 
 export interface RequiresFundSetupCompleteProps {
   fallback?: React.ReactNode;
@@ -14,6 +15,6 @@ export const RequiresFundSetupComplete: React.FC<RequiresFundSetupCompleteProps>
     return <>{children}</>;
   }
 
-  const output = fallback === true ? 'Fund setup is not completed.' : fallback;
+  const output = fallback === true ? <Fallback>Fund setup is not completed.</Fallback> : fallback;
   return <>{output || null}</>;
 };

@@ -1,5 +1,6 @@
 import React from 'react';
 import { useFund } from '~/hooks/useFund';
+import { Fallback } from '~/components/Common/Fallback/Fallback';
 
 export interface RequiresFundShutDownProps {
   loader?: React.ReactElement;
@@ -17,6 +18,6 @@ export const RequiresFundShutDown: React.FC<RequiresFundShutDownProps> = ({ load
     return <>{children}</>;
   }
 
-  const output = fallback === true ? 'This fund is still active.' : fallback;
+  const output = fallback === true ? <Fallback>This fund is still active.</Fallback> : fallback;
   return <>{output || null}</>;
 };

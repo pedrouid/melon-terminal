@@ -1,5 +1,6 @@
 import React from 'react';
 import { useFundPoliciesQuery } from '~/queries/FundPolicies';
+import { Fallback } from '~/components/Common/Fallback/Fallback';
 
 export interface RequiresNoPoliciesDeployedProps {
   address: string;
@@ -25,6 +26,11 @@ export const RequiresNoPoliciesDeployed: React.FC<RequiresNoPoliciesDeployedProp
     return <>{children}</>;
   }
 
-  const output = fallback === true ? 'The fund needs to have no deployed policies to access this page' : fallback;
+  const output =
+    fallback === true ? (
+      <Fallback>The fund needs to have no deployed policies to access this page.</Fallback>
+    ) : (
+      fallback
+    );
   return <>{output || null}</>;
 };

@@ -1,6 +1,7 @@
 import React from 'react';
 import { useEnvironment } from '~/hooks/useEnvironment';
-import { useAccountFundQuery } from '~/queries/AccountFund';
+import { Fallback } from '~/components/Common/Fallback/Fallback';
+import { useAccount } from '~/hooks/useAccount';
 
 export interface RequiresFundSetupNotStartedProps {
   fallback?: React.ReactNode;
@@ -11,12 +12,17 @@ export const RequiresFundSetupNotStarted: React.FC<RequiresFundSetupNotStartedPr
   fallback = true,
 }) => {
   const environment = useEnvironment();
-  const [account] = useAccountFundQuery();
+  const account = useAccount();
 
   if (environment && account && !account.fund) {
     return <>{children}</>;
   }
 
-  const output = fallback === true ? 'You can only view this page if you have not yet set up your fund.' : fallback;
+  const output =
+    fallback === true ? (
+      <Fallback>You can only view this page if you have not yet set up your fund.</Fallback>
+    ) : (
+      fallback
+    );
   return <>{output || null}</>;
 };

@@ -14,10 +14,12 @@ export const Headline = styled.div`
 `;
 
 export const HeadlineIcon = styled.div<HeadlineIconProps>`
-  width: 52px;
-  height: 52px;
+  width: 50px;
+  height: 50px;
   margin-right: ${props => props.theme.spaceUnits.s};
   background-image: ${props => (props.icon === 'wallet' ? `url(${wallet})` : `url(${fund})`)};
+  background-position: center;
+  background-repeat: no-repeat;
 `;
 
 export const HeadlineText = styled.div`

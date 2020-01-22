@@ -17,7 +17,7 @@ export const FundHeader: React.FC<FundHeaderProps> = ({ address }) => {
   const [dailyChange, queryDailyChange] = useFundDailyChange(address);
 
   if (queryDailyChange.loading || query.loading || !fund) {
-    return <Bar />;
+    return null;
   }
 
   const routes = fund.routes;

@@ -1,5 +1,6 @@
 import React from 'react';
 import { useFund } from '~/hooks/useFund';
+import { Fallback } from '~/components/Common/Fallback/Fallback';
 
 export interface RequiresFundCreatedAfterProps {
   loader?: React.ReactElement;
@@ -26,6 +27,10 @@ export const RequiresFundCreatedAfter: React.FC<RequiresFundCreatedAfterProps> =
   }
 
   const output =
-    fallback === true ? `The fund needs to have been created after ${after.toString()} to access this page` : fallback;
+    fallback === true ? (
+      <Fallback>The fund needs to have been created after {after.toString()} to access this page.</Fallback>
+    ) : (
+      fallback
+    );
   return <>{output || null}</>;
 };

@@ -17,7 +17,7 @@ import { Button } from '~/storybook/components/Button/Button';
 import { Dropdown } from '~/storybook/components/Dropdown/Dropdown';
 import { Spinner } from '~/storybook/components/Spinner/Spinner';
 import { FormattedNumber } from '~/components/Common/FormattedNumber/FormattedNumber';
-import { NotificationBar } from '~/storybook/components/NotificationBar/NotificationBar';
+import { NotificationBar, NotificationContent } from '~/storybook/components/NotificationBar/NotificationBar';
 import { Link } from '~/storybook/components/Link/Link';
 import { toTokenBaseUnit } from '~/utils/toTokenBaseUnit';
 import { fromTokenBaseUnit } from '~/utils/fromTokenBaseUnit';
@@ -198,7 +198,9 @@ export const RequestInvestment: React.FC<RequestInvestmentProps> = props => {
 
               {asset?.token?.symbol === 'WETH' && (
                 <NotificationBar kind="neutral">
-                  Get WETH by wrapping your ether in the <Link to="/wallet/weth">wallet section</Link>.
+                  <NotificationContent>
+                    Get WETH by wrapping your ether in the <Link to="/wallet/weth">wallet section</Link>.
+                  </NotificationContent>
                 </NotificationBar>
               )}
 

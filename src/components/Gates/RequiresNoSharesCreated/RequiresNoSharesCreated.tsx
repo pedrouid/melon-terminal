@@ -1,6 +1,7 @@
 import React from 'react';
 import { useFundDetailsQuery } from '~/queries/FundDetails';
 import BigNumber from 'bignumber.js';
+import { Fallback } from '~/components/Common/Fallback/Fallback';
 
 export interface RequiresNoSharesCreatedProps {
   address: string;
@@ -26,6 +27,7 @@ export const RequiresNoSharesCreated: React.FC<RequiresNoSharesCreatedProps> = (
     return <>{children}</>;
   }
 
-  const output = fallback === true ? 'The fund needs to have no shares to access this page' : fallback;
+  const output =
+    fallback === true ? <Fallback>The fund needs to have no shares to access this page.</Fallback> : fallback;
   return <>{output || null}</>;
 };

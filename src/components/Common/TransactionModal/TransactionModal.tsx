@@ -7,7 +7,7 @@ import { ProgressBarStep } from '~/components/Common/ProgressBar/ProgressBarStep
 import { FormField } from '~/storybook/components/FormField/FormField';
 import { Input } from '~/storybook/components/Input/Input';
 import { Button } from '~/storybook/components/Button/Button';
-import { NotificationBar } from '~/storybook/components/NotificationBar/NotificationBar';
+import { NotificationBar, NotificationContent } from '~/storybook/components/NotificationBar/NotificationBar';
 import { Spinner } from '~/storybook/components/Spinner/Spinner';
 import * as S from '~/storybook/components/Modal/Modal';
 import { EtherscanLink } from '../EtherscanLink/EtherscanLink';
@@ -74,7 +74,11 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
         <S.TransactionModal>
           <S.TransactionModalTitle>{state.name}</S.TransactionModalTitle>
 
-          {error && <NotificationBar kind="error">{error.message}</NotificationBar>}
+          {error && (
+            <NotificationBar kind="error">
+              <NotificationContent>{error.message}</NotificationContent>
+            </NotificationBar>
+          )}
 
           <S.TransactionModalContent>
             {!estimated && !error && <Spinner />}

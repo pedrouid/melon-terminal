@@ -224,9 +224,9 @@ export const Home: React.FC = () => {
               <SectionTitle>
                 <span>Melon fund universe</span>
                 {!account.fund && (
-                  <Link to="/wallet/setup">
-                    <Button>Create your own Melon fund</Button>
-                  </Link>
+                  <Button kind="secondary">
+                    <Link to="/wallet/setup">Create your own Melon fund</Link>
+                  </Button>
                 )}
               </SectionTitle>
               <Grid>
