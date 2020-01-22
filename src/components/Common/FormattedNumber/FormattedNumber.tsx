@@ -30,7 +30,9 @@ export const FormattedNumber: React.FC<FormattedNumberData> = ({
   colorize = false,
 }) => {
   const bn = BigNumber.isBigNumber(value) ? value : new BigNumber(value ?? 'NaN');
-  const output = bn.isNaN() ? 'N/A' : [prefix, ' ', bn.toFixed(decimals), suffix === '%' ? '' : ' ', suffix];
+  const output = bn.isNaN()
+    ? 'N/A'
+    : [prefix, prefix ? ' ' : '', bn.toFixed(decimals), (!suffix || suffix) === '%' ? '' : ' ', suffix];
 
   if (colorize) {
     const color = bn.isNaN() || bn.isZero() ? 'grey' : bn.isPositive() ? 'green' : 'red';

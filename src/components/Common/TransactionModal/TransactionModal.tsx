@@ -107,6 +107,8 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
             </NotificationBar>
           )}
 
+          {finished && <NotificationBar kind="success">Transaction successful!</NotificationBar>}
+
           <S.TransactionModalContent>
             {!estimated && !error && <Spinner />}
 
@@ -191,7 +193,7 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
 
                         {options && options.incentive && (
                           <S.CostsTableRow>
-                            <S.CostsTableCellText>Asset management gas</S.CostsTableCellText>
+                            <S.CostsTableCellText>Incentive</S.CostsTableCellText>
                             <S.CostsTableCell></S.CostsTableCell>
                             <S.CostsTableCell>
                               <FormattedNumber value={fromTokenBaseUnit(options.incentive, 18)} suffix="ETH" />
@@ -220,8 +222,6 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
                 </>
               )}
 
-              {finished && <NotificationBar kind="success">Transaction successful!</NotificationBar>}
-
               {output && (
                 <S.TransactionModalMessages>
                   <S.TransactionModalMessagesTable>
@@ -234,23 +234,41 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
                           </S.TransactionModalMessagesTableRowQuantity>
                         </S.TransactionModalMessagesTableRow>
                       )}
+
                       {receipt && (
-                        <S.TransactionModalMessagesTableRow>
-                          <S.TransactionModalMessagesTableRowLabel>
-                            Block number
-                          </S.TransactionModalMessagesTableRowLabel>
-                          <S.TransactionModalMessagesTableRowQuantity>
-                            {receipt.blockNumber}
-                          </S.TransactionModalMessagesTableRowQuantity>
-                        </S.TransactionModalMessagesTableRow>
-                      )}
-                      {receipt && (
-                        <S.TransactionModalMessagesTableRow>
-                          <S.TransactionModalMessagesTableRowLabel>Gas used</S.TransactionModalMessagesTableRowLabel>
-                          <S.TransactionModalMessagesTableRowQuantity>
-                            {receipt.gasUsed}
-                          </S.TransactionModalMessagesTableRowQuantity>
-                        </S.TransactionModalMessagesTableRow>
+                        <>
+                          <S.TransactionModalMessagesTableRow>
+                            <S.TransactionModalMessagesTableRowLabel>Gas used</S.TransactionModalMessagesTableRowLabel>
+                            <S.TransactionModalMessagesTableRowQuantity>
+                              <FormattedNumber value={receipt.gasUsed} decimals={0}></FormattedNumber>
+                            </S.TransactionModalMessagesTableRowQuantity>
+                          </S.TransactionModalMessagesTableRow>
+
+                          <S.TransactionModalMessagesTableRow>
+                            <S.TransactionModalMessagesTableRowLabel>Gas cost</S.TransactionModalMessagesTableRowLabel>
+                            <S.TransactionModalMessagesTableRowQuantity>
+                              <FormattedNumber
+                                value={fromTokenBaseUnit(
+                                  new BigNumber(receipt.gasUsed).multipliedBy(price).multipliedBy('1e9'),
+                                  18
+                                )}
+                                suffix="ETH"
+                              />
+                              {' ('}
+                              <FormattedNumber
+                                value={fromTokenBaseUnit(
+                                  new BigNumber(receipt.gasUsed)
+                                    .multipliedBy(price)
+                                    .multipliedBy('1e9')
+                                    .multipliedBy(coinApi.data.rate),
+                                  18
+                                )}
+                                suffix="USD"
+                              />
+                              {')'}
+                            </S.TransactionModalMessagesTableRowQuantity>
+                          </S.TransactionModalMessagesTableRow>
+                        </>
                       )}
                     </S.TransactionModalMessagesTableBody>
                   </S.TransactionModalMessagesTable>
