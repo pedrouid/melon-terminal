@@ -120,11 +120,11 @@ export const InvestmentAssets: React.FC<InvestmentAssetsProps> = ({ address }) =
 
           <Grid>
             <GridRow>
-              {environment.tokens
-                .filter(token => !token.historic)
-                .map((token, index) => (
-                  <GridCol xs={12} sm={12} md={6} key={token.symbol}>
-                    <FormField name="asset">
+              <FormField name="asset">
+                {environment.tokens
+                  .filter(token => !token.historic)
+                  .map((token, index) => (
+                    <GridCol xs={12} sm={12} md={6} key={token.symbol}>
                       <CheckboxContainer>
                         <CheckboxInput
                           defaultChecked={defaultValues[index]}
@@ -142,9 +142,9 @@ export const InvestmentAssets: React.FC<InvestmentAssetsProps> = ({ address }) =
                           {token.symbol} ({token.name})
                         </CheckboxLabel>
                       </CheckboxContainer>
-                    </FormField>
-                  </GridCol>
-                ))}
+                    </GridCol>
+                  ))}
+              </FormField>
             </GridRow>
           </Grid>
 

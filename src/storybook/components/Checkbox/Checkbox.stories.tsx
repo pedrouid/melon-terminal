@@ -13,11 +13,9 @@ export const Default: React.FC = () => {
   return (
     <CheckboxContainer>
       <CheckboxLabel htmlFor="idcheckbox">I'm a label</CheckboxLabel>
-
       <CheckboxMask>
         <CheckboxInput type="checkbox" id="idcheckbox" name="my_checkbox" value="1" />
-
-        <CheckboxIcon></CheckboxIcon>
+        <CheckboxIcon />
       </CheckboxMask>
     </CheckboxContainer>
   );
@@ -28,7 +26,7 @@ export const Disabled: React.FC = () => {
     <CheckboxContainer>
       <CheckboxInput type="checkbox" id="idcheckbox" name="my_checkbox" value="1" disabled={true} />
       <CheckboxMask>
-        <CheckboxIcon></CheckboxIcon>
+        <CheckboxIcon />
       </CheckboxMask>
       <CheckboxLabel htmlFor="idcheckbox">I'm a label</CheckboxLabel>
     </CheckboxContainer>
@@ -40,7 +38,7 @@ export const DisabledChecked: React.FC = () => {
     <CheckboxContainer>
       <CheckboxInput type="checkbox" id="idcheckbox" name="my_checkbox" value="1" disabled={true} checked />
       <CheckboxMask>
-        <CheckboxIcon></CheckboxIcon>
+        <CheckboxIcon />
       </CheckboxMask>
       <CheckboxLabel htmlFor="idcheckbox">I'm a label</CheckboxLabel>
     </CheckboxContainer>

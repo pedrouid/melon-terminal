@@ -164,7 +164,7 @@ export const FundSetupTransactions: React.FC = () => {
                             disabled={true}
                           />
                           <CheckboxMask>
-                            <CheckboxIcon></CheckboxIcon>
+                            <CheckboxIcon />
                           </CheckboxMask>
                           <CheckboxLabel htmlFor="1">{pipeline[item].previous}</CheckboxLabel>
                         </CheckboxContainer>

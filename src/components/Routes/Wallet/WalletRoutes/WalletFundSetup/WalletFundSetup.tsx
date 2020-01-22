@@ -177,11 +177,11 @@ export const WalletFundSetup: React.FC = () => {
                       </NotificationBar>
                       <Grid>
                         <GridRow>
-                          {environment.exchanges
-                            .filter(exchange => !exchange.historic)
-                            .map((exchange, index) => (
-                              <GridCol xs={12} sm={12} md={6} key={exchange.id}>
-                                <FormField name="exchanges">
+                          <FormField name="exchanges">
+                            {environment.exchanges
+                              .filter(exchange => !exchange.historic)
+                              .map((exchange, index) => (
+                                <GridCol xs={12} sm={12} md={6} key={exchange.id}>
                                   <CheckboxContainer>
                                     <CheckboxInput
                                       id={`exchanges[${index}]`}
@@ -192,13 +192,13 @@ export const WalletFundSetup: React.FC = () => {
                                       ref={form.register}
                                     />
                                     <CheckboxMask>
-                                      <CheckboxIcon></CheckboxIcon>
+                                      <CheckboxIcon />
                                     </CheckboxMask>
                                     <CheckboxLabel htmlFor={`exchanges[${index}]`}>{exchange.name}</CheckboxLabel>
                                   </CheckboxContainer>
-                                </FormField>
-                              </GridCol>
-                          ))}
+                                </GridCol>
+                              ))}
+                          </FormField>
                         </GridRow>
                       </Grid>
                     </BlockSection>
@@ -211,11 +211,11 @@ export const WalletFundSetup: React.FC = () => {
                       </NotificationBar>
                       <Grid>
                         <GridRow>
-                          {environment.tokens
-                            .filter(token => !token.historic)
-                            .map((token, index) => (
-                              <GridCol xs={12} sm={12} md={6} key={token.symbol}>
-                                <FormField name="assets">
+                          <FormField name="assets">
+                            {environment.tokens
+                              .filter(token => !token.historic)
+                              .map((token, index) => (
+                                <GridCol xs={12} sm={12} md={6} key={token.symbol}>
                                   <CheckboxContainer>
                                     <CheckboxInput
                                       id={`assets[${index}]`}
@@ -232,51 +232,51 @@ export const WalletFundSetup: React.FC = () => {
                                       {token.symbol} ({token.name})
                                     </CheckboxLabel>
                                   </CheckboxContainer>
-                                </FormField>
-                              </GridCol>
-                          ))}
-                      </GridRow>
-                    </Grid>
-                  </BlockSection>
-                  <BlockSection>
-                    <SectionTitle>Disclaimer</SectionTitle>
-                    <p>
-                      IMPORTANT NOTE: PLEASE READ THE FULL VERSION OF THIS DISCLAIMER CAREFULLY BEFORE USING THE MELON
-                      PROTOCOL.
-                    </p>
-                    <p>
-                      YOUR USE OF THE MELON PROTOCOL AND/OR THE SOFTWARE MAY BE SUBJECT TO THE FINANCIAL LAWS AND
-                      REGULATIONS OF VARIOUS JURISDICTIONS. PRIOR TO USING THE MELON PROTOCOL, SEEK LEGAL ASSISTANCE TO
-                      ASSURE THAT YOU MAY USE THE SOFTWARE IN COMPLIANCE WITH APPLICABLE LAW. FAILURE TO DO SO MAY SUBJECT
-                      YOU TO CRIMINAL AS WELL AS CIVIL PENALTIES IN ONE OR MORE JURISDICTIONS. BY USING THIS SOFTWARE, YOU
-                      CONFIRM THAT YOU HAVE SOUGHT THE ADVICE OF COMPETENT COUNSEL OR ARE OTHERWISE FAMILIAR WITH THE
-                      APPLICABLE LAWS AND REGULATIONS PERTAINING TO YOUR INTENDED USE OF THE MELON PROTOCOL. BY USING THIS
-                      SOFTWARE, YOU UNDERSTAND, ACKNOWLEDGE AND ACCEPT THAT THE MELON PROTOCOL AND/OR THE UNDERLYING
-                      SOFTWARE ARE PROVIDED “AS IS” AND WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND EITHER EXPRESSED
-                      OR IMPLIED. ANY USE OF THIS OPEN SOURCE SOFTWARE RELEASED UNDER THE GNU GENERAL PUBLIC LICENSE
-                      VERSION 3 (GPL 3) IS DONE AT YOUR OWN RISK TO THE FULLEST EXTENT PERMISSIBLE PURSUANT TO APPLICABLE
-                      LAW ANY AND ALL LIABILITY AS WELL AS ALL WARRANTIES, INCLUDING ANY FITNESS FOR A PARTICULAR PURPOSE
-                      WITH RESPECT TO THE MELON PROTOCOL AND/OR THE UNDERLYING SOFTWARE AND THE USE THEREOF ARE
-                      DISCLAIMED.
-                    </p>
-                    <FormField name="termsAndConditions">
-                      <CheckboxContainer>
-                        <CheckboxInput
-                          id="termsAndConditions"
-                          type="checkbox"
-                          name="termsAndConditions"
-                          ref={form.register}
-                        />
-                        <CheckboxMask>
-                          <CheckboxIcon />
-                        </CheckboxMask>
-                        <CheckboxLabel htmlFor="termsAndConditions">I accept the terms and conditions</CheckboxLabel>
-                      </CheckboxContainer>
-                    </FormField>
-                    <BlockActions>
-                      <Button type="submit">Create fund</Button>
-                    </BlockActions>
-                  </BlockSection>
+                                </GridCol>
+                              ))}
+                          </FormField>
+                        </GridRow>
+                      </Grid>
+                    </BlockSection>
+                    <BlockSection>
+                      <SectionTitle>Disclaimer</SectionTitle>
+                      <p>
+                        IMPORTANT NOTE: PLEASE READ THE FULL VERSION OF THIS DISCLAIMER CAREFULLY BEFORE USING THE MELON
+                        PROTOCOL.
+                      </p>
+                      <p>
+                        YOUR USE OF THE MELON PROTOCOL AND/OR THE SOFTWARE MAY BE SUBJECT TO THE FINANCIAL LAWS AND
+                        REGULATIONS OF VARIOUS JURISDICTIONS. PRIOR TO USING THE MELON PROTOCOL, SEEK LEGAL ASSISTANCE
+                        TO ASSURE THAT YOU MAY USE THE SOFTWARE IN COMPLIANCE WITH APPLICABLE LAW. FAILURE TO DO SO MAY
+                        SUBJECT YOU TO CRIMINAL AS WELL AS CIVIL PENALTIES IN ONE OR MORE JURISDICTIONS. BY USING THIS
+                        SOFTWARE, YOU CONFIRM THAT YOU HAVE SOUGHT THE ADVICE OF COMPETENT COUNSEL OR ARE OTHERWISE
+                        FAMILIAR WITH THE APPLICABLE LAWS AND REGULATIONS PERTAINING TO YOUR INTENDED USE OF THE MELON
+                        PROTOCOL. BY USING THIS SOFTWARE, YOU UNDERSTAND, ACKNOWLEDGE AND ACCEPT THAT THE MELON PROTOCOL
+                        AND/OR THE UNDERLYING SOFTWARE ARE PROVIDED “AS IS” AND WITHOUT WARRANTIES OR REPRESENTATIONS OF
+                        ANY KIND EITHER EXPRESSED OR IMPLIED. ANY USE OF THIS OPEN SOURCE SOFTWARE RELEASED UNDER THE
+                        GNU GENERAL PUBLIC LICENSE VERSION 3 (GPL 3) IS DONE AT YOUR OWN RISK TO THE FULLEST EXTENT
+                        PERMISSIBLE PURSUANT TO APPLICABLE LAW ANY AND ALL LIABILITY AS WELL AS ALL WARRANTIES,
+                        INCLUDING ANY FITNESS FOR A PARTICULAR PURPOSE WITH RESPECT TO THE MELON PROTOCOL AND/OR THE
+                        UNDERLYING SOFTWARE AND THE USE THEREOF ARE DISCLAIMED.
+                      </p>
+                      <FormField name="termsAndConditions">
+                        <CheckboxContainer>
+                          <CheckboxInput
+                            id="termsAndConditions"
+                            type="checkbox"
+                            name="termsAndConditions"
+                            ref={form.register}
+                          />
+                          <CheckboxMask>
+                            <CheckboxIcon />
+                          </CheckboxMask>
+                          <CheckboxLabel htmlFor="termsAndConditions">I accept the terms and conditions</CheckboxLabel>
+                        </CheckboxContainer>
+                      </FormField>
+                      <BlockActions>
+                        <Button type="submit">Create fund</Button>
+                      </BlockActions>
+                    </BlockSection>
                   </form>
                 </FormContext>
               </Block>

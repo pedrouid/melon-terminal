@@ -58,9 +58,9 @@ export const AssetBlacklistConfiguration: React.FC<AssetBlacklistConfigurationPr
         <form onSubmit={submit}>
           <Grid>
             <GridRow>
-              {tokens.map((token, index) => (
-                <GridCol xs={4} sm={3} md={2.4} key={token.address}>
-                  <FormField name="assetBlacklist">
+              <FormField name="assetBlacklist">
+                {tokens.map((token, index) => (
+                  <GridCol xs={4} sm={3} md={2.4} key={token.address}>
                     <CheckboxContainer>
                       <CheckboxInput
                         id={`assetBlacklist[${index}]`}
@@ -75,9 +75,9 @@ export const AssetBlacklistConfiguration: React.FC<AssetBlacklistConfigurationPr
                       </CheckboxMask>
                       <CheckboxLabel htmlFor={`assetBlacklist[${index}]`}>{token.symbol}</CheckboxLabel>
                     </CheckboxContainer>
-                  </FormField>
-                </GridCol>
-              ))}
+                  </GridCol>
+                ))}
+              </FormField>
             </GridRow>
           </Grid>
 

@@ -58,9 +58,9 @@ export const AssetWhitelistConfiguration: React.FC<AssetWhitelistConfigurationPr
         <form onSubmit={submit}>
           <Grid>
             <GridRow>
-              {tokens.map((token, index) => (
-                <GridCol xs={4} sm={3} md={2.4} key={token.address}>
-                  <FormField name="assetWhitelist">
+              <FormField name="assetWhitelist">
+                {tokens.map((token, index) => (
+                  <GridCol xs={4} sm={3} md={2.4} key={token.address}>
                     <CheckboxContainer>
                       <CheckboxInput
                         id={`assetWhitelist[${index}]`}
@@ -75,9 +75,9 @@ export const AssetWhitelistConfiguration: React.FC<AssetWhitelistConfigurationPr
                       </CheckboxMask>
                       <CheckboxLabel htmlFor={`assetWhitelist[${index}]`}>{token.symbol}</CheckboxLabel>
                     </CheckboxContainer>
-                  </FormField>
-                </GridCol>
-              ))}
+                  </GridCol>
+                ))}
+              </FormField>
 
               <BlockActions>
                 <Button type="submit">Add asset whitelist policy</Button>
