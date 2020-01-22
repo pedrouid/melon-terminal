@@ -2,7 +2,7 @@ import React from 'react';
 import { Fallback } from '~/components/Common/Fallback/Fallback';
 import { useConnectionState } from '~/hooks/useConnectionState';
 import { ConnectionStatus } from '~/components/Contexts/Connection/Connection';
-import { Loader } from '~/storybook/components/Spinner/Spinner.styles';
+import { Spinner } from '~/storybook/components/Spinner/Spinner';
 
 export interface RequiresConnectionProps {
   fallback?: React.ReactNode;
@@ -16,7 +16,7 @@ export const RequiresConnection: React.FC<RequiresConnectionProps> = ({ children
   }
 
   if (connection.status === ConnectionStatus.CONNECTING) {
-    return <Loader />;
+    return <Spinner positioning="centered" size="large" />;
   }
 
   const output =
