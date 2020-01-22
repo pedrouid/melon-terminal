@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useForm,  FormContext } from 'react-hook-form';
+import { useForm, FormContext } from 'react-hook-form';
 import * as Yup from 'yup';
 import { useEnvironment } from '~/hooks/useEnvironment';
 import { useTransaction } from '~/hooks/useTransaction';
@@ -32,20 +32,11 @@ export interface FundOrderbookLimitFormProps {
 }
 
 interface FundOrderbookLimitFormValues {
-  exchange: string;
   quantity: string;
   price: string;
   direction: 'sell' | 'buy';
+  exchange?: string;
 }
-
-const validationSchema = Yup.object().shape({
-  exchange: Yup.string().required(),
-  direction: Yup.string()
-    .required()
-    .oneOf(['buy', 'sell']),
-  quantity: Yup.string().required(),
-  price: Yup.string().required(),
-});
 
 export const FundOrderbookLimitForm: React.FC<FundOrderbookLimitFormProps> = props => {
   const environment = useEnvironment()!;
@@ -55,28 +46,33 @@ export const FundOrderbookLimitForm: React.FC<FundOrderbookLimitFormProps> = pro
     onFinish: receipt => refetch(receipt.blockNumber),
   });
 
+  const defaults: FundOrderbookLimitFormValues = {
+    direction: 'buy',
+    quantity: '',
+    price: '',
+    exchange: undefined,
+  };
+
   const form = useForm<FundOrderbookLimitFormValues>({
-    validationSchema,
+    validationSchema: Yup.object().shape({
+      exchange: Yup.string().required(),
+      direction: Yup.string()
+        .required()
+        .oneOf(['buy', 'sell']),
+      quantity: Yup.string().required('Missing quantity.'),
+      price: Yup.string().required('Missing price.'),
+    }),
     mode: 'onSubmit',
     reValidateMode: 'onBlur',
-    defaultValues: {
-      direction: 'buy',
-      quantity: '',
-      price: '',
-      exchange: undefined,
-    },
+    defaultValues: defaults,
   });
 
   useEffect(() => {
     if (props.order) {
-      return form.reset({
-        direction: props.order.side === 'bid' ? 'sell' : 'buy',
-        quantity: props.order.quantity.toFixed(),
-        price: props.order.price.toFixed(),
-      });
+      form.setValue('direction', props.order.side === 'bid' ? 'sell' : 'buy');
+      form.setValue('quantity', props.order.quantity.toFixed());
+      form.setValue('price', props.order.price.toFixed());
     }
-
-    form.reset();
   }, [props.order]);
 
   const submit = form.handleSubmit(async data => {
@@ -87,7 +83,7 @@ export const FundOrderbookLimitForm: React.FC<FundOrderbookLimitFormProps> = pro
     const quote = environment.getToken('WETH');
     const maker = data.direction === 'buy' ? quote : base;
     const taker = data.direction === 'buy' ? base : quote;
-    const exchange = environment.getExchange(data.exchange);
+    const exchange = environment.getExchange(data.exchange!);
 
     const makerQuantity = toTokenBaseUnit(data.quantity, maker.decimals).multipliedBy(data.price);
     const takerQuantity = toTokenBaseUnit(data.quantity, taker.decimals);
@@ -160,6 +156,7 @@ export const FundOrderbookLimitForm: React.FC<FundOrderbookLimitFormProps> = pro
           <FormField label="Price" name="price">
             <Input type="text" name="price" onChange={() => props.order && props.unsetOrder()} />
           </FormField>
+
           <BlockActions>
             <Button type="submit">Submit</Button>
           </BlockActions>
