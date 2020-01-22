@@ -85,6 +85,10 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
 
   const currentStep = progressToStep(state.progress);
 
+  const errorReportingUri = encodeURI(
+    `https://github.com/avantgardefinance/interface/issues/new?title=Error in transaction "${state.name}";body=${error?.stack}`
+  );
+
   return (
     <FormContext {...form}>
       <Modal isOpen={open} {...rest}>
@@ -97,16 +101,9 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
           {error && (
             <NotificationBar kind="error">
               <NotificationContent>{error.message}</NotificationContent>
-            </NotificationBar>
-          )}
-
-          {error && (
-            <NotificationBar kind="error">
-              <a
-                href={`https://github.com/avantgardefinance/interface/issues/new?title=Error in transaction "${state.name}";body=${error.name}`}
-              >
-                Report error
-              </a>
+              <NotificationContent>
+                <a href={errorReportingUri}>Report error</a>
+              </NotificationContent>
             </NotificationBar>
           )}
 
@@ -293,7 +290,6 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
               </S.TransactionModalActions>
             </S.TransactionModalForm>
           </S.TransactionModalContent>
-          {error && <NotificationBar kind="error">Stack trace: {error.stack}</NotificationBar>}
         </S.TransactionModal>
       </Modal>
     </FormContext>

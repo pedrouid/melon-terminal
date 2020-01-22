@@ -1,8 +1,7 @@
 import React from 'react';
 import * as Yup from 'yup';
 import BigNumber from 'bignumber.js';
-import { useForm,  FormContext } from 'react-hook-form';
-import { toWei } from 'web3-utils';
+import { useForm, FormContext } from 'react-hook-form';
 import { Weth } from '@melonproject/melonjs';
 import { useTransaction } from '~/hooks/useTransaction';
 import { TransactionModal } from '~/components/Common/TransactionModal/TransactionModal';
