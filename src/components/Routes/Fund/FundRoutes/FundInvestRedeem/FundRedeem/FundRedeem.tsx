@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import BigNumber from 'bignumber.js';
 import * as Yup from 'yup';
-import useForm, { FormContext } from 'react-hook-form';
+import { useForm,  FormContext } from 'react-hook-form';
 import { Participation } from '@melonproject/melonjs';
 import { useEnvironment } from '~/hooks/useEnvironment';
 import { useFundInvestQuery } from '~/queries/FundInvest';

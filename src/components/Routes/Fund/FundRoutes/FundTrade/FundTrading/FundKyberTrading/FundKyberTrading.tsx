@@ -1,9 +1,9 @@
-import React, { useMemo, useEffect, useState, useLayoutEffect } from 'react';
+import React, { useMemo, useEffect, useState } from 'react';
 import BigNumber from 'bignumber.js';
 import * as Yup from 'yup';
 import * as Rx from 'rxjs';
 import { equals } from 'ramda';
-import useForm, { FormContext } from 'react-hook-form';
+import { useForm, FormContext } from 'react-hook-form';
 import {
   TokenDefinition,
   KyberNetworkProxy,
@@ -18,39 +18,27 @@ import { Dropdown } from '~/storybook/components/Dropdown/Dropdown';
 import { FormField } from '~/storybook/components/FormField/FormField';
 import { Input } from '~/storybook/components/Input/Input';
 import { Button } from '~/storybook/components/Button/Button';
-import { startWith, scan, distinctUntilChanged, debounceTime, switchMap, tap } from 'rxjs/operators';
-import { Spinner } from '~/storybook/components/Spinner/Spinner';
+import { distinctUntilChanged, debounceTime, switchMap, tap, take, skip, share } from 'rxjs/operators';
 import { useAccount } from '~/hooks/useAccount';
 import { useTransaction } from '~/hooks/useTransaction';
 import { useOnChainQueryRefetcher } from '~/hooks/useOnChainQueryRefetcher';
 import { TransactionModal } from '~/components/Common/TransactionModal/TransactionModal';
 import { Grid, GridRow, GridCol } from '~/storybook/components/Grid/Grid';
 import { FormattedNumber } from '~/components/Common/FormattedNumber/FormattedNumber';
-import { useFundHoldingsQuery } from '~/queries/FundHoldings';
 import { toTokenBaseUnit } from '~/utils/toTokenBaseUnit';
 import { fromTokenBaseUnit } from '~/utils/fromTokenBaseUnit';
+import { Holding } from '@melonproject/melongql';
 
 export interface FundKyberTradingProps {
   address: string;
   exchange: ExchangeDefinition;
+  holdings: Holding[];
   asset?: TokenDefinition;
 }
 
-const validationSchema = Yup.object().shape({
-  makerAsset: Yup.string().required(),
-  takerAsset: Yup.string().required(),
-  makerQuantity: Yup.number()
-    .required()
-    .positive(),
-  takerQuantity: Yup.number()
-    .required()
-    .positive(),
-});
-
 interface FundKyberTradingFormValues {
-  makerAsset?: string;
-  takerAsset?: string;
-  makerQuantity?: string;
+  makerAsset: string;
+  takerAsset: string;
   takerQuantity: string;
 }
 
@@ -70,14 +58,34 @@ export const FundKyberTrading: React.FC<FundKyberTradingProps> = props => {
   const defaultValues = {
     makerAsset: options[1].value,
     takerAsset: options[0].value,
-    takerQuantity: '',
+    takerQuantity: '1',
   };
 
   const form = useForm<FundKyberTradingFormValues>({
     defaultValues,
-    validationSchema,
-    mode: 'onSubmit',
-    reValidateMode: 'onBlur',
+    validationSchema: Yup.object().shape({
+      makerAsset: Yup.string().required(),
+      takerAsset: Yup.string().required(),
+      takerQuantity: Yup.string()
+        .required('This is a required value.')
+        // tslint:disable-next-line
+        .test('not-a-number', 'The given value is not a valid number.', function(value) {
+          return !new BigNumber(value).isNaN();
+        })
+        // tslint:disable-next-line
+        .test('not-positive', 'The given value is not a valid number.', function(value) {
+          return new BigNumber(value).isPositive();
+        })
+        // tslint:disable-next-line
+        .test('balance-too-low', 'Your current balance is too low.', function(value) {
+          const holding = props.holdings.find(item => sameAddress(item.token!.address, this.parent.takerAsset))!;
+          const divisor = new BigNumber(10).exponentiatedBy(holding.token!.decimals!);
+          const balance = holding.amount!.dividedBy(divisor);
+          return new BigNumber(value).isLessThanOrEqualTo(balance);
+        }),
+    }),
+    mode: 'onChange',
+    reValidateMode: 'onChange',
   });
 
   const transaction = useTransaction(environment, {
@@ -85,43 +93,40 @@ export const FundKyberTrading: React.FC<FundKyberTradingProps> = props => {
     onAcknowledge: () => form.reset(defaultValues),
   });
 
-  const makerAddress = form.watch('makerAsset');
-  const takerAddress = form.watch('takerAsset');
-  const takerQuantity = form.watch('takerQuantity');
-  const makerAsset = makerAddress ? environment.getToken(makerAddress) : undefined;
-  const takerAsset = takerAddress ? environment.getToken(takerAddress) : undefined;
+  const makerAsset = environment.getToken(form.watch('makerAsset')!);
+  const takerAsset = environment.getToken(form.watch('takerAsset')!);
+  const takerQuantity = new BigNumber(form.watch('takerQuantity'));
+  const makerQuantity = takerQuantity.multipliedBy(price);
 
-  const [holdings, _] = useFundHoldingsQuery(props.address);
-  const takerAssetHolding = holdings.find(holding => sameAddress(holding.token?.address, takerAddress));
-  const takerAssetHoldingAmount = takerAssetHolding?.amount || new BigNumber(0);
+  const taker$ = useMemo(() => new Rx.BehaviorSubject(takerAsset), []);
+  const maker$ = useMemo(() => new Rx.BehaviorSubject(makerAsset), []);
+  const quantity$ = useMemo(() => new Rx.BehaviorSubject(takerQuantity), []);
 
-  useEffect(() => {
-    if (takerAssetHoldingAmount.isLessThan(toTokenBaseUnit(takerQuantity, takerAsset!.decimals))) {
-      form.setError('takerQuantity', 'tooLow', `Your ${takerAsset?.symbol} balance is too low`);
-    } else {
-      form.clearError('takerQuantity');
-    }
-  }, [takerAssetHoldingAmount, takerQuantity]);
+  useEffect(() => maker$.next(makerAsset), [makerAsset]);
+  useEffect(() => taker$.next(takerAsset), [takerAsset]);
+  useEffect(() => quantity$.next(takerQuantity), [takerQuantity]);
 
-  const changes$ = useMemo(() => new Rx.Subject<[string, string]>(), []);
   const stream$ = useMemo(() => {
     const contract = new KyberNetworkProxy(environment, environment.deployment.kyber.addr.KyberNetworkProxy);
-    const scanned$ = Rx.from(changes$).pipe(scan((carry, [key, value]) => ({ ...carry, [key]: value }), defaultValues));
-    const values$ = scanned$.pipe(
-      debounceTime(500),
-      startWith(defaultValues),
-      distinctUntilChanged((a, b) => equals(a, b))
-    );
+    const changes$ = Rx.combineLatest([taker$, maker$, quantity$], (taker, maker, quantity) => ({
+      taker,
+      maker,
+      quantity,
+    })).pipe(share());
+
+    const first$ = changes$.pipe(take(1));
+    const followup$ = changes$.pipe(skip(1), debounceTime(500));
+    const values$ = Rx.concat(first$, followup$).pipe(distinctUntilChanged((a, b) => equals(a, b)));
 
     return values$.pipe(
       tap(() => setLoading(true)),
-      switchMap(async values => {
+      switchMap(async ({ taker, maker, quantity }) => {
         const expected = await new Promise<BigNumber>(async resolve => {
           try {
             const kyberEth = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee';
-            const srcToken = values.takerAsset === weth.address ? kyberEth : values.takerAsset;
-            const destToken = values.makerAsset === weth.address ? kyberEth : values.makerAsset;
-            const srcQty = toTokenBaseUnit(values.takerQuantity, takerAsset!.decimals);
+            const srcToken = taker.address === weth.address ? kyberEth : taker.address;
+            const destToken = maker.address === weth.address ? kyberEth : maker.address;
+            const srcQty = toTokenBaseUnit(quantity, taker!.decimals);
             const result = await contract.getExpectedRate(srcToken, destToken, srcQty);
 
             resolve(result.expectedRate);
@@ -135,39 +140,27 @@ export const FundKyberTrading: React.FC<FundKyberTradingProps> = props => {
       tap(price => setPrice(price)),
       tap(() => setLoading(false))
     );
-  }, [changes$]);
+  }, [taker$, maker$, quantity$]);
 
   useEffect(() => {
     const subscription = stream$.subscribe();
     return () => subscription.unsubscribe();
   }, [stream$]);
 
-  useLayoutEffect(() => {
-    const qty = new BigNumber(takerQuantity ?? 0).multipliedBy(price);
-    form.setValue('makerQuantity', qty.toFixed(4));
-  }, [price, takerQuantity]);
-
-  const submit = form.handleSubmit(async data => {
+  const submit = form.handleSubmit(async () => {
     const hub = new Hub(environment, props.address);
     const trading = new Trading(environment, (await hub.getRoutes()).trading);
     const adapter = await KyberTradingAdapter.create(trading, props.exchange.exchange);
 
-    // Don't use the maker quantity form value, it's rounded.
-    const takerQuantity = new BigNumber(data.takerQuantity);
-    const makerQuantity = takerQuantity.multipliedBy(price);
-
     const tx = adapter.takeOrder(account.address!, {
-      makerQuantity: toTokenBaseUnit(makerQuantity, makerAsset!.decimals),
-      takerQuantity: toTokenBaseUnit(takerQuantity, takerAsset!.decimals),
-      makerAsset: data.makerAsset!,
-      takerAsset: data.takerAsset!,
+      makerQuantity: toTokenBaseUnit(makerQuantity, makerAsset.decimals),
+      takerQuantity: toTokenBaseUnit(takerQuantity, takerAsset.decimals),
+      makerAsset: makerAsset.address,
+      takerAsset: takerAsset.address,
     });
 
     transaction.start(tx, 'Take order');
   });
-
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) =>
-    changes$.next([event.target.name, event.target.value]);
 
   return (
     <>
@@ -175,45 +168,48 @@ export const FundKyberTrading: React.FC<FundKyberTradingProps> = props => {
         <form onSubmit={submit}>
           <Grid>
             <GridRow>
-              <GridCol xs={2}>
+              <GridCol xs={12} sm={3}>
                 <FormField name="takerAsset" label="Sell asset">
-                  <Dropdown name="takerAsset" options={options} onChange={handleChange} disabled={loading} />
+                  <Dropdown name="takerAsset" options={options} disabled={loading} />
                 </FormField>
               </GridCol>
 
-              <GridCol xs={10}>
+              <GridCol xs={12} sm={9}>
                 <FormField name="takerQuantity" label="Sell quantity">
-                  <Input type="number" step="any" name="takerQuantity" onChange={handleChange} />
+                  <Input type="number" step="any" name="takerQuantity" />
                 </FormField>
               </GridCol>
             </GridRow>
 
             <GridRow>
-              <GridCol xs={2}>
+              <GridCol xs={12} sm={3}>
                 <FormField name="makerAsset" label="Buy asset">
-                  <Dropdown name="makerAsset" options={options} onChange={handleChange} disabled={loading} />
+                  <Dropdown name="makerAsset" options={options} disabled={loading} />
                 </FormField>
               </GridCol>
 
-              <GridCol xs={10}>
-                <FormField name="makerQuantity" label="Buy quantity">
-                  <Input type="number" step="any" name="makerQuantity" disabled={true} />
+              <GridCol xs={12} sm={9}>
+                <FormField label="Buy quantity">
+                  <Input type="text" value={makerQuantity.isNaN() ? '' : makerQuantity.toFixed(4)} disabled={true} />
                 </FormField>
               </GridCol>
             </GridRow>
 
             <GridRow>
               <GridCol>
-                {!loading && !price.isFinite() && <div>No liquidity for this quantity.</div>}
-                {!loading && price.isFinite() && (
-                  <div>
-                    1 {takerAsset?.symbol ?? 'N/A'} = <FormattedNumber value={price} /> {makerAsset?.symbol ?? 'N/A'}
-                  </div>
+                {!loading && (
+                  <>
+                    {!price.isFinite() ? (
+                      <div>No liquidity for this quantity.</div>
+                    ) : (
+                      <div>
+                        1 {takerAsset!.symbol} = <FormattedNumber value={price} /> {makerAsset!.symbol}
+                      </div>
+                    )}
+                  </>
                 )}
               </GridCol>
             </GridRow>
-
-            {loading && <Spinner />}
 
             <GridRow>
               <GridCol>
@@ -225,6 +221,7 @@ export const FundKyberTrading: React.FC<FundKyberTradingProps> = props => {
           </Grid>
         </form>
       </FormContext>
+
       <TransactionModal transaction={transaction} />
     </>
   );

@@ -1,7 +1,7 @@
 import React from 'react';
 import BigNumber from 'bignumber.js';
 import * as Yup from 'yup';
-import useForm, { FormContext } from 'react-hook-form';
+import { useForm, FormContext } from 'react-hook-form';
 import { useHistory } from 'react-router';
 import { Registry, Version } from '@melonproject/melonjs';
 import { useEnvironment } from '~/hooks/useEnvironment';
@@ -23,7 +23,6 @@ import {
   CheckboxLabel,
 } from '~/storybook/components/Checkbox/Checkbox';
 import { NotificationBar } from '~/storybook/components/NotificationBar/NotificationBar';
-import { toTokenBaseUnit } from '~/utils/toTokenBaseUnit';
 
 export interface WalletFundSetupForm {
   name: string;
@@ -44,10 +43,12 @@ export const WalletFundSetup: React.FC = () => {
   const validationSchema = Yup.object().shape({
     name: Yup.string()
       .min(1, 'Fund Name must be at least one character')
+      // tslint:disable-next-line
       .test('nameTest', 'Fund name contains invalid characters', async function(value) {
         const registry = new Registry(environment, environment.deployment.melon.addr.Registry);
         return await registry.isValidFundName(value);
       })
+      // tslint:disable-next-line
       .test('nameTest', 'Fund name is reserved by another manager', async function(value) {
         const registry = new Registry(environment, environment.deployment.melon.addr.Registry);
         return await registry.canUseFundName(account.address!, value);
@@ -166,26 +167,25 @@ export const WalletFundSetup: React.FC = () => {
                         .filter(exchange => !exchange.historic)
                         .map((exchange, index) => (
                           <GridCol xs={12} sm={12} md={6} key={exchange.id}>
-                            <CheckboxContainer>
-                              <CheckboxInput
-                                id={`exchanges[${index}]`}
-                                type="checkbox"
-                                name={`exchanges[${index}]`}
-                                value={exchange.id}
-                                key={exchange.id}
-                                ref={form.register}
-                              />
-                              <CheckboxMask>
-                                <CheckboxIcon></CheckboxIcon>
-                              </CheckboxMask>
-                              <CheckboxLabel htmlFor={`exchanges[${index}]`}>{exchange.name}</CheckboxLabel>
-                            </CheckboxContainer>
+                            <FormField name="exchanges">
+                              <CheckboxContainer>
+                                <CheckboxInput
+                                  id={`exchanges[${index}]`}
+                                  type="checkbox"
+                                  name={`exchanges[${index}]`}
+                                  value={exchange.id}
+                                  key={exchange.id}
+                                  ref={form.register}
+                                />
+                                <CheckboxMask>
+                                  <CheckboxIcon />
+                                </CheckboxMask>
+                                <CheckboxLabel htmlFor={`exchanges[${index}]`}>{exchange.name}</CheckboxLabel>
+                              </CheckboxContainer>
+                            </FormField>
                           </GridCol>
                         ))}
                     </GridRow>
-                    {form.errors.exchanges && (
-                      <NotificationBar kind="error">{form.errors.exchanges.message}</NotificationBar>
-                    )}
                   </Grid>
                 </BlockSection>
                 <BlockSection>
@@ -199,26 +199,27 @@ export const WalletFundSetup: React.FC = () => {
                         .filter(token => !token.historic)
                         .map((token, index) => (
                           <GridCol xs={12} sm={12} md={6} key={token.symbol}>
-                            <CheckboxContainer>
-                              <CheckboxInput
-                                id={`assets[${index}]`}
-                                type="checkbox"
-                                name={`assets[${index}]`}
-                                value={token.symbol}
-                                key={token.symbol}
-                                ref={form.register}
-                              />
-                              <CheckboxMask>
-                                <CheckboxIcon />
-                              </CheckboxMask>
-                              <CheckboxLabel htmlFor={`assets[${index}]`}>
-                                {token.symbol} ({token.name})
-                              </CheckboxLabel>
-                            </CheckboxContainer>
+                            <FormField name="exchanges">
+                              <CheckboxContainer>
+                                <CheckboxInput
+                                  id={`assets[${index}]`}
+                                  type="checkbox"
+                                  name={`assets[${index}]`}
+                                  value={token.symbol}
+                                  key={token.symbol}
+                                  ref={form.register}
+                                />
+                                <CheckboxMask>
+                                  <CheckboxIcon />
+                                </CheckboxMask>
+                                <CheckboxLabel htmlFor={`assets[${index}]`}>
+                                  {token.symbol} ({token.name})
+                                </CheckboxLabel>
+                              </CheckboxContainer>
+                            </FormField>
                           </GridCol>
                         ))}
                     </GridRow>
-                    {form.errors.assets && <NotificationBar kind="error">{form.errors.assets.message}</NotificationBar>}
                   </Grid>
                 </BlockSection>
                 <BlockSection>
@@ -242,22 +243,20 @@ export const WalletFundSetup: React.FC = () => {
                     WITH RESPECT TO THE MELON PROTOCOL AND/OR THE UNDERLYING SOFTWARE AND THE USE THEREOF ARE
                     DISCLAIMED.
                   </p>
-                  <CheckboxContainer>
-                    <CheckboxInput
-                      id="termsAndConditions"
-                      type="checkbox"
-                      name="termsAndConditions"
-                      ref={form.register}
-                    />
-                    <CheckboxMask>
-                      <CheckboxIcon></CheckboxIcon>
-                    </CheckboxMask>
-                    <CheckboxLabel htmlFor="termsAndConditions">I accept the terms and conditions</CheckboxLabel>
-                  </CheckboxContainer>
-                  {form.errors.termsAndConditions && (
-                    <NotificationBar kind="error">{form.errors.termsAndConditions.message}</NotificationBar>
-                  )}
-
+                  <FormField name="termsAndConditions">
+                    <CheckboxContainer>
+                      <CheckboxInput
+                        id="termsAndConditions"
+                        type="checkbox"
+                        name="termsAndConditions"
+                        ref={form.register}
+                      />
+                      <CheckboxMask>
+                        <CheckboxIcon />
+                      </CheckboxMask>
+                      <CheckboxLabel htmlFor="termsAndConditions">I accept the terms and conditions</CheckboxLabel>
+                    </CheckboxContainer>
+                  </FormField>
                   <BlockActions>
                     <Button type="submit">Create fund</Button>
                   </BlockActions>

@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import * as Yup from 'yup';
-import useForm, { FormContext } from 'react-hook-form';
+import { useForm, FormContext } from 'react-hook-form';
 import { useEnvironment } from '~/hooks/useEnvironment';
 import { Deployment, UserWhitelist, PolicyDefinition, zeroAddress } from '@melonproject/melonjs';
 import { UserWhitelistBytecode } from '@melonproject/melonjs/abis/UserWhitelist.bin';
@@ -28,7 +28,19 @@ export const UserWhitelistConfiguration: React.FC<UserWhitelistConfigurationProp
   const validationSchema = Yup.object().shape({
     userWhitelist: Yup.string()
       .label('User whitelist')
-      .required(),
+      .required()
+      .test('valid-addresses', 'Invalid address format.', (value: string) => {
+        const valid = value
+          .replace(/^\s+|\s+$/g, '')
+          .split('\n')
+          .map(user => isAddress(user));
+
+        if (valid.some(current => current === false)) {
+          return false;
+        }
+
+        return true;
+      }),
   });
 
   const form = useForm<UserWhitelistConfigurationForm>({
@@ -40,14 +52,6 @@ export const UserWhitelistConfiguration: React.FC<UserWhitelistConfigurationProp
   const submit = form.handleSubmit(async data => {
     const whitelistedUsers = data.userWhitelist!.replace(/^\s+|\s+$/g, '').split('\n');
     const validAddresses = whitelistedUsers.map(user => isAddress(user));
-
-    if (validAddresses.some(valid => !valid)) {
-      form.setError('userWhitelist', 'wrongFormat', `Invalid address format`);
-      return;
-    } else {
-      form.clearError('userWhitelist');
-    }
-
     const tx = UserWhitelist.deploy(environment, UserWhitelistBytecode, account.address!, whitelistedUsers);
     props.startTransaction(tx, 'Deploy UserWhitelist Contract');
   });

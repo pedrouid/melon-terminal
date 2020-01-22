@@ -1,6 +1,6 @@
 import React from 'react';
 import * as Yup from 'yup';
-import useForm, { FormContext } from 'react-hook-form';
+import { useForm, FormContext } from 'react-hook-form';
 import { useEnvironment } from '~/hooks/useEnvironment';
 import { MaxConcentration, Deployment, PolicyDefinition } from '@melonproject/melonjs';
 import { MaxConcentrationBytecode } from '@melonproject/melonjs/abis/MaxConcentration.bin';
@@ -11,7 +11,6 @@ import { Input } from '~/storybook/components/Input/Input';
 import { Button } from '~/storybook/components/Button/Button';
 import { SectionTitle } from '~/storybook/components/Title/Title';
 import { BlockActions } from '~/storybook/components/Block/Block';
-import { toTokenBaseUnit } from '~/utils/toTokenBaseUnit';
 
 interface MaxConcentrationConfigurationForm {
   maxConcentration: number;

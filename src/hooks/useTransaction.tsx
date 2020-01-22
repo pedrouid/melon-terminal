@@ -1,6 +1,6 @@
 import React, { useEffect, useReducer } from 'react';
 import * as Yup from 'yup';
-import useForm from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { TransactionReceipt } from 'web3-core';
 import { Transaction, SendOptions, Deployment, Contract, DeployedEnvironment } from '@melonproject/melonjs';
 import { FormContextValues } from 'react-hook-form/dist/contextTypes';

@@ -6,6 +6,7 @@ export const DropdownWrapper = styled.div`
   background-color: ${props => props.theme.mainColors.primary};
   color: ${props => props.theme.mainColors.primaryDark};
   border: ${props => props.theme.border.borderDefault};
+
   &:before {
     content: '';
     position: absolute;
@@ -31,12 +32,15 @@ export const DropdownSelect = styled.select`
     ${props => props.theme.spaceUnits.xs} ${props => props.theme.spaceUnits.s};
   line-height: 1.6;
   margin: 0;
+
   :focus {
     outline-color: ${props => props.theme.mainColors.secondaryDarkAlpha};
   }
+
   &::-ms-expand {
     display: none;
   }
+
   &:focus::-ms-value {
     background-color: transparent;
   }

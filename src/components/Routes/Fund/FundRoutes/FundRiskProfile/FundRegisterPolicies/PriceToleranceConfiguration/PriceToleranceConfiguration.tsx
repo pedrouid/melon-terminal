@@ -1,6 +1,6 @@
 import React from 'react';
 import * as Yup from 'yup';
-import useForm, { FormContext } from 'react-hook-form';
+import { useForm,  FormContext } from 'react-hook-form';
 import { useEnvironment } from '~/hooks/useEnvironment';
 import { PriceTolerance, Deployment, PolicyDefinition } from '@melonproject/melonjs';
 import { PriceToleranceBytecode } from '@melonproject/melonjs/abis/PriceTolerance.bin';

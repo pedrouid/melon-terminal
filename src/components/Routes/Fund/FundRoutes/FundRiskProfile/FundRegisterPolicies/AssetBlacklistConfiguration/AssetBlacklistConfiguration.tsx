@@ -1,6 +1,6 @@
 import React from 'react';
 import * as Yup from 'yup';
-import useForm, { FormContext } from 'react-hook-form';
+import { useForm, FormContext } from 'react-hook-form';
 import { Button } from '~/storybook/components/Button/Button';
 import { useEnvironment } from '~/hooks/useEnvironment';
 import { Deployment, AssetBlacklist, PolicyDefinition, availableTokens } from '@melonproject/melonjs';
@@ -16,7 +16,7 @@ import {
   CheckboxLabel,
 } from '~/storybook/components/Checkbox/Checkbox';
 import { Grid, GridRow, GridCol } from '~/storybook/components/Grid/Grid';
-import { NotificationBar } from '~/storybook/components/NotificationBar/NotificationBar';
+import { FormField } from '~/storybook/components/FormField/FormField';
 
 interface AssetBlacklistConfigurationForm {
   assetBlacklist: string[];
@@ -60,28 +60,26 @@ export const AssetBlacklistConfiguration: React.FC<AssetBlacklistConfigurationPr
             <GridRow>
               {tokens.map((token, index) => (
                 <GridCol xs={4} sm={3} md={2.4} key={token.address}>
-                  <CheckboxContainer>
-                    <CheckboxInput
-                      id={`assetBlacklist[${index}]`}
-                      type="checkbox"
-                      name={`assetBlacklist[${index}]`}
-                      value={token.address}
-                      key={token.symbol}
-                      ref={form.register}
-                    />
-                    <CheckboxMask>
-                      <CheckboxIcon></CheckboxIcon>
-                    </CheckboxMask>
-                    <CheckboxLabel htmlFor={`assetBlacklist[${index}]`}>{token.symbol}</CheckboxLabel>
-                  </CheckboxContainer>
+                  <FormField name="assetBlacklist">
+                    <CheckboxContainer>
+                      <CheckboxInput
+                        id={`assetBlacklist[${index}]`}
+                        type="checkbox"
+                        name={`assetBlacklist[${index}]`}
+                        value={token.address}
+                        key={token.symbol}
+                        ref={form.register}
+                      />
+                      <CheckboxMask>
+                        <CheckboxIcon />
+                      </CheckboxMask>
+                      <CheckboxLabel htmlFor={`assetBlacklist[${index}]`}>{token.symbol}</CheckboxLabel>
+                    </CheckboxContainer>
+                  </FormField>
                 </GridCol>
               ))}
             </GridRow>
           </Grid>
-
-          {form.errors.assetBlacklist && (
-            <NotificationBar kind="error">{form.errors.assetBlacklist.message}</NotificationBar>
-          )}
 
           <BlockActions>
             <Button type="submit">Add asset blacklist policy</Button>

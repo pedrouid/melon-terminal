@@ -22,8 +22,7 @@ import { Input } from '~/storybook/components/Input/Input';
 import { OrderbookItem } from '../FundOrderbook/utils/aggregatedOrderbook';
 import { useAccount } from '~/hooks/useAccount';
 import { MatchingMarketOrderbookItem } from '../FundOrderbook/utils/matchingMarketOrderbook';
-import useForm, { FormContext } from 'react-hook-form';
-import BigNumber from 'bignumber.js';
+import { useForm, FormContext } from 'react-hook-form';
 import { BlockActions } from '~/storybook/components/Block/Block';
 import { toTokenBaseUnit } from '~/utils/toTokenBaseUnit';
 
@@ -33,6 +32,10 @@ export interface FundOrderbookMarketFormProps {
   exchanges: ExchangeDefinition[];
   order?: OrderbookItem;
   unsetOrder: () => void;
+}
+
+interface FundOrderbookMarketFormValues {
+  quantity: string;
 }
 
 export const FundOrderbookMarketForm: React.FC<FundOrderbookMarketFormProps> = props => {
@@ -65,11 +68,11 @@ export const FundOrderbookMarketForm: React.FC<FundOrderbookMarketFormProps> = p
   ];
 
   const quantity = useRef(props.order?.quantity);
-  const form = useForm({
+  const form = useForm<FundOrderbookMarketFormValues>({
     mode: 'onSubmit',
     reValidateMode: 'onBlur',
     defaultValues: {
-      quantity: undefined,
+      quantity: '',
     },
     validationSchema: Yup.object().shape({
       quantity: Yup.string()
@@ -86,7 +89,7 @@ export const FundOrderbookMarketForm: React.FC<FundOrderbookMarketFormProps> = p
 
   useEffect(() => {
     quantity.current = props.order?.quantity;
-    form.setValue('quantity', props.order?.quantity.toString());
+    form.setValue('quantity', props.order?.quantity.toString() ?? '');
   }, [props.order?.quantity.toString()]);
 
   const submit = form.handleSubmit(async values => {

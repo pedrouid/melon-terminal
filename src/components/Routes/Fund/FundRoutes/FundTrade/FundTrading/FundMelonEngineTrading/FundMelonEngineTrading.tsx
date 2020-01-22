@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import BigNumber from 'bignumber.js';
 import * as Yup from 'yup';
-import useForm, { FormContext } from 'react-hook-form';
+import { useForm,  FormContext } from 'react-hook-form';
 import {
   TokenDefinition,
   MelonEngineTradingAdapter,
@@ -25,10 +25,12 @@ import { BlockActions } from '~/storybook/components/Block/Block';
 import { useFundHoldingsQuery } from '~/queries/FundHoldings';
 import { toTokenBaseUnit } from '~/utils/toTokenBaseUnit';
 import { fromTokenBaseUnit } from '~/utils/fromTokenBaseUnit';
+import { Holding } from '@melonproject/melongql';
 
 export interface FundMelonEngineTradingProps {
   address: string;
   exchange: ExchangeDefinition;
+  holdings: Holding[];
   asset?: TokenDefinition;
 }
 

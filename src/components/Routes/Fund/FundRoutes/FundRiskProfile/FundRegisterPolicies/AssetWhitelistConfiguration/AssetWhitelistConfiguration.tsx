@@ -1,6 +1,6 @@
 import React from 'react';
 import * as Yup from 'yup';
-import useForm, { FormContext } from 'react-hook-form';
+import { useForm, FormContext } from 'react-hook-form';
 import { Button } from '~/storybook/components/Button/Button';
 import { useEnvironment } from '~/hooks/useEnvironment';
 import { Deployment, AssetWhitelist, availableTokens, PolicyDefinition } from '@melonproject/melonjs';
@@ -16,7 +16,7 @@ import {
 } from '~/storybook/components/Checkbox/Checkbox';
 import { BlockActions } from '~/storybook/components/Block/Block';
 import { Grid, GridRow, GridCol } from '~/storybook/components/Grid/Grid';
-import { NotificationBar } from '~/storybook/components/NotificationBar/NotificationBar';
+import { FormField } from '~/storybook/components/FormField/FormField';
 
 interface AssetWhitelistConfigurationForm {
   assetWhitelist: string[];
@@ -60,26 +60,24 @@ export const AssetWhitelistConfiguration: React.FC<AssetWhitelistConfigurationPr
             <GridRow>
               {tokens.map((token, index) => (
                 <GridCol xs={4} sm={3} md={2.4} key={token.address}>
-                  <CheckboxContainer>
-                    <CheckboxInput
-                      id={`assetWhitelist[${index}]`}
-                      type="checkbox"
-                      name={`assetWhitelist[${index}]`}
-                      value={token.address}
-                      key={token.symbol}
-                      ref={form.register}
-                    />
-                    <CheckboxMask>
-                      <CheckboxIcon></CheckboxIcon>
-                    </CheckboxMask>
-                    <CheckboxLabel htmlFor={`assetWhitelist[${index}]`}>{token.symbol}</CheckboxLabel>
-                  </CheckboxContainer>
+                  <FormField name="assetWhitelist">
+                    <CheckboxContainer>
+                      <CheckboxInput
+                        id={`assetWhitelist[${index}]`}
+                        type="checkbox"
+                        name={`assetWhitelist[${index}]`}
+                        value={token.address}
+                        key={token.symbol}
+                        ref={form.register}
+                      />
+                      <CheckboxMask>
+                        <CheckboxIcon />
+                      </CheckboxMask>
+                      <CheckboxLabel htmlFor={`assetWhitelist[${index}]`}>{token.symbol}</CheckboxLabel>
+                    </CheckboxContainer>
+                  </FormField>
                 </GridCol>
               ))}
-
-              {form.errors.assetWhitelist && (
-                <NotificationBar kind="error">{form.errors.assetWhitelist.message}</NotificationBar>
-              )}
 
               <BlockActions>
                 <Button type="submit">Add asset whitelist policy</Button>

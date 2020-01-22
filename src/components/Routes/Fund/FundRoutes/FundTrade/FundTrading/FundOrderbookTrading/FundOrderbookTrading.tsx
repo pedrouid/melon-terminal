@@ -1,17 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { ExchangeDefinition } from '@melonproject/melonjs';
+import { Holding } from '@melonproject/melongql';
 import { FundOrderbook } from './FundOrderbook/FundOrderbook';
 import { OrderbookItem } from './FundOrderbook/utils/aggregatedOrderbook';
 import { FormField } from '~/storybook/components/FormField/FormField';
 import { useEnvironment } from '~/hooks/useEnvironment';
 import { Dropdown } from '~/storybook/components/Dropdown/Dropdown';
-import * as S from './FundOrderbookTrading.styles';
 import { FundOrderbookMarketForm } from './FundOrderbookMarketForm/FundOrderbookMarketForm';
 import { FundOrderbookLimitForm } from './FundOrderbookLimitForm/FundOrderbookLimitForm';
+import * as S from './FundOrderbookTrading.styles';
 
 export interface FundOrderbookTradingProps {
   address: string;
   exchanges: ExchangeDefinition[];
+  holdings: Holding[];
 }
 
 export const FundOrderbookTrading: React.FC<FundOrderbookTradingProps> = props => {

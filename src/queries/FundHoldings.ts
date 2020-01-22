@@ -1,19 +1,6 @@
 import gql from 'graphql-tag';
-import BigNumber from 'bignumber.js';
 import { useOnChainQuery } from '~/hooks/useQuery';
 import { Holding } from '@melonproject/melongql';
-
-export interface FundHolding {
-  amount: BigNumber;
-  valueInDenominationAsset: BigNumber;
-  token: {
-    address: string;
-    symbol: string;
-    decimals: number;
-    name: string;
-    price: BigNumber;
-  };
-}
 
 export interface FundHoldingsQueryVariables {
   address: string;

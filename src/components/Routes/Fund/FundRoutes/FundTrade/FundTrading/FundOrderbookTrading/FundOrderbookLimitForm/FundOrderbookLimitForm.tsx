@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
-import useForm, { FormContext } from 'react-hook-form';
+import { useForm,  FormContext } from 'react-hook-form';
 import * as Yup from 'yup';
-import BigNumber from 'bignumber.js';
 import { useEnvironment } from '~/hooks/useEnvironment';
 import { useTransaction } from '~/hooks/useTransaction';
 import { TransactionModal } from '~/components/Common/TransactionModal/TransactionModal';
