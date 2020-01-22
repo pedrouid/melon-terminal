@@ -1,13 +1,13 @@
 import BigNumber from 'bignumber.js';
+import { toBigNumber } from '@melonproject/melonjs';
 
-export function toTokenBaseUnit(value: BigNumber | string | number | undefined, decimals: number = 18): BigNumber {
-  if (!value) {
-    return new BigNumber('NaN');
-  }
+export function toTokenBaseUnit(value: BigNumber | string | number | undefined, decimals: number): BigNumber {
+  const val = toBigNumber(value ?? 'NaN');
+  const dec = toBigNumber(decimals ?? 'NaN');
 
   if (typeof value === 'string' || typeof value === 'number') {
     value = new BigNumber(value);
   }
 
-  return new BigNumber(value).multipliedBy(new BigNumber(10).exponentiatedBy(decimals)).integerValue();
+  return val.multipliedBy(new BigNumber(10).exponentiatedBy(dec)).integerValue();
 }
