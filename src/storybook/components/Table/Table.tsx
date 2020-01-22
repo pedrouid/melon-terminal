@@ -15,12 +15,18 @@ export const Table = styled.table`
   border-spacing: 0;
 `;
 
-export const HeaderCell = styled.th`
+export interface HeaderCellProps {
+  hover?: boolean;
+}
+
+export const HeaderCell = styled.th<HeaderCellProps>`
   text-align: left;
   padding: ${props => props.theme.spaceUnits.s};
+  cursor: ${props => props.hover && 'pointer'};
 `;
 
-export const HeaderCellRightAlign = styled.th`
+export const HeaderCellRightAlign = styled.th<HeaderCellProps>`
+  cursor: ${props => props.hover && 'pointer'};
   text-align: right;
   padding: ${props => props.theme.spaceUnits.s};
 `;

@@ -271,6 +271,7 @@ export const Home: React.FC = () => {
                       {tableHeadings.map((heading, key) =>
                         heading.align === 'left' ? (
                           <HeaderCell
+                            hover={true}
                             key={key}
                             onClick={heading.key ? () => handleChangeSortableItem(heading.key) : undefined}
                           >
@@ -280,6 +281,7 @@ export const Home: React.FC = () => {
                           </HeaderCell>
                         ) : (
                           <HeaderCellRightAlign
+                            hover={true}
                             key={key}
                             onClick={heading.key ? () => handleChangeSortableItem(heading.key) : undefined}
                           >
