@@ -42,7 +42,7 @@ export const Layout: React.FC = ({ children }) => {
               {account.fund && (
                 <ConnectionInfoItem>
                   <NavLink to={`/fund/${account.fund}`} title={account.fund} activeClassName="active">
-                    Your fund
+                    My fund
                   </NavLink>
                 </ConnectionInfoItem>
               )}
@@ -50,7 +50,7 @@ export const Layout: React.FC = ({ children }) => {
               {account.address && (
                 <ConnectionInfoItem>
                   <NavLink to="/wallet" title={account.address} activeClassName="active">
-                    Your wallet
+                    My wallet
                   </NavLink>
                 </ConnectionInfoItem>
               )}
