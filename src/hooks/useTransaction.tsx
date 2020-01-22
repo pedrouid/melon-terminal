@@ -354,7 +354,9 @@ export function useTransaction(environment: DeployedEnvironment, options?: Trans
     mode: 'onSubmit',
     reValidateMode: 'onBlur',
     validationSchema: Yup.object().shape({
-      gasPrice: Yup.number(),
+      gasPrice: Yup.number()
+        .required()
+        .max(8000000),
     }),
   });
 

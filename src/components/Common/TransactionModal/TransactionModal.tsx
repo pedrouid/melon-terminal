@@ -4,7 +4,6 @@ import { FormContext } from 'react-hook-form';
 import { TransactionHookValues, TransactionProgress } from '~/hooks/useTransaction';
 import { ProgressBar } from '~/components/Common/ProgressBar/ProgressBar';
 import { ProgressBarStep } from '~/components/Common/ProgressBar/ProgressBarStep/ProgressBarStep';
-import { FormField } from '~/storybook/components/FormField/FormField';
 import { Input } from '~/storybook/components/Input/Input';
 import { Button } from '~/storybook/components/Button/Button';
 import { NotificationBar, NotificationContent } from '~/storybook/components/NotificationBar/NotificationBar';
@@ -142,20 +141,20 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
               {estimated && !finished && (
                 <>
                   <S.TransactionModalFeeForm>
-                    <FormField name="gasPrice" label="Gas Price (gwei)">
-                      <Input
-                        id="gas-price"
-                        type="number"
-                        name="gasPrice"
-                        step=".01"
-                        defaultValue={defaultGasPrice}
-                        disabled={!!loading && estimated}
-                      />
-                    </FormField>
+                    <Input
+                      id="gas-price"
+                      type="number"
+                      name="gasPrice"
+                      label="Gas Price (gwei)"
+                      step=".01"
+                      max={8000000}
+                      defaultValue={defaultGasPrice}
+                      disabled={!!loading && estimated}
+                    />
                     <S.CostsTable>
                       <S.CostsTableHead>
                         <S.CostsTableRow>
-                          <S.CostsTableHeaderCellText></S.CostsTableHeaderCellText>
+                          <S.CostsTableHeaderCellText />
                           <S.CostsTableHeaderCell>Amount</S.CostsTableHeaderCell>
                           <S.CostsTableHeaderCell>Costs [ETH]</S.CostsTableHeaderCell>
                           <S.CostsTableHeaderCell>Costs [USD]</S.CostsTableHeaderCell>
@@ -181,7 +180,7 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
                         {options && options.amgu && (
                           <S.CostsTableRow>
                             <S.CostsTableCellText>Asset management gas</S.CostsTableCellText>
-                            <S.CostsTableCell></S.CostsTableCell>
+                            <S.CostsTableCell />
                             <S.CostsTableCell>
                               <FormattedNumber value={fromTokenBaseUnit(options.amgu, 18)} suffix="ETH" />
                             </S.CostsTableCell>
@@ -193,8 +192,8 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
 
                         {options && options.incentive && (
                           <S.CostsTableRow>
-                            <S.CostsTableCellText>Incentive</S.CostsTableCellText>
-                            <S.CostsTableCell></S.CostsTableCell>
+                            <S.CostsTableCellText>Asset management gas</S.CostsTableCellText>
+                            <S.CostsTableCell />
                             <S.CostsTableCell>
                               <FormattedNumber value={fromTokenBaseUnit(options.incentive, 18)} suffix="ETH" />
                             </S.CostsTableCell>
@@ -207,7 +206,7 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
                         {totalEth && (
                           <S.CostsTableRowTotal>
                             <S.CostsTableCellText>Total</S.CostsTableCellText>
-                            <S.CostsTableCell></S.CostsTableCell>
+                            <S.CostsTableCell />
                             <S.CostsTableCell>
                               <FormattedNumber value={fromTokenBaseUnit(totalEth, 18)} suffix="ETH" />
                             </S.CostsTableCell>

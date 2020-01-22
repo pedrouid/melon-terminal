@@ -1,7 +1,7 @@
 import React from 'react';
 import * as Yup from 'yup';
 import BigNumber from 'bignumber.js';
-import { useForm,  FormContext } from 'react-hook-form';
+import { useForm, FormContext } from 'react-hook-form';
 import { toWei } from 'web3-utils';
 import { Weth } from '@melonproject/melonjs';
 import { useTransaction } from '~/hooks/useTransaction';
@@ -11,7 +11,6 @@ import { useAccount } from '~/hooks/useAccount';
 import { useOnChainQueryRefetcher } from '~/hooks/useOnChainQueryRefetcher';
 import { Block, BlockActions } from '~/storybook/components/Block/Block';
 import { Title } from '~/storybook/components/Title/Title';
-import { FormField } from '~/storybook/components/FormField/FormField';
 import { Input } from '~/storybook/components/Input/Input';
 import { Button } from '~/storybook/components/Button/Button';
 import { FormattedNumber } from '~/components/Common/FormattedNumber/FormattedNumber';
@@ -69,9 +68,7 @@ export const WalletWrapEther: React.FC = () => {
               <FormattedNumber value={fromTokenBaseUnit(account.weth!, 18)} suffix="WETH" />
             </S.WalletWrapEtherBalance>
           </S.WalletWrapEtherBalances>
-          <FormField name="quantityEth" label="Quantity">
-            <Input id="quantityEth" name="quantityEth" type="number" step="any" />
-          </FormField>
+          <Input id="quantityEth" name="quantityEth" label="Quantity" type="number" step="any" />
           <BlockActions>
             <Button type="submit" disabled={!!form.errors.quantityEth}>
               Wrap Ether

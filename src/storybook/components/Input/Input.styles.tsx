@@ -4,6 +4,24 @@ export interface InputProps {
   error?: boolean;
 }
 
+export const InputWrapper = styled.div`
+  margin-bottom: ${props => props.theme.spaceUnits.l};
+`;
+
+export const InputLabel = styled.span`
+  display: inline-block;
+  margin-bottom: ${props => props.theme.spaceUnits.xs};
+  color: ${props => props.theme.mainColors.primaryDark};
+  font-size: ${props => props.theme.fontSizes.m};
+`;
+
+export const InputError = styled.span`
+  display: inline-block;
+  margin-top: ${props => props.theme.spaceUnits.xs};
+  color: ${props => props.theme.statusColors.primaryLoss};
+  font-size: ${props => props.theme.fontSizes.s};
+`;
+
 export const Input = styled.input<InputProps>`
   position: relative;
   width: 100%;
@@ -13,8 +31,8 @@ export const Input = styled.input<InputProps>`
   font-family: inherit;
   font-size: ${props => props.theme.fontSizes.m};
   background: ${props => props.theme.mainColors.primary};
-  box-shadow: inset 1px 4px 4px rgba(200, 200, 200, 0.25);
   height: ${props => props.theme.spaceUnits.xxl};
+  box-shadow: inset 1px 4px 4px rgba(200, 200, 200, 0.25);
 
   &::placeholder {
     color: ${props => props.theme.mainColors.secondaryDarkAlpha};
@@ -34,6 +52,7 @@ export const Input = styled.input<InputProps>`
       `;
     }
   }}
+
   ${props => {
     if (props.error) {
       return css`

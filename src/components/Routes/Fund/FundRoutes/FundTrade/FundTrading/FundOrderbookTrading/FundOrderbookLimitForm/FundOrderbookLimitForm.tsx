@@ -17,7 +17,6 @@ import { useOnChainQueryRefetcher } from '~/hooks/useOnChainQueryRefetcher';
 import { useAccount } from '~/hooks/useAccount';
 import { Dropdown } from '~/storybook/components/Dropdown/Dropdown';
 import { Button } from '~/storybook/components/Button/Button';
-import { FormField } from '~/storybook/components/FormField/FormField';
 import { Input } from '~/storybook/components/Input/Input';
 import { OrderbookItem } from '../FundOrderbook/utils/aggregatedOrderbook';
 import { BlockActions } from '~/storybook/components/Block/Block';
@@ -67,15 +66,16 @@ export const FundOrderbookLimitForm: React.FC<FundOrderbookLimitFormProps> = pro
     defaultValues: defaults,
   });
 
-  useEffect(() => {
-    if (props.order) {
-      form.setValue('direction', props.order.side === 'bid' ? 'sell' : 'buy');
-      form.setValue('quantity', props.order.quantity.toFixed());
-      form.setValue('price', props.order.price.toFixed());
-    }
-  }, [props.order]);
+  // useEffect(() => {
+  //   if (props.order) {
+  //     form.setValue('direction', props.order.side === 'bid' ? 'sell' : 'buy');
+  //     form.setValue('quantity', props.order.quantity.toFixed());
+  //     form.setValue('price', props.order.price.toFixed());
+  //   }
+  // }, [props.order]);
 
   const submit = form.handleSubmit(async data => {
+    console.log(data);
     const hub = new Hub(environment, props.address);
     const trading = new Trading(environment, (await hub.getRoutes()).trading);
 
@@ -141,21 +141,10 @@ export const FundOrderbookLimitForm: React.FC<FundOrderbookLimitFormProps> = pro
     <>
       <FormContext {...form}>
         <form onSubmit={submit}>
-          <FormField name="direction">
-            <Dropdown name="direction" options={directions} />
-          </FormField>
-
-          <FormField name="exchange">
-            <Dropdown name="exchange" options={exchanges} />
-          </FormField>
-
-          <FormField label="Quantity" name="quantity">
-            <Input type="text" name="quantity" onChange={() => props.order && props.unsetOrder()} />
-          </FormField>
-
-          <FormField label="Price" name="price">
-            <Input type="text" name="price" onChange={() => props.order && props.unsetOrder()} />
-          </FormField>
+          <Dropdown name="direction" label="Direction" options={directions} />
+          <Dropdown name="exchange" label="Exchange" options={exchanges} />
+          <Input type="text" name="quantity" label="Quantity" onChange={() => props.order && props.unsetOrder()} />
+          <Input type="text" name="price" label="Price" onChange={() => props.order && props.unsetOrder()} />
 
           <BlockActions>
             <Button type="submit">Submit</Button>

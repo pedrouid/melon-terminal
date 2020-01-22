@@ -8,7 +8,6 @@ import { Textarea } from '~/storybook/components/Textarea/Textarea';
 import { useAccount } from '~/hooks/useAccount';
 import { SectionTitle } from '~/storybook/components/Title/Title';
 import { Button } from '~/storybook/components/Button/Button';
-import { isAddress } from 'web3-utils';
 import { BlockActions } from '~/storybook/components/Block/Block';
 
 interface UserWhitelistConfigurationForm {
@@ -26,32 +25,32 @@ export const UserWhitelistConfiguration: React.FC<UserWhitelistConfigurationProp
   const account = useAccount();
 
   const validationSchema = Yup.object().shape({
-    userWhitelist: Yup.string()
-      .label('User whitelist')
-      .required()
-      .test('valid-addresses', 'Invalid address format.', (value: string) => {
-        const valid = value
-          .replace(/^\s+|\s+$/g, '')
-          .split('\n')
-          .map(user => isAddress(user));
+    userWhitelist: Yup.string().required(),
+    // .test('valid-addresses', 'Invalid address format.', (value: string) => {
+    //   const valid = value
+    //     .replace(/^\s+|\s+$/g, '')
+    //     .split('\n')
+    //     .map(user => isAddress(user));
 
-        if (valid.some(current => current === false)) {
-          return false;
-        }
+    //   if (valid.some(current => current === false)) {
+    //     return false;
+    //   }
 
-        return true;
-      }),
+    //   return true;
+    // }),
   });
 
   const form = useForm<UserWhitelistConfigurationForm>({
     validationSchema,
     mode: 'onSubmit',
     reValidateMode: 'onBlur',
+    defaultValues: {
+      userWhitelist: '',
+    },
   });
 
   const submit = form.handleSubmit(async data => {
     const whitelistedUsers = data.userWhitelist!.replace(/^\s+|\s+$/g, '').split('\n');
-    const validAddresses = whitelistedUsers.map(user => isAddress(user));
     const tx = UserWhitelist.deploy(environment, UserWhitelistBytecode, account.address!, whitelistedUsers);
     props.startTransaction(tx, 'Deploy UserWhitelist Contract');
   });

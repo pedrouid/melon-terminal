@@ -1,6 +1,29 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 export const DropdownWrapper = styled.div`
+  margin-bottom: ${props => props.theme.spaceUnits.l};
+`;
+
+export const DropdownLabel = styled.span`
+  display: inline-block;
+  margin-bottom: ${props => props.theme.spaceUnits.xs};
+  color: ${props => props.theme.mainColors.primaryDark};
+  font-size: ${props => props.theme.fontSizes.m};
+`;
+
+export const DropdownError = styled.span`
+  display: inline-block;
+  margin-top: ${props => props.theme.spaceUnits.xs};
+  color: ${props => props.theme.statusColors.primaryLoss};
+  font-size: ${props => props.theme.fontSizes.s};
+`;
+
+export interface DropdownSelectContainerProps {
+  error?: boolean;
+  disabled?: boolean;
+}
+
+export const DropdownSelectContainer = styled.div<DropdownSelectContainerProps>`
   position: relative;
   width: 100%;
   background-color: ${props => props.theme.mainColors.primary};
@@ -19,6 +42,24 @@ export const DropdownWrapper = styled.div`
     border-top: 6px solid ${props => props.theme.border.borderColor};
     pointer-events: none;
   }
+
+  ${props => {
+    if (props.disabled) {
+      return css`
+        background: ${props => props.theme.mainColors.secondary};
+        border-color: ${props => props.theme.mainColors.secondaryDarkAlpha};
+        pointer-events: none;
+      `;
+    }
+  }}
+
+  ${props => {
+    if (props.error) {
+      return css`
+        border-color: ${props => props.theme.statusColors.primaryLoss};
+      `;
+    }
+  }}
 `;
 
 export const DropdownSelect = styled.select`

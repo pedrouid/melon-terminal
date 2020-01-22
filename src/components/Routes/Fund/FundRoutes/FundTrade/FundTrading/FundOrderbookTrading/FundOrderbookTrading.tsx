@@ -3,7 +3,6 @@ import { ExchangeDefinition } from '@melonproject/melonjs';
 import { Holding } from '@melonproject/melongql';
 import { FundOrderbook } from './FundOrderbook/FundOrderbook';
 import { OrderbookItem } from './FundOrderbook/utils/aggregatedOrderbook';
-import { FormField } from '~/storybook/components/FormField/FormField';
 import { useEnvironment } from '~/hooks/useEnvironment';
 import { Dropdown } from '~/storybook/components/Dropdown/Dropdown';
 import { FundOrderbookMarketForm } from './FundOrderbookMarketForm/FundOrderbookMarketForm';
@@ -65,23 +64,21 @@ export const FundOrderbookTrading: React.FC<FundOrderbookTradingProps> = props =
       </S.FundOrderbook>
 
       <S.FundOrderbookForm>
-        <FormField name="asset">
-          <Dropdown
-            name="asset"
-            options={tokenOptions}
-            value={asset.address}
-            onChange={event => setAsset(environment.getToken(event.target.value)!)}
-          />
-        </FormField>
+        <Dropdown
+          name="asset"
+          label="Asset pair"
+          options={tokenOptions}
+          value={asset.address}
+          onChange={event => setAsset(environment.getToken(event.target.value)!)}
+        />
 
-        <FormField name="type">
-          <Dropdown
-            name="type"
-            options={typeOptions}
-            value={type}
-            onChange={event => setType(event.target.value as 'limit' | 'market')}
-          />
-        </FormField>
+        <Dropdown
+          name="type"
+          label="Type"
+          options={typeOptions}
+          value={type}
+          onChange={event => setType(event.target.value as 'limit' | 'market')}
+        />
 
         {type === 'market' && (
           <FundOrderbookMarketForm

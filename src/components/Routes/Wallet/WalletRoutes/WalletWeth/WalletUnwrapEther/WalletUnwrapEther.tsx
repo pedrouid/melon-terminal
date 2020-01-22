@@ -10,7 +10,6 @@ import { useAccount } from '~/hooks/useAccount';
 import { useOnChainQueryRefetcher } from '~/hooks/useOnChainQueryRefetcher';
 import { Block, BlockActions } from '~/storybook/components/Block/Block';
 import { Title } from '~/storybook/components/Title/Title';
-import { FormField } from '~/storybook/components/FormField/FormField';
 import { Input } from '~/storybook/components/Input/Input';
 import { FormattedNumber } from '~/components/Common/FormattedNumber/FormattedNumber';
 import { Button } from '~/storybook/components/Button/Button';
@@ -71,9 +70,7 @@ export const WalletUnwrapEther: React.FC = () => {
             </S.WalletUnwrapEtherBalance>
           </S.WalletUnwrapEtherBalances>
 
-          <FormField name="quantityWeth" label="Quantity">
-            <Input id="quantityWeth" name="quantityWeth" />
-          </FormField>
+          <Input id="quantityWeth" name="quantityWeth" label="Quantity" />
           <BlockActions>
             <Button type="submit" disabled={!!form.errors.quantityWeth}>
               Unwrap Ether

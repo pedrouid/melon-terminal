@@ -1,11 +1,10 @@
 import React from 'react';
 import * as Yup from 'yup';
-import { useForm,  FormContext } from 'react-hook-form';
+import { useForm, FormContext } from 'react-hook-form';
 import { useEnvironment } from '~/hooks/useEnvironment';
 import { PriceTolerance, Deployment, PolicyDefinition } from '@melonproject/melonjs';
 import { PriceToleranceBytecode } from '@melonproject/melonjs/abis/PriceTolerance.bin';
 import { useAccount } from '~/hooks/useAccount';
-import { FormField } from '~/storybook/components/FormField/FormField';
 import { Input } from '~/storybook/components/Input/Input';
 import { Button } from '~/storybook/components/Button/Button';
 import { SectionTitle } from '~/storybook/components/Title/Title';
@@ -54,9 +53,7 @@ export const PriceToleranceConfiguration: React.FC<PriceToleranceConfigurationPr
       <SectionTitle>Configure price tolerance policy</SectionTitle>
       <FormContext {...form}>
         <form onSubmit={submit}>
-          <FormField name="priceTolerance" label="Price tolerance (%)">
-            <Input name="priceTolerance" type="number" step="any" id="priceTolerance" />
-          </FormField>
+          <Input name="priceTolerance" label="Price tolerance (%)" type="number" step="any" id="priceTolerance" />
           <BlockActions>
             <Button type="submit">Add price tolerance policy</Button>
           </BlockActions>

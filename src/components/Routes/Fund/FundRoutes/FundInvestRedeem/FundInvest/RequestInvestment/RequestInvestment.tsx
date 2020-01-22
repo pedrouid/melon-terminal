@@ -1,7 +1,7 @@
 import React, { useMemo, useEffect } from 'react';
 import BigNumber from 'bignumber.js';
 import * as Yup from 'yup';
-import { useForm,  FormContext } from 'react-hook-form';
+import { useForm, FormContext } from 'react-hook-form';
 import { Participation, StandardToken, sameAddress, TokenDefinition } from '@melonproject/melonjs';
 import { AllowedInvestmentAsset, Account } from '@melonproject/melongql';
 import { useEnvironment } from '~/hooks/useEnvironment';
@@ -10,7 +10,6 @@ import { TransactionModal } from '~/components/Common/TransactionModal/Transacti
 import { useAccountAllowanceQuery } from '~/queries/AccountAllowance';
 import { useOnChainQueryRefetcher } from '~/hooks/useOnChainQueryRefetcher';
 import { useAccount } from '~/hooks/useAccount';
-import { FormField } from '~/storybook/components/FormField/FormField';
 import { Input } from '~/storybook/components/Input/Input';
 import { BlockActions } from '~/storybook/components/Block/Block';
 import { Button } from '~/storybook/components/Button/Button';
@@ -177,14 +176,13 @@ export const RequestInvestment: React.FC<RequestInvestmentProps> = props => {
     <>
       <FormContext {...form}>
         <form onSubmit={submit}>
-          <FormField name="investmentAsset" label="Investment asset">
-            <Dropdown
-              name="investmentAsset"
-              id="investmentAsset"
-              options={investmentAssetOptions}
-              disabled={props.loading}
-            />
-          </FormField>
+          <Dropdown
+            name="investmentAsset"
+            label="Investment asset"
+            id="investmentAsset"
+            options={investmentAssetOptions}
+            disabled={props.loading}
+          />
 
           {(query.loading && !asset && <Spinner />) || (
             <>
@@ -204,34 +202,31 @@ export const RequestInvestment: React.FC<RequestInvestmentProps> = props => {
                 </NotificationBar>
               )}
 
-              <FormField name="requestedShares" label="Number of shares">
-                <Input
-                  id="requestedShares"
-                  name="requestedShares"
-                  disabled={props.loading}
-                  onChange={handleRequestedSharesChange}
-                />
-              </FormField>
+              <Input
+                id="requestedShares"
+                name="requestedShares"
+                label="Number of shares"
+                disabled={props.loading}
+                onChange={handleRequestedSharesChange}
+              />
 
-              <FormField name="sharePrice" label={`Share price in ${asset?.token?.symbol}`}>
-                <Input
-                  id="sharePrice"
-                  name="sharePrice"
-                  value={fromTokenBaseUnit(asset!.shareCostInAsset!, asset!.token!.decimals!)
-                    .multipliedBy(multiplier)
-                    .toFixed(asset?.token?.decimals!)}
-                  disabled={true}
-                />
-              </FormField>
+              <Input
+                id="sharePrice"
+                name="sharePrice"
+                label={`Share price in ${asset?.token?.symbol}`}
+                value={fromTokenBaseUnit(asset!.shareCostInAsset!, asset!.token!.decimals!)
+                  .multipliedBy(multiplier)
+                  .toFixed(asset?.token?.decimals!)}
+                disabled={true}
+              />
 
-              <FormField name="investmentAmount" label={`Total investment amount in ${asset?.token?.symbol}`}>
-                <Input
-                  id="investmentAmount"
-                  name="investmentAmount"
-                  disabled={props.loading}
-                  onChange={handleInvestmentAmountChange}
-                />
-              </FormField>
+              <Input
+                id="investmentAmount"
+                name="investmentAmount"
+                label={`Total investment amount in ${asset?.token?.symbol}`}
+                disabled={props.loading}
+                onChange={handleInvestmentAmountChange}
+              />
               <BlockActions>
                 <Button type="submit" disabled={props.loading || !!form.errors.investmentAmount}>
                   Invest

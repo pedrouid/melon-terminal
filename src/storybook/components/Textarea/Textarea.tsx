@@ -1,15 +1,12 @@
 import styled, { css } from 'styled-components';
 import React from 'react';
-import { useFormContext } from 'react-hook-form';
+import { useFormContext, ErrorMessage } from 'react-hook-form';
 
-export interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
-  name: string;
-  rows?: number;
-  cols?: number;
-  placeholder?: string;
+interface TextareaInputProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
+  error?: boolean;
 }
 
-const TextAreaStyle = styled.textarea`
+const TextareaInput = styled.textarea<TextareaInputProps>`
   position: relative;
   width: 100%;
   min-height: calc(${props => props.theme.spaceUnits.xl} * 4);
@@ -34,19 +31,47 @@ const TextAreaStyle = styled.textarea`
       border-color: ${props => props.theme.mainColors.secondaryDarkAlpha};
       pointer-events: none;
     `}
+
+  ${props => {
+    if (props.error) {
+      return css`
+        border-color: ${props => props.theme.statusColors.primaryLoss};
+      `;
+    }
+  }}
 `;
 
-export const Textarea: React.FC<TextareaProps> = ({ name, rows, cols, placeholder, ...rest }) => {
+const TextareaWrapper = styled.div``;
+
+const TextareaLabel = styled.span`
+  display: inline-block;
+  margin-bottom: ${props => props.theme.spaceUnits.xs};
+  color: ${props => props.theme.mainColors.primaryDark};
+  font-size: ${props => props.theme.fontSizes.m};
+`;
+
+const TextareaError = styled.span`
+  display: inline-block;
+  margin-top: ${props => props.theme.spaceUnits.xs};
+  color: ${props => props.theme.statusColors.primaryLoss};
+  font-size: ${props => props.theme.fontSizes.s};
+`;
+
+export interface TextareaProps extends TextareaInputProps {
+  label?: string;
+}
+
+export const Textarea: React.FC<TextareaProps> = ({ name, label, rows, cols, ...rest }) => {
   const form = useFormContext();
+  const connected = !!(form && name);
+  const ref = connected ? form.register : undefined;
+  const error = !!(connected && form?.errors[name!]);
 
   return (
-    <TextAreaStyle
-      {...rest}
-      name={name}
-      ref={form.register}
-      cols={cols || 30}
-      rows={rows || 5}
-      placeholder={placeholder}
-    />
+    <TextareaWrapper>
+      {label && <TextareaLabel>{label}</TextareaLabel>}
+      <TextareaInput {...rest} name={name} error={error} ref={ref} cols={cols || 30} rows={rows || 5} />;
+      {error && <ErrorMessage errors={form.errors} name={name!} as={TextareaError} />}
+    </TextareaWrapper>
   );
 };

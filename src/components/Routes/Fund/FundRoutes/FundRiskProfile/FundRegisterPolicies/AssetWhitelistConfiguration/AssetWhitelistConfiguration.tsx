@@ -7,16 +7,8 @@ import { Deployment, AssetWhitelist, availableTokens, PolicyDefinition } from '@
 import { AssetWhitelistBytecode } from '@melonproject/melonjs/abis/AssetWhitelist.bin';
 import { useAccount } from '~/hooks/useAccount';
 import { SectionTitle } from '~/storybook/components/Title/Title';
-import {
-  CheckboxContainer,
-  CheckboxInput,
-  CheckboxMask,
-  CheckboxIcon,
-  CheckboxLabel,
-} from '~/storybook/components/Checkbox/Checkbox';
+import { Checkboxes } from '~/storybook/components/Checkbox/Checkbox';
 import { BlockActions } from '~/storybook/components/Block/Block';
-import { Grid, GridRow, GridCol } from '~/storybook/components/Grid/Grid';
-import { FormField } from '~/storybook/components/FormField/FormField';
 
 interface AssetWhitelistConfigurationForm {
   assetWhitelist: string[];
@@ -51,39 +43,21 @@ export const AssetWhitelistConfiguration: React.FC<AssetWhitelistConfigurationPr
     props.startTransaction(tx, 'Deploy AssetWhitelist Contract');
   });
 
+  const options = tokens.map(item => ({
+    label: `${item.symbol} (${item.name})`,
+    value: item.address,
+  }));
+
   return (
     <>
       <SectionTitle>Configure asset whitelist policy</SectionTitle>
       <FormContext {...form}>
         <form onSubmit={submit}>
-          <Grid>
-            <GridRow>
-              <FormField name="assetWhitelist">
-                {tokens.map((token, index) => (
-                  <GridCol xs={4} sm={3} md={2.4} key={token.address}>
-                    <CheckboxContainer>
-                      <CheckboxInput
-                        id={`assetWhitelist[${index}]`}
-                        type="checkbox"
-                        name={`assetWhitelist[${index}]`}
-                        value={token.address}
-                        key={token.symbol}
-                        ref={form.register}
-                      />
-                      <CheckboxMask>
-                        <CheckboxIcon />
-                      </CheckboxMask>
-                      <CheckboxLabel htmlFor={`assetWhitelist[${index}]`}>{token.symbol}</CheckboxLabel>
-                    </CheckboxContainer>
-                  </GridCol>
-                ))}
-              </FormField>
+          <Checkboxes options={options} name="assetWhitelist" />
 
-              <BlockActions>
-                <Button type="submit">Add asset whitelist policy</Button>
-              </BlockActions>
-            </GridRow>
-          </Grid>
+          <BlockActions>
+            <Button type="submit">Add asset whitelist policy</Button>
+          </BlockActions>
         </form>
       </FormContext>
     </>

@@ -6,8 +6,12 @@ export const Grid = styled(Container)`
   margin: ${props => props.theme.spaceUnits.l} auto;
 `;
 
-export const GridRow = styled(Row)`
-  margin-bottom: ${props => props.theme.spaceUnits.s};
+export interface GridRowProps {
+  noGap?: boolean;
+}
+
+export const GridRow = styled(Row)<GridRowProps>`
+  ${props => !props.noGap && `margin-bottom: ${props.theme.spaceUnits.s}`};
 `;
 
 export const GridCol = styled(Col)`

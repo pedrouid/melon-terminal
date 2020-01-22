@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import BigNumber from 'bignumber.js';
 import * as Yup from 'yup';
-import { useForm,  FormContext } from 'react-hook-form';
+import { useForm, FormContext } from 'react-hook-form';
 import {
   TokenDefinition,
   MelonEngineTradingAdapter,
@@ -11,7 +11,6 @@ import {
   sameAddress,
 } from '@melonproject/melonjs';
 import { useEnvironment } from '~/hooks/useEnvironment';
-import { FormField } from '~/storybook/components/FormField/FormField';
 import { Input } from '~/storybook/components/Input/Input';
 import { Button } from '~/storybook/components/Button/Button';
 import { Spinner } from '~/storybook/components/Spinner/Spinner';
@@ -128,18 +127,14 @@ export const FundMelonEngineTrading: React.FC<FundMelonEngineTradingProps> = pro
     <>
       <FormContext {...form}>
         <form onSubmit={submit}>
-          <FormField name="takerQuantity" label="MLN">
-            <Input type="text" name="takerQuantity" />
-          </FormField>
-
-          <FormField name="makerQuantity" label="WETH">
-            <Input type="text" name="makerQuantity" disabled={true} />
-          </FormField>
+          <Input type="text" label="MLN" name="takerQuantity" />
+          <Input type="text" label="WETH" name="makerQuantity" disabled={true} />
 
           <div>1 MLN = {price.toFixed(4)} WETH</div>
           <div>
             <FormattedNumber value={liquid} suffix="WETH available" />
           </div>
+
           <BlockActions>
             <Button type="submit">Submit</Button>
           </BlockActions>

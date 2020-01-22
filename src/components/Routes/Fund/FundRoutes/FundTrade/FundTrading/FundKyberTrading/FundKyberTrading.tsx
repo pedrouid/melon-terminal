@@ -15,7 +15,6 @@ import {
 } from '@melonproject/melonjs';
 import { useEnvironment } from '~/hooks/useEnvironment';
 import { Dropdown } from '~/storybook/components/Dropdown/Dropdown';
-import { FormField } from '~/storybook/components/FormField/FormField';
 import { Input } from '~/storybook/components/Input/Input';
 import { Button } from '~/storybook/components/Button/Button';
 import { distinctUntilChanged, debounceTime, switchMap, tap, take, skip, share } from 'rxjs/operators';
@@ -167,31 +166,28 @@ export const FundKyberTrading: React.FC<FundKyberTradingProps> = props => {
       <FormContext {...form}>
         <form onSubmit={submit}>
           <Grid>
-            <GridRow>
+            <GridRow noGap={true}>
               <GridCol xs={12} sm={3}>
-                <FormField name="takerAsset" label="Sell asset">
-                  <Dropdown name="takerAsset" options={options} disabled={loading} />
-                </FormField>
+                <Dropdown name="takerAsset" label="Sell asset" options={options} disabled={loading} />
               </GridCol>
 
               <GridCol xs={12} sm={9}>
-                <FormField name="takerQuantity" label="Sell quantity">
-                  <Input type="number" step="any" name="takerQuantity" />
-                </FormField>
+                <Input type="number" step="any" name="takerQuantity" label="Sell quantity" />
               </GridCol>
             </GridRow>
 
             <GridRow>
               <GridCol xs={12} sm={3}>
-                <FormField name="makerAsset" label="Buy asset">
-                  <Dropdown name="makerAsset" options={options} disabled={loading} />
-                </FormField>
+                <Dropdown name="makerAsset" label="Buy asset" options={options} disabled={loading} />
               </GridCol>
 
               <GridCol xs={12} sm={9}>
-                <FormField label="Buy quantity">
-                  <Input type="text" value={makerQuantity.isNaN() ? '' : makerQuantity.toFixed(4)} disabled={true} />
-                </FormField>
+                <Input
+                  type="text"
+                  label="Buy quantity"
+                  value={makerQuantity.isNaN() ? '' : makerQuantity.toFixed(4)}
+                  disabled={true}
+                />
               </GridCol>
             </GridRow>
 
@@ -213,7 +209,7 @@ export const FundKyberTrading: React.FC<FundKyberTradingProps> = props => {
 
             <GridRow>
               <GridCol>
-                <Button type="submit" disabled={loading || price.isNaN() || price.isZero()}>
+                <Button type="submit" loading={loading} disabled={loading || price.isNaN() || price.isZero()}>
                   Submit
                 </Button>
               </GridCol>

@@ -10,7 +10,6 @@ import { TransactionModal } from '~/components/Common/TransactionModal/Transacti
 import { Spinner } from '~/storybook/components/Spinner/Spinner';
 import { useAccount } from '~/hooks/useAccount';
 import { useOnChainQueryRefetcher } from '~/hooks/useOnChainQueryRefetcher';
-import { FormField } from '~/storybook/components/FormField/FormField';
 import { Input } from '~/storybook/components/Input/Input';
 import { Button } from '~/storybook/components/Button/Button';
 import { Block, BlockActions } from '~/storybook/components/Block/Block';
@@ -109,9 +108,14 @@ export const FundRedeem: React.FC<FundRedeemProps> = ({ address }) => {
           </p>
           <FormContext {...form}>
             <form onSubmit={submit}>
-              <FormField name="shareQuantity" label="Number of shares to redeem">
-                <Input id="shareQuantity" name="shareQuantity" type="number" step="any" disabled={redeemAll} />
-              </FormField>
+              <Input
+                id="shareQuantity"
+                name="shareQuantity"
+                label="Number of shares to redeem"
+                type="number"
+                step="any"
+                disabled={redeemAll}
+              />
               <CheckboxContainer>
                 <CheckboxInput type="checkbox" ref={form.register} name="redeemAll" id="redeemAll" />
                 <CheckboxMask>

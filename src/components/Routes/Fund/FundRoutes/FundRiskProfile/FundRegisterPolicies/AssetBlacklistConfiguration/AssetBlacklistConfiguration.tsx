@@ -8,15 +8,7 @@ import { AssetBlacklistBytecode } from '@melonproject/melonjs/abis/AssetBlacklis
 import { useAccount } from '~/hooks/useAccount';
 import { SectionTitle } from '~/storybook/components/Title/Title';
 import { BlockActions } from '~/storybook/components/Block/Block';
-import {
-  CheckboxContainer,
-  CheckboxInput,
-  CheckboxMask,
-  CheckboxIcon,
-  CheckboxLabel,
-} from '~/storybook/components/Checkbox/Checkbox';
-import { Grid, GridRow, GridCol } from '~/storybook/components/Grid/Grid';
-import { FormField } from '~/storybook/components/FormField/FormField';
+import { Checkboxes } from '~/storybook/components/Checkbox/Checkbox';
 
 interface AssetBlacklistConfigurationForm {
   assetBlacklist: string[];
@@ -51,35 +43,17 @@ export const AssetBlacklistConfiguration: React.FC<AssetBlacklistConfigurationPr
     props.startTransaction(tx, 'Deploy AssetBlacklist Contract');
   });
 
+  const options = tokens.map(item => ({
+    label: `${item.symbol} (${item.name})`,
+    value: item.address,
+  }));
+
   return (
     <>
       <SectionTitle>Configure asset blacklist policy</SectionTitle>
       <FormContext {...form}>
         <form onSubmit={submit}>
-          <Grid>
-            <GridRow>
-              <FormField name="assetBlacklist">
-                {tokens.map((token, index) => (
-                  <GridCol xs={4} sm={3} md={2.4} key={token.address}>
-                    <CheckboxContainer>
-                      <CheckboxInput
-                        id={`assetBlacklist[${index}]`}
-                        type="checkbox"
-                        name={`assetBlacklist[${index}]`}
-                        value={token.address}
-                        key={token.symbol}
-                        ref={form.register}
-                      />
-                      <CheckboxMask>
-                        <CheckboxIcon />
-                      </CheckboxMask>
-                      <CheckboxLabel htmlFor={`assetBlacklist[${index}]`}>{token.symbol}</CheckboxLabel>
-                    </CheckboxContainer>
-                  </GridCol>
-                ))}
-              </FormField>
-            </GridRow>
-          </Grid>
+          <Checkboxes options={options} name="assetBlacklist" />
 
           <BlockActions>
             <Button type="submit">Add asset blacklist policy</Button>

@@ -11,17 +11,9 @@ import { useOnChainQueryRefetcher } from '~/hooks/useOnChainQueryRefetcher';
 import { Block, BlockActions } from '~/storybook/components/Block/Block';
 import { SectionTitle } from '~/storybook/components/Title/Title';
 import { Spinner } from '~/storybook/components/Spinner/Spinner';
-import {
-  CheckboxContainer,
-  CheckboxInput,
-  CheckboxMask,
-  CheckboxIcon,
-  CheckboxLabel,
-} from '~/storybook/components/Checkbox/Checkbox';
+import { Checkboxes } from '~/storybook/components/Checkbox/Checkbox';
 import { useAccount } from '~/hooks/useAccount';
 import { useFundInvestmentAssetsQuery } from '~/queries/FundInvestmentAssets';
-import { Grid, GridRow, GridCol } from '~/storybook/components/Grid/Grid';
-import { FormField } from '~/storybook/components/FormField/FormField';
 
 export interface InvestmentAssetsProps {
   address: string;
@@ -61,14 +53,6 @@ export const InvestmentAssets: React.FC<InvestmentAssetsProps> = ({ address }) =
   });
 
   const allowedAssets = details?.fund?.routes?.participation?.allowedAssets || [];
-  const defaultValues = useMemo(
-    () =>
-      environment.tokens.map(token =>
-        allowedAssets?.some((allowed: AllowedInvestmentAsset) => allowed && allowed.token!.symbol === token.symbol)
-      ),
-    [environment, allowedAssets]
-  );
-
   useEffect(() => {
     const participationAddress = details?.fund?.routes?.participation?.address;
     const participation = new Participation(environment, participationAddress);
@@ -110,43 +94,24 @@ export const InvestmentAssets: React.FC<InvestmentAssetsProps> = ({ address }) =
     );
   }
 
+  const tokensOptions = environment.tokens
+    .filter(token => !token.historic)
+    .map(token => ({
+      label: `${token.symbol} (${token.name})`,
+      value: token.address,
+      checked: !!allowedAssets?.some(
+        (allowed: AllowedInvestmentAsset) => allowed && allowed.token!.symbol === token.symbol
+      ),
+    }));
+
   return (
     <Block>
       <FormContext {...form}>
         <form onSubmit={submit}>
           <SectionTitle>Define investment assets</SectionTitle>
-
           <p>Investors will be able to invest in your funds using any of the assets selected below.</p>
 
-          <Grid>
-            <GridRow>
-              <FormField name="asset">
-                {environment.tokens
-                  .filter(token => !token.historic)
-                  .map((token, index) => (
-                    <GridCol xs={12} sm={12} md={6} key={token.symbol}>
-                      <CheckboxContainer>
-                        <CheckboxInput
-                          defaultChecked={defaultValues[index]}
-                          id={`assets[${index}]`}
-                          type="checkbox"
-                          name={`assets[${index}]`}
-                          value={token.address}
-                          key={token.address}
-                          ref={form.register}
-                        />
-                        <CheckboxMask>
-                          <CheckboxIcon />
-                        </CheckboxMask>
-                        <CheckboxLabel htmlFor={`assets[${index}]`}>
-                          {token.symbol} ({token.name})
-                        </CheckboxLabel>
-                      </CheckboxContainer>
-                    </GridCol>
-                  ))}
-              </FormField>
-            </GridRow>
-          </Grid>
+          <Checkboxes options={tokensOptions} name="assets" />
 
           <BlockActions>
             <Button type="button" onClick={submit}>

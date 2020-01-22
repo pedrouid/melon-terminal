@@ -6,7 +6,6 @@ import { MaxConcentration, Deployment, PolicyDefinition } from '@melonproject/me
 import { MaxConcentrationBytecode } from '@melonproject/melonjs/abis/MaxConcentration.bin';
 import { BigNumber } from 'bignumber.js';
 import { useAccount } from '~/hooks/useAccount';
-import { FormField } from '~/storybook/components/FormField/FormField';
 import { Input } from '~/storybook/components/Input/Input';
 import { Button } from '~/storybook/components/Button/Button';
 import { SectionTitle } from '~/storybook/components/Title/Title';
@@ -61,9 +60,14 @@ export const MaxConcentrationConfiguration: React.FC<MaxConcentrationConfigurati
 
       <FormContext {...form}>
         <form onSubmit={submit}>
-          <FormField name="maxConcentration" label="Maximum concentration (%)">
-            <Input name="maxConcentration" type="number" step="any" id="maxConcentration" />
-          </FormField>
+          <Input
+            name="maxConcentration"
+            label="Maximum concentration (%)"
+            type="number"
+            step="any"
+            id="maxConcentration"
+          />
+
           <BlockActions>
             <Button type="submit">Add max concentration policy</Button>
           </BlockActions>

@@ -17,7 +17,6 @@ import {
 import { useOnChainQueryRefetcher } from '~/hooks/useOnChainQueryRefetcher';
 import { Dropdown } from '~/storybook/components/Dropdown/Dropdown';
 import { Button } from '~/storybook/components/Button/Button';
-import { FormField } from '~/storybook/components/FormField/FormField';
 import { Input } from '~/storybook/components/Input/Input';
 import { OrderbookItem } from '../FundOrderbook/utils/aggregatedOrderbook';
 import { useAccount } from '~/hooks/useAccount';
@@ -127,21 +126,10 @@ export const FundOrderbookMarketForm: React.FC<FundOrderbookMarketFormProps> = p
     <FormContext {...form}>
       {props.order && (
         <form onSubmit={submit}>
-          <FormField name="direction">
-            <Dropdown name="direction" options={directions} disabled={true} value={direction} />
-          </FormField>
-
-          <FormField name="exchange">
-            <Dropdown name="exchange" options={exchanges} disabled={true} value={exchange} />
-          </FormField>
-
-          <FormField label="Quantity" name="quantity">
-            <Input type="text" name="quantity" max={props.order.quantity.toFixed()} />
-          </FormField>
-
-          <FormField label="Price" name="price">
-            <Input type="text" name="price" disabled={true} value={props.order.price.toFixed()} />
-          </FormField>
+          <Dropdown name="direction" label="Buy or sell" options={directions} disabled={true} value={direction} />
+          <Dropdown name="exchange" label="Exchange" options={exchanges} disabled={true} value={exchange} />
+          <Input type="text" name="quantity" label="Quantity" max={props.order.quantity.toFixed()} />
+          <Input type="text" name="price" label="Price" disabled={true} value={props.order.price.toFixed()} />
 
           <BlockActions>
             <Button type="button" onClick={submit}>
