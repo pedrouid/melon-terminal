@@ -1,15 +1,21 @@
 import React from 'react';
-import { useEnvironment } from '~/hooks/useEnvironment';
+import { useConnectionState } from '~/hooks/useConnectionState';
+import { ConnectionStatus } from '~/components/Contexts/Connection/Connection';
+import { Loader } from '~/storybook/components/Spinner/Spinner.styles';
 
 export interface RequiresConnectionProps {
   fallback?: React.ReactNode;
 }
 
 export const RequiresConnection: React.FC<RequiresConnectionProps> = ({ children, fallback = true }) => {
-  const environment = useEnvironment();
+  const connection = useConnectionState();
 
-  if (environment) {
+  if (connection.environment) {
     return <>{children}</>;
+  }
+
+  if (connection.status === ConnectionStatus.CONNECTING) {
+    return <Loader />;
   }
 
   const output = fallback === true ? 'You have to be connected to a supported network to see this page.' : fallback;
