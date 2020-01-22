@@ -15,6 +15,7 @@ import {
 } from '~/storybook/components/Table/Table';
 import { Block } from '~/storybook/components/Block/Block';
 import { SectionTitle } from '~/storybook/components/Title/Title';
+import { EtherscanLink } from '~/components/Common/EtherscanLink/EtherscanLink';
 
 export interface FundInvestorsListProps {
   address: string;
@@ -56,7 +57,9 @@ export const FundInvestorsList: React.FC<FundInvestorsListProps> = ({ address })
             {fundInvestements.map(investement => {
               return (
                 <BodyRow key={investement.id}>
-                  <BodyCell>{investement.owner.id}</BodyCell>
+                  <BodyCell>
+                    <EtherscanLink address={investement.owner.id}>{investement.owner.id}</EtherscanLink>
+                  </BodyCell>
                   <BodyCellRightAlign>{weiToString(investement.shares.toString(), 4)}</BodyCellRightAlign>
                 </BodyRow>
               );

@@ -17,6 +17,7 @@ import { SectionTitle } from '~/storybook/components/Title/Title';
 import { FormattedDate } from '~/components/Common/FormattedDate/FormattedDate';
 import { fromTokenBaseUnit } from '~/utils/fromTokenBaseUnit';
 import { FormattedNumber } from '~/components/Common/FormattedNumber/FormattedNumber';
+import { EtherscanLink } from '~/components/Common/EtherscanLink/EtherscanLink';
 
 export interface FundInvestmentHistoryListProps {
   address: string;
@@ -67,7 +68,9 @@ export const FundInvestmentHistoryList: React.FC<FundInvestmentHistoryListProps>
                   <BodyCell>
                     <FormattedDate timestamp={investment.timestamp} />
                   </BodyCell>
-                  <BodyCell>{investment.owner.id.substr(0, 8)}...</BodyCell>
+                  <BodyCell>
+                    <EtherscanLink address={investment.owner.id}>{investment.owner.id.substr(0, 8)}...</EtherscanLink>
+                  </BodyCell>
                   <BodyCell>{investment.action}</BodyCell>
                   <BodyCellRightAlign>
                     <FormattedNumber value={fromTokenBaseUnit(investment.shares, 18)}></FormattedNumber>

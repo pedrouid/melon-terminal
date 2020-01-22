@@ -17,6 +17,7 @@ export const useEtherscanLink = ({ address, hash }: UseEtherscanLinkProps) => {
     }
 
     const link = address ? `address/${address}` : `tx/${hash}`;
+
     if (network === 'MAINNET') {
       return `https://etherscan.io/${link}`;
     }
