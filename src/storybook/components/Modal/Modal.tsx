@@ -140,17 +140,21 @@ export const CostsTableRowTotal = styled.tr`
 `;
 
 export const CostsTableHeaderCellText = styled.th`
+  padding: ${props => props.theme.spaceUnits.xs};
   text-align: left;
 `;
 
 export const CostsTableHeaderCell = styled.th`
+  padding: ${props => props.theme.spaceUnits.xs};
   text-align: right;
 `;
 
 export const CostsTableCellText = styled.td`
+  padding: ${props => props.theme.spaceUnits.xs};
   text-align: left;
 `;
 
 export const CostsTableCell = styled.td`
+  padding: ${props => props.theme.spaceUnits.xs};
   text-align: right;
 `;
