@@ -84,8 +84,8 @@ export const FundKyberTrading: React.FC<FundKyberTradingProps> = props => {
           return new BigNumber(value).isLessThanOrEqualTo(balance);
         }),
     }),
-    mode: 'onChange',
-    reValidateMode: 'onChange',
+    mode: 'onSubmit',
+    reValidateMode: 'onBlur',
   });
 
   const transaction = useTransaction(environment, {
@@ -213,7 +213,7 @@ export const FundKyberTrading: React.FC<FundKyberTradingProps> = props => {
 
             <GridRow>
               <GridCol>
-                <Button type="submit" disabled={loading}>
+                <Button type="submit" disabled={loading || price.isNaN() || price.isZero()}>
                   Submit
                 </Button>
               </GridCol>
