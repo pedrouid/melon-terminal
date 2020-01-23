@@ -71,7 +71,7 @@ export const Anonymous: React.FC<ConnectionMethodProps> = ({ connect, active }) 
     <>
       <SectionTitle>Anonymous</SectionTitle>
       {!active ? (
-        <Button lenght="stretch" onClick={() => connect()}>
+        <Button length="stretch" onClick={() => connect()}>
           Connect
         </Button>
       ) : (

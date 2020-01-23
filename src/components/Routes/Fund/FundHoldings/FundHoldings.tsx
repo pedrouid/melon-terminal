@@ -17,6 +17,7 @@ import { SectionTitle } from '~/storybook/components/Title/Title';
 import { Block } from '~/storybook/components/Block/Block';
 import { FormattedNumber } from '~/components/Common/FormattedNumber/FormattedNumber';
 import { fromTokenBaseUnit } from '~/utils/fromTokenBaseUnit';
+import { Icons, IconName } from '~/storybook/components/Icons/Icons';
 
 export interface FundHoldingsProps {
   address: string;
@@ -55,9 +56,14 @@ export const FundHoldings: React.FC<FundHoldingsProps> = ({ address }) => {
             {holdings.map(holding => (
               <BodyRow key={holding.token?.address}>
                 <BodyCell>
-                  <S.HoldingSymbol>{holding.token?.symbol}</S.HoldingSymbol>
-                  <br />
-                  <S.HoldingName>{holding.token?.name}</S.HoldingName>
+                  <S.HoldingIcon>
+                    <Icons name={holding.token?.symbol as IconName} size="small" />
+                  </S.HoldingIcon>
+                  <S.HoldingName>
+                    <S.HoldingSymbol>{holding.token?.symbol}</S.HoldingSymbol>
+                    <br />
+                    <S.HoldingName>{holding.token?.name}</S.HoldingName>
+                  </S.HoldingName>
                 </BodyCell>
                 <BodyCellRightAlign>
                   <FormattedNumber value={holding.token?.price} />

@@ -44,7 +44,7 @@ export const FundMelonEngineTrading: React.FC<FundMelonEngineTradingProps> = pro
   const refetch = useOnChainQueryRefetcher();
   const weth = environment.getToken('WETH')!;
   const mln = environment.getToken('MLN')!;
-  const [price, liquid, query] = useMelonEngineTradingQuery(props.address);
+  const [price, liquid, query] = useMelonEngineTradingQuery();
 
   const defaultValues = {
     takerQuantity: '',

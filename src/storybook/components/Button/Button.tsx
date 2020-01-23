@@ -4,7 +4,7 @@ import { SpinIcon } from '../SpinIcon/SpinIcon';
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   size?: 'large' | 'small';
-  lenght?: 'stretch';
+  length?: 'stretch';
   kind?: 'secondary' | 'warning' | 'danger' | 'success';
   disabled?: boolean;
   loading?: boolean;

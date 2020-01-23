@@ -5,6 +5,7 @@ import { config } from '~/config';
 import { Address, DeploymentOutput, DeployedEnvironment, sameAddress } from '@melonproject/melonjs';
 import { NetworkEnum } from '~/types';
 import { Eth } from 'web3-eth';
+import { IconName } from '~/storybook/components/Icons/Icons';
 
 export enum ConnectionStatus {
   OFFLINE,
@@ -214,6 +215,7 @@ export interface ConnectionMethodProps {
 export interface ConnectionMethod {
   name: string;
   label: string;
+  icon?: IconName;
   component: React.ComponentType<ConnectionMethodProps>;
   connect: () => Rx.Observable<ConnectionAction>;
 }

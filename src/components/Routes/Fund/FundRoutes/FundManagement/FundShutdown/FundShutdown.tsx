@@ -31,7 +31,7 @@ export const Shutdown: React.FC<ShutdownProps> = ({ address }) => {
     onFinish: receipt => refetch(receipt.blockNumber),
     onAcknowledge: async () => {
       if (assetsInTrading) {
-        const version = new Version(environment, await hub.getFundVersion());
+        const version = new Version(environment, await hub.getVersion());
         const tx = version.shutDownFund(account.address!, address);
         transaction.start(tx, 'Shutdown fund');
       }
@@ -46,7 +46,7 @@ export const Shutdown: React.FC<ShutdownProps> = ({ address }) => {
       const tx = trading.returnBatchToVault(account.address!, assets);
       transaction.start(tx, 'Return assets to vault');
     } else {
-      const version = new Version(environment, await hub.getFundVersion());
+      const version = new Version(environment, await hub.getVersion());
       const tx = version.shutDownFund(account.address!, address);
       transaction.start(tx, 'Shutdown fund');
     }

@@ -1,17 +1,76 @@
-import React, { useState, useMemo } from 'react';
-import ModalContainer from 'styled-react-modal';
+import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { useConnectionState } from '~/hooks/useConnectionState';
-import { Grid, GridRow, GridCol } from '~/storybook/components/Grid/Grid';
-import { Block, BlockActions } from '~/storybook/components/Block/Block';
-import { Modal, ModalTitle, ModalContent } from '~/storybook/components/Modal/Modal';
-import { Button } from '~/storybook/components/Button/Button';
 import { Dropdown } from '~/storybook/components/Dropdown/Dropdown';
+import { Icons, IconName } from '~/storybook/components/Icons/Icons';
+import { ConnectionContext } from '~/components/Contexts/Connection/Connection';
 import * as S from './ConnectionSelector.styles';
-import { Icons } from '~/storybook/components/Icons/Icons';
+
+export interface ConnectionButtonProps {
+  name: string;
+  label: string;
+  icon?: IconName;
+  connection: ConnectionContext;
+  accounts: { name: string; value: string }[];
+  active: boolean;
+}
+
+export const ConnectionButton: React.FC<ConnectionButtonProps> = ({
+  name,
+  label,
+  icon,
+  connection,
+  accounts,
+  active,
+}) => {
+  const click = () => (active ? connection.disconnect() : connection.connect(name));
+
+  return (
+    <S.ConnectionButtonWrapper>
+      <S.ConnectionButton onClick={click}>
+        <S.ButtonWrapper>
+          {icon && (
+            <S.ButtonIcon>
+              <Icons name={icon} />
+            </S.ButtonIcon>
+          )}
+          <S.ButtonText>{active ? `Disconnect from ${label}` : `Conncet to ${label}`}</S.ButtonText>
+        </S.ButtonWrapper>
+      </S.ConnectionButton>
+
+      {(accounts && accounts.length > 1 && (
+        <Dropdown
+          options={accounts}
+          value={connection.account}
+          onChange={event => connection.switch(event.target.value)}
+        />
+      )) ||
+        null}
+    </S.ConnectionButtonWrapper>
+  );
+};
 
 export const ConnectionSelector = () => {
+  const ref = useRef<any>();
   const [open, setOpen] = useState(false);
   const connection = useConnectionState();
+
+  useEffect(() => {
+    if (!open) {
+      return;
+    }
+
+    const handler = (event: MouseEvent) => {
+      if (ref.current && !ref.current!.contains(event.target)) {
+        setOpen(false);
+      }
+    };
+
+    document.addEventListener('click', handler, false);
+
+    return () => {
+      document.removeEventListener('click', handler, false);
+    };
+  }, [open]);
 
   const icon = useMemo(() => {
     switch (connection.method) {
@@ -27,7 +86,7 @@ export const ConnectionSelector = () => {
   }, [connection.method]);
 
   return (
-    <S.ConnectionSelector>
+    <S.ConnectionSelector ref={ref}>
       {icon ? (
         <Icons name={icon} onClick={() => setOpen(!open)} className={open ? 'active' : undefined} />
       ) : (
@@ -36,51 +95,31 @@ export const ConnectionSelector = () => {
         </S.ConnectionLabel>
       )}
 
-      <ModalContainer isOpen={open} onBackgroundClick={() => setOpen(false)}>
-        <Modal>
-          <ModalTitle>Select your preferred connection method</ModalTitle>
-          <ModalContent>
-            <Grid>
-              {connection.methods.map(method => {
-                const Component = method.component;
-                const active = method.name === connection.method;
-                const connect = () => connection.connect(method.name);
-                const accounts = active
-                  ? (connection.accounts || []).map((address, index) => ({
-                      name: `${index}: ${address}`,
-                      value: address,
-                    }))
-                  : [];
+      {open && (
+        <S.ConnectionSelectorBox>
+          {connection.methods.map(method => {
+            const active = method.name === connection.method;
+            const accounts = active
+              ? (connection.accounts || []).map((address, index) => ({
+                  name: `${index}: ${address}`,
+                  value: address,
+                }))
+              : [];
 
-                return (
-                  <GridRow key={method.name}>
-                    <GridCol>
-                      <Block>
-                        <Component active={active} connect={connect} disconnect={connection.disconnect} />
-
-                        {(accounts && accounts.length > 1 && (
-                          <Dropdown
-                            options={accounts}
-                            value={connection.account}
-                            onChange={event => connection.switch(event.target.value)}
-                          />
-                        )) ||
-                          null}
-                      </Block>
-                    </GridCol>
-                  </GridRow>
-                );
-              })}
-            </Grid>
-
-            <BlockActions>
-              <Button type="button" onClick={() => setOpen(false)}>
-                Close
-              </Button>
-            </BlockActions>
-          </ModalContent>
-        </Modal>
-      </ModalContainer>
+            return (
+              <ConnectionButton
+                key={method.name}
+                name={method.name}
+                label={method.label}
+                icon={method.icon}
+                active={active}
+                connection={connection}
+                accounts={accounts}
+              />
+            );
+          })}
+        </S.ConnectionSelectorBox>
+      )}
     </S.ConnectionSelector>
   );
 };

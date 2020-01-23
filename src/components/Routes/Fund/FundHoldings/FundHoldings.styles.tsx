@@ -1,6 +1,19 @@
 import styled from 'styled-components';
 
-export const HoldingSymbol = styled.span``;
+export const HoldingIcon = styled.div`
+  float: left;
+  margin-right: 10px;
+`;
+
+export const HoldingText = styled.div`
+  float: right;
+  margin: auto;
+  width: 50%;
+`;
+
+export const HoldingSymbol = styled.span`
+  color: ${props => props.theme.mainColors.primaryDark};
+`;
 
 export const HoldingName = styled.span`
   display: block;
@@ -8,5 +21,5 @@ export const HoldingName = styled.span`
   overflow: hidden;
   text-overflow: ellipsis;
   font-size: 0.75rem;
-  color: rgb(155, 155, 155);
+  color: ${props => props.theme.otherColors.grey};
 `;

@@ -91,11 +91,11 @@ export const Frame: React.FC<ConnectionMethodProps> = ({ connect, disconnect, ac
     <>
       <SectionTitle>Frame</SectionTitle>
       {!active ? (
-        <Button lenght="stretch" onClick={() => connect()}>
+        <Button length="stretch" onClick={() => connect()}>
           Connect
         </Button>
       ) : (
-        <Button lenght="stretch" onClick={() => disconnect()}>
+        <Button length="stretch" onClick={() => disconnect()}>
           Disconnect
         </Button>
       )}
@@ -106,6 +106,7 @@ export const Frame: React.FC<ConnectionMethodProps> = ({ connect, disconnect, ac
 export const method: ConnectionMethod = {
   connect,
   component: Frame,
+  icon: 'FRAME',
   name: 'frame',
   label: 'Frame',
 };

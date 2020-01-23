@@ -2,6 +2,7 @@ import styled, { css } from 'styled-components';
 
 export const DropdownWrapper = styled.div`
   margin-bottom: ${props => props.theme.spaceUnits.l};
+  width: 100%;
 `;
 
 export const DropdownLabel = styled.span`

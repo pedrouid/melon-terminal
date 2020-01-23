@@ -49,11 +49,11 @@ export const MetaMask: React.FC<ConnectionMethodProps> = ({ connect, disconnect,
     <>
       <SectionTitle>Metamask</SectionTitle>
       {!active ? (
-        <Button lenght="stretch" onClick={() => connect()}>
+        <Button length="stretch" onClick={() => connect()}>
           Connect
         </Button>
       ) : (
-        <Button lenght="stretch" onClick={() => disconnect()}>
+        <Button length="stretch" onClick={() => disconnect()}>
           Disconnect
         </Button>
       )}
@@ -64,6 +64,7 @@ export const MetaMask: React.FC<ConnectionMethodProps> = ({ connect, disconnect,
 export const method: ConnectionMethod = {
   connect,
   component: MetaMask,
+  icon: 'METAMASK',
   name: 'metamask',
   label: 'MetaMask',
 };

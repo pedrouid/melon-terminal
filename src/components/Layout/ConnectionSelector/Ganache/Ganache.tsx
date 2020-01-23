@@ -46,11 +46,11 @@ export const Ganache: React.FC<ConnectionMethodProps> = ({ connect, disconnect, 
       <SectionTitle>Ganache</SectionTitle>
 
       {!active ? (
-        <Button lenght="stretch" onClick={() => connect()}>
+        <Button length="stretch" onClick={() => connect()}>
           Connect
         </Button>
       ) : (
-        <Button lenght="stretch" onClick={() => disconnect()}>
+        <Button length="stretch" onClick={() => disconnect()}>
           Disconnect
         </Button>
       )}
@@ -61,6 +61,7 @@ export const Ganache: React.FC<ConnectionMethodProps> = ({ connect, disconnect, 
 export const method: ConnectionMethod = {
   connect,
   component: Ganache,
+  icon: 'GANACHE',
   name: 'ganache',
   label: 'Ganache',
 };

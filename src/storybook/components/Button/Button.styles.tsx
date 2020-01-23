@@ -3,7 +3,7 @@ import styled, { css } from 'styled-components';
 export interface ButtonProps {
   kind?: 'secondary' | 'warning' | 'danger' | 'success';
   size?: 'large' | 'small';
-  lenght?: 'stretch';
+  length?: 'stretch';
   disabled?: boolean;
   loading?: boolean;
 }
@@ -81,7 +81,7 @@ export const Button = styled.button<ButtonProps>`
       height: 32px;
     `}
     ${props =>
-      props.lenght === 'stretch' &&
+      props.length === 'stretch' &&
       css`
         width: 100%;
       `}
