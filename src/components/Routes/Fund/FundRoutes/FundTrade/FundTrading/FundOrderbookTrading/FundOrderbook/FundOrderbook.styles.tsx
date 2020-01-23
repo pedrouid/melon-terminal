@@ -1,14 +1,18 @@
 import styled, { css } from 'styled-components';
+import { PolicyPositionNotPreOrPostError } from '@melonproject/melonjs';
 
 export const Wrapper = styled.div`
   position: relative;
   margin-bottom: ${props => props.theme.spaceUnits.xxl};
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 `;
 
 export const OrderbookHeader = styled.div`
   display: flex;
   justify-content: space-between;
-  padding: 0 ${props => props.theme.spaceUnits.s};
+  padding: 0 6px;
 `;
 
 export const OrderbookBody = styled.div`
@@ -16,11 +20,30 @@ export const OrderbookBody = styled.div`
   z-index: 1;
 `;
 
-export const OrderbookLabel = styled.span``;
+export interface OrderbookLabelProps {
+  left?: boolean;
+  width?: string;
+}
 
-export const OrderbookData = styled.span`
-  font-size: ${props => props.theme.fontSizes.s};
+export const OrderbookLabel = styled.span<OrderbookLabelProps>`
+  text-align: ${props => (props.left ? 'left' : 'right')};
+  width: ${props => (props.width ? props.width : '40%')};
 `;
+
+export interface OrderbookDataProps {
+  left?: boolean;
+  width?: string;
+}
+
+export const OrderbookData = styled.span<OrderbookDataProps>`
+  font-size: ${props => props.theme.fontSizes.s};
+  text-align: ${props => (props.left ? 'left' : 'right')};
+  width: ${props => (props.width ? props.width : '33%')};
+`;
+
+export const OrderbookPrice = styled.span``;
+
+export const OrderbookHighlight = styled.span``;
 
 export interface OrderbookItemProps {
   selected: boolean;
@@ -29,9 +52,10 @@ export interface OrderbookItemProps {
 export const OrderbookItem = styled.div<OrderbookItemProps>`
   cursor: pointer;
   height: 20px;
-  padding: 0 ${props => props.theme.spaceUnits.s};
   display: flex;
   justify-content: space-between;
+  padding: 0 6px;
+  line-height: 1.25rem;
 
   &:hover {
     background-color: rgba(0, 0, 0, 0.2);
@@ -44,25 +68,12 @@ export const OrderbookItem = styled.div<OrderbookItemProps>`
     `}
 `;
 
-export const OrderbookBarsWrapper = styled.div`
-  overflow: visible;
-  position: absolute;
-  z-index: -1;
+export const OrderbookMidprice = styled.div`
   width: 100%;
-  height: 100%;
-`;
-
-export const OrderbookBars = styled.svg`
-  width: 100%;
-  height: 100%;
-  transform: scale(-1, 1);
-  z-index: 0;
-  pointer-events: none;
-`;
-
-export const OrderbookBar = styled.rect`
-  height: 20px;
-  fill-opacity: 0.2;
+  text-align: center;
+  background-color: black;
+  padding: 6px;
+  color: white;
 `;
 
 export interface OrderbookSideProps {
@@ -75,29 +86,24 @@ export const OrderbookSide = styled.div<OrderbookSideProps>`
   ${props =>
     props.side === 'asks' &&
     css`
-      ${OrderbookBars} {
-        transform: scale(1, 1);
+      ${OrderbookPrice} {
+        color: darkred;
       }
 
-      ${OrderbookBar} {
-        fill: red;
+      ${OrderbookHighlight} {
+        color: red;
       }
     `}
 
   ${props =>
     props.side === 'bids' &&
     css`
-      ${OrderbookBars} {
-        transform: scale(-1, 1);
+      ${OrderbookPrice} {
+        color: darkgreen;
       }
 
-      ${OrderbookBar} {
-        fill: green;
+      ${OrderbookHighlight} {
+        color: lime;
       }
     `}
-`;
-
-export const Orderbook = styled.div`
-  display: flex;
-  justify-content: space-between;
 `;

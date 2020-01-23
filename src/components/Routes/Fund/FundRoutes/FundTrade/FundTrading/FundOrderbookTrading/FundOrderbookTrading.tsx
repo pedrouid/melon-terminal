@@ -47,22 +47,6 @@ export const FundOrderbookTrading: React.FC<FundOrderbookTradingProps> = props =
 
   return (
     <S.FundOrderbookTrading>
-      <S.FundOrderbook>
-        <FundOrderbook
-          address={props.address}
-          asset={asset}
-          exchanges={props.exchanges}
-          selected={order}
-          setSelected={(order?: OrderbookItem) => {
-            if (order != null && type !== 'market') {
-              setType('market');
-            }
-
-            setOrder(order);
-          }}
-        />
-      </S.FundOrderbook>
-
       <S.FundOrderbookForm>
         <Dropdown
           name="asset"
@@ -100,6 +84,21 @@ export const FundOrderbookTrading: React.FC<FundOrderbookTradingProps> = props =
           />
         )}
       </S.FundOrderbookForm>
+      <S.FundOrderbook>
+        <FundOrderbook
+          address={props.address}
+          asset={asset}
+          exchanges={props.exchanges}
+          selected={order}
+          setSelected={(order?: OrderbookItem) => {
+            if (order != null && type !== 'market') {
+              setType('market');
+            }
+
+            setOrder(order);
+          }}
+        />
+      </S.FundOrderbook>
     </S.FundOrderbookTrading>
   );
 };

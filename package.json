@@ -79,6 +79,7 @@
     "@storybook/addon-notes": "^5.2.8",
     "@storybook/addon-options": "^5.2.8",
     "@storybook/react": "^5.2.8",
+    "@types/jest": "^24.9.0",
     "@types/lru-cache": "^5.1.0",
     "@types/node": "^13.1.1",
     "@types/ramda": "^0.26.33",
@@ -113,6 +114,11 @@
   "husky": {
     "hooks": {
       "pre-commit": "lint-staged"
+    }
+  },
+  "jest":{
+    "moduleNameMapper": {
+      "^~/(.*)$": "<rootDir>/src/$1"
     }
   },
   "lint-staged": {
