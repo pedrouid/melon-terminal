@@ -13,7 +13,7 @@ export const ConnectionSelectorBox = styled.div`
   background: ${props => props.theme.mainColors.primary};
   padding: ${props => props.theme.spaceUnits.l};
   border: ${props => props.theme.border.borderDefault};
-  box-shadow: 0 0 0 5px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.5);
 `;
 
 export const ConnectionLabel = styled.a`

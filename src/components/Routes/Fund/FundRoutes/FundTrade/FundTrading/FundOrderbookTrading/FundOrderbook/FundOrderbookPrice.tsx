@@ -12,9 +12,10 @@ export interface FundOrderbookPriceProps {
 export const FundOrderbookPrice: React.FC<FundOrderbookPriceProps> = props => {
   const decimals = props.decimals ?? 8;
   const changedDigits = props.change !== undefined ? props.price.toFixed(decimals).slice(props.change) : undefined;
-  const unchangedDigits = changedDigits === undefined 
-    ? props.price.toFixed(decimals)
-    : props.price.toFixed(decimals).slice(0, props.change ?? props.price.toFixed(decimals).length - 1);
+  const unchangedDigits =
+    changedDigits === undefined
+      ? props.price.toFixed(decimals)
+      : props.price.toFixed(decimals).slice(0, props.change ?? props.price.toFixed(decimals).length - 1);
 
   return (
     <S.OrderbookPrice>

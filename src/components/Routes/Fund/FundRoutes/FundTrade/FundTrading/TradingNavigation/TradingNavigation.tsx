@@ -1,5 +1,5 @@
 import React, { createContext, useMemo, useState } from 'react';
-import * as S from './TradingNavigation.styles';
+import { TabItem, TabBar, TabBarContent, TabBarSection } from '~/storybook/components/TabNavigation/TabNavigation';
 
 const TradingNavigationContext = createContext<string | undefined>(undefined);
 
@@ -28,17 +28,21 @@ export const TradingNavigation: React.FC = ({ children }) => {
 
   return (
     <TradingNavigationContext.Provider value={active}>
-      <S.Menu>
-        {items.map(item => (
-          <S.MenuItem
-            key={item.identifier}
-            onClick={() => setActive(item.identifier)}
-            active={active === item.identifier}
-          >
-            {item.label}
-          </S.MenuItem>
-        ))}
-      </S.Menu>
+      <TabBar>
+        <TabBarContent justify="between">
+          <TabBarSection>
+            {items.map(item => (
+              <TabItem
+                key={item.identifier}
+                onClick={() => setActive(item.identifier)}
+                active={active === item.identifier}
+              >
+                {item.label}
+              </TabItem>
+            ))}
+          </TabBarSection>
+        </TabBarContent>
+      </TabBar>
 
       {activeTab && activeTab.props.children}
     </TradingNavigationContext.Provider>

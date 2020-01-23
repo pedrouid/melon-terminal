@@ -9,8 +9,6 @@ export const ScrollableTable = styled.div`
 
 export const Table = styled.table`
   background-color: ${props => props.theme.otherColors.white};
-  margin-top: ${props => props.theme.spaceUnits.m};
-  margin-bottom: ${props => props.theme.spaceUnits.m};
   width: 100%;
   border-spacing: 0;
 `;

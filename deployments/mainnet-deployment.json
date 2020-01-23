@@ -7,8 +7,8 @@
     "addr": {
       "EthfinexAdapter": "0x48525A3DD8E3cd655B21340c5474402Aa6247b85",
       "KyberAdapter": "0x8CB3E810027d97BE5E890257338b9Cc755dE9c67",
-      "MatchingMarketAdapter": "0x542F91538205FCe34c7e1538b7Ce2218655D8623",
-      "MatchingMarketAccessor": "0x005a15d35f0153Bf27dD40Bb53ADE42e01FA877E",
+      "OasisDexAdapter": "0x542F91538205FCe34c7e1538b7Ce2218655D8623",
+      "OasisDexAccessor": "0x005a15d35f0153Bf27dD40Bb53ADE42e01FA877E",
       "ZeroExV2Adapter": "0x3ecfe6f8414ed517366a5e6f7f7fc74ef21caac9",
       "EngineAdapter": "0xF31D358eFD7B80A6733BCb850bd49BFCBEC1428A",
       "PriceTolerance": "0xfA98fc8e64cC0D1338274952E7D36f1034aEA0a9",
@@ -57,7 +57,7 @@
     },
     "conf": {}
   },
-  "zeroex": {
+  "zeroExV2": {
     "addr": {
       "ZeroExV2Exchange": "0x080bf510fcbf18b91105470639e9561022937712"
     },
@@ -78,7 +78,7 @@
     },
     "conf": {
       "WETH": {
-        "name": "Wrapped Ether",
+        "name": "Eth Token",
         "decimals": 18,
         "initialDepositAmount": "10000000000000000000"
       },
@@ -99,7 +99,7 @@
         "decimals": 18
       },
       "MKR": {
-        "name": "Maker token",
+        "name": "MakerDao",
         "decimals": 18
       },
       "REP": {
@@ -107,7 +107,7 @@
         "decimals": 18
       },
       "ZRX": {
-        "name": "0x protocol token",
+        "name": "ZeroX Protocol Token",
         "decimals": 18
       },
       "USDC": {
