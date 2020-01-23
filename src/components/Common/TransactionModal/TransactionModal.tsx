@@ -106,10 +106,10 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
             </NotificationBar>
           )}
 
-          {finished && <NotificationBar kind="success">Transaction successful!</NotificationBar>}
-
           <S.TransactionModalContent>
             {!estimated && !error && <Spinner />}
+
+            {finished && <NotificationBar kind="success">Transaction successful!</NotificationBar>}
 
             {estimated && !finished && (
               <ProgressBar step={currentStep} loading={loadingStep(state.progress)}>

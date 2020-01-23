@@ -32,7 +32,7 @@ export const ModalTitle = styled.div`
 `;
 
 export const ModalContent = styled.div`
-  padding: ${props => props.theme.spaceUnits.l};
+  margin: ${props => props.theme.spaceUnits.l};
 `;
 
 // TODO: Move the transaction modal styles into a separate component structure.
