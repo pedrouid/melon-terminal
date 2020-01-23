@@ -2,6 +2,7 @@ import React from 'react';
 import { Grid, GridRow, GridCol } from '~/storybook/components/Grid/Grid';
 import FundClaimFees from './FundClaimFees/FundClaimFees';
 import FundShutdown from './FundShutdown/FundShutdown';
+import FundReturnBatchToVault from './FundReturnBatchToVault/FundReturnBatchToVault';
 import FundIvestmentAssets from './FundInvestmentAssets/FundInvestmentAssets';
 import { RequiresFundNotShutDown } from '~/components/Gates/RequiresFundNotShutDown/RequiresFundNotShutDown';
 import { RequiresFundManager } from '~/components/Gates/RequiresFundManager/RequiresFundManager';
@@ -23,13 +24,16 @@ export const FundManagement: React.FC<FundManagementProps> = ({ address }) => (
           <FundClaimFees address={address} />
         </GridCol>
       </GridRow>
-      <RequiresFundNotShutDown fallback={false}>
-        <GridRow>
+      <GridRow>
+        <GridCol xs={12} sm={6}>
+          <FundReturnBatchToVault address={address} />
+        </GridCol>
+        <RequiresFundNotShutDown fallback={false}>
           <GridCol xs={12} sm={6}>
             <FundShutdown address={address} />
           </GridCol>
-        </GridRow>
-      </RequiresFundNotShutDown>
+        </RequiresFundNotShutDown>
+      </GridRow>
     </Grid>
   </RequiresFundManager>
 );
