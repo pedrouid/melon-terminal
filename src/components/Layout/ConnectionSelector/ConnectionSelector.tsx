@@ -33,7 +33,7 @@ export const ConnectionButton: React.FC<ConnectionButtonProps> = ({
               <Icons name={icon} />
             </S.ButtonIcon>
           )}
-          <S.ButtonText>{active ? `Disconnect from ${label}` : `Conncet to ${label}`}</S.ButtonText>
+          <S.ButtonText>{active ? `Disconnect from ${label}` : `Connect to ${label}`}</S.ButtonText>
         </S.ButtonWrapper>
       </S.ConnectionButton>
 
