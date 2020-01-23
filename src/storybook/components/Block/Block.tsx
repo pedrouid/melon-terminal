@@ -2,6 +2,7 @@ import styled from 'styled-components';
 
 export const Block = styled.div`
   position: relative;
+  height: 100%;
   width: 100%;
   padding: ${props => props.theme.spaceUnits.l};
   border: ${props => props.theme.border.borderDefault};

@@ -29,7 +29,7 @@ export const FundTrade: React.FC<FundTradeProps> = ({ address }) => {
   return (
     <Grid>
       <GridRow>
-        <GridCol xs={12} sm={12}>
+        <GridCol>
           <FundOpenOrders address={address} />
         </GridCol>
       </GridRow>
@@ -37,10 +37,12 @@ export const FundTrade: React.FC<FundTradeProps> = ({ address }) => {
         <RequiresFundNotShutDown fallback={false}>
           <RequiresFundCreatedAfter fallback={tradingNotPossible} after={new Date('2019-12-02')}>
             <GridRow>
-              <GridCol xs={12} lg={8}>
+              <GridCol>
                 <FundTrading address={address} />
               </GridCol>
-              <GridCol xs={12} lg={4}>
+            </GridRow>
+            <GridRow>
+              <GridCol>
                 <FundHoldings address={address} />
               </GridCol>
             </GridRow>
