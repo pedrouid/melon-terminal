@@ -1,5 +1,4 @@
 import React from 'react';
-import BigNumber from 'bignumber.js';
 import { useEnvironment } from '~/hooks/useEnvironment';
 import { OpenMakeOrder } from '~/queries/FundOpenMakeOrders';
 import { useTransaction } from '~/hooks/useTransaction';
@@ -7,8 +6,8 @@ import {
   Hub,
   Trading,
   OasisDexTradingAdapter,
-  ZeroExTradingAdapter,
-  MatchingMarket,
+  ZeroExV2TradingAdapter,
+  OasisDexExchange,
   ExchangeIdentifier,
 } from '@melonproject/melonjs';
 import { TransactionModal } from '~/components/Common/TransactionModal/TransactionModal';
@@ -47,7 +46,7 @@ export const OpenOrderItem: React.FC<OpenOrderItemProps> = ({ address, order, ma
     if (exchange && exchange.id === ExchangeIdentifier.OasisDex) {
       const oasisDex = await OasisDexTradingAdapter.create(trading, exchange.exchange);
 
-      const matchingMarket = new MatchingMarket(environment, exchange.exchange);
+      const matchingMarket = new OasisDexExchange(environment, exchange.exchange);
       const offer = await matchingMarket.getOffer(order.id);
 
       if (await matchingMarket.isActive(order.id)) {
@@ -59,8 +58,8 @@ export const OpenOrderItem: React.FC<OpenOrderItemProps> = ({ address, order, ma
       return transaction.start(tx, 'Update and get quantity being traded');
     }
 
-    if (exchange && exchange.id === ExchangeIdentifier.ZeroEx) {
-      const zeroEx = await ZeroExTradingAdapter.create(trading, order.exchange);
+    if (exchange && exchange.id === ExchangeIdentifier.ZeroExV2) {
+      const zeroEx = await ZeroExV2TradingAdapter.create(trading, order.exchange);
       const args = {
         orderId: order.id,
       };

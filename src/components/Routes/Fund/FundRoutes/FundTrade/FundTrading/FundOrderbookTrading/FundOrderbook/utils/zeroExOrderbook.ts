@@ -1,5 +1,4 @@
 import * as Rx from 'rxjs';
-import BigNumber from 'bignumber.js';
 import { equals } from 'ramda';
 import { Orderbook as OrderbookProvider } from '@0x/orderbook';
 import { APIOrder as ZeroExOrder } from '@0x/types';
@@ -22,7 +21,7 @@ const endpoints = {
 };
 
 export interface ZeroExOrderbookItem extends OrderbookItem {
-  type: ExchangeIdentifier.ZeroEx;
+  type: ExchangeIdentifier.ZeroExV2;
   order: ZeroExOrder;
 }
 
@@ -41,7 +40,7 @@ function mapOrders(
       quantity,
       price,
       side,
-      exchange: ExchangeIdentifier.ZeroEx,
+      exchange: ExchangeIdentifier.ZeroExV2,
       id: `zeroex:${order.order.salt}`,
     } as OrderbookItem;
   });

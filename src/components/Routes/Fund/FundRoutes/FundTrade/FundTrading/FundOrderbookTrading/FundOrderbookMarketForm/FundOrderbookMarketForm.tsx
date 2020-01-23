@@ -10,9 +10,9 @@ import {
   Trading,
   ExchangeIdentifier,
   OasisDexTradingAdapter,
-  MatchingMarket,
-  ZeroExTradingAdapter,
-  ZeroExOrder,
+  OasisDexExchange,
+  ZeroExV2TradingAdapter,
+  ZeroExV2Order,
 } from '@melonproject/melonjs';
 import { useOnChainQueryRefetcher } from '~/hooks/useOnChainQueryRefetcher';
 import { Dropdown } from '~/storybook/components/Dropdown/Dropdown';
@@ -20,7 +20,7 @@ import { Button } from '~/storybook/components/Button/Button';
 import { Input } from '~/storybook/components/Input/Input';
 import { OrderbookItem } from '../FundOrderbook/utils/aggregatedOrderbook';
 import { useAccount } from '~/hooks/useAccount';
-import { MatchingMarketOrderbookItem } from '../FundOrderbook/utils/matchingMarketOrderbook';
+import { OasisDexOrderbookItem } from '../FundOrderbook/utils/matchingMarketOrderbook';
 import { useForm, FormContext } from 'react-hook-form';
 import { BlockActions } from '~/storybook/components/Block/Block';
 import { toTokenBaseUnit } from '~/utils/toTokenBaseUnit';
@@ -99,9 +99,9 @@ export const FundOrderbookMarketForm: React.FC<FundOrderbookMarketFormProps> = p
     const taker = props.order!.side === 'bid' ? props.asset! : environment.getToken('WETH');
 
     if (exchange.id === ExchangeIdentifier.OasisDex) {
-      const market = new MatchingMarket(environment, exchange.exchange);
+      const market = new OasisDexExchange(environment, exchange.exchange);
       const adapter = await OasisDexTradingAdapter.create(trading, exchange.exchange);
-      const offer = await market.getOffer((order as MatchingMarketOrderbookItem).order.id);
+      const offer = await market.getOffer((order as OasisDexOrderbookItem).order.id);
       const quantity = !offer.takerQuantity.isEqualTo(values.quantity)
         ? toTokenBaseUnit(values.quantity, taker.decimals).multipliedBy(order.price)
         : undefined;
@@ -110,9 +110,9 @@ export const FundOrderbookMarketForm: React.FC<FundOrderbookMarketFormProps> = p
       return transaction.start(tx, 'Take order');
     }
 
-    if (order.exchange === ExchangeIdentifier.ZeroEx) {
-      const adapter = await ZeroExTradingAdapter.create(trading, exchange.exchange);
-      const offer = order.order as ZeroExOrder;
+    if (order.exchange === ExchangeIdentifier.ZeroExV2) {
+      const adapter = await ZeroExV2TradingAdapter.create(trading, exchange.exchange);
+      const offer = order.order as ZeroExV2Order;
       const quantity = !offer.takerAssetAmount.isEqualTo(values.quantity)
         ? toTokenBaseUnit(values.quantity, taker.decimals).multipliedBy(order.price)
         : undefined;

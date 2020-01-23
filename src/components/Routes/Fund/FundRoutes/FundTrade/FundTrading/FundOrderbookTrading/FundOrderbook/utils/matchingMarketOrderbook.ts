@@ -1,24 +1,23 @@
 import * as Rx from 'rxjs';
-import BigNumber from 'bignumber.js';
 import { equals } from 'ramda';
 import {
   TokenDefinition,
   DeployedEnvironment,
-  MatchingMarketAccessor,
-  MatchingMarketOrder,
+  OasisDexAccessor,
+  OasisDexOrder,
   ExchangeIdentifier,
 } from '@melonproject/melonjs';
 import { concatMap, expand, distinctUntilChanged, map, catchError } from 'rxjs/operators';
 import { Orderbook, OrderbookItem } from './aggregatedOrderbook';
 import { fromTokenBaseUnit } from '~/utils/fromTokenBaseUnit';
 
-export interface MatchingMarketOrderbookItem extends OrderbookItem {
+export interface OasisDexOrderbookItem extends OrderbookItem {
   type: ExchangeIdentifier.OasisDex;
-  order: MatchingMarketOrder;
+  order: OasisDexOrder;
 }
 
 function mapOrders(
-  orders: MatchingMarketOrder[],
+  orders: OasisDexOrder[],
   makerAsset: TokenDefinition,
   takerAsset: TokenDefinition,
   side: 'bid' | 'ask'
@@ -51,7 +50,7 @@ export function matchingMarketOrderbook(
   takerAsset: TokenDefinition
 ) {
   const exchange = environment.deployment.oasis.addr.OasisDexExchange;
-  const contract = new MatchingMarketAccessor(environment, environment.deployment.melon.addr.MatchingMarketAccessor);
+  const contract = new OasisDexAccessor(environment, environment.deployment.melon.addr.OasisDexAccessor);
 
   const bids$ = Rx.defer(() => contract.getOrders(exchange, makerAsset.address, takerAsset.address)).pipe(
     catchError(() => Rx.of([]))

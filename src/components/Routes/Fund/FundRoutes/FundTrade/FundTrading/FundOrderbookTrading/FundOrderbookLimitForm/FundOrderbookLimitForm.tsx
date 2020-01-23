@@ -10,7 +10,7 @@ import {
   OasisDexTradingAdapter,
   TokenDefinition,
   ExchangeDefinition,
-  ZeroExTradingAdapter,
+  ZeroExV2TradingAdapter,
   ExchangeIdentifier,
 } from '@melonproject/melonjs';
 import { useOnChainQueryRefetcher } from '~/hooks/useOnChainQueryRefetcher';
@@ -100,8 +100,8 @@ export const FundOrderbookLimitForm: React.FC<FundOrderbookLimitFormProps> = pro
       return transaction.start(tx, 'Make order');
     }
 
-    if (exchange && exchange.id === ExchangeIdentifier.ZeroEx) {
-      const adapter = await ZeroExTradingAdapter.create(trading, exchange.exchange);
+    if (exchange && exchange.id === ExchangeIdentifier.ZeroExV2) {
+      const adapter = await ZeroExV2TradingAdapter.create(trading, exchange.exchange);
       const order = await adapter.createUnsignedOrder({
         makerAssetAmount: makerQuantity,
         takerAssetAmount: takerQuantity,

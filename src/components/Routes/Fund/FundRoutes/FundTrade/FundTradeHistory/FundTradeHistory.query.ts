@@ -2,14 +2,10 @@ import gql from 'graphql-tag';
 import BigNumber from 'bignumber.js';
 import { useMemo } from 'react';
 import { useTheGraphQuery } from '~/hooks/useQuery';
-import {
-  decodeFunctionSignature,
-  ExchangeDefinition,
-  TokenDefinition,
-  DecodedFunctionSignature,
-} from '@melonproject/melonjs';
+import { ExchangeDefinition, TokenDefinition } from '@melonproject/melonjs';
 import { useEnvironment } from '~/hooks/useEnvironment';
 import { fromTokenBaseUnit } from '~/utils/fromTokenBaseUnit';
+import { decodeFunctionSignature, DecodedFunctionSignature } from '~/utils/decodeFunctionSignature';
 
 export interface CallOnExchange {
   id: string;
