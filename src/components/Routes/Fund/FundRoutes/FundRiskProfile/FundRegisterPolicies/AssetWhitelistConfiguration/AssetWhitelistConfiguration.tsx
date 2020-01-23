@@ -23,7 +23,7 @@ export interface AssetWhitelistConfigurationProps {
 export const AssetWhitelistConfiguration: React.FC<AssetWhitelistConfigurationProps> = props => {
   const environment = useEnvironment()!;
   const account = useAccount();
-  const tokens = availableTokens(environment.deployment);
+  const tokens = availableTokens(environment.deployment).filter(token => !token.historic);
 
   const validationSchema = Yup.object().shape({
     assetWhitelist: Yup.array<string>()
