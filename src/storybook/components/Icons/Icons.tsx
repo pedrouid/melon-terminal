@@ -18,6 +18,8 @@ import USDT from './svg/tokens/usdt.svg';
 import WBTC from './svg/tokens/wbtc.svg';
 import WETH from './svg/tokens/weth.svg';
 import ZRX from './svg/tokens/zrx.svg';
+import DGX from './svg/tokens/dgx.svg';
+import EUR from './svg/tokens/eur.svg';
 import METAMASK from './svg/wallet/metamask.svg';
 import FRAME from './svg/wallet/frame.svg';
 import GANACHE from './svg/wallet/ganache.svg';
@@ -43,6 +45,8 @@ export enum IconName {
   'WBTC' = 'WBTC',
   'WETH' = 'WETH',
   'ZRX' = 'ZRX',
+  'DGX' = 'DGX',
+  'EUR' = 'EUR',
   'METAMASK' = 'METAMASK',
   'FRAME' = 'FRAME',
   'GANACHE' = 'GANACHE',
@@ -73,6 +77,8 @@ const icons = {
   WBTC,
   WETH,
   ZRX,
+  DGX,
+  EUR,
   METAMASK,
   FRAME,
   GANACHE,
