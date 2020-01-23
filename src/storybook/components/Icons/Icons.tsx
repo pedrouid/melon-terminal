@@ -25,34 +25,33 @@ import FRAME from './svg/wallet/frame.svg';
 import GANACHE from './svg/wallet/ganache.svg';
 import * as S from './Icons.styles';
 
-export enum IconName {
-  'ANT' = 'ANT',
-  'BAT' = 'BAT',
-  'DAI' = 'DAI',
-  'ENG' = 'ENG',
-  'KNC' = 'KNC',
-  'LINK' = 'LINK',
-  'MANA' = 'MANA',
-  'MKR' = 'MKR',
-  'MLN' = 'MLN',
-  'OMG' = 'OMG',
-  'REN' = 'REN',
-  'REP' = 'REP',
-  'RLC' = 'RLC',
-  'SAI' = 'SAI',
-  'USDC' = 'USDC',
-  'USDT' = 'USDT',
-  'WBTC' = 'WBTC',
-  'WETH' = 'WETH',
-  'ZRX' = 'ZRX',
-  'DGX' = 'DGX',
-  'EUR' = 'EUR',
-  'METAMASK' = 'METAMASK',
-  'FRAME' = 'FRAME',
-  'GANACHE' = 'GANACHE',
-}
+export type IconName =
+  | 'ANT'
+  | 'BAT'
+  | 'DAI'
+  | 'ENG'
+  | 'KNC'
+  | 'LINK'
+  | 'MANA'
+  | 'MKR'
+  | 'MLN'
+  | 'OMG'
+  | 'REN'
+  | 'REP'
+  | 'RLC'
+  | 'SAI'
+  | 'USDC'
+  | 'USDT'
+  | 'WBTC'
+  | 'WETH'
+  | 'ZRX'
+  | 'DGX'
+  | 'EUR'
+  | 'METAMASK'
+  | 'FRAME'
+  | 'GANACHE';
 
-export type IconsProps = React.ComponentProps<typeof L.IconsWrapper> & {
+export type IconsProps = React.ComponentProps<typeof S.IconsWrapper> & {
   name: IconName;
   size?: 'normal' | 'small';
 };

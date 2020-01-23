@@ -7,8 +7,6 @@ export const BAT: React.FC = () => <Icons name="BAT" />;
 
 export const DAI: React.FC = () => <Icons name="DAI" />;
 
-export const ETH: React.FC = () => <Icons name="ETH" />;
-
 export const KNC: React.FC = () => <Icons name="KNC" />;
 
 export const MKR: React.FC = () => <Icons name="MKR" />;
