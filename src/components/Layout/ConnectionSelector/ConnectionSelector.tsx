@@ -87,13 +87,15 @@ export const ConnectionSelector = () => {
 
   return (
     <S.ConnectionSelector ref={ref}>
-      {icon ? (
-        <Icons name={icon} onClick={() => setOpen(!open)} className={open ? 'active' : undefined} />
-      ) : (
-        <S.ConnectionLabel onClick={() => setOpen(!open)} className={open ? 'active' : undefined}>
-          Login
-        </S.ConnectionLabel>
-      )}
+      <S.ConnectionSelectorToggle>
+        {icon ? (
+          <Icons name={icon} onClick={() => setOpen(!open)} className={open ? 'active' : undefined} />
+        ) : (
+          <S.ConnectionLabel onClick={() => setOpen(!open)} className={open ? 'active' : undefined}>
+            Login
+          </S.ConnectionLabel>
+        )}
+      </S.ConnectionSelectorToggle>
 
       {open && (
         <S.ConnectionSelectorBox>

@@ -4,6 +4,10 @@ export const ConnectionSelector = styled.div`
   position: relative;
 `;
 
+export const ConnectionSelectorToggle = styled.div`
+  cursor: pointer;
+`;
+
 export const ConnectionSelectorBox = styled.div`
   position: absolute;
   top: 100%;

@@ -8,8 +8,6 @@ export const IconsWrapper = styled.div<IconProps>`
   position: relative;
   display: block;
 
-  cursor: pointer;
-
   ${props =>
     props.size === 'normal' &&
     css`
