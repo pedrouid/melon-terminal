@@ -34,6 +34,7 @@ import {
   CheckboxInput,
   CheckboxIcon,
 } from '~/storybook/components/Checkbox/Checkbox';
+import styled from 'styled-components';
 
 interface SortChoice {
   key: keyof typeof sortChoice;
@@ -169,6 +170,15 @@ const tableHeadings = [
   },
 ];
 
+const ToggleCheckboxContainer = styled(CheckboxContainer)`
+  margin-top: ${props => props.theme.spaceUnits.xs};
+`;
+
+const ToggleCheckboxLabel = styled(CheckboxLabel)`
+  padding-left: 0;
+  padding-right: ${props => props.theme.spaceUnits.xs};
+`;
+
 export const Home: React.FC = () => {
   const history = useHistory();
   const [funds, query] = useFundOverviewQuery();
@@ -222,7 +232,7 @@ export const Home: React.FC = () => {
             <Block>
               <SectionTitle>
                 <span>Melon fund universe</span>
-                {!account.fund && (
+                {!account.fund && account.address && (
                   <Button kind="secondary">
                     <Link to="/wallet/setup">Create your own Melon fund</Link>
                   </Button>
@@ -242,23 +252,21 @@ export const Home: React.FC = () => {
                   </GridCol>
 
                   <GridCol>
-                    <CheckboxContainer>
-                      <CheckboxLabel htmlFor="filter">Show only active funds </CheckboxLabel>
-
+                    <ToggleCheckboxContainer>
+                      <ToggleCheckboxLabel htmlFor="filter">Show only active funds</ToggleCheckboxLabel>
                       <CheckboxPositioning>
                         <CheckboxInput
                           type="checkbox"
                           id="filter"
                           name="filter"
                           checked={filter}
-                          onChange={event => setFilter(!filter)}
+                          onChange={() => setFilter(!filter)}
                         />
-
                         <CheckboxMask>
                           <CheckboxIcon />
                         </CheckboxMask>
                       </CheckboxPositioning>
-                    </CheckboxContainer>
+                    </ToggleCheckboxContainer>
                   </GridCol>
                 </GridRow>
               </Grid>
