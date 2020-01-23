@@ -192,7 +192,7 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
 
                         {options && options.incentive && (
                           <S.CostsTableRow>
-                            <S.CostsTableCellText>Asset management gas</S.CostsTableCellText>
+                            <S.CostsTableCellText>Incentive</S.CostsTableCellText>
                             <S.CostsTableCell />
                             <S.CostsTableCell>
                               <FormattedNumber value={fromTokenBaseUnit(options.incentive, 18)} suffix="ETH" />
