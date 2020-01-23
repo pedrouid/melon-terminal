@@ -6,6 +6,7 @@ import styled from 'styled-components';
 export interface EtherscanLinkProps {
   address?: string;
   hash?: string;
+  inline?: boolean;
 }
 
 const OverflowEllipsis = styled.a`
@@ -24,9 +25,13 @@ export const EtherscanLink: React.FC<EtherscanLinkProps> = props => {
 
   const link = useEtherscanLink(args);
 
-  return (
+  return !props.inline ? (
     <OverflowEllipsis href={link!} target="_blank">
-      {args.address || args.hash}
+      {props.children || args.address || args.hash}
     </OverflowEllipsis>
+  ) : (
+    <a href={link!} target="_blank">
+      {props.children || args.address || args.hash}
+    </a>
   );
 };

@@ -75,7 +75,6 @@ export const FundOrderbookLimitForm: React.FC<FundOrderbookLimitFormProps> = pro
   // }, [props.order]);
 
   const submit = form.handleSubmit(async data => {
-    console.log(data);
     const hub = new Hub(environment, props.address);
     const trading = new Trading(environment, (await hub.getRoutes()).trading);
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { Spinner } from '~/storybook/components/Spinner/Spinner';
 import { useFundDetailsQuery } from '~/queries/FundDetails';
 import { SectionTitle } from '~/storybook/components/Title/Title';
@@ -103,11 +103,6 @@ export const FundFactSheet: React.FC<FundFactSheetProps> = ({ address }) => {
     standardDeviation(normalizedCalculations.map(item => item.logReturn)) * 100 * Math.sqrt(365.25);
 
   const exchanges = routes?.trading?.exchanges;
-  const exchangeNames = exchanges?.map(exchange => {
-    const envExchange = environment?.getExchange(exchange.exchange!);
-    return envExchange?.name;
-  });
-
   const allowedAssets = routes?.participation?.allowedAssets;
   const allowedAssetsSymbols = allowedAssets?.map(asset => asset?.token?.symbol);
 
@@ -195,7 +190,7 @@ export const FundFactSheet: React.FC<FundFactSheetProps> = ({ address }) => {
       <DictionaryEntry>
         <DictionaryLabel>Start of next performance fee period</DictionaryLabel>
         <DictionaryData>
-          {performanceFee?.initializeTime ? <FormattedDate timestamp={nextPeriodStart} /> : 'N/A'}
+          <FormattedDate timestamp={nextPeriodStart} />
         </DictionaryData>
       </DictionaryEntry>
       <DictionaryEntry>
@@ -234,7 +229,20 @@ export const FundFactSheet: React.FC<FundFactSheetProps> = ({ address }) => {
       </DictionaryEntry>
       <DictionaryEntry>
         <DictionaryLabel>Authorized exchanges</DictionaryLabel>
-        <DictionaryData>{exchangeNames ? exchangeNames.sort().join(', ') : 'N/A'}</DictionaryData>
+        <DictionaryData>
+          {exchanges?.map((exchange, index) => {
+            const item = environment?.getExchange(exchange.exchange!);
+
+            return (
+              <Fragment key={exchange.exchange}>
+                <EtherscanLink key={index} inline={true} address={exchange.exchange}>
+                  {item?.name ?? exchange.exchange}
+                </EtherscanLink>
+                {index + 1 < exchanges.length && ', '}
+              </Fragment>
+            );
+          })}
+        </DictionaryData>
       </DictionaryEntry>
       <DictionaryEntry>
         <DictionaryLabel>Investable assets</DictionaryLabel>

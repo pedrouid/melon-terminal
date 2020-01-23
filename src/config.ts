@@ -1,9 +1,12 @@
 import { NetworkEnum } from './types';
-import { DeploymentOutput } from '@melonproject/melonjs';
+import { DeploymentOutput, TokenDefinition, ExchangeDefinition, PolicyDefinition } from '@melonproject/melonjs';
 
 export interface Config {
   subgraph: string;
   deployment: () => Promise<DeploymentOutput>;
+  tokens?: TokenDefinition[];
+  exchanges?: ExchangeDefinition[];
+  policies?: PolicyDefinition[];
 }
 
 export type ConfigMap = {
@@ -30,6 +33,24 @@ export const config: ConfigMap = {
         // @ts-ignore
         return loadDeployment(() => import('deployments/mainnet-deployment'), process.env.MELON_MAINNET_DEPLOYMENT);
       },
+      tokens: [
+        {
+          symbol: 'DGX',
+          address: '0x4f3afec4e5a3f2a6a1a411def7d7dfe50ee057bf',
+          decimals: 9,
+          name: 'Digix Gold Token',
+          historic: true,
+        },
+      ],
+      exchanges: [
+        {
+          name: 'ZeroEx (v. 2.0)',
+          id: 'ZeroExV2Old',
+          adapter: '0x3ECFe6F8414ED517366a5e6f7F7FC74EF21CAac9',
+          exchange: '0x4F833a24e1f95D70F028921e27040Ca56E09AB0b',
+          historic: true,
+        },
+      ],
     },
   }),
   ...(JSON.parse(process.env.MELON_KOVAN) && {

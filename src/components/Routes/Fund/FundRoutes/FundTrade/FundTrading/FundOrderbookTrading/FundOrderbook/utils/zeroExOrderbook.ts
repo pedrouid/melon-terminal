@@ -51,7 +51,7 @@ export function zeroExOrderbook(
   makerAsset: TokenDefinition,
   takerAsset: TokenDefinition
 ) {
-  const network = (environment.network as any) as NetworkEnum;
+  const network = environment.network as NetworkEnum;
   const makerAssetData = assetDataUtils.encodeERC20AssetData(makerAsset.address);
   const takerAssetData = assetDataUtils.encodeERC20AssetData(takerAsset.address);
 

@@ -3,11 +3,15 @@ import { DeployedEnvironment, DeploymentOutput } from '@melonproject/melonjs';
 import { Eth } from 'web3-eth';
 import { NetworkEnum } from './types';
 import { HttpProvider, WebsocketProvider, HttpProviderOptions, WebsocketProviderOptions } from 'web3-providers';
+import { Config } from './config';
 
-export function createEnvironment(eth: Eth, deployment: DeploymentOutput, network: NetworkEnum) {
+export function createEnvironment(eth: Eth, deployment: DeploymentOutput, network: NetworkEnum, config: Config) {
   // TODO: Fix network parameter.
-  return new DeployedEnvironment(eth, network as any, deployment, {
+  return new DeployedEnvironment(eth, network, deployment, {
     cache: new LRUCache(500),
+    ...(config.tokens && { tokens: config.tokens }),
+    ...(config.policies && { policies: config.policies }),
+    ...(config.exchanges && { exchanges: config.exchanges }),
   });
 }
 

@@ -319,8 +319,7 @@ export interface TransactionHookValues<FormValues extends TransactionFormValues 
 }
 
 async function fetchEthGasStation(environment: DeployedEnvironment) {
-  // TODO: Fix network enum.
-  const network = (environment.network as any) as NetworkEnum;
+  const network = environment.network as NetworkEnum;
   if (network !== NetworkEnum.MAINNET) {
     return undefined;
   }

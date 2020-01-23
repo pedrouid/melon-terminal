@@ -18,11 +18,11 @@ export const useEtherscanLink = ({ address, hash }: UseEtherscanLinkProps) => {
 
     const link = address ? `address/${address}` : `tx/${hash}`;
 
-    if (network === 'MAINNET') {
+    if (network === NetworkEnum.MAINNET) {
       return `https://etherscan.io/${link}`;
     }
 
-    if (network === 'KOVAN') {
+    if (network === NetworkEnum.KOVAN) {
       return `https://kovan.etherscan.io/${link}`;
     }
 
