@@ -71,7 +71,7 @@ export const FundInvest: React.FC<FundInvestProps> = ({ address }) => {
         {action === 'waiting' && (
           <p>
             You need to wait before you can execute your investment request. The time-window to execute your investment
-            request is between the next price update and 24 hours after your investment request .
+            request is between the next price update and 24 hours after your investment request.
           </p>
         )}
       </RequiresFundCreatedAfter>
