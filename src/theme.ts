@@ -154,7 +154,7 @@ export const Global = createGlobalStyle`
 
   h1, h2, h3 {
     margin-bottom: ${theme.spaceUnits.m};
-    font-size: ${theme.fontSizes.xl};
+    font-size: ${theme.fontSizes.xxl};
     font-weight: bold;
     position: relative;
   }
@@ -167,7 +167,7 @@ export const Global = createGlobalStyle`
   }
 
   h4 {
-    font-size: ${theme.fontSizes.l};
+    font-size: ${theme.fontSizes.xl};
     margin-bottom: ${theme.spaceUnits.xs};
   }
 
