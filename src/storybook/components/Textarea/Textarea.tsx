@@ -13,13 +13,10 @@ const TextareaInput = styled.textarea<TextareaInputProps>`
   padding: ${props => props.theme.spaceUnits.m};
   border: 1px solid ${props => props.theme.mainColors.secondaryDarkAlpha};
   border-radius: 0;
-  font-family: inherit;
-  font-size: ${props => props.theme.fontSizes.m};
   background: ${props => props.theme.mainColors.primary};
   box-shadow: inset 1px 4px 4px rgba(200, 200, 200, 0.25);
   ::placeholder {
     color: ${props => props.theme.mainColors.secondaryDarkAlpha};
-    font-size: ${props => props.theme.fontSizes.s};
   }
   :focus {
     outline-color: ${props => props.theme.mainColors.secondaryDarkAlpha};
@@ -47,7 +44,6 @@ const TextareaLabel = styled.span`
   display: inline-block;
   margin-bottom: ${props => props.theme.spaceUnits.xs};
   color: ${props => props.theme.mainColors.primaryDark};
-  font-size: ${props => props.theme.fontSizes.m};
 `;
 
 const TextareaError = styled.span`

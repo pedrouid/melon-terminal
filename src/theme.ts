@@ -135,11 +135,18 @@ export const Global = createGlobalStyle`
     min-height: 100%;
   }
 
+  html, body, form, fieldset, table, tr, td, img {
+    font: 14px/1.4 monospace, sans-serif;
+  }
+
+  input, button, select, textarea, optgroup, option {
+      font-family: inherit;
+      font-size: inherit;
+      font-style: inherit;
+      font-weight: inherit;
+  }
+  
   body {
-    position: relative;
-    font-family: monospace;
-    font-size: 14px;
-    line-height: 1.4;
     margin: 0;
     min-height: 100%;
     background-color: ${theme.mainColors.secondary};

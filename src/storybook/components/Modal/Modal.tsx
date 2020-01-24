@@ -116,7 +116,7 @@ export const EthGasStationButtonGwei = styled.span`
 `;
 
 export const EthGasStationButtonText = styled.span`
-  font-size: 10px;
+  font-size: ${props => props.theme.fontSizes.m};
 `;
 
 export const CostsTable = styled.table`
@@ -134,22 +134,24 @@ export const CostsTableBody = styled.tbody``;
 export const CostsTableRow = styled.tr``;
 
 export const CostsTableRowTotal = styled.tr`
-  font-weight: bold;
   border-top: 1px dashed ${props => props.theme.otherColors.grey};
   border-bottom: 1px solid ${props => props.theme.otherColors.grey};
 `;
 
 export const CostsTableHeaderCellText = styled.th`
+  font-weight: ${props => props.theme.fontWeights.semiBold};
   padding: ${props => props.theme.spaceUnits.xs};
   text-align: left;
 `;
 
 export const CostsTableHeaderCell = styled.th`
+  font-weight: ${props => props.theme.fontWeights.semiBold};
   padding: ${props => props.theme.spaceUnits.xs};
   text-align: right;
 `;
 
 export const CostsTableCellText = styled.td`
+  font-weight: ${props => props.theme.fontWeights.semiBold};
   padding: ${props => props.theme.spaceUnits.xs};
   text-align: left;
 `;

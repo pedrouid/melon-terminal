@@ -42,7 +42,7 @@ export const ConnectionInfoItem = styled.div`
 
   a {
     background: ${props => props.theme.mainColors.secondary};
-    font-size: ${props => props.theme.fontSizes.s};
+    font-size: ${props => props.theme.fontSizes.m};
     text-transform: uppercase;
     text-decoration: none;
     padding: ${props => props.theme.spaceUnits.xs} ${props => props.theme.spaceUnits.s};

@@ -9,7 +9,6 @@ export const DropdownLabel = styled.span`
   display: inline-block;
   margin-bottom: ${props => props.theme.spaceUnits.xs};
   color: ${props => props.theme.mainColors.primaryDark};
-  font-size: ${props => props.theme.fontSizes.m};
 `;
 
 export const DropdownError = styled.span`
@@ -68,7 +67,6 @@ export const DropdownSelect = styled.select`
   appearance: none;
   border-radius: 0;
   border: none;
-  font-size: ${props => props.theme.fontSizes.m};
   background: transparent;
   padding: ${props => props.theme.spaceUnits.xs} ${props => props.theme.spaceUnits.xl}
     ${props => props.theme.spaceUnits.xs} ${props => props.theme.spaceUnits.s};

@@ -9,7 +9,7 @@ export const Footer = styled.div`
   height: ${props => props.theme.skeleton.footerHeight};
   padding: 0px ${props => props.theme.spaceUnits.xs};
   border-top: 1px dotted ${props => props.theme.otherColors.grey};
-  font-size: ${props => props.theme.fontSizes.s};
+
   @media (${props => props.theme.mediaQueries.s}) {
     justify-content: space-between;
     padding: 0px ${props => props.theme.spaceUnits.m};

@@ -99,7 +99,6 @@ export const CheckboxError = styled.span`
   display: inline-block;
   margin-top: ${props => props.theme.spaceUnits.xs};
   color: ${props => props.theme.statusColors.primaryLoss};
-  font-size: ${props => props.theme.fontSizes.s};
 `;
 
 export const CheckboxesWrapper = styled.div``;
@@ -108,7 +107,6 @@ export const CheckboxesLabel = styled.span`
   display: inline-block;
   margin-bottom: ${props => props.theme.spaceUnits.xs};
   color: ${props => props.theme.mainColors.primaryDark};
-  font-size: ${props => props.theme.fontSizes.m};
 `;
 
 export const CheckboxesError = styled.span`

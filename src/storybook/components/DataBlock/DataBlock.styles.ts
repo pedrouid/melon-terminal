@@ -22,7 +22,6 @@ export const DataLabel = styled.p`
   margin-bottom: ${props => props.theme.spaceUnits.xs};
   margin-right: ${props => props.theme.spaceUnits.xs};
   color: ${props => props.theme.mainColors.secondaryDark};
-  font-size: ${props => props.theme.fontSizes.m};
   white-space: nowrap;
   @media (${props => props.theme.mediaQueries.m}) {
     display: block;
@@ -34,7 +33,6 @@ export const Data = styled.p`
   display: inline-block;
   margin-bottom: 0px;
   color: ${props => props.theme.mainColors.primaryDark};
-  font-size: ${props => props.theme.fontSizes.m};
   font-weight: ${props => props.theme.fontWeights.semiBold};
   white-space: nowrap;
   @media (${props => props.theme.mediaQueries.m}) {

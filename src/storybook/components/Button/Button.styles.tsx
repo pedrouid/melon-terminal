@@ -17,9 +17,6 @@ const ButtonBase = css`
   align-items: center;
   border: none;
   border-radius: ${props => props.theme.border.borderRadius};
-  font-family: inherit;
-  font-size: ${props => props.theme.fontSizes.m};
-  font-weight: ${props => props.theme.fontWeights.regular};
   white-space: nowrap;
   cursor: pointer;
   transition: ${props => props.theme.transition.defaultAll};
