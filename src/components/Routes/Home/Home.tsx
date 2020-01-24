@@ -35,6 +35,7 @@ import {
   CheckboxIcon,
 } from '~/storybook/components/Checkbox/Checkbox';
 import styled from 'styled-components';
+import BigNumber from 'bignumber.js';
 
 interface SortChoice {
   key: keyof typeof sortChoice;
@@ -61,24 +62,16 @@ function createSortNumberFromString(key: keyof FundProcessed) {
   };
 }
 
-function sortChange(a: FundProcessed, b: FundProcessed): number {
-  if (a.change === b.change) {
-    return 0;
-  }
-
-  return a.change < b.change ? -1 : 1;
-}
-
 const sortChoice = {
   name: createSortString('name'),
   inception: createSortString('inception'),
   aumEth: createSortNumberFromString('aumEth'),
   aumUsd: createSortNumberFromString('aumEth'),
   sharePrice: createSortNumberFromString('sharePrice'),
-  change: sortChange,
   shares: createSortNumberFromString('shares'),
   version: createSortString('version'),
   status: createSortString('status'),
+  change: (a: FundProcessed, b: FundProcessed) => b.change.comparedTo(a.change),
 };
 
 const useFilteredFunds = (funds: FundProcessed[], search: string, filter: boolean) => {
