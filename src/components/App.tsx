@@ -16,6 +16,7 @@ import { method as metamask } from './Layout/ConnectionSelector/MetaMask/MetaMas
 import { method as frame } from './Layout/ConnectionSelector/Frame/Frame';
 import { method as ganache } from './Layout/ConnectionSelector/Ganache/Ganache';
 import { method as anonymous } from './Layout/ConnectionSelector/Anonymous/Anonymous';
+import { CurrencyProvider } from './Contexts/Currency/Currency';
 
 const AppComponent = () => {
   const start = process.env.MELON_TESTNET ? ganache : anonymous;
@@ -29,9 +30,11 @@ const AppComponent = () => {
             <ConnectionProvider methods={methods} default={start} disconnect={anonymous}>
               <ApolloProvider>
                 <AccountProvider>
-                  <Layout>
-                    <AppRouter />
-                  </Layout>
+                  <CurrencyProvider>
+                    <Layout>
+                      <AppRouter />
+                    </Layout>
+                  </CurrencyProvider>
                 </AccountProvider>
               </ApolloProvider>
             </ConnectionProvider>
