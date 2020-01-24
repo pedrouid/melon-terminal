@@ -35,7 +35,7 @@ export const FundHoldings: React.FC<FundHoldingsProps> = ({ address }) => {
   }
 
   const totalValue = holdings.reduce((acc, current) => {
-    return acc.plus(current.valueInDenominationAsset || new BigNumber(0));
+    return acc.plus(current.value || new BigNumber(0));
   }, new BigNumber(0));
 
   return (
@@ -72,14 +72,10 @@ export const FundHoldings: React.FC<FundHoldingsProps> = ({ address }) => {
                   <FormattedNumber value={fromTokenBaseUnit(holding.amount!, holding.token!.decimals!)} />
                 </BodyCellRightAlign>
                 <BodyCellRightAlign>
-                  <FormattedNumber value={fromTokenBaseUnit(holding.valueInDenominationAsset!, 18)} />
+                  <FormattedNumber value={fromTokenBaseUnit(holding.value!, 18)} />
                 </BodyCellRightAlign>
                 <BodyCellRightAlign>
-                  <FormattedNumber
-                    value={holding.valueInDenominationAsset?.dividedBy(totalValue).times(100)}
-                    decimals={2}
-                    suffix="%"
-                  />
+                  <FormattedNumber value={holding.value?.dividedBy(totalValue).times(100)} decimals={2} suffix="%" />
                 </BodyCellRightAlign>
               </BodyRow>
             ))}

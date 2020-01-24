@@ -6,7 +6,6 @@ import { HttpProvider, WebsocketProvider, HttpProviderOptions, WebsocketProvider
 import { Config } from './config';
 
 export function createEnvironment(eth: Eth, deployment: DeploymentOutput, network: NetworkEnum, config: Config) {
-  // TODO: Fix network parameter.
   return new DeployedEnvironment(eth, network, deployment, {
     cache: new LRUCache(500),
     ...(config.tokens && { tokens: config.tokens }),

@@ -28,7 +28,7 @@ export const FundOrderbookTrading: React.FC<FundOrderbookTradingProps> = props =
     setType('limit');
   }, [asset]);
 
-  const tokens = environment.tokens.filter(token => token !== weth);
+  const tokens = environment.tokens.filter(token => token !== weth && !token.historic);
   const tokenOptions = tokens.map(token => ({
     value: token.address,
     name: `${token.symbol} / ${weth.symbol}`,

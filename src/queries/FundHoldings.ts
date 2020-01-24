@@ -13,7 +13,7 @@ const FundHoldingsQuery = gql`
         accounting {
           holdings {
             amount
-            valueInDenominationAsset
+            value
             token {
               address
               symbol

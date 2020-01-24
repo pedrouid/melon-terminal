@@ -49,10 +49,12 @@ export const FundKyberTrading: React.FC<FundKyberTradingProps> = props => {
   const refetch = useOnChainQueryRefetcher();
 
   const weth = environment.getToken('WETH')!;
-  const options = environment.tokens.map(token => ({
-    value: token.address,
-    name: token.symbol,
-  }));
+  const options = environment.tokens
+    .filter(item => !item.historic)
+    .map(token => ({
+      value: token.address,
+      name: token.symbol,
+    }));
 
   const defaultValues = {
     makerAsset: options[1].value,
