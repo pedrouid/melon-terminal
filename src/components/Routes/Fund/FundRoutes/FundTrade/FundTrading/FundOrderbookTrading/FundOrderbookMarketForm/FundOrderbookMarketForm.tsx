@@ -12,7 +12,7 @@ import {
   OasisDexTradingAdapter,
   OasisDexExchange,
   ZeroExV2TradingAdapter,
-  ZeroExV2Order,
+  toBigNumber,
 } from '@melonproject/melonjs';
 import { useOnChainQueryRefetcher } from '~/hooks/useOnChainQueryRefetcher';
 import { Dropdown } from '~/storybook/components/Dropdown/Dropdown';
@@ -24,10 +24,12 @@ import { OasisDexOrderbookItem } from '../FundOrderbook/utils/matchingMarketOrde
 import { useForm, FormContext } from 'react-hook-form';
 import { BlockActions } from '~/storybook/components/Block/Block';
 import { toTokenBaseUnit } from '~/utils/toTokenBaseUnit';
+import { NotificationBar, NotificationContent } from '~/storybook/components/NotificationBar/NotificationBar';
+import BigNumber from 'bignumber.js';
 
 export interface FundOrderbookMarketFormProps {
   address: string;
-  asset?: TokenDefinition;
+  asset: TokenDefinition;
   exchanges: ExchangeDefinition[];
   order?: OrderbookItem;
   unsetOrder: () => void;
@@ -35,6 +37,7 @@ export interface FundOrderbookMarketFormProps {
 
 interface FundOrderbookMarketFormValues {
   quantity: string;
+  total: string;
 }
 
 export const FundOrderbookMarketForm: React.FC<FundOrderbookMarketFormProps> = props => {
@@ -66,80 +69,124 @@ export const FundOrderbookMarketForm: React.FC<FundOrderbookMarketFormProps> = p
     },
   ];
 
-  const quantity = useRef(props.order?.quantity);
   const form = useForm<FundOrderbookMarketFormValues>({
     mode: 'onSubmit',
     reValidateMode: 'onBlur',
     defaultValues: {
       quantity: '',
+      total: '',
     },
     validationSchema: Yup.object().shape({
       quantity: Yup.string()
-        .required()
-        .test('max', 'Maximum quantity exceeded', value => {
-          if (!quantity.current) {
-            return false;
-          }
+        .required(),
+      // .test('max', 'Maximum quantity exceeded', value => {
+      //   if (!quantityRef.current) {
+      //     return false;
+      //   }
 
-          return quantity.current!.isGreaterThanOrEqualTo(value);
-        }),
+      //   return quantityRef.current!.isGreaterThanOrEqualTo(value);
+      // }),
+      total: Yup.string()
+        .required(),
+      // .test('max', 'Maximum quantity exceeded', value => {
+      //   if (!quantityRef.current) {
+      //     return false;
+      //   }
+
+      //   return quantityRef.current!.isGreaterThanOrEqualTo(value);
+      // }),
     }),
   });
 
+  const base = props.asset;
+  const order = props.order;
+  const quote = environment.getToken('WETH');
+  const price = props.order?.price ?? new BigNumber('NaN');
+
+  // The refs are used for form validation.
+  const quantityRef = useRef(order?.quantity);
+  const totalRef = useRef(order?.quantity.multipliedBy(price));
+
   useEffect(() => {
-    quantity.current = props.order?.quantity;
-    form.setValue('quantity', props.order?.quantity.toString() ?? '');
-  }, [props.order?.quantity.toString()]);
+    const quantity = order?.quantity ?? new BigNumber('NaN');
+    const total = quantity.multipliedBy(price);
+
+    quantityRef.current = quantity;
+    totalRef.current = total;
+
+    form.setValue('quantity', !quantity.isNaN() ? quantity.toString() : '');
+    form.setValue('total', !total.isNaN() ? total.toString() : '');
+  }, [order]);
 
   const submit = form.handleSubmit(async values => {
-    const order = props.order!;
     const hub = new Hub(environment, props.address);
     const trading = new Trading(environment, (await hub.getRoutes()).trading);
-    const exchange = environment.getExchange(order.exchange);
-    const taker = props.order!.side === 'bid' ? props.asset! : environment.getToken('WETH');
+    const exchange = environment.getExchange(order!.exchange);
+
+    const taker = order!.side === 'bid' ? base : quote;
+    const maker = order!.side === 'bid' ? quote : base;
+    const quantity = order!.side === 'bid' ? toTokenBaseUnit(values.quantity, taker.decimals) : toTokenBaseUnit(values.total, maker.decimals);
 
     if (exchange.id === ExchangeIdentifier.OasisDex) {
       const market = new OasisDexExchange(environment, exchange.exchange);
       const adapter = await OasisDexTradingAdapter.create(trading, exchange.exchange);
       const offer = await market.getOffer((order as OasisDexOrderbookItem).order.id);
-      const quantity = !offer.takerQuantity.isEqualTo(values.quantity)
-        ? toTokenBaseUnit(values.quantity, taker.decimals).multipliedBy(order.price)
-        : undefined;
-
-      const tx = adapter.takeOrder(account.address!, order.order.id, offer, quantity);
+      const tx = adapter.takeOrder(account.address!, order!.order.id, offer, quantity);
       return transaction.start(tx, 'Take order');
     }
 
-    if (order.exchange === ExchangeIdentifier.ZeroExV2) {
+    if (order!.exchange === ExchangeIdentifier.ZeroExV2) {
       const adapter = await ZeroExV2TradingAdapter.create(trading, exchange.exchange);
-      const offer = order.order as ZeroExV2Order;
-      const quantity = !offer.takerAssetAmount.isEqualTo(values.quantity)
-        ? toTokenBaseUnit(values.quantity, taker.decimals).multipliedBy(order.price)
-        : undefined;
-
-      const tx = adapter.takeOrder(account.address!, order.order, quantity);
+      const tx = adapter.takeOrder(account.address!, order!.order, quantity);
       return transaction.start(tx, 'Take order');
     }
   });
 
+  const quantity = toBigNumber(form.watch('quantity'));
+  const total = toBigNumber(form.watch('total'));
+
+  const changeQuantity = (change: BigNumber.Value) => {
+    const quantity = toBigNumber(change);
+    const total = quantity.multipliedBy(price);
+    form.setValue('total', !total.isNaN() ? total.decimalPlaces(4).toString() : '');
+  }
+
+  const changeTotal = (change: BigNumber.Value) => {
+    const total = toBigNumber(change);
+    const quantity = total.dividedBy(price);
+    form.setValue('quantity', !quantity.isNaN() ? quantity.decimalPlaces(4).toString() : '');
+  }
+
+  const ready = !price.isNaN() && !quantity.isNaN() && !total.isNaN();
+  const description = ready && `Market order: ${direction === 'buy' ? 'Buy' : 'Sell'} ${quantity.decimalPlaces(4).toString()} ${base.symbol} at a price of ${price.decimalPlaces(4).toString()} ${quote.symbol} per ${base.symbol} for a total of ${total.decimalPlaces(4).toString()} ${quote.symbol}`;
+
   return (
     <FormContext {...form}>
-      {props.order && (
+      {order && (
         <form onSubmit={submit}>
           <Dropdown name="direction" label="Buy or sell" options={directions} disabled={true} value={direction} />
           <Dropdown name="exchange" label="Exchange" options={exchanges} disabled={true} value={exchange} />
-          <Input type="text" name="quantity" label="Quantity" max={props.order.quantity.toFixed()} />
-          <Input type="text" name="price" label="Price" disabled={true} value={props.order.price.toFixed()} />
+          <Input type="text" name="quantity" label={`Quantity (${base.symbol})`} onChange={event => changeQuantity(event.target.value)} />
+          <Input type="text" name="price" label={`Price (${quote.symbol} per ${base.symbol})`} disabled={true} value={price.decimalPlaces(4).toString()} />
+          <Input type="text" name="total" label={`Total (${quote.symbol})`} onChange={(event) => changeTotal(event.target.value)} />
+
+          {description && (
+            <NotificationBar kind="neutral">
+              <NotificationContent>
+                {description}
+              </NotificationContent>
+            </NotificationBar>
+          )}
 
           <BlockActions>
-            <Button type="button" onClick={submit}>
+            <Button type="button" disabled={!ready} onClick={submit}>
               Submit
             </Button>
           </BlockActions>
         </form>
       )}
 
-      {!props.order && <>Please select an order.</>}
+      {!order && <>Please select an order.</>}
 
       <TransactionModal transaction={transaction} />
     </FormContext>

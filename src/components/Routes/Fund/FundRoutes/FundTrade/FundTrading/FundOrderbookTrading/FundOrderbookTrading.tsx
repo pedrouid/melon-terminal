@@ -64,7 +64,7 @@ export const FundOrderbookTrading: React.FC<FundOrderbookTradingProps> = props =
           onChange={event => setType(event.target.value as 'limit' | 'market')}
         />
 
-        {type === 'market' && (
+        {type === 'market' && asset && (
           <FundOrderbookMarketForm
             address={props.address}
             asset={asset}
@@ -74,7 +74,7 @@ export const FundOrderbookTrading: React.FC<FundOrderbookTradingProps> = props =
           />
         )}
 
-        {type === 'limit' && (
+        {type === 'limit' && asset && (
           <FundOrderbookLimitForm
             address={props.address}
             asset={asset}
@@ -84,21 +84,23 @@ export const FundOrderbookTrading: React.FC<FundOrderbookTradingProps> = props =
           />
         )}
       </S.FundOrderbookForm>
-      <S.FundOrderbook>
-        <FundOrderbook
-          address={props.address}
-          asset={asset}
-          exchanges={props.exchanges}
-          selected={order}
-          setSelected={(order?: OrderbookItem) => {
-            if (order != null && type !== 'market') {
-              setType('market');
-            }
+      {asset && (
+        <S.FundOrderbook>
+          <FundOrderbook
+            address={props.address}
+            asset={asset}
+            exchanges={props.exchanges}
+            selected={order}
+            setSelected={(order?: OrderbookItem) => {
+              if (order != null && type !== 'market') {
+                setType('market');
+              }
 
-            setOrder(order);
-          }}
-        />
-      </S.FundOrderbook>
+              setOrder(order);
+            }}
+          />
+        </S.FundOrderbook>
+      )}
     </S.FundOrderbookTrading>
   );
 };
