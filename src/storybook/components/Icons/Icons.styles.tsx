@@ -23,6 +23,9 @@ export const IconsWrapper = styled.div<IconProps>`
 `;
 
 export const Img = styled.img<IconProps>`
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
   ${props =>
     props.size === 'normal' &&
     css`

@@ -1,5 +1,6 @@
 import React from 'react';
 import { format } from 'date-fns';
+import { useLocation } from 'react-router';
 import { usePriceFeedUpdateQuery } from '~/queries/PriceFeedUpdate';
 import { Link, NavLink } from '~/storybook/components/Link/Link';
 import { useAccount } from '~/hooks/useAccount';
@@ -15,15 +16,18 @@ import {
 import { Footer, FooterNavigation, FooterItem } from '~/storybook/components/Footer/Footer';
 import { Logo } from '~/storybook/components/Logo/Logo';
 import { ConnectionSelector } from './ConnectionSelector/ConnectionSelector';
-import { useConnectionState } from '~/hooks/useConnectionState';
 import { useEnvironment } from '~/hooks/useEnvironment';
+import { Icons } from '~/storybook/components/Icons/Icons';
 
 const graphiql = JSON.parse(process.env.MELON_INCLUDE_GRAPHIQL || 'false');
 
 export const Layout: React.FC = ({ children }) => {
+  const location = useLocation()!;
   const [update] = usePriceFeedUpdateQuery();
   const environment = useEnvironment();
   const account = useAccount();
+
+  const home = location.pathname === '/';
 
   return (
     <Skeleton>
@@ -31,12 +35,13 @@ export const Layout: React.FC = ({ children }) => {
         <HeaderContainer>
           <HeaderContent>
             <HeaderTitle>
-              <Link to="/">Melon Manager Interface</Link>
+              <Link to="/">
+                {!home && <Icons name="LEFTARROW" size="small" />}
+                <span>Melon Manager Interface</span>
+              </Link>
             </HeaderTitle>
             <LogoContainer>
-              <Link to="/">
-                <Logo name="with-bottom-text" size="small" />
-              </Link>
+              <Logo name="with-bottom-text" size="small" />
             </LogoContainer>
             <ConnectionInfo>
               {account.fund && (

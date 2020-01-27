@@ -10,6 +10,7 @@ export const theme = {
     secondaryDarkAlpha: 'rgb(196, 196, 196)',
     border: 'rgb(29, 29, 29)',
   },
+  logoColors: ['#000000', '#ff00b4', '#00ffbc', '#8ea5ff', '#c493ff', '#ffb5b5', '#bdffa3', '#8fb8ff', '#fd81eb'],
   border: {
     borderDefault: '1px solid rgb(29,29,29)',
     borderSecondary: '1px solid rgb(196,196,196)',
@@ -172,12 +173,18 @@ export const Global = createGlobalStyle`
   }
 
   a {
+    display: flex;
+    align-items: center;
     text-decoration: underline;
     color: ${theme.otherColors.black};
     transition: ${theme.transition.defaultAll};
     :hover{
       opacity: 0.6;
     }
+  }
+
+  div + span {
+    margin-left: 10px;
   }
 
   hr {

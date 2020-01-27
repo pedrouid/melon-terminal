@@ -28,11 +28,10 @@ export interface LogosProps {
 
 export const Logo: React.FC<LogosProps> = ({ name, size }) => {
   const context = useColor();
-  const handleEnter = () => context.random && context.random();
-  const handleLeave = () => context.reset && context.reset();
+  const onClick = () => context.random && context.random();
 
   return (
-    <L.LogoWrapper size={size} onMouseEnter={handleEnter} onMouseLeave={handleLeave}>
+    <L.LogoWrapper size={size} onClick={onClick}>
       <svg
         version="1.1"
         xmlns="http://www.w3.org/2000/svg"

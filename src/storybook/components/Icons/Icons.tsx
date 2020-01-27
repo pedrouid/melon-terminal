@@ -24,6 +24,7 @@ import METAMASK from './svg/wallet/metamask.svg';
 import FRAME from './svg/wallet/frame.svg';
 import GANACHE from './svg/wallet/ganache.svg';
 import TWITTER from './svg/socialNetwork/twitter.svg';
+import LEFTARROW from './svg/leftArrow.svg';
 import * as S from './Icons.styles';
 
 export type IconName =
@@ -51,7 +52,8 @@ export type IconName =
   | 'METAMASK'
   | 'FRAME'
   | 'GANACHE'
-  | 'TWITTER';
+  | 'TWITTER'
+  | 'LEFTARROW';
 
 export type IconsProps = React.ComponentProps<typeof S.IconsWrapper> & {
   name: IconName;
@@ -84,13 +86,14 @@ const icons = {
   FRAME,
   GANACHE,
   TWITTER,
+  LEFTARROW,
 };
 
 export const Icons: React.FC<IconsProps> = ({ name, size, ...props }) => {
   size = size || 'normal';
 
   return (
-    <S.IconsWrapper {...props}>
+    <S.IconsWrapper {...props} size={size}>
       <S.Img src={icons[name]} size={size} />
     </S.IconsWrapper>
   );

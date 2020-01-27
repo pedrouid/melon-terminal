@@ -1,5 +1,6 @@
 import React, { createContext, useState, useLayoutEffect } from 'react';
 import { useLocation } from 'react-router';
+import { theme } from '~/theme';
 
 export interface ColorContextValue {
   color: string;
@@ -14,7 +15,7 @@ export interface ColorProviderProps {
 }
 
 function randomColor() {
-  return `#${Math.floor(Math.random() * 16777215).toString(16)}`;
+  return theme.logoColors[Math.floor(Math.random() * theme.logoColors.length)];
 }
 
 export const ColorProvider: React.FC<ColorProviderProps> = props => {

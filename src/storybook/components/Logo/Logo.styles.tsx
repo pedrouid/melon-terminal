@@ -9,6 +9,7 @@ export const LogoWrapper = styled.div<LogoWrapperProps>`
   display: block;
   height: 100%;
   text-align: center;
+  cursor: pointer;
   :hover{
     transition: ${props => props.theme.transition.defaultAll};
   }
