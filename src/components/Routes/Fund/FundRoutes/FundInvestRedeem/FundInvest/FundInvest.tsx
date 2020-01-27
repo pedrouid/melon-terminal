@@ -66,7 +66,12 @@ export const FundInvest: React.FC<FundInvestProps> = ({ address }) => {
           />
         )}
         {action === 'execute' && (
-          <ExecuteRequest address={address} account={account!} loading={query.networkStatus < 7} />
+          <ExecuteRequest
+            address={address}
+            account={account!}
+            loading={query.networkStatus < 7}
+            totalSupply={totalSupply}
+          />
         )}
         {action === 'waiting' && (
           <p>

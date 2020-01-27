@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Participation } from '@melonproject/melonjs';
 import { Account } from '@melonproject/melongql';
 import { useEnvironment } from '~/hooks/useEnvironment';
@@ -7,6 +7,7 @@ import { TransactionModal } from '~/components/Common/TransactionModal/Transacti
 import { useOnChainQueryRefetcher } from '~/hooks/useOnChainQueryRefetcher';
 import { useAccount } from '~/hooks/useAccount';
 import { Button } from '~/storybook/components/Button/Button';
+import { Spinner } from '~/storybook/components/Spinner/Spinner';
 
 export interface CancelRequestProps {
   address: string;
@@ -18,8 +19,13 @@ export const CancelRequest: React.FC<CancelRequestProps> = props => {
   const environment = useEnvironment()!;
   const account = useAccount();
   const refetch = useOnChainQueryRefetcher();
+  const [refetching, setRefetching] = useState(false);
+
   const transaction = useTransaction(environment, {
-    onFinish: receipt => refetch(receipt.blockNumber),
+    onAcknowledge: receipt => {
+      setRefetching(true);
+      refetch(receipt.blockNumber);
+    },
   });
 
   const cancel = () => {
@@ -28,6 +34,10 @@ export const CancelRequest: React.FC<CancelRequestProps> = props => {
     const tx = participationContract.cancelRequest(account.address!);
     transaction.start(tx, 'Cancel investment request');
   };
+
+  if (refetching) {
+    return <Spinner></Spinner>;
+  }
 
   return (
     <>

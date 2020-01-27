@@ -1,4 +1,4 @@
-import React, { useMemo, useEffect } from 'react';
+import React, { useMemo, useEffect, useState } from 'react';
 import BigNumber from 'bignumber.js';
 import * as Yup from 'yup';
 import { useForm, FormContext } from 'react-hook-form';
@@ -39,6 +39,7 @@ export const RequestInvestment: React.FC<RequestInvestmentProps> = props => {
   const environment = useEnvironment()!;
   const account = useAccount();
   const refetch = useOnChainQueryRefetcher();
+  const [refetching, setRefetching] = useState(false);
 
   const allowedAssets = props.allowedAssets || [];
   const initialAsset = allowedAssets[0];
@@ -100,10 +101,10 @@ export const RequestInvestment: React.FC<RequestInvestmentProps> = props => {
   }, [allowance, investmentAmount]);
 
   const transaction = useTransaction(environment, {
-    onFinish: receipt => refetch(receipt.blockNumber),
-    onAcknowledge: () => {
+    onAcknowledge: receipt => {
+      refetch(receipt.blockNumber);
       const values = form.getValues();
-      if (action === 'invest') {
+      if (action === 'approve') {
         const contract = new Participation(environment, participation);
         const sharesAmount = toTokenBaseUnit(values.requestedShares, 18);
         const investmentAmount = toTokenBaseUnit(values.investmentAmount, token!.decimals);
@@ -114,6 +115,8 @@ export const RequestInvestment: React.FC<RequestInvestmentProps> = props => {
           values.investmentAsset!
         );
         transaction.start(tx, 'Invest');
+      } else if (action === 'invest') {
+        setRefetching(true);
       }
     },
   });
@@ -171,6 +174,10 @@ export const RequestInvestment: React.FC<RequestInvestmentProps> = props => {
     value: holding.token!.address!,
     name: holding.token!.symbol!,
   }));
+
+  if (refetching) {
+    return <Spinner></Spinner>;
+  }
 
   return (
     <>
