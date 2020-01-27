@@ -1,4 +1,5 @@
 import React, { Fragment } from 'react';
+import { sameAddress } from '@melonproject/melonjs';
 import { Spinner } from '~/storybook/components/Spinner/Spinner';
 import { useFundDetailsQuery } from '~/queries/FundDetails';
 import { SectionTitle } from '~/storybook/components/Title/Title';
@@ -15,6 +16,8 @@ import { useEnvironment } from '~/hooks/useEnvironment';
 import { useFundCalculationHistoryQuery } from '~/queries/FundCalculationHistory';
 import BigNumber from 'bignumber.js';
 import { standardDeviation } from '~/utils/finance';
+import { TwitterLink } from '~/components/Common/TwitterLink/TwitterLink';
+import { useAccount } from '~/hooks/useAccount';
 
 export interface NormalizedCalculation {
   sharePrice: BigNumber;
@@ -30,6 +33,7 @@ export interface FundFactSheetProps {
 export const FundFactSheet: React.FC<FundFactSheetProps> = ({ address }) => {
   const [fund, fundQuery] = useFundDetailsQuery(address);
   const environment = useEnvironment();
+  const account = useAccount();
   const [calculations, calculationsQuery] = useFundCalculationHistoryQuery(address);
 
   if (!fundQuery || fundQuery.loading || !calculationsQuery || calculationsQuery.loading) {
@@ -44,6 +48,8 @@ export const FundFactSheet: React.FC<FundFactSheetProps> = ({ address }) => {
   if (!fund) {
     return null;
   }
+
+  const isManager = sameAddress(fund.manager, account.address);
 
   const routes = fund.routes;
   const creation = fund.creationTime;
@@ -108,7 +114,10 @@ export const FundFactSheet: React.FC<FundFactSheetProps> = ({ address }) => {
 
   return (
     <Dictionary>
-      <SectionTitle>Fund factsheet</SectionTitle>
+      <SectionTitle>
+        <span>Fund factsheet</span>
+        <TwitterLink name={fund.name} manager={isManager} />
+      </SectionTitle>
       <DictionaryEntry>
         <DictionaryLabel>Fund name</DictionaryLabel>
         <DictionaryData>{fund.name}</DictionaryData>

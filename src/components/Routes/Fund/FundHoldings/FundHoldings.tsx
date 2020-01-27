@@ -53,8 +53,8 @@ export const FundHoldings: React.FC<FundHoldingsProps> = ({ address }) => {
             </HeaderRow>
           </thead>
           <tbody>
-            {holdings.map(holding => (
-              <BodyRow key={holding.token?.address}>
+            {holdings.map((holding, key) => (
+              <BodyRow key={key}>
                 <BodyCell>
                   <S.HoldingIcon>
                     <Icons name={holding.token?.symbol as IconName} size="small" />

@@ -23,6 +23,7 @@ import EUR from './svg/tokens/eur.svg';
 import METAMASK from './svg/wallet/metamask.svg';
 import FRAME from './svg/wallet/frame.svg';
 import GANACHE from './svg/wallet/ganache.svg';
+import TWITTER from './svg/socialNetwork/twitter.svg';
 import * as S from './Icons.styles';
 
 export type IconName =
@@ -49,7 +50,8 @@ export type IconName =
   | 'EUR'
   | 'METAMASK'
   | 'FRAME'
-  | 'GANACHE';
+  | 'GANACHE'
+  | 'TWITTER';
 
 export type IconsProps = React.ComponentProps<typeof S.IconsWrapper> & {
   name: IconName;
@@ -81,6 +83,7 @@ const icons = {
   METAMASK,
   FRAME,
   GANACHE,
+  TWITTER,
 };
 
 export const Icons: React.FC<IconsProps> = ({ name, size, ...props }) => {
