@@ -37,6 +37,15 @@ export const ConnectionInfo = styled.div`
   flex-direction: row;
 `;
 
+export const CurrencySelectionItem = styled.div`
+  display: flex;
+  padding: ${props => props.theme.spaceUnits.xs} 0px;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: row;
+`;
+
 export const ConnectionInfoItem = styled.div`
   margin-right: ${props => props.theme.spaceUnits.s};
 

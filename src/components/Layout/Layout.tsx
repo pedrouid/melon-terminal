@@ -11,12 +11,14 @@ import {
   ConnectionInfo,
   ConnectionInfoItem,
   HeaderTitle,
+  CurrencySelectionItem,
 } from '~/storybook/components/Header/Header';
 import { Footer, FooterNavigation, FooterItem } from '~/storybook/components/Footer/Footer';
 import { Logo } from '~/storybook/components/Logo/Logo';
 import { ConnectionSelector } from './ConnectionSelector/ConnectionSelector';
-import { useConnectionState } from '~/hooks/useConnectionState';
 import { useEnvironment } from '~/hooks/useEnvironment';
+import { CurrencySelector } from './CurrencySelector/CurrencySelector';
+import { NetworkEnum } from '~/types';
 
 const graphiql = JSON.parse(process.env.MELON_INCLUDE_GRAPHIQL || 'false');
 
@@ -54,6 +56,9 @@ export const Layout: React.FC = ({ children }) => {
                   </NavLink>
                 </ConnectionInfoItem>
               )}
+              <CurrencySelectionItem>
+                <CurrencySelector />
+              </CurrencySelectionItem>
               <ConnectionInfoItem>
                 <ConnectionSelector />
               </ConnectionInfoItem>
@@ -92,7 +97,7 @@ export const Layout: React.FC = ({ children }) => {
               </FooterItem>
             )}
 
-            {environment?.network && <FooterItem>{environment.network}</FooterItem>}
+            {environment?.network && <FooterItem>{NetworkEnum[environment.network]}</FooterItem>}
           </FooterNavigation>
         </Footer>
       </SkeletonFeet>

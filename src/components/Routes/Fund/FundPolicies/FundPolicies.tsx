@@ -90,8 +90,6 @@ export const FundPolicies: React.FC<FundPoliciesProps> = ({ address }) => {
 
   const policies = policyManager && policyManager.policies;
 
-  console.log(policies);
-
   return (
     <Block>
       <SectionTitle>Fund ruleset</SectionTitle>

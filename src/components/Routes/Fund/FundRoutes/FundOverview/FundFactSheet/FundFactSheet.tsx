@@ -15,6 +15,7 @@ import { useEnvironment } from '~/hooks/useEnvironment';
 import { useFundCalculationHistoryQuery } from '~/queries/FundCalculationHistory';
 import BigNumber from 'bignumber.js';
 import { standardDeviation } from '~/utils/finance';
+import { useCurrency } from '~/hooks/useCurrency';
 
 export interface NormalizedCalculation {
   sharePrice: BigNumber;
