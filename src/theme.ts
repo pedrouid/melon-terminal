@@ -173,7 +173,7 @@ export const Global = createGlobalStyle`
   }
 
   a {
-    display: flex;
+    display: inline-flex;
     align-items: center;
     text-decoration: underline;
     color: ${theme.otherColors.black};
