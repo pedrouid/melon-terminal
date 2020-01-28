@@ -117,6 +117,11 @@ const useSortedFunds = (filteredFunds: FundProcessed[]) => {
 
 const tableHeadings = [
   {
+    value: '',
+    key: '',
+    align: 'left',
+  },
+  {
     value: 'Name',
     key: 'name',
     align: 'left',
@@ -295,8 +300,9 @@ export const Home: React.FC = () => {
                   </thead>
                   <tbody>
                     {pagination.data.length ? (
-                      pagination.data.map(fund => (
+                      pagination.data.map((fund, key) => (
                         <BodyRowHover key={fund.id} title={fund.name} onClick={() => history.push(`/fund/${fund.id}`)}>
+                          <BodyCell>{pagination.offset + (key + 1)}</BodyCell>
                           <BodyCell maxWidth="200px">{fund.name}</BodyCell>
                           <BodyCell>
                             <FormattedDate timestamp={fund.inception} format="yyyy/MM/dd" />
