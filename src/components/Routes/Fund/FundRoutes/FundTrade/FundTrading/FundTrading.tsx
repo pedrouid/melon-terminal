@@ -9,6 +9,7 @@ import { useFundTrading } from './FundTrading.query';
 import { Block } from '~/storybook/components/Block/Block';
 import { FundMelonEngineTrading } from './FundMelonEngineTrading/FundMelonEngineTrading';
 import { useFundHoldingsQuery } from '~/queries/FundHoldings';
+import { FundUniswapTrading } from './FundUniswapTrading/FundUniswapTrading';
 
 export interface FundTradingProps {
   address: string;
@@ -20,6 +21,7 @@ export const FundTrading: React.FC<FundTradingProps> = ({ address }) => {
 
   const loading = exchangesQuery.loading && holdingsQuery.loading;
   const kyber = exchanges.find(exchange => exchange.id === ExchangeIdentifier.KyberNetwork);
+  const uniswap = exchanges.find(exchange => exchange.id === ExchangeIdentifier.Uniswap);
   const engine = exchanges.find(exchange => exchange.id === ExchangeIdentifier.MelonEngine);
   const markets = exchanges.filter(exchange => exchange.id === ExchangeIdentifier.OasisDex);
 
@@ -37,6 +39,11 @@ export const FundTrading: React.FC<FundTradingProps> = ({ address }) => {
           {!!kyber && (
             <TradingNavigationItem label="Kyber" identifier="kyber">
               <FundKyberTrading address={address} exchange={kyber} holdings={holdings} />
+            </TradingNavigationItem>
+          )}
+          {!!uniswap && (
+            <TradingNavigationItem label="Uniswap" identifier="uniswap">
+              <FundUniswapTrading address={address} exchange={uniswap!} holdings={holdings} />
             </TradingNavigationItem>
           )}
           {!!engine && (

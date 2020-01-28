@@ -47,7 +47,7 @@ export const FundMelonEngineTrading: React.FC<FundMelonEngineTradingProps> = pro
   const [price, liquid, query] = useMelonEngineTradingQuery();
 
   const defaultValues = {
-    takerQuantity: '',
+    takerQuantity: '1',
     makerQuantity: '',
   };
 

@@ -126,14 +126,14 @@ export const FundSetupTransactions: React.FC = () => {
     const newChecked = R.range(0, index + 1).map(() => true);
     setChecked(newChecked);
 
-    if (acknowledged && progress === 'COMPLETE') {
+    if (fund && acknowledged && progress === 'COMPLETE') {
       return history.push(`/fund/${fund!.address}`);
     }
 
     if (acknowledged && next) {
       return transaction.start(next, step!.name!);
     }
-  }, [progress, next, acknowledged]);
+  }, [progress, fund, next, acknowledged]);
 
   const submit = (event: FormEvent) => {
     event.preventDefault();

@@ -144,7 +144,7 @@ export const Checkbox: React.FC<CheckboxProps> = ({ name, id, label, ...rest }) 
 };
 
 export interface CheckboxesProps {
-  options: { value: string; label: string; checked?: boolean }[];
+  options: { value: string; label: string; checked?: boolean; disabled?: boolean }[];
   name: string;
   label?: string;
 }
@@ -168,6 +168,7 @@ export const Checkboxes: React.FC<CheckboxesProps> = ({ name, label, options }) 
             name={`${name}[${index}]`}
             value={item.value}
             defaultChecked={item.checked}
+            disabled={item.disabled}
             ref={ref}
           />
 

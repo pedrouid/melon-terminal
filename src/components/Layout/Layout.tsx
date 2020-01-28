@@ -18,6 +18,7 @@ import { Logo } from '~/storybook/components/Logo/Logo';
 import { ConnectionSelector } from './ConnectionSelector/ConnectionSelector';
 import { useEnvironment } from '~/hooks/useEnvironment';
 import { Icons } from '~/storybook/components/Icons/Icons';
+import { NetworkEnum } from '~/types';
 
 const graphiql = JSON.parse(process.env.MELON_INCLUDE_GRAPHIQL || 'false');
 
@@ -99,7 +100,7 @@ export const Layout: React.FC = ({ children }) => {
               </FooterItem>
             )}
 
-            {environment?.network && <FooterItem>{environment.network}</FooterItem>}
+            {environment?.network && <FooterItem>{NetworkEnum[environment.network]}</FooterItem>}
           </FooterNavigation>
         </Footer>
       </SkeletonFeet>

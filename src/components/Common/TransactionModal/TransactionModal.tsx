@@ -15,6 +15,7 @@ import { fromTokenBaseUnit } from '~/utils/fromTokenBaseUnit';
 import { BigNumber } from 'bignumber.js';
 import { useCoinAPI } from '~/hooks/useCoinAPI';
 import { useEnvironment } from '~/hooks/useEnvironment';
+import { NetworkEnum } from '~/types';
 
 function progressToStep(progress: number) {
   if (progress >= TransactionProgress.EXECUTION_FINISHED) {
@@ -52,7 +53,7 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
   const defaultGasPrice = state.defaultGasPrice;
 
   const coinApi = useCoinAPI();
-  const environment = useEnvironment();
+  const environment = useEnvironment()!;
 
   const hash = state.hash;
   const receipt = state.receipt;
@@ -94,7 +95,7 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
         <S.TransactionModal>
           <S.TransactionModalTitle>
             <S.TransactionModalName>{state.name}</S.TransactionModalName>
-            <S.TransactionModalNetwork>{environment?.network} </S.TransactionModalNetwork>
+            <S.TransactionModalNetwork>{NetworkEnum[environment.network]} </S.TransactionModalNetwork>
           </S.TransactionModalTitle>
 
           {error && (

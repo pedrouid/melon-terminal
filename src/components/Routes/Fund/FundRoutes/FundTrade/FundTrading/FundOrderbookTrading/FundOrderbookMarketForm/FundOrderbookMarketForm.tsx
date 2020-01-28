@@ -77,8 +77,7 @@ export const FundOrderbookMarketForm: React.FC<FundOrderbookMarketFormProps> = p
       total: '',
     },
     validationSchema: Yup.object().shape({
-      quantity: Yup.string()
-        .required(),
+      quantity: Yup.string().required(),
       // .test('max', 'Maximum quantity exceeded', value => {
       //   if (!quantityRef.current) {
       //     return false;
@@ -86,8 +85,7 @@ export const FundOrderbookMarketForm: React.FC<FundOrderbookMarketFormProps> = p
 
       //   return quantityRef.current!.isGreaterThanOrEqualTo(value);
       // }),
-      total: Yup.string()
-        .required(),
+      total: Yup.string().required(),
       // .test('max', 'Maximum quantity exceeded', value => {
       //   if (!quantityRef.current) {
       //     return false;
@@ -125,7 +123,10 @@ export const FundOrderbookMarketForm: React.FC<FundOrderbookMarketFormProps> = p
 
     const taker = order!.side === 'bid' ? base : quote;
     const maker = order!.side === 'bid' ? quote : base;
-    const quantity = order!.side === 'bid' ? toTokenBaseUnit(values.quantity, taker.decimals) : toTokenBaseUnit(values.total, maker.decimals);
+    const quantity =
+      order!.side === 'bid'
+        ? toTokenBaseUnit(values.quantity, taker.decimals)
+        : toTokenBaseUnit(values.total, maker.decimals);
 
     if (exchange.id === ExchangeIdentifier.OasisDex) {
       const market = new OasisDexExchange(environment, exchange.exchange);
@@ -149,16 +150,22 @@ export const FundOrderbookMarketForm: React.FC<FundOrderbookMarketFormProps> = p
     const quantity = toBigNumber(change);
     const total = quantity.multipliedBy(price);
     form.setValue('total', !total.isNaN() ? total.decimalPlaces(4).toString() : '');
-  }
+  };
 
   const changeTotal = (change: BigNumber.Value) => {
     const total = toBigNumber(change);
     const quantity = total.dividedBy(price);
     form.setValue('quantity', !quantity.isNaN() ? quantity.decimalPlaces(4).toString() : '');
-  }
+  };
 
   const ready = !price.isNaN() && !quantity.isNaN() && !total.isNaN();
-  const description = ready && `Market order: ${direction === 'buy' ? 'Buy' : 'Sell'} ${quantity.decimalPlaces(4).toString()} ${base.symbol} at a price of ${price.decimalPlaces(4).toString()} ${quote.symbol} per ${base.symbol} for a total of ${total.decimalPlaces(4).toString()} ${quote.symbol}`;
+  const description =
+    ready &&
+    `Market order: ${direction === 'buy' ? 'Buy' : 'Sell'} ${quantity.decimalPlaces(4).toString()} ${
+      base.symbol
+    } at a price of ${price.decimalPlaces(4).toString()} ${quote.symbol} per ${
+      base.symbol
+    } for a total of ${total.decimalPlaces(4).toString()} ${quote.symbol}`;
 
   return (
     <FormContext {...form}>
@@ -166,15 +173,29 @@ export const FundOrderbookMarketForm: React.FC<FundOrderbookMarketFormProps> = p
         <form onSubmit={submit}>
           <Dropdown name="direction" label="Buy or sell" options={directions} disabled={true} value={direction} />
           <Dropdown name="exchange" label="Exchange" options={exchanges} disabled={true} value={exchange} />
-          <Input type="text" name="quantity" label={`Quantity (${base.symbol})`} onChange={event => changeQuantity(event.target.value)} />
-          <Input type="text" name="price" label={`Price (${quote.symbol} per ${base.symbol})`} disabled={true} value={price.decimalPlaces(4).toString()} />
-          <Input type="text" name="total" label={`Total (${quote.symbol})`} onChange={(event) => changeTotal(event.target.value)} />
+          <Input
+            type="text"
+            name="quantity"
+            label={`Quantity (${base.symbol})`}
+            onChange={event => changeQuantity(event.target.value)}
+          />
+          <Input
+            type="text"
+            name="price"
+            label={`Price (${quote.symbol} per ${base.symbol})`}
+            disabled={true}
+            value={price.decimalPlaces(4).toString()}
+          />
+          <Input
+            type="text"
+            name="total"
+            label={`Total (${quote.symbol})`}
+            onChange={event => changeTotal(event.target.value)}
+          />
 
           {description && (
             <NotificationBar kind="neutral">
-              <NotificationContent>
-                {description}
-              </NotificationContent>
+              <NotificationContent>{description}</NotificationContent>
             </NotificationBar>
           )}
 

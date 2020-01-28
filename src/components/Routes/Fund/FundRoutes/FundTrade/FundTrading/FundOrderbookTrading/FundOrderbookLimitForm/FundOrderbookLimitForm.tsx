@@ -137,7 +137,7 @@ export const FundOrderbookLimitForm: React.FC<FundOrderbookLimitFormProps> = pro
     const quantity = toBigNumber(change);
     const total = quantity.multipliedBy(currentPrice);
     form.setValue('total', !total.isNaN() ? total.decimalPlaces(4).toString() : '');
-  }
+  };
 
   const changePrice = (change: BigNumber.Value) => {
     props.unsetOrder();
@@ -145,7 +145,7 @@ export const FundOrderbookLimitForm: React.FC<FundOrderbookLimitFormProps> = pro
     const price = toBigNumber(change);
     const total = price.multipliedBy(currentQuantity);
     form.setValue('total', !total.isNaN() ? total.decimalPlaces(4).toString() : '');
-  }
+  };
 
   const changeTotal = (change: BigNumber.Value) => {
     props.unsetOrder();
@@ -153,10 +153,16 @@ export const FundOrderbookLimitForm: React.FC<FundOrderbookLimitFormProps> = pro
     const total = toBigNumber(change);
     const quantity = total.dividedBy(currentPrice);
     form.setValue('quantity', !quantity.isNaN() ? quantity.decimalPlaces(4).toString() : '');
-  }
+  };
 
   const ready = !currentPrice.isNaN() && !currentQuantity.isNaN() && !currentTotal.isNaN();
-  const description = ready && `Limit order: ${currentDirection === 'buy' ? 'Buy' : 'Sell'} ${currentQuantity.decimalPlaces(4).toString()} ${base.symbol} at a price of ${currentPrice.decimalPlaces(4).toString()} ${quote.symbol} per ${base.symbol} for a total of ${currentTotal.decimalPlaces(4).toString()} ${quote.symbol}`;
+  const description =
+    ready &&
+    `Limit order: ${currentDirection === 'buy' ? 'Buy' : 'Sell'} ${currentQuantity.decimalPlaces(4).toString()} ${
+      base.symbol
+    } at a price of ${currentPrice.decimalPlaces(4).toString()} ${quote.symbol} per ${
+      base.symbol
+    } for a total of ${currentTotal.decimalPlaces(4).toString()} ${quote.symbol}`;
 
   return (
     <>
@@ -164,20 +170,35 @@ export const FundOrderbookLimitForm: React.FC<FundOrderbookLimitFormProps> = pro
         <form onSubmit={submit}>
           <Dropdown name="direction" label="Direction" options={directions} />
           <Dropdown name="exchange" label="Exchange" options={exchanges} />
-          <Input type="text" name="quantity" label={`Quantity (${base.symbol})`} onChange={(event) => changeQuantity(event.target.value)} />
-          <Input type="text" name="price" label={`Price (${quote.symbol} per ${base.symbol})`} onChange={(event) => changePrice(event.target.value)} />
-          <Input type="text" name="total" label={`Total (${quote.symbol})`} onChange={(event) => changeTotal(event.target.value)} />
+          <Input
+            type="text"
+            name="quantity"
+            label={`Quantity (${base.symbol})`}
+            onChange={event => changeQuantity(event.target.value)}
+          />
+          <Input
+            type="text"
+            name="price"
+            label={`Price (${quote.symbol} per ${base.symbol})`}
+            onChange={event => changePrice(event.target.value)}
+          />
+          <Input
+            type="text"
+            name="total"
+            label={`Total (${quote.symbol})`}
+            onChange={event => changeTotal(event.target.value)}
+          />
 
           {description && (
             <NotificationBar kind="neutral">
-              <NotificationContent>
-                {description}
-              </NotificationContent>
+              <NotificationContent>{description}</NotificationContent>
             </NotificationBar>
           )}
 
           <BlockActions>
-            <Button type="submit" disabled={!ready}>Submit</Button>
+            <Button type="submit" disabled={!ready}>
+              Submit
+            </Button>
           </BlockActions>
         </form>
       </FormContext>
