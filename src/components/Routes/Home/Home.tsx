@@ -320,13 +320,11 @@ export const Home: React.FC = () => {
                   </tbody>
                 </Table>
               </ScrollableTable>
-              <BlockActions>
-                <FundOverviewPagination
-                  offset={pagination.offset}
-                  setOffset={pagination.setOffset}
-                  funds={filtered.funds.length}
-                />
-              </BlockActions>
+              <FundOverviewPagination
+                offset={pagination.offset}
+                setOffset={pagination.setOffset}
+                funds={filtered.funds.length}
+              />
             </Block>
           </GridCol>
         </GridRow>

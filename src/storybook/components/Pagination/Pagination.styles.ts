@@ -1,22 +1,34 @@
 import styled from 'styled-components';
 
-export const Container = styled.div`
-  width: 250px;
-  background: ${props => props.theme.mainColors.secondary};
-  border-radius: 10px;
+export interface ContainerProps {
+  position: 'center' | 'flex-start' | 'flex-end';
+}
+
+export const Container = styled.ul<ContainerProps>`
   display: flex;
-  justify-content: space-around;
+  flex-wrap: wrap;
+  justify-content: ${props => props.position};
   align-items: center;
-  height: 35px;
+  font-size: 16px;
 `;
 
-export const Button = styled.button`
-  font-size: ${props => props.theme.fontSizes.xl};
-  border: none;
-  background-color: inherit;
+export interface LiProps {
+  selected?: boolean;
+}
+
+export const Li = styled.li<LiProps>`
+  ${props => props.selected && 'font-weight: bold;'}
+  ${props => props.selected && `background: ${props.theme.statusColors.neutral};`}
+  padding-top: 1px;
+  border: 1px solid black;
+  border-right-width: 0;
+  min-width: 30px;
+  min-height: 30px;
+  align-items: center;
+  display: flex;
+  justify-content: center;
   cursor: pointer;
+  :last-child {
+    border-right-width: 1px;
+  }
 `;
-
-export const Span = styled.span``;
-
-export const ButtonWrapper = styled.div``;

@@ -17,8 +17,10 @@ export const FundOverviewPagination: React.FC<FundOverviewPaginationProps> = ({ 
       next={() => setOffset(offset + 15)}
       first={() => setOffset(0)}
       last={() => setOffset(funds - (funds % 15))}
-      actual={offset}
+      goTo={(page: number) => setOffset(page * 15)}
+      actual={offset / 15 + 1}
       totalItems={funds}
+      position="flex-end"
     />
   );
 };

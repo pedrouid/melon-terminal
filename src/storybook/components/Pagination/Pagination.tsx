@@ -8,8 +8,11 @@ export interface PaginationProps {
   next: () => void;
   first: () => void;
   last: () => void;
+  goTo: (page: number) => void;
   actual: number;
   totalItems: number;
+  itemsPerPage?: number;
+  position?: 'center' | 'flex-start' | 'flex-end';
 }
 
 export const Pagination: React.FC<PaginationProps> = ({
@@ -19,18 +22,39 @@ export const Pagination: React.FC<PaginationProps> = ({
   next = () => {},
   first = () => {},
   last = () => {},
+  goTo = () => {},
   actual = 0,
   totalItems = 0,
-}) => (
-  <S.Container>
-    <S.ButtonWrapper>
-      {!hasPrevious && <S.Button onClick={first}>|&lt;</S.Button>}
-      {!hasPrevious && <S.Button onClick={previous}>&lt;</S.Button>}
-    </S.ButtonWrapper>
-    <S.Span>{`${actual + 1}-${actual + 15 > totalItems ? totalItems : actual + 15} of ${totalItems}`}</S.Span>
-    <S.ButtonWrapper>
-      {!hasNext && <S.Button onClick={next}>&gt;</S.Button>}
-      {!hasNext && <S.Button onClick={last}>&gt;|</S.Button>}
-    </S.ButtonWrapper>
-  </S.Container>
-);
+  itemsPerPage = 15,
+  position = 'center',
+}) => {
+  const pages = Math.ceil(totalItems / itemsPerPage);
+
+  if (pages <= 0) return <></>;
+
+  return (
+    <S.Container position={position}>
+      {!hasPrevious && (
+        <>
+          <S.Li onClick={first}>{'<<'}</S.Li>
+          <S.Li onClick={previous}>{'<'}</S.Li>
+        </>
+      )}
+
+      {Array(pages)
+        .fill('')
+        .map((_, i) => (
+          <S.Li key={i} onClick={() => goTo(i)} selected={actual === i + 1}>
+            {i + 1}
+          </S.Li>
+        ))}
+
+      {!hasNext && (
+        <>
+          <S.Li onClick={next}>{'>'}</S.Li>
+          <S.Li onClick={last}>{'>>'}</S.Li>
+        </>
+      )}
+    </S.Container>
+  );
+};

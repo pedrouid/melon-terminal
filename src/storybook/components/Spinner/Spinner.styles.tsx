@@ -1,6 +1,7 @@
 import styled, { css, keyframes } from 'styled-components';
 import { Logo as BaseLogo } from '~/storybook/components/Logo/Logo';
 import { SpinnerProps } from '~/storybook/components/Spinner/Spinner';
+import { string } from 'yup';
 
 const rotate = keyframes`
   from {
@@ -11,7 +12,11 @@ const rotate = keyframes`
   }
 `;
 
-export const Loader = styled.div`
+export interface LoaderProps {
+  color?: string;
+}
+
+export const Loader = styled.div<LoaderProps>`
   &,
   &::after {
     border-radius: 50%;
@@ -19,9 +24,9 @@ export const Loader = styled.div`
   position: absolute;
   top: 0;
   border-style: solid;
-  border-top-color: ${props => props.theme.otherColors.black};
+  border-top-color: ${props => props.color || props.theme.otherColors.black};
   border-right-color: ${props => props.theme.otherColors.grey};
-  border-bottom-color: ${props => props.theme.otherColors.black};
+  border-bottom-color: ${props => props.color || props.theme.otherColors.black};
   border-left-color: ${props => props.theme.otherColors.grey};
   transform: translateZ(0);
   animation: ${rotate} 2s infinite linear;
@@ -41,7 +46,7 @@ export const Logo = styled(BaseLogo)``;
 const sizes = {
   default: {
     spinner: 100,
-    border: 2,
+    border: 3,
   },
   tiny: {
     spinner: 25,
@@ -49,7 +54,7 @@ const sizes = {
   },
   small: {
     spinner: 50,
-    border: 1,
+    border: 2,
   },
   large: {
     spinner: 200,

@@ -5,6 +5,7 @@ export const ScrollableTable = styled.div`
   display: block;
   overflow-x: auto;
   white-space: nowrap;
+  margin-bottom: 25px;
 `;
 
 export const Table = styled.table`
