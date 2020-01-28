@@ -101,7 +101,9 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
             <NotificationBar kind="error">
               <NotificationContent>{error.message}</NotificationContent>
               <NotificationContent>
-                <a href={errorReportingUri}>Report error</a>
+                <a href={errorReportingUri} target="_blank">
+                  Report error
+                </a>
               </NotificationContent>
             </NotificationBar>
           )}

@@ -77,7 +77,9 @@ export const Layout: React.FC = ({ children }) => {
               <a href="https://docs.melonport.com">Documentation</a>
             </FooterItem>
             <FooterItem>
-              <a href="https://github.com/avantgardefinance/interface/issues">Report an issue</a>
+              <a href="https://github.com/avantgardefinance/interface/issues" target="_blank">
+                Report an issue
+              </a>
             </FooterItem>
 
             {graphiql && (
