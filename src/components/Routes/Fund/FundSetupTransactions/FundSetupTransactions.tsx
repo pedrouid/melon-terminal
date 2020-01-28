@@ -143,7 +143,7 @@ export const FundSetupTransactions: React.FC = () => {
   return (
     <Grid>
       <GridRow justify="center">
-        <GridCol xs={12} sm={10} md={8} lg={6}>
+        <GridCol sm={12} md={10} lg={8}>
           <Block>
             <SectionTitle>Fund setup transactions</SectionTitle>
             {query.loading && <Spinner />}

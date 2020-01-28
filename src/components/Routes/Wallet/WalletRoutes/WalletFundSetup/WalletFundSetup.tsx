@@ -153,7 +153,7 @@ export const WalletFundSetup: React.FC = () => {
       <RequiresFundSetupNotStarted fallback={fallback}>
         <Grid>
           <GridRow justify="center">
-            <GridCol xs={12} sm={10} md={8} lg={6}>
+            <GridCol sm={12} md={10} lg={8}>
               <Block>
                 <FormContext {...form}>
                   <form onSubmit={submit}>
