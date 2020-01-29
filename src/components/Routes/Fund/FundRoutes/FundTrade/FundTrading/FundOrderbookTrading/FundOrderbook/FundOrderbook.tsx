@@ -45,11 +45,19 @@ export const FundOrderbook: React.FC<FundOrderbookProps> = props => {
     return orders?.bids[0];
   }, [orders]);
 
+  const spread = useMemo(() => {
+    const askPrice = bestAsk?.price ?? new BigNumber('NaN');
+    const bidPrice = bestBid?.price ?? new BigNumber('NaN');
+    return askPrice?.minus(bidPrice);
+  }, [bestAsk, bestBid]);
+
   const midPrice = useMemo(() => {
     const askPrice = bestAsk?.price ?? new BigNumber('NaN');
     const bidPrice = bestBid?.price ?? new BigNumber('NaN');
     return askPrice?.plus(bidPrice).dividedBy(2);
   }, [bestAsk, bestBid]);
+
+
 
   const toggle = useCallback(
     (order: OrderbookItem) => {
@@ -81,15 +89,15 @@ export const FundOrderbook: React.FC<FundOrderbookProps> = props => {
               <S.OrderbookData left={true} width={'auto'}>
                 <FundOrderbookPrice price={item.price} decimals={orders?.decimals} change={item.change} />
               </S.OrderbookData>
-              <S.OrderbookData>{item.quantity.toFixed(4)}</S.OrderbookData>
-              <S.OrderbookData>{item.total!.toFixed(4)}</S.OrderbookData>
+              <S.OrderbookData><FormattedNumber value={item.quantity}/></S.OrderbookData>
+              <S.OrderbookData><FormattedNumber value={item.total!}/></S.OrderbookData>
             </S.OrderbookItem>
           ))}
         </S.OrderbookBody>
       </S.OrderbookSide>
 
       <S.OrderbookMidprice>
-        {!midPrice.isNaN() ? <FormattedNumber value={midPrice} suffix={maker.symbol} /> : null}
+        <div>MID: <FormattedNumber value={midPrice}   decimals={decimals}/></div>
       </S.OrderbookMidprice>
 
       <S.OrderbookSide side="bids">
@@ -99,8 +107,8 @@ export const FundOrderbook: React.FC<FundOrderbookProps> = props => {
               <S.OrderbookData left={true} width={'auto'}>
                 <FundOrderbookPrice price={item.price} decimals={orders?.decimals} change={item.change} />
               </S.OrderbookData>
-              <S.OrderbookData>{item.quantity.toFixed(4)}</S.OrderbookData>
-              <S.OrderbookData>{item.total!.toFixed(4)}</S.OrderbookData>
+              <S.OrderbookData><FormattedNumber value={item.quantity}/></S.OrderbookData>
+              <S.OrderbookData><FormattedNumber value={item.total!}/></S.OrderbookData>
             </S.OrderbookItem>
           ))}
         </S.OrderbookBody>

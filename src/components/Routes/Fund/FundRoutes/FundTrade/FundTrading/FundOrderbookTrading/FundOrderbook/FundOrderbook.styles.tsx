@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components';
-import { PolicyPositionNotPreOrPostError } from '@melonproject/melonjs';
+
 
 export const Wrapper = styled.div`
   position: relative;
@@ -12,7 +12,7 @@ export const Wrapper = styled.div`
 export const OrderbookHeader = styled.div`
   display: flex;
   justify-content: space-between;
-  padding: 0 6px;
+  padding: 0 xs;
 `;
 
 export const OrderbookBody = styled.div`
@@ -54,7 +54,7 @@ export const OrderbookItem = styled.div<OrderbookItemProps>`
   height: 20px;
   display: flex;
   justify-content: space-between;
-  padding: 0 6px;
+  padding: 0 xs;
   line-height: 1.25rem;
 
   &:hover {
@@ -71,9 +71,10 @@ export const OrderbookItem = styled.div<OrderbookItemProps>`
 export const OrderbookMidprice = styled.div`
   width: 100%;
   text-align: center;
-  background-color: black;
-  padding: 6px;
-  color: white;
+  background-color: white;
+  // border: solid black;
+  padding: 4px 0;
+  color: black;
 `;
 
 export interface OrderbookSideProps {
@@ -103,7 +104,7 @@ export const OrderbookSide = styled.div<OrderbookSideProps>`
       }
 
       ${OrderbookHighlight} {
-        color: lime;
+        color: limegreen;
       }
     `}
 `;
