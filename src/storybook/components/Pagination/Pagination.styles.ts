@@ -14,21 +14,22 @@ export const Container = styled.ul<ContainerProps>`
 
 export interface LiProps {
   selected?: boolean;
+  color?: string;
 }
 
 export const Li = styled.li<LiProps>`
   ${props => props.selected && 'font-weight: bold;'}
-  ${props => props.selected && `background: ${props.theme.statusColors.neutral};`}
+  ${props => props.selected && `border-bottom: 1px solid ${props.color};`}
+  ${props => props.selected && `color: ${props.color};`}
+  margin-right: 1px;
   padding-top: 1px;
-  border: 1px solid black;
-  border-right-width: 0;
   min-width: 30px;
   min-height: 30px;
   align-items: center;
   display: flex;
   justify-content: center;
   cursor: pointer;
-  :last-child {
-    border-right-width: 1px;
+  :hover {
+    border: 1px solid ${props => props.color};
   }
 `;

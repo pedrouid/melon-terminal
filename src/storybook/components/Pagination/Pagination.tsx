@@ -1,4 +1,5 @@
 import React from 'react';
+import { useColor } from '~/hooks/useColor';
 import * as S from './Pagination.styles';
 
 export interface PaginationProps {
@@ -28,6 +29,7 @@ export const Pagination: React.FC<PaginationProps> = ({
   itemsPerPage = 15,
   position = 'center',
 }) => {
+  const context = useColor();
   const pages = Math.ceil(totalItems / itemsPerPage);
 
   if (pages <= 0) return <></>;
@@ -44,7 +46,7 @@ export const Pagination: React.FC<PaginationProps> = ({
       {Array(pages)
         .fill('')
         .map((_, i) => (
-          <S.Li key={i} onClick={() => goTo(i)} selected={actual === i + 1}>
+          <S.Li key={i} onClick={() => goTo(i)} selected={actual === i + 1} color={context.color}>
             {i + 1}
           </S.Li>
         ))}
