@@ -27,6 +27,7 @@ import { Grid, GridRow, GridCol } from '~/storybook/components/Grid/Grid';
 import { FormattedNumber } from '~/components/Common/FormattedNumber/FormattedNumber';
 import { toTokenBaseUnit } from '~/utils/toTokenBaseUnit';
 import { Holding } from '@melonproject/melongql';
+import { Icons } from '~/storybook/components/Icons/Icons';
 
 export interface FundUniswapTradingProps {
   address: string;
@@ -175,7 +176,7 @@ export const FundUniswapTrading: React.FC<FundUniswapTradingProps> = props => {
   const submit = form.handleSubmit(async () => {
     const hub = new Hub(environment, props.address);
     const trading = new Trading(environment, (await hub.getRoutes()).trading);
-    const adapter = await UniswapTradingAdapter.create(trading, props.exchange.exchange);
+    const adapter = await UniswapTradingAdapter.create(environment, props.exchange.exchange, trading);
 
     const tx = adapter.takeOrder(account.address!, {
       makerQuantity: toTokenBaseUnit(makerQuantity, makerAsset.decimals),
@@ -186,6 +187,13 @@ export const FundUniswapTrading: React.FC<FundUniswapTradingProps> = props => {
 
     transaction.start(tx, 'Take order');
   });
+
+  const swapAssets = () => {
+    const values = form.getValues();
+    form.setValue('makerAsset', values.takerAsset);
+    form.setValue('takerAsset', values.makerAsset);
+    form.setValue('takerQuantity', makerQuantity.toString());
+  };
 
   return (
     <>
@@ -199,6 +207,12 @@ export const FundUniswapTrading: React.FC<FundUniswapTradingProps> = props => {
 
               <GridCol xs={12} sm={9}>
                 <Input type="number" step="any" name="takerQuantity" label="Sell quantity" />
+              </GridCol>
+            </GridRow>
+
+            <GridRow noGap={true}>
+              <GridCol xs={12} sm={3}>
+                <Icons name="SWAPARROWS" onClick={swapAssets} pointer={true} />
               </GridCol>
             </GridRow>
 

@@ -107,7 +107,7 @@ export const FundMelonEngineTrading: React.FC<FundMelonEngineTradingProps> = pro
   const submit = form.handleSubmit(async data => {
     const hub = new Hub(environment, props.address);
     const trading = new Trading(environment, (await hub.getRoutes()).trading);
-    const adapter = await MelonEngineTradingAdapter.create(trading, props.exchange.exchange);
+    const adapter = await MelonEngineTradingAdapter.create(environment, props.exchange.exchange, trading);
 
     const tx = adapter.takeOrder(account.address!, {
       makerAsset: weth.address,

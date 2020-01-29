@@ -1959,10 +1959,10 @@
     web3-providers "^2.0.0-alpha.1"
     web3-utils "^2.0.0-alpha.1"
 
-"@melonproject/melonjs@^0.0.94":
-  version "0.0.94"
-  resolved "https://registry.yarnpkg.com/@melonproject/melonjs/-/melonjs-0.0.94.tgz#fb0d5b69a18474a9c22cb98c8dc9c66f4cfa7836"
-  integrity sha512-b8tThy270qyddgS76UjfUa/96pWcKbscfSEC+C02YHUlr8UwOn/4F9qX295+cYeeHLtKCuS2Erj5iLr03TH7Jw==
+"@melonproject/melonjs@^0.0.95":
+  version "0.0.95"
+  resolved "https://registry.yarnpkg.com/@melonproject/melonjs/-/melonjs-0.0.95.tgz#c09076fdebe83eb5792b74cf9c64b4e15caf2f3e"
+  integrity sha512-fJ01ri3OTYAZg4NqAQbi+V7PYzG3glxVLXMzFS6O1i8eQCGd/U2g5iUxNm7xK8yvD8/MqsABFnnvc9gDhTs6Ew==
   dependencies:
     "@0x/order-utils" "^8.5.0-beta.4"
     "@0x/order-utils-v2" "npm:@0x/order-utils@8.4.0"

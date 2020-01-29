@@ -27,6 +27,7 @@ import { FormattedNumber } from '~/components/Common/FormattedNumber/FormattedNu
 import { toTokenBaseUnit } from '~/utils/toTokenBaseUnit';
 import { fromTokenBaseUnit } from '~/utils/fromTokenBaseUnit';
 import { Holding } from '@melonproject/melongql';
+import { Icons } from '~/storybook/components/Icons/Icons';
 
 export interface FundKyberTradingProps {
   address: string;
@@ -151,7 +152,7 @@ export const FundKyberTrading: React.FC<FundKyberTradingProps> = props => {
   const submit = form.handleSubmit(async () => {
     const hub = new Hub(environment, props.address);
     const trading = new Trading(environment, (await hub.getRoutes()).trading);
-    const adapter = await KyberTradingAdapter.create(trading, props.exchange.exchange);
+    const adapter = await KyberTradingAdapter.create(environment, props.exchange.exchange, trading);
 
     const tx = adapter.takeOrder(account.address!, {
       makerQuantity: toTokenBaseUnit(makerQuantity, makerAsset.decimals),
@@ -162,6 +163,13 @@ export const FundKyberTrading: React.FC<FundKyberTradingProps> = props => {
 
     transaction.start(tx, 'Take order');
   });
+
+  const swapAssets = () => {
+    const values = form.getValues();
+    form.setValue('makerAsset', values.takerAsset);
+    form.setValue('takerAsset', values.makerAsset);
+    form.setValue('takerQuantity', makerQuantity.toString());
+  };
 
   return (
     <>
@@ -175,6 +183,12 @@ export const FundKyberTrading: React.FC<FundKyberTradingProps> = props => {
 
               <GridCol xs={12} sm={9}>
                 <Input type="number" step="any" name="takerQuantity" label="Sell quantity" />
+              </GridCol>
+            </GridRow>
+
+            <GridRow noGap={true}>
+              <GridCol xs={12} sm={3}>
+                <Icons name="SWAPARROWS" onClick={swapAssets} pointer={true} />
               </GridCol>
             </GridRow>
 

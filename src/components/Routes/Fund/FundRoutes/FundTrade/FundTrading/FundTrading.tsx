@@ -10,6 +10,7 @@ import { Block } from '~/storybook/components/Block/Block';
 import { FundMelonEngineTrading } from './FundMelonEngineTrading/FundMelonEngineTrading';
 import { useFundHoldingsQuery } from '~/queries/FundHoldings';
 import { FundUniswapTrading } from './FundUniswapTrading/FundUniswapTrading';
+import { useEnvironment } from '~/hooks/useEnvironment';
 
 export interface FundTradingProps {
   address: string;
@@ -23,7 +24,12 @@ export const FundTrading: React.FC<FundTradingProps> = ({ address }) => {
   const kyber = exchanges.find(exchange => exchange.id === ExchangeIdentifier.KyberNetwork);
   const uniswap = exchanges.find(exchange => exchange.id === ExchangeIdentifier.Uniswap);
   const engine = exchanges.find(exchange => exchange.id === ExchangeIdentifier.MelonEngine);
-  const markets = exchanges.filter(exchange => exchange.id === ExchangeIdentifier.OasisDex);
+  const markets = exchanges.filter(
+    exchange =>
+      exchange.id === ExchangeIdentifier.OasisDex ||
+      exchange.id === ExchangeIdentifier.ZeroExV2 ||
+      exchange.id === ExchangeIdentifier.ZeroExV3
+  );
 
   return (
     <Block>
@@ -43,7 +49,7 @@ export const FundTrading: React.FC<FundTradingProps> = ({ address }) => {
           )}
           {!!uniswap && (
             <TradingNavigationItem label="Uniswap" identifier="uniswap">
-              <FundUniswapTrading address={address} exchange={uniswap!} holdings={holdings} />
+              <FundUniswapTrading address={address} exchange={uniswap} holdings={holdings} />
             </TradingNavigationItem>
           )}
           {!!engine && (

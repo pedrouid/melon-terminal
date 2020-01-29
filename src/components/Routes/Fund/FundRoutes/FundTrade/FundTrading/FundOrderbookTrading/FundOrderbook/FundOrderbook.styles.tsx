@@ -1,6 +1,5 @@
 import styled, { css } from 'styled-components';
 
-
 export const Wrapper = styled.div`
   position: relative;
   margin-bottom: ${props => props.theme.spaceUnits.xxl};

@@ -25,42 +25,10 @@ import FRAME from './svg/wallet/frame.svg';
 import GANACHE from './svg/wallet/ganache.svg';
 import TWITTER from './svg/socialNetwork/twitter.svg';
 import LEFTARROW from './svg/leftArrow.svg';
+import SWAPARROWS from './svg/swapArrows.svg';
 import * as S from './Icons.styles';
 
-export type IconName =
-  | 'ANT'
-  | 'BAT'
-  | 'DAI'
-  | 'ENG'
-  | 'KNC'
-  | 'LINK'
-  | 'MANA'
-  | 'MKR'
-  | 'MLN'
-  | 'OMG'
-  | 'REN'
-  | 'REP'
-  | 'RLC'
-  | 'SAI'
-  | 'USDC'
-  | 'USDT'
-  | 'WBTC'
-  | 'WETH'
-  | 'ZRX'
-  | 'DGX'
-  | 'EUR'
-  | 'METAMASK'
-  | 'FRAME'
-  | 'GANACHE'
-  | 'TWITTER'
-  | 'LEFTARROW';
-
-export type IconsProps = React.ComponentProps<typeof S.IconsWrapper> & {
-  name: IconName;
-  size?: 'normal' | 'small';
-};
-
-const icons = {
+const availableIcons = {
   ANT,
   BAT,
   DAI,
@@ -87,14 +55,23 @@ const icons = {
   GANACHE,
   TWITTER,
   LEFTARROW,
+  SWAPARROWS,
 };
 
-export const Icons: React.FC<IconsProps> = ({ name, size, ...props }) => {
+export type IconName = keyof typeof availableIcons;
+
+export type IconsProps = React.ComponentProps<typeof S.IconsWrapper> & {
+  name: IconName;
+  size?: 'normal' | 'small';
+  pointer?: boolean;
+};
+
+export const Icons: React.FC<IconsProps> = ({ name, size, pointer, ...props }) => {
   size = size || 'normal';
 
   return (
-    <S.IconsWrapper {...props} size={size}>
-      <S.Img src={icons[name]} size={size} />
+    <S.IconsWrapper {...props} size={size} pointer={pointer}>
+      <S.Img src={availableIcons[name]} size={size} />
     </S.IconsWrapper>
   );
 };

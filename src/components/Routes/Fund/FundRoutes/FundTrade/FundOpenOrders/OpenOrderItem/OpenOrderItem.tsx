@@ -44,7 +44,7 @@ export const OpenOrderItem: React.FC<OpenOrderItemProps> = ({ address, order, ma
     const trading = new Trading(environment, (await hub.getRoutes()).trading);
 
     if (exchange && exchange.id === ExchangeIdentifier.OasisDex) {
-      const oasisDex = await OasisDexTradingAdapter.create(trading, exchange.exchange);
+      const oasisDex = await OasisDexTradingAdapter.create(environment, exchange.exchange, trading);
 
       const matchingMarket = new OasisDexExchange(environment, exchange.exchange);
       const offer = await matchingMarket.getOffer(order.id);
@@ -59,7 +59,7 @@ export const OpenOrderItem: React.FC<OpenOrderItemProps> = ({ address, order, ma
     }
 
     if (exchange && exchange.id === ExchangeIdentifier.ZeroExV2) {
-      const zeroEx = await ZeroExV2TradingAdapter.create(trading, order.exchange);
+      const zeroEx = await ZeroExV2TradingAdapter.create(environment, exchange.exchange, trading);
       const args = {
         orderId: order.id,
       };

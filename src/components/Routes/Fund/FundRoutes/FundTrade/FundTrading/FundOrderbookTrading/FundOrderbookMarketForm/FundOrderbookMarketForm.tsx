@@ -130,14 +130,14 @@ export const FundOrderbookMarketForm: React.FC<FundOrderbookMarketFormProps> = p
 
     if (exchange.id === ExchangeIdentifier.OasisDex) {
       const market = new OasisDexExchange(environment, exchange.exchange);
-      const adapter = await OasisDexTradingAdapter.create(trading, exchange.exchange);
+      const adapter = await OasisDexTradingAdapter.create(environment, exchange.exchange, trading);
       const offer = await market.getOffer((order as OasisDexOrderbookItem).order.id);
       const tx = adapter.takeOrder(account.address!, order!.order.id, offer, quantity);
       return transaction.start(tx, 'Take order');
     }
 
     if (order!.exchange === ExchangeIdentifier.ZeroExV2) {
-      const adapter = await ZeroExV2TradingAdapter.create(trading, exchange.exchange);
+      const adapter = await ZeroExV2TradingAdapter.create(environment, exchange.exchange, trading);
       const tx = adapter.takeOrder(account.address!, order!.order, quantity);
       return transaction.start(tx, 'Take order');
     }

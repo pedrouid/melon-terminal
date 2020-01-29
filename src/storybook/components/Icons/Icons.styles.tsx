@@ -1,7 +1,8 @@
 import styled, { css } from 'styled-components';
 
 export interface IconProps {
-  size: 'normal' | 'small';
+  size?: 'normal' | 'small';
+  pointer?: boolean;
 }
 
 export const IconsWrapper = styled.div<IconProps>`
@@ -9,17 +10,25 @@ export const IconsWrapper = styled.div<IconProps>`
   display: block;
 
   ${props =>
+    props.size &&
     props.size === 'normal' &&
     css`
       height: 32px;
       width: 32px;
     `}
   ${props =>
+    props.size &&
     props.size === 'small' &&
     css`
       height: 16px;
       width: 16px;
     `}
+
+    ${props =>
+      props.pointer &&
+      css`
+        cursor: pointer;
+      `}
 `;
 
 export const Img = styled.img<IconProps>`
@@ -27,12 +36,14 @@ export const Img = styled.img<IconProps>`
   margin-right: auto;
   display: block;
   ${props =>
+    props.size &&
     props.size === 'normal' &&
     css`
       height: 32px;
       width: 32px;
     `}
   ${props =>
+    props.size &&
     props.size === 'small' &&
     css`
       height: 16px;

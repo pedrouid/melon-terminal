@@ -57,8 +57,6 @@ export const FundOrderbook: React.FC<FundOrderbookProps> = props => {
     return askPrice?.plus(bidPrice).dividedBy(2);
   }, [bestAsk, bestBid]);
 
-
-
   const toggle = useCallback(
     (order: OrderbookItem) => {
       if (props.selected?.id === order.id) {
@@ -89,15 +87,21 @@ export const FundOrderbook: React.FC<FundOrderbookProps> = props => {
               <S.OrderbookData left={true} width={'auto'}>
                 <FundOrderbookPrice price={item.price} decimals={orders?.decimals} change={item.change} />
               </S.OrderbookData>
-              <S.OrderbookData><FormattedNumber value={item.quantity}/></S.OrderbookData>
-              <S.OrderbookData><FormattedNumber value={item.total!}/></S.OrderbookData>
+              <S.OrderbookData>
+                <FormattedNumber value={item.quantity} />
+              </S.OrderbookData>
+              <S.OrderbookData>
+                <FormattedNumber value={item.total!} />
+              </S.OrderbookData>
             </S.OrderbookItem>
           ))}
         </S.OrderbookBody>
       </S.OrderbookSide>
 
       <S.OrderbookMidprice>
-        <div>MID: <FormattedNumber value={midPrice}   decimals={decimals}/></div>
+        <div>
+          MID: <FormattedNumber value={midPrice} decimals={decimals} />
+        </div>
       </S.OrderbookMidprice>
 
       <S.OrderbookSide side="bids">
@@ -107,8 +111,12 @@ export const FundOrderbook: React.FC<FundOrderbookProps> = props => {
               <S.OrderbookData left={true} width={'auto'}>
                 <FundOrderbookPrice price={item.price} decimals={orders?.decimals} change={item.change} />
               </S.OrderbookData>
-              <S.OrderbookData><FormattedNumber value={item.quantity}/></S.OrderbookData>
-              <S.OrderbookData><FormattedNumber value={item.total!}/></S.OrderbookData>
+              <S.OrderbookData>
+                <FormattedNumber value={item.quantity} />
+              </S.OrderbookData>
+              <S.OrderbookData>
+                <FormattedNumber value={item.total!} />
+              </S.OrderbookData>
             </S.OrderbookItem>
           ))}
         </S.OrderbookBody>

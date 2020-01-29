@@ -12,6 +12,7 @@ import {
   TokenDefinition,
   ExchangeDefinition,
   ZeroExV2TradingAdapter,
+  ZeroExV3TradingAdapter,
   ExchangeIdentifier,
   toBigNumber,
 } from '@melonproject/melonjs';
@@ -84,7 +85,7 @@ export const FundOrderbookLimitForm: React.FC<FundOrderbookLimitFormProps> = pro
 
     const exchange = environment.getExchange(data.exchange!);
     if (exchange && exchange.id === ExchangeIdentifier.OasisDex) {
-      const adapter = await OasisDexTradingAdapter.create(trading, exchange.exchange);
+      const adapter = await OasisDexTradingAdapter.create(environment, exchange.exchange, trading);
       const tx = adapter.makeOrder(account.address!, {
         makerQuantity,
         takerQuantity,
@@ -96,7 +97,21 @@ export const FundOrderbookLimitForm: React.FC<FundOrderbookLimitFormProps> = pro
     }
 
     if (exchange && exchange.id === ExchangeIdentifier.ZeroExV2) {
-      const adapter = await ZeroExV2TradingAdapter.create(trading, exchange.exchange);
+      const adapter = await ZeroExV2TradingAdapter.create(environment, exchange.exchange, trading);
+      const order = await adapter.createUnsignedOrder({
+        makerAssetAmount: makerQuantity,
+        takerAssetAmount: takerQuantity,
+        makerTokenAddress: makerAsset.address,
+        takerTokenAddress: takerAsset.address,
+      });
+
+      const signed = await adapter.signOrder(order, account.address!);
+      const tx = adapter.makeOrder(account.address!, signed);
+      return transaction.start(tx, 'Make order');
+    }
+
+    if (exchange && exchange.id === ExchangeIdentifier.ZeroExV3) {
+      const adapter = await ZeroExV3TradingAdapter.create(environment, exchange.exchange, trading);
       const order = await adapter.createUnsignedOrder({
         makerAssetAmount: makerQuantity,
         takerAssetAmount: takerQuantity,
