@@ -1,6 +1,7 @@
 import React, { createContext, useMemo } from 'react';
 import { useFundContextQuery, FundContext } from './Fund.query';
 import { toChecksumAddress, isAddress } from 'web3-utils';
+import { Spinner } from '~/storybook/components/Spinner/Spinner';
 
 export interface FundContextValue extends FundContext {
   loading: boolean;
@@ -27,5 +28,9 @@ export const FundProvider: React.FC<FundProviderProps> = props => {
     fund,
     query.loading,
   ]);
+
+  if (query.loading) {
+    return <Spinner></Spinner>;
+  }
   return <Fund.Provider value={output}>{props.children}</Fund.Provider>;
 };
