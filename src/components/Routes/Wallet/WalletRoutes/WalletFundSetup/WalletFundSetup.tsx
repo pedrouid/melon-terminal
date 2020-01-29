@@ -189,7 +189,7 @@ export const WalletFundSetup: React.FC = () => {
                       <SectionTitle>Supported exchanges</SectionTitle>
                       <NotificationBar kind="neutral">
                         <NotificationContent>
-                          Exchanges can only be set up now and they cannot be changed later.
+                          Exchanges can be set up now and they can be changed later.
                         </NotificationContent>
                       </NotificationBar>
                       <Checkboxes options={exchangeOptions} name="exchanges" />
