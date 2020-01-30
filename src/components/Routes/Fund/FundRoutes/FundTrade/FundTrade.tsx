@@ -17,7 +17,7 @@ export interface FundTradeProps {
 export const FundTrade: React.FC<FundTradeProps> = ({ address }) => {
   const tradingNotPossible = (
     <GridRow>
-      <GridCol xs={12} sm={12}>
+      <GridCol>
         <Block>
           <SectionTitle>Trading</SectionTitle>
           <>Trading has been disabled for this fund.</>
@@ -36,19 +36,17 @@ export const FundTrade: React.FC<FundTradeProps> = ({ address }) => {
       <RequiresFundManager fallback={false}>
         <RequiresFundNotShutDown fallback={false}>
           <GridRow>
-            <GridCol>
+            <GridCol xs={12} md={6}>
               <FundTrading address={address} />
             </GridCol>
-          </GridRow>
-          <GridRow>
-            <GridCol>
+            <GridCol xs={12} md={6}>
               <FundHoldings address={address} />
             </GridCol>
           </GridRow>
         </RequiresFundNotShutDown>
       </RequiresFundManager>
       <GridRow>
-        <GridCol xs={12} sm={12}>
+        <GridCol>
           <FundTradeHistory address={address} />
         </GridCol>
       </GridRow>

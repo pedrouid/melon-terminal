@@ -14,6 +14,6 @@ export const FundOrderbook = styled.div`
 `;
 
 export const FundOrderbookForm = styled.div`
-  flex: 0.4 1;
+  flex: 0.5 1;
   padding-right: ${props => props.theme.spaceUnits.l};
 `;

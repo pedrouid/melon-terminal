@@ -46,9 +46,7 @@ export const FundHoldings: React.FC<FundHoldingsProps> = ({ address }) => {
           <thead>
             <HeaderRow>
               <HeaderCell>Asset</HeaderCell>
-              <HeaderCellRightAlign>Price</HeaderCellRightAlign>
               <HeaderCellRightAlign>Balance</HeaderCellRightAlign>
-              <HeaderCellRightAlign>Value [ETH]</HeaderCellRightAlign>
               <HeaderCellRightAlign>Allocation</HeaderCellRightAlign>
             </HeaderRow>
           </thead>
@@ -66,13 +64,7 @@ export const FundHoldings: React.FC<FundHoldingsProps> = ({ address }) => {
                   </S.HoldingName>
                 </BodyCell>
                 <BodyCellRightAlign>
-                  <FormattedNumber value={holding.token?.price} />
-                </BodyCellRightAlign>
-                <BodyCellRightAlign>
                   <FormattedNumber value={fromTokenBaseUnit(holding.amount!, holding.token!.decimals!)} />
-                </BodyCellRightAlign>
-                <BodyCellRightAlign>
-                  <FormattedNumber value={fromTokenBaseUnit(holding.value!, 18)} />
                 </BodyCellRightAlign>
                 <BodyCellRightAlign>
                   <FormattedNumber value={holding.value?.dividedBy(totalValue).times(100)} decimals={2} suffix="%" />

@@ -177,11 +177,11 @@ export const FundKyberTrading: React.FC<FundKyberTradingProps> = props => {
         <form onSubmit={submit}>
           <Grid>
             <GridRow noGap={true}>
-              <GridCol xs={12} sm={3}>
+              <GridCol xs={12} sm={4}>
                 <Dropdown name="takerAsset" label="Sell asset" options={options} disabled={loading} />
               </GridCol>
 
-              <GridCol xs={12} sm={9}>
+              <GridCol xs={12} sm={8}>
                 <Input type="number" step="any" name="takerQuantity" label="Sell quantity" />
               </GridCol>
             </GridRow>
@@ -193,11 +193,11 @@ export const FundKyberTrading: React.FC<FundKyberTradingProps> = props => {
             </GridRow>
 
             <GridRow>
-              <GridCol xs={12} sm={3}>
+              <GridCol xs={12} sm={4}>
                 <Dropdown name="makerAsset" label="Buy asset" options={options} disabled={loading} />
               </GridCol>
 
-              <GridCol xs={12} sm={9}>
+              <GridCol xs={12} sm={8}>
                 <Input
                   type="text"
                   label="Buy quantity"
