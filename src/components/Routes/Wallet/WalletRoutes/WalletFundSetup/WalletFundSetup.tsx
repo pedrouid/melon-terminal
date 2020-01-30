@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import BigNumber from 'bignumber.js';
 import * as Yup from 'yup';
 import { useForm, FormContext } from 'react-hook-form';
@@ -35,6 +35,7 @@ export const WalletFundSetup: React.FC = () => {
   const history = useHistory();
   const account = useAccount();
   const refetch = useOnChainQueryRefetcher();
+  const [transactionFinished, setTransactionFinished] = useState(false);
 
   const validationSchema = Yup.object().shape({
     name: Yup.string()
@@ -85,7 +86,10 @@ export const WalletFundSetup: React.FC = () => {
   });
 
   const transaction = useTransaction(environment, {
-    onFinish: receipt => refetch(receipt.blockNumber),
+    onFinish: receipt => {
+      setTransactionFinished(true);
+      refetch(receipt.blockNumber);
+    },
     onAcknowledge: () => {
       if (!account.fund) {
         history.push('/wallet');
@@ -127,10 +131,12 @@ export const WalletFundSetup: React.FC = () => {
     transaction.start(tx, 'Begin setup (Step 1 of 9)');
   });
 
-  const fallback = (
+  const fallback = transactionFinished ? (
+    <></>
+  ) : (
     <Fallback kind="error">
-      You have already started a fund setup. Go to <Link to={`/fund/${account.fund}`}>your fund</Link> to complete the
-      setup
+      You have already started to setup your fund or your fund has already been fully setup. Go to{' '}
+      <Link to={`/fund/${account.fund}`}>your fund</Link> to view your fund.
     </Fallback>
   );
 
@@ -153,7 +159,7 @@ export const WalletFundSetup: React.FC = () => {
       <RequiresFundSetupNotStarted fallback={fallback}>
         <Grid>
           <GridRow justify="center">
-            <GridCol sm={12} md={10} lg={8}>
+            <GridCol sm={12} md={12} lg={12}>
               <Block>
                 <FormContext {...form}>
                   <form onSubmit={submit}>

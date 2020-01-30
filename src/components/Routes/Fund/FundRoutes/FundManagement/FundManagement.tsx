@@ -7,6 +7,7 @@ import FundIvestmentAssets from './FundInvestmentAssets/FundInvestmentAssets';
 import FundExchanges from './FundExchanges/FundExchanges';
 import { RequiresFundNotShutDown } from '~/components/Gates/RequiresFundNotShutDown/RequiresFundNotShutDown';
 import { RequiresFundManager } from '~/components/Gates/RequiresFundManager/RequiresFundManager';
+import { RequiresFundDeployedWithCurrentVersion } from '~/components/Gates/RequiresFundDeployedWithCurrentVersion/RequiresFundDeployedWithCurrentVersion';
 
 export interface FundManagementProps {
   address: string;
@@ -15,16 +16,18 @@ export interface FundManagementProps {
 export const FundManagement: React.FC<FundManagementProps> = ({ address }) => (
   <RequiresFundManager>
     <Grid>
-      <RequiresFundNotShutDown fallback={false}>
-        <GridRow>
-          <GridCol xs={12} sm={6}>
-            <FundIvestmentAssets address={address} />
-          </GridCol>
-          <GridCol xs={12} sm={6}>
-            <FundExchanges address={address} />
-          </GridCol>
-        </GridRow>
-      </RequiresFundNotShutDown>
+      <RequiresFundDeployedWithCurrentVersion address={address} fallback={false}>
+        <RequiresFundNotShutDown fallback={false}>
+          <GridRow>
+            <GridCol xs={12} sm={6}>
+              <FundIvestmentAssets address={address} />
+            </GridCol>
+            <GridCol xs={12} sm={6}>
+              <FundExchanges address={address} />
+            </GridCol>
+          </GridRow>
+        </RequiresFundNotShutDown>
+      </RequiresFundDeployedWithCurrentVersion>
       <GridRow>
         <GridCol xs={12} sm={6}>
           <FundClaimFees address={address} />

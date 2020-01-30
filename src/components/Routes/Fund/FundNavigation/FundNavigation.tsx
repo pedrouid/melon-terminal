@@ -2,6 +2,7 @@ import React from 'react';
 import { RequiresFundManager } from '~/components/Gates/RequiresFundManager/RequiresFundManager';
 import { RequiresFundNotShutDown } from '~/components/Gates/RequiresFundNotShutDown/RequiresFundNotShutDown';
 import { TabBar, TabBarContent, TabBarSection, TabLink } from '~/storybook/components/TabNavigation/TabNavigation';
+import { RequiresFundDeployedWithCurrentVersion } from '~/components/Gates/RequiresFundDeployedWithCurrentVersion/RequiresFundDeployedWithCurrentVersion';
 
 export interface FundNavigationProps {
   address: string;
@@ -24,11 +25,13 @@ export const FundNavigation: React.FC<FundNavigationProps> = ({ address }) => {
         </TabBarSection>
         <RequiresFundManager fallback={false}>
           <TabBarSection>
-            <RequiresFundNotShutDown fallback={false}>
-              <TabLink to={`/fund/${address}/policies`} exact={true} activeClassName="active">
-                Ruleset
-              </TabLink>
-            </RequiresFundNotShutDown>
+            <RequiresFundDeployedWithCurrentVersion address={address} fallback={false}>
+              <RequiresFundNotShutDown fallback={false}>
+                <TabLink to={`/fund/${address}/policies`} exact={true} activeClassName="active">
+                  Ruleset
+                </TabLink>
+              </RequiresFundNotShutDown>
+            </RequiresFundDeployedWithCurrentVersion>
             <TabLink to={`/fund/${address}/manage`} exact={true} activeClassName="active">
               Admin
             </TabLink>

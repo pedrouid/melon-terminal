@@ -157,7 +157,7 @@ const tableHeadings = [
     align: 'right',
   },
   {
-    value: 'Version',
+    value: 'Protocol',
     key: 'version',
     align: 'left',
   },

@@ -19,6 +19,7 @@ import { ConnectionSelector } from './ConnectionSelector/ConnectionSelector';
 import { useEnvironment } from '~/hooks/useEnvironment';
 import { Icons } from '~/storybook/components/Icons/Icons';
 import { NetworkEnum } from '~/types';
+import { useVersionQuery } from '~/queries/Version';
 
 const graphiql = JSON.parse(process.env.MELON_INCLUDE_GRAPHIQL || 'false');
 
@@ -27,6 +28,7 @@ export const Layout: React.FC = ({ children }) => {
   const [update] = usePriceFeedUpdateQuery();
   const environment = useEnvironment();
   const account = useAccount();
+  const [version] = useVersionQuery();
 
   const home = location.pathname === '/';
 
@@ -53,9 +55,17 @@ export const Layout: React.FC = ({ children }) => {
                 </ConnectionInfoItem>
               )}
 
+              {!account.fund && account.address && (
+                <ConnectionInfoItem>
+                  <NavLink to={`/wallet/setup`} title={account.fund} activeClassName="active" exact={true}>
+                    Create fund
+                  </NavLink>
+                </ConnectionInfoItem>
+              )}
+
               {account.address && (
                 <ConnectionInfoItem>
-                  <NavLink to="/wallet" title={account.address} activeClassName="active">
+                  <NavLink to="/wallet" title={account.address} activeClassName="active" exact={true}>
                     My wallet
                   </NavLink>
                 </ConnectionInfoItem>
@@ -101,6 +111,8 @@ export const Layout: React.FC = ({ children }) => {
             )}
 
             {environment?.network && <FooterItem>{NetworkEnum[environment.network]}</FooterItem>}
+
+            {version && <FooterItem>Protocol {version.name}</FooterItem>}
           </FooterNavigation>
         </Footer>
       </SkeletonFeet>

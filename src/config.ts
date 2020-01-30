@@ -50,6 +50,13 @@ export const config: ConfigMap = {
           exchange: '0x4F833a24e1f95D70F028921e27040Ca56E09AB0b',
           historic: true,
         },
+        {
+          name: 'MelonEngine (v1)',
+          id: 'MelonEngineV1',
+          adapter: '0xF31D358eFD7B80A6733BCb850bd49BFCBEC1428A',
+          exchange: '0x7CaEc96607c5c7190d63B5A650E7CE34472352f5',
+          historic: true,
+        },
       ],
     },
   }),

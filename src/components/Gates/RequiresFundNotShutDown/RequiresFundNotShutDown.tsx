@@ -2,12 +2,12 @@ import React from 'react';
 import { useFund } from '~/hooks/useFund';
 import { Fallback } from '~/components/Common/Fallback/Fallback';
 
-export interface RequireFundNotShutDownProps {
+export interface RequiresFundNotShutDownProps {
   loader?: React.ReactElement;
   fallback?: React.ReactNode;
 }
 
-export const RequiresFundNotShutDown: React.FC<RequireFundNotShutDownProps> = ({
+export const RequiresFundNotShutDown: React.FC<RequiresFundNotShutDownProps> = ({
   loader,
   children,
   fallback = true,

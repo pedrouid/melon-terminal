@@ -16,6 +16,7 @@ import { RequiresFundManager } from '~/components/Gates/RequiresFundManager/Requ
 import { RequiresNoSharesCreated } from '~/components/Gates/RequiresNoSharesCreated/RequiresNoSharesCreated';
 import { Link } from '~/storybook/components/Link/Link';
 import { RequiresNoPoliciesDeployed } from '~/components/Gates/RequiresNoPoliciesDeployed/RequiresNoPoliciesDeployed';
+import { RequiresFundDeployedWithCurrentVersion } from '~/components/Gates/RequiresFundDeployedWithCurrentVersion/RequiresFundDeployedWithCurrentVersion';
 
 const NoMatch = React.lazy(() => import('~/components/Routes/NoMatch/NoMatch'));
 const FundSetupTransactions = React.lazy(() => import('./FundSetupTransactions/FundSetupTransactions'));
@@ -32,6 +33,15 @@ export interface FundRouteParams {
 export const Fund: React.FC = () => {
   const match = useRouteMatch<FundRouteParams>()!;
 
+  const fundManagerDeprecatedVersionFallback = (
+    <NotificationBar kind="neutral">
+      <NotificationContent>
+        Note to the manager: please <Link to={`/fund/${match.params.address}/manage`}>shut down your fund</Link> and{' '}
+        <Link to={`/wallet/setup`}>set up a new fund.</Link>
+      </NotificationContent>
+    </NotificationBar>
+  );
+
   return (
     <FundProvider address={match.params.address}>
       <FundHeader address={match.params.address} />
@@ -44,6 +54,16 @@ export const Fund: React.FC = () => {
             <NotificationContent>This fund is shut down.</NotificationContent>
           </NotificationBar>
         </RequiresFundShutDown>
+        <RequiresFundDeployedWithCurrentVersion
+          address={match.params.address}
+          fallback={true}
+        ></RequiresFundDeployedWithCurrentVersion>
+        <RequiresFundManager fallback={false}>
+          <RequiresFundDeployedWithCurrentVersion
+            address={match.params.address}
+            fallback={fundManagerDeprecatedVersionFallback}
+          ></RequiresFundDeployedWithCurrentVersion>
+        </RequiresFundManager>
         <RequiresFundSetupInProgress>
           <NotificationBar kind="neutral">
             <NotificationContent>

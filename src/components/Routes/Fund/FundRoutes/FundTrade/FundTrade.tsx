@@ -9,6 +9,7 @@ import { FundTradeHistory } from './FundTradeHistory/FundTradeHistory';
 import { RequiresFundCreatedAfter } from '~/components/Gates/RequiresFundCreatedAfter/RequiresFundCreatedAfter';
 import { Block } from '~/storybook/components/Block/Block';
 import { SectionTitle } from '~/storybook/components/Title/Title';
+import { RequiresFundDeployedWithCurrentVersion } from '~/components/Gates/RequiresFundDeployedWithCurrentVersion/RequiresFundDeployedWithCurrentVersion';
 
 export interface FundTradeProps {
   address: string;
@@ -34,16 +35,21 @@ export const FundTrade: React.FC<FundTradeProps> = ({ address }) => {
         </GridCol>
       </GridRow>
       <RequiresFundManager fallback={false}>
-        <RequiresFundNotShutDown fallback={false}>
-          <GridRow>
-            <GridCol xs={12} md={6}>
-              <FundTrading address={address} />
-            </GridCol>
-            <GridCol xs={12} md={6}>
-              <FundHoldings address={address} />
-            </GridCol>
-          </GridRow>
-        </RequiresFundNotShutDown>
+        <RequiresFundDeployedWithCurrentVersion address={address} fallback={false}>
+          <RequiresFundCreatedAfter after={new Date('2019-12-02')} fallback={false}>
+            <RequiresFundNotShutDown fallback={false}>
+              <GridRow>
+                <GridCol xs={12} md={6}>
+                  <FundTrading address={address} />
+                </GridCol>
+                <GridCol xs={12} md={6}>
+                  <FundHoldings address={address} />
+                </GridCol>
+              </GridRow>
+            </RequiresFundNotShutDown>
+          </RequiresFundCreatedAfter>
+          >
+        </RequiresFundDeployedWithCurrentVersion>
       </RequiresFundManager>
       <GridRow>
         <GridCol>

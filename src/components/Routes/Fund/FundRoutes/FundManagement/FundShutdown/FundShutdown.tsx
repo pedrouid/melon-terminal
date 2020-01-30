@@ -56,8 +56,8 @@ export const Shutdown: React.FC<ShutdownProps> = ({ address }) => {
     <Block>
       <SectionTitle>Shut down fund</SectionTitle>
       <p>
-        Shutting down your fund closes the fund for new investors and trades will no longer be possible. Investor can
-        redeem their shares whenever they want.
+        Shutting down your fund closes the fund for new investors and trades will no longer be possible. Investors can
+        still redeem their shares whenever they want.
       </p>
       {info?.address ? (
         <BlockActions>
