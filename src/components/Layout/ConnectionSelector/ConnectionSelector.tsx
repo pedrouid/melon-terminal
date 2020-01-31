@@ -4,6 +4,7 @@ import { Dropdown } from '~/storybook/components/Dropdown/Dropdown';
 import { Icons, IconName } from '~/storybook/components/Icons/Icons';
 import { ConnectionContext } from '~/components/Contexts/Connection/Connection';
 import * as S from './ConnectionSelector.styles';
+import { useLocation, useHistory } from 'react-router';
 
 export interface ConnectionButtonProps {
   name: string;
@@ -22,8 +23,16 @@ export const ConnectionButton: React.FC<ConnectionButtonProps> = ({
   accounts,
   active,
 }) => {
-  const click = () => (active ? connection.disconnect() : connection.connect(name));
-
+  const location = useLocation()!;
+  const history = useHistory();
+  const click = () => {
+    if (active) {
+      connection.disconnect();
+      location.pathname.match(/^\/wallet/g) && history.push('/');
+    } else {
+      connection.connect(name);
+    }
+  };
   return (
     <S.ConnectionButtonWrapper>
       <S.ConnectionButton onClick={click}>
