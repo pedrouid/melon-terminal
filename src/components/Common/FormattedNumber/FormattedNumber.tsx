@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import BigNumber from 'bignumber.js';
+import { Tooltip } from '~/storybook/components/Tooltip/Tooltip';
 
 export interface FormattedNumberData {
   value?: BigNumber | number | string | null;
@@ -8,6 +9,7 @@ export interface FormattedNumberData {
   suffix?: string;
   decimals?: number;
   colorize?: boolean;
+  tooltip?: boolean;
 }
 
 interface ColorProps {
@@ -28,6 +30,7 @@ export const FormattedNumber: React.FC<FormattedNumberData> = ({
   suffix,
   decimals = 4,
   colorize = false,
+  tooltip = false,
 }) => {
   const bn = BigNumber.isBigNumber(value) ? value : new BigNumber(value ?? 'NaN');
   const output = bn.isNaN()
@@ -36,8 +39,28 @@ export const FormattedNumber: React.FC<FormattedNumberData> = ({
 
   if (colorize) {
     const color = bn.isNaN() || bn.isZero() ? 'grey' : bn.isPositive() ? 'green' : 'red';
-    return <Color color={color}>{output}</Color>;
+    return (
+      <Color color={color}>
+        {tooltip ? (
+          <Tooltip value={`${prefix ? ' ' : ''}${bn.toFixed(18)}${!suffix || suffix === '%' ? '' : ' '}${suffix}`}>
+            {output}
+          </Tooltip>
+        ) : (
+          output
+        )}
+      </Color>
+    );
   }
 
-  return <NoWrap>{output}</NoWrap>;
+  return (
+    <NoWrap>
+      {tooltip ? (
+        <Tooltip value={`${prefix ? ' ' : ''}${bn.toFixed(18)}${!suffix || suffix === '%' ? '' : ' '}${suffix}`}>
+          {output}
+        </Tooltip>
+      ) : (
+        output
+      )}
+    </NoWrap>
+  );
 };

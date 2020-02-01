@@ -8,7 +8,7 @@ import { useFundOverviewQuery, FundProcessed } from '~/queries/FundOverview';
 import { usePagination } from '~/hooks/usePagination';
 import { useAccount } from '~/hooks/useAccount';
 import { Grid, GridRow, GridCol } from '~/storybook/components/Grid/Grid';
-import { Block, BlockActions } from '~/storybook/components/Block/Block';
+import { Block } from '~/storybook/components/Block/Block';
 import { Input } from '~/storybook/components/Input/Input';
 import { SectionTitle } from '~/storybook/components/Title/Title';
 import { Button } from '~/storybook/components/Button/Button';
@@ -35,7 +35,6 @@ import {
   CheckboxIcon,
 } from '~/storybook/components/Checkbox/Checkbox';
 import styled from 'styled-components';
-import BigNumber from 'bignumber.js';
 
 interface SortChoice {
   key: keyof typeof sortChoice;
@@ -309,7 +308,13 @@ export const Home: React.FC = () => {
                           </BodyCell>
                           <BodyCellRightAlign>{fund.sharePrice}</BodyCellRightAlign>
                           <BodyCellRightAlign>
-                            <FormattedNumber value={fund.change} colorize={true} decimals={2} suffix="%" />
+                            <FormattedNumber
+                              tooltip={true}
+                              value={fund.change}
+                              colorize={true}
+                              decimals={2}
+                              suffix="%"
+                            />
                           </BodyCellRightAlign>
                           <BodyCellRightAlign>{fund.aumEth}</BodyCellRightAlign>
                           <BodyCellRightAlign>{fund.aumUsd || ''}</BodyCellRightAlign>
