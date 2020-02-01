@@ -69,8 +69,7 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
     state.progress > TransactionProgress.TRANSACTION_STARTED;
 
   const price = form.watch('gasPrice') ?? defaultGasPrice;
-
-  const gasPriceEth = new BigNumber(options?.gas ?? 'NaN').multipliedBy(new BigNumber(price)).multipliedBy('1e9');
+  const gasPriceEth = new BigNumber(options?.gas ?? 'NaN').multipliedBy('1e9').multipliedBy(price);
   const gasPriceUsd = gasPriceEth.multipliedBy(coinApi.data.rate);
 
   const amguUsd = options?.amgu?.multipliedBy(coinApi.data.rate) ?? new BigNumber('NaN');
@@ -84,7 +83,6 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
   };
 
   const currentStep = progressToStep(state.progress);
-
   const errorReportingUri = encodeURI(
     `https://github.com/avantgardefinance/interface/issues/new?title=Error in transaction "${state.name}";body=${error?.stack}`
   );
@@ -152,7 +150,7 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
                       step=".01"
                       max={8000000}
                       defaultValue={defaultGasPrice}
-                      disabled={!!loading && estimated}
+                      disabled={loading && estimated}
                     />
                     <S.CostsTable>
                       <S.CostsTableHead>
@@ -242,7 +240,7 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
                           <S.TransactionModalMessagesTableRow>
                             <S.TransactionModalMessagesTableRowLabel>Gas used</S.TransactionModalMessagesTableRowLabel>
                             <S.TransactionModalMessagesTableRowQuantity>
-                              <FormattedNumber value={receipt.gasUsed} decimals={0}></FormattedNumber>
+                              <FormattedNumber value={receipt.gasUsed} decimals={0} />
                             </S.TransactionModalMessagesTableRowQuantity>
                           </S.TransactionModalMessagesTableRow>
 

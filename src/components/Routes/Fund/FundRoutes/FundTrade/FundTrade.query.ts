@@ -4,10 +4,6 @@ import { useMemo } from 'react';
 import { useEnvironment } from '~/hooks/useEnvironment';
 import { ExchangeDefinition } from '@melonproject/melonjs';
 
-export interface FundTradingResult {
-  exchanges?: string[];
-}
-
 export interface FundTradingVariables {
   fund?: string;
 }

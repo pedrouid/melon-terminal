@@ -6,8 +6,13 @@ export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> 
   label?: string;
 }
 
-export const Input: React.FC<InputProps> = ({ name, label, ...rest }) => {
+export const Input: React.FC<InputProps> = ({ name, label, type, ...rest }) => {
   const form = useFormContext();
+
+  if (type === 'hidden') {
+    return <S.Input name={name} type={type} {...rest} />;
+  }
+
   const connected = !!(form && name);
   const ref = connected ? form.register : undefined;
   const errors = connected ? form.errors : undefined;
@@ -16,7 +21,7 @@ export const Input: React.FC<InputProps> = ({ name, label, ...rest }) => {
   return (
     <S.InputWrapper>
       {label && <S.InputLabel>{label}</S.InputLabel>}
-      <S.Input ref={ref} error={error} name={name} {...rest} />
+      <S.Input ref={ref} error={error} name={name} type={type} {...rest} />
       {error && <ErrorMessage errors={form.errors} name={name!} as={S.InputError} />}
     </S.InputWrapper>
   );

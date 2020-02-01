@@ -55,16 +55,27 @@ export const FundOrderbookLimitForm: React.FC<FundOrderbookLimitFormProps> = pro
   const total = props.order?.quantity.multipliedBy(props.order?.price);
 
   const form = useForm<FundOrderbookLimitFormValues>({
+    mode: 'onChange',
     validationSchema: Yup.object().shape({
       exchange: Yup.string().required(),
       direction: Yup.string()
         .required()
         .oneOf(['buy', 'sell']),
-      quantity: Yup.string().required('Missing quantity.'),
-      price: Yup.string().required('Missing price.'),
+      quantity: Yup.string()
+        .required('Missing quantity.')
+        // tslint:disable-next-line
+        .test('valid-number', 'The given value is not a valid number.', function(value) {
+          const bn = new BigNumber(value);
+          return !bn.isNaN() && bn.isPositive();
+        }),
+      price: Yup.string()
+        .required('Missing price.')
+        // tslint:disable-next-line
+        .test('valid-number', 'The given value is not a valid number.', function(value) {
+          const bn = new BigNumber(value);
+          return !bn.isNaN() && bn.isPositive();
+        }),
     }),
-    mode: 'onSubmit',
-    reValidateMode: 'onBlur',
     defaultValues: {
       direction: props.order?.side === 'bid' ? 'sell' : 'buy',
       quantity: !props.order?.quantity?.isNaN() ? props.order?.quantity.decimalPlaces(4).toString() : '',
@@ -170,7 +181,7 @@ export const FundOrderbookLimitForm: React.FC<FundOrderbookLimitFormProps> = pro
     form.setValue('quantity', !quantity.isNaN() ? quantity.decimalPlaces(4).toString() : '');
   };
 
-  const ready = !currentPrice.isNaN() && !currentQuantity.isNaN() && !currentTotal.isNaN();
+  const ready = form.formState.isValid;
   const description =
     ready &&
     `Limit order: ${currentDirection === 'buy' ? 'Buy' : 'Sell'} ${currentQuantity.decimalPlaces(4).toString()} ${

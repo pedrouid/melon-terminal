@@ -380,7 +380,7 @@ export function useTransaction(environment: DeployedEnvironment, options?: Trans
       executionPending(dispatch);
       const transaction = state.transaction!;
       const opts: SendOptions = {
-        gasPrice: `${+data.gasPrice * 10e9}`,
+        gasPrice: `${+data.gasPrice * 1e9}`,
         ...(state.sendOptions && state.sendOptions.gas && { gas: state.sendOptions.gas }),
         ...(state.sendOptions && state.sendOptions.amgu && { amgu: state.sendOptions.amgu }),
         ...(state.sendOptions && state.sendOptions.incentive && { incentive: state.sendOptions.incentive }),
@@ -393,7 +393,7 @@ export function useTransaction(environment: DeployedEnvironment, options?: Trans
         tx.once('error', error => reject((error as any).error ? (error as any).error : error));
       });
 
-      await Promise.resolve(options && options.onFinish && options.onFinish(receipt));
+      await (options?.onFinish && options.onFinish(receipt));
       executionFinished(dispatch, receipt);
     } catch (error) {
       executionError(dispatch, error);
@@ -444,7 +444,7 @@ export function useTransaction(environment: DeployedEnvironment, options?: Trans
               state.transaction!.prepare(),
             ])!;
 
-            const defaultGasPrice = ethGasStation ? ethGasStation.average : +onChainPrice! / 10e9;
+            const defaultGasPrice = ethGasStation ? ethGasStation.average : +onChainPrice! / 1e9;
             estimationFinished(dispatch, defaultGasPrice, sendOptions!, ethGasStation);
           } catch (error) {
             estimationError(dispatch, error);

@@ -33,15 +33,6 @@ export interface FundRouteParams {
 export const Fund: React.FC = () => {
   const match = useRouteMatch<FundRouteParams>()!;
 
-  const fundManagerDeprecatedVersionFallback = (
-    <NotificationBar kind="neutral">
-      <NotificationContent>
-        Note to the manager: please <Link to={`/fund/${match.params.address}/manage`}>shut down your fund</Link> and{' '}
-        <Link to={`/wallet/setup`}>set up a new fund.</Link>
-      </NotificationContent>
-    </NotificationBar>
-  );
-
   return (
     <FundProvider address={match.params.address}>
       <FundHeader address={match.params.address} />
@@ -54,15 +45,19 @@ export const Fund: React.FC = () => {
             <NotificationContent>This fund is shut down.</NotificationContent>
           </NotificationBar>
         </RequiresFundShutDown>
-        <RequiresFundDeployedWithCurrentVersion
-          address={match.params.address}
-          fallback={true}
-        ></RequiresFundDeployedWithCurrentVersion>
+        <RequiresFundDeployedWithCurrentVersion address={match.params.address} fallback={true} />
         <RequiresFundManager fallback={false}>
           <RequiresFundDeployedWithCurrentVersion
             address={match.params.address}
-            fallback={fundManagerDeprecatedVersionFallback}
-          ></RequiresFundDeployedWithCurrentVersion>
+            fallback={
+              <NotificationBar kind="neutral">
+                <NotificationContent>
+                  Please <Link to={`/fund/${match.params.address}/manage`}>shut down your fund</Link> and{' '}
+                  <Link to={`/wallet/setup`}>set up a new fund.</Link>
+                </NotificationContent>
+              </NotificationBar>
+            }
+          />
         </RequiresFundManager>
         <RequiresFundSetupInProgress>
           <NotificationBar kind="neutral">

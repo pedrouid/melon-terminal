@@ -246,8 +246,8 @@ export const FundFactSheet: React.FC<FundFactSheetProps> = ({ address }) => {
               <Fragment key={exchange.exchange}>
                 <EtherscanLink key={index} inline={true} address={exchange.exchange}>
                   {item?.name ?? exchange.exchange}
-                  {index + 1 < exchanges.length && ', '}
                 </EtherscanLink>
+                {index + 1 < exchanges.length && ', '}
               </Fragment>
             );
           })}

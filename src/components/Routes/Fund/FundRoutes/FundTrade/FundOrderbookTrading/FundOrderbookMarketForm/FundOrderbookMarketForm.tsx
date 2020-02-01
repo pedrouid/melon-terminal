@@ -70,14 +70,20 @@ export const FundOrderbookMarketForm: React.FC<FundOrderbookMarketFormProps> = p
   ];
 
   const form = useForm<FundOrderbookMarketFormValues>({
-    mode: 'onSubmit',
-    reValidateMode: 'onBlur',
+    mode: 'onChange',
     defaultValues: {
       quantity: '',
       total: '',
     },
     validationSchema: Yup.object().shape({
-      quantity: Yup.string().required(),
+      quantity: Yup.string()
+        .required('Missing quantity.')
+        // tslint:disable-next-line
+        .test('valid-number', 'The given value is not a valid number.', function(value) {
+          const bn = new BigNumber(value);
+          return !bn.isNaN() && bn.isPositive();
+        }),
+
       // .test('max', 'Maximum quantity exceeded', value => {
       //   if (!quantityRef.current) {
       //     return false;

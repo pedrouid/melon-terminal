@@ -25,6 +25,7 @@ export interface FundHoldingsProps {
 
 export const FundHoldings: React.FC<FundHoldingsProps> = ({ address }) => {
   const [holdings, query] = useFundHoldingsQuery(address);
+
   if (query.loading) {
     return (
       <Block>
