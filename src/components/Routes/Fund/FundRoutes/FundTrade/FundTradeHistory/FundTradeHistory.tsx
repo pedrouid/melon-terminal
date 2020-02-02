@@ -54,10 +54,10 @@ export const FundTradeHistory: React.FC<FundTradeHistoryProps> = ({ address }) =
                   <BodyCell>{call.buyAsset?.symbol}</BodyCell>
                   <BodyCell>{call.sellAsset?.symbol}</BodyCell>
                   <BodyCellRightAlign>
-                    <FormattedNumber value={call.buyQuantity}></FormattedNumber>
+                    <FormattedNumber value={call.buyQuantity} />
                   </BodyCellRightAlign>
                   <BodyCellRightAlign>
-                    <FormattedNumber value={call.sellQuantity}></FormattedNumber>
+                    <FormattedNumber value={call.sellQuantity} />
                   </BodyCellRightAlign>
                   <BodyCell>{call.signature?.label}</BodyCell>
                 </BodyRow>

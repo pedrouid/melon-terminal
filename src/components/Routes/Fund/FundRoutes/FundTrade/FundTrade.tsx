@@ -22,7 +22,7 @@ export const FundTrade: React.FC<FundTradeProps> = ({ address }) => {
   const loading = exchangesQuery.loading && holdingsQuery.loading;
 
   const markets = exchanges.filter(exchange => {
-    const supported = [ExchangeIdentifier.OasisDex, ExchangeIdentifier.ZeroExV2, ExchangeIdentifier.ZeroExV3];
+    const supported = [ExchangeIdentifier.OasisDex, ExchangeIdentifier.ZeroExV3];
     return supported.includes(exchange.id as ExchangeIdentifier);
   });
 
