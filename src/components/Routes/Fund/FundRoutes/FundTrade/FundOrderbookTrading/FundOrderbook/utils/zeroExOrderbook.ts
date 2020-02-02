@@ -10,9 +10,25 @@ import { Orderbook, OrderbookItem } from './aggregatedOrderbook';
 import { fromTokenBaseUnit } from '~/utils/fromTokenBaseUnit';
 
 export interface ZeroExOrderbookItem extends OrderbookItem {
-  type: ExchangeIdentifier.ZeroExV2;
+  type: ExchangeIdentifier.ZeroExV3;
   order: ZeroExOrder;
 }
+
+const endpoints = {
+  [NetworkEnum.MAINNET]: {
+    http: 'https://api.0x.org/sra',
+    ws: 'wss://api.0x.org/sra/v3',
+  },
+  [NetworkEnum.KOVAN]: {
+    http: 'https://kovan.api.0x.org/sra',
+    ws: 'wss://kovan.api.0x.org/sra/v3',
+  },
+} as {
+  [key: number]: {
+    http: string;
+    ws: string;
+  };
+};
 
 function mapOrders(
   orders: ZeroExOrder[],
@@ -29,8 +45,8 @@ function mapOrders(
       quantity,
       price,
       side,
-      exchange: ExchangeIdentifier.ZeroExV2,
-      id: `zeroex:${order.order.salt}`,
+      exchange: ExchangeIdentifier.ZeroExV3,
+      id: `zeroexv3:${order.order.salt}`,
     } as OrderbookItem;
   });
 }
@@ -41,18 +57,20 @@ export function zeroExOrderbook(
   takerAsset: TokenDefinition
 ) {
   const network = environment.network as NetworkEnum;
+  const endpoint = endpoints[network];
+
+  if (!endpoint) {
+    return Rx.NEVER;
+  }
+
   const makerAssetData = assetDataUtils.encodeERC20AssetData(makerAsset.address);
   const takerAssetData = assetDataUtils.encodeERC20AssetData(takerAsset.address);
 
-  if (network !== NetworkEnum.MAINNET) {
-    return Rx.EMPTY;
-  }
-
   return Rx.using(
     () => {
-      const provider = OrderbookProvider.getOrderbookForPollingProvider({
-        httpEndpoint: 'https://api.0x.org/sra',
-        pollingIntervalMs: 50000,
+      const provider = OrderbookProvider.getOrderbookForWebsocketProvider({
+        httpEndpoint: endpoint.http,
+        websocketEndpoint: endpoint.ws,
       });
 
       return {

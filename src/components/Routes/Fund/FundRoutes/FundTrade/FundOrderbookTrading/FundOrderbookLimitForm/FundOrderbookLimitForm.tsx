@@ -229,11 +229,13 @@ export const FundOrderbookLimitForm: React.FC<FundOrderbookLimitFormProps> = pro
   };
 
   const ready = form.formState.isValid;
-  const description = `Limit order: ${currentDirection === 'buy' ? 'Buy' : 'Sell'} ${currentQuantity
-    .decimalPlaces(4)
-    .toString()} ${base.symbol} at a price of ${currentPrice.decimalPlaces(4).toString()} ${quote.symbol} per ${
-    base.symbol
-  } for a total of ${currentTotal.decimalPlaces(4).toString()} ${quote.symbol}`;
+  const description =
+    ready &&
+    `Limit order: ${currentDirection === 'buy' ? 'Buy' : 'Sell'} ${currentQuantity.decimalPlaces(4).toString()} ${
+      base.symbol
+    } at a price of ${currentPrice.decimalPlaces(4).toString()} ${quote.symbol} per ${
+      base.symbol
+    } for a total of ${currentTotal.decimalPlaces(4).toString()} ${quote.symbol}`;
 
   return (
     <>

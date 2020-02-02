@@ -72,7 +72,7 @@ export const FundLiquidityProviderTrading: React.FC<FundLiquidityProviderTrading
 
   return (
     <Block>
-      <SectionTitle>Liquidity providers</SectionTitle>
+      <SectionTitle>Liquidity pool based trading</SectionTitle>
 
       <FormContext {...form}>
         <Dropdown name="takerAsset" label="Sell asset" options={options} />
