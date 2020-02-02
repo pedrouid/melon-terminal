@@ -1,8 +1,8 @@
 import * as Rx from 'rxjs';
 import BigNumber from 'bignumber.js';
 import { startWith } from 'rxjs/operators';
-import { TokenDefinition, DeployedEnvironment, ExchangeIdentifier } from '@melonproject/melonjs';
-// import { zeroExOrderbook } from './zeroExOrderbook';
+import { DeployedEnvironment, ExchangeDefinition, ExchangeIdentifier, TokenDefinition } from '@melonproject/melonjs';
+import { zeroExOrderbook } from './zeroExOrderbook';
 import { matchingMarketOrderbook } from './matchingMarketOrderbook';
 
 export interface OrderbookItem {
@@ -35,7 +35,6 @@ export function findPriceChange(base: BigNumber, comparison?: BigNumber) {
   }
 
   const baseString = base.toFixed(8);
-
   const compString = comparison.toFixed(8);
   const offset = baseString.length - compString.length;
 
@@ -45,9 +44,8 @@ export function findPriceChange(base: BigNumber, comparison?: BigNumber) {
     if (!current) {
       return 0;
     }
-    const comp = compString[i];
 
-    if (current != comp) {
+    if (current !== compString[i]) {
       return i + offset;
     }
   }
@@ -58,6 +56,7 @@ export function findPriceChange(base: BigNumber, comparison?: BigNumber) {
 /**
  * Returns the index at which the smallest price change occurs in two arrays of [[OrderbookItem]]s.
  * Used to control how many decimals to show in an orderbook render function.
+ *
  * @param bids an array of [[OrderbookItem]]
  * @param asks an array of [[OrderbookItem]]
  */
@@ -71,11 +70,13 @@ export function findPriceDecimals(bids: OrderbookItem[], asks: OrderbookItem[]) 
     (carry, current) => (current.change && current.change > carry ? current.change : carry),
     0
   );
+
   return askDecimal > bidsDecimal ? askDecimal : bidsDecimal;
 }
 
 export function aggregatedOrderbook(
   environment: DeployedEnvironment,
+  exchanges: ExchangeDefinition[],
   makerAsset: TokenDefinition,
   takerAsset: TokenDefinition
 ) {
@@ -84,12 +85,21 @@ export function aggregatedOrderbook(
     bids: [],
   } as Orderbook;
 
+  const ids = exchanges.map(item => item.id);
   const streams = [
-    // zeroExOrderbook(environment, makerAsset, takerAsset).pipe(startWith(empty)),
-    matchingMarketOrderbook(environment, makerAsset, takerAsset).pipe(startWith(empty)),
+    ...(ids.includes(ExchangeIdentifier.ZeroExV3)
+      ? [zeroExOrderbook(environment, makerAsset, takerAsset).pipe(startWith(empty))]
+      : []),
+    ...(ids.includes(ExchangeIdentifier.OasisDex)
+      ? [matchingMarketOrderbook(environment, makerAsset, takerAsset).pipe(startWith(empty))]
+      : []),
   ];
 
-  const merged$ = Rx.combineLatest(streams, (...groups) => {
+  if (!streams.length) {
+    return Rx.NEVER;
+  }
+
+  return Rx.combineLatest(streams, (...groups) => {
     const empty = [] as OrderbookItem[];
 
     const asksOnly = groups.map(item => item.asks);
@@ -154,6 +164,4 @@ export function aggregatedOrderbook(
 
     return { asks, bids, decimals } as Orderbook;
   });
-
-  return merged$;
 }

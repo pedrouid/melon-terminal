@@ -28,7 +28,7 @@ export const Dropdown: React.FC<DropdownProps> = ({ options, name, label, ...res
         </D.DropdownSelect>
       </D.DropdownSelectContainer>
 
-      {error && <ErrorMessage errors={form.errors} name={name!} as={D.DropdownError} />}
+      {error && <ErrorMessage errors={form.errors} name={name!} as={<D.DropdownError />} />}
     </D.DropdownWrapper>
   );
 };

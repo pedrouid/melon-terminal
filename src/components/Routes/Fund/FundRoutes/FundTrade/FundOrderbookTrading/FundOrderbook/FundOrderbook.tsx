@@ -26,7 +26,7 @@ export const FundOrderbook: React.FC<FundOrderbookProps> = props => {
       return Rx.EMPTY;
     }
 
-    return aggregatedOrderbook(environment, maker, props.asset);
+    return aggregatedOrderbook(environment, props.exchanges, maker, props.asset);
   }, [props.asset]);
 
   useEffect(() => {

@@ -22,7 +22,7 @@ export const Input: React.FC<InputProps> = ({ name, label, type, ...rest }) => {
     <S.InputWrapper>
       {label && <S.InputLabel>{label}</S.InputLabel>}
       <S.Input ref={ref} error={error} name={name} type={type} {...rest} />
-      {error && <ErrorMessage errors={form.errors} name={name!} as={S.InputError} />}
+      {error && <ErrorMessage errors={form.errors} name={name!} as={<S.InputError />} />}
     </S.InputWrapper>
   );
 };

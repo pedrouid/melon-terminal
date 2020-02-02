@@ -3,22 +3,11 @@ import { equals } from 'ramda';
 import { Orderbook as OrderbookProvider } from '@0x/orderbook';
 import { APIOrder as ZeroExOrder } from '@0x/types';
 import { assetDataUtils } from '@0x/order-utils';
-import { TokenDefinition, DeployedEnvironment, ExchangeIdentifier } from '@melonproject/melonjs';
-import { concatMap, expand, distinctUntilChanged, map, catchError } from 'rxjs/operators';
+import { DeployedEnvironment, ExchangeIdentifier, TokenDefinition } from '@melonproject/melonjs';
+import { catchError, concatMap, distinctUntilChanged, expand, map, tap } from 'rxjs/operators';
 import { NetworkEnum } from '~/types';
 import { Orderbook, OrderbookItem } from './aggregatedOrderbook';
 import { fromTokenBaseUnit } from '~/utils/fromTokenBaseUnit';
-
-const endpoints = {
-  [NetworkEnum.MAINNET]: {
-    http: 'https://api-v2.ledgerdex.com/sra/v2',
-  },
-} as {
-  [key in NetworkEnum]: {
-    http: string;
-    ws?: string;
-  };
-};
 
 export interface ZeroExOrderbookItem extends OrderbookItem {
   type: ExchangeIdentifier.ZeroExV2;
@@ -55,27 +44,15 @@ export function zeroExOrderbook(
   const makerAssetData = assetDataUtils.encodeERC20AssetData(makerAsset.address);
   const takerAssetData = assetDataUtils.encodeERC20AssetData(takerAsset.address);
 
-  if (!endpoints.hasOwnProperty(network)) {
+  if (network !== NetworkEnum.MAINNET) {
     return Rx.EMPTY;
   }
 
   return Rx.using(
     () => {
-      if (!!endpoints[network].ws) {
-        const provider = OrderbookProvider.getOrderbookForWebsocketProvider({
-          httpEndpoint: endpoints[network].http,
-          websocketEndpoint: endpoints[network].ws!,
-        });
-
-        return {
-          provider,
-          unsubscribe: () => provider.destroyAsync(),
-        };
-      }
-
       const provider = OrderbookProvider.getOrderbookForPollingProvider({
-        httpEndpoint: endpoints[network].http,
-        pollingIntervalMs: 5000,
+        httpEndpoint: 'https://api.0x.org/sra',
+        pollingIntervalMs: 50000,
       });
 
       return {
@@ -95,7 +72,7 @@ export function zeroExOrderbook(
       );
 
       const delay$ = Rx.timer(5000);
-      const orders$ = Rx.combineLatest(bids$, asks$);
+      const orders$ = Rx.combineLatest([bids$, asks$]);
       const polling$ = orders$.pipe(
         expand(() => delay$.pipe(concatMap(() => orders$))),
         distinctUntilChanged((a, b) => equals(a, b))

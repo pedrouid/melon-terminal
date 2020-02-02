@@ -14829,10 +14829,10 @@ react-helmet@^5.2.1:
     react-fast-compare "^2.0.2"
     react-side-effect "^1.1.0"
 
-react-hook-form@^4.6.2:
-  version "4.6.2"
-  resolved "https://registry.yarnpkg.com/react-hook-form/-/react-hook-form-4.6.2.tgz#e7ed94b14c4e542ceb9cf7a579147c01dc0fb3c9"
-  integrity sha512-o2ykewu1Snf5z85w80XUFx8kC7wuqlaOZCvqWVTGIahhgHb+fOYiTi0I2hgEtw3avsxIsKtJZWSis2grM8RVHg==
+react-hook-form@^4.8.0:
+  version "4.8.0"
+  resolved "https://registry.yarnpkg.com/react-hook-form/-/react-hook-form-4.8.0.tgz#8d1a4721fda8b27dcfeeb0b8c6303cf7441d8429"
+  integrity sha512-Q0fm5TF5UoJa9bHWp/LCqo/xYNLAtwOREIRGDHFxrv5bYUoCuliDAD60KBmi/V2Q7P5z/vM3Brx/JGbuvzqwGg==
 
 react-hotkeys@2.0.0:
   version "2.0.0"

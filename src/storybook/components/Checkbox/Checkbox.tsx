@@ -138,7 +138,7 @@ export const Checkbox: React.FC<CheckboxProps> = ({ name, id, label, ...rest }) 
         {label && <CheckboxLabel htmlFor={id ?? name}>{label}</CheckboxLabel>}
       </CheckboxContainer>
 
-      {error && <ErrorMessage errors={form.errors} name={name!} as={CheckboxError} />}
+      {error && <ErrorMessage errors={form.errors} name={name!} as={<CheckboxError />} />}
     </CheckboxWrapper>
   );
 };
@@ -180,7 +180,7 @@ export const Checkboxes: React.FC<CheckboxesProps> = ({ name, label, options }) 
         </CheckboxContainer>
       ))}
 
-      {error && <ErrorMessage errors={form.errors} name={name!} as={CheckboxesError} />}
+      {error && <ErrorMessage errors={form.errors} name={name!} as={<CheckboxesError />} />}
     </CheckboxesWrapper>
   );
 };

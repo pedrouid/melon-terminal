@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import BigNumber from 'bignumber.js';
 import { useForm, FormContext } from 'react-hook-form';
 import * as Yup from 'yup';
@@ -25,11 +25,14 @@ import { OrderbookItem } from '../FundOrderbook/utils/aggregatedOrderbook';
 import { BlockActions } from '~/storybook/components/Block/Block';
 import { NotificationBar, NotificationContent } from '~/storybook/components/NotificationBar/NotificationBar';
 import { toTokenBaseUnit } from '~/utils/toTokenBaseUnit';
+import { Holding } from '@melonproject/melongql';
+import { fromTokenBaseUnit } from '~/utils/fromTokenBaseUnit';
 
 export interface FundOrderbookLimitFormProps {
   address: string;
   asset: TokenDefinition;
   exchanges: ExchangeDefinition[];
+  holdings: Holding[];
   order?: OrderbookItem;
   unsetOrder: () => void;
 }
@@ -52,7 +55,13 @@ export const FundOrderbookLimitForm: React.FC<FundOrderbookLimitFormProps> = pro
 
   const base = props.asset;
   const quote = environment.getToken('WETH');
-  const total = props.order?.quantity.multipliedBy(props.order?.price);
+  const holdings = props.holdings;
+  const order = props.order;
+  const total = order?.quantity.multipliedBy(order?.price ?? new BigNumber('NaN')) ?? new BigNumber('NaN');
+
+  // TODO: These refs are used for validation. Fix this after https://github.com/react-hook-form/react-hook-form/pull/817
+  const holdingsRef = useRef(holdings);
+  const baseRef = useRef(base);
 
   const form = useForm<FundOrderbookLimitFormValues>({
     mode: 'onChange',
@@ -64,26 +73,58 @@ export const FundOrderbookLimitForm: React.FC<FundOrderbookLimitFormProps> = pro
       quantity: Yup.string()
         .required('Missing quantity.')
         // tslint:disable-next-line
-        .test('valid-number', 'The given value is not a valid number.', function(value) {
+        .test('valid-number', 'The given value is not a valid number.', value => {
           const bn = new BigNumber(value);
           return !bn.isNaN() && bn.isPositive();
+        })
+        .test('balance-exceeded', 'Available balance exceeded.', value => {
+          const values = form.getValues();
+          if (values.direction === 'sell') {
+            const holdings = holdingsRef.current;
+            const asset = baseRef.current;
+            const holding = holdings.find(holding => holding.token?.symbol === asset.symbol);
+            const available = fromTokenBaseUnit(holding?.amount ?? new BigNumber(0), holding?.token?.decimals ?? 18);
+            return available.isGreaterThanOrEqualTo(value);
+          }
+
+          return true;
         }),
       price: Yup.string()
         .required('Missing price.')
         // tslint:disable-next-line
-        .test('valid-number', 'The given value is not a valid number.', function(value) {
+        .test('valid-number', 'The given value is not a valid number.', value => {
           const bn = new BigNumber(value);
           return !bn.isNaN() && bn.isPositive();
         }),
+      total: Yup.string()
+        .required('Missing total.')
+        .test('balance-exceeded', 'Available balance exceeded.', value => {
+          const values = form.getValues();
+          if (values.direction === 'buy') {
+            const holdings = holdingsRef.current;
+            const holding = holdings.find(holding => holding.token?.symbol === quote.symbol);
+            const available = fromTokenBaseUnit(holding?.amount ?? new BigNumber(0), holding?.token?.decimals ?? 18);
+            return available.isGreaterThanOrEqualTo(value);
+          }
+
+          return true;
+        }),
     }),
     defaultValues: {
-      direction: props.order?.side === 'bid' ? 'sell' : 'buy',
-      quantity: !props.order?.quantity?.isNaN() ? props.order?.quantity.decimalPlaces(4).toString() : '',
-      price: !props.order?.price?.isNaN() ? props.order?.price.decimalPlaces(4).toString() : '',
-      total: !total?.isNaN() ? total?.decimalPlaces(4).toString() : '',
-      exchange: props.order?.exchange ?? undefined,
+      direction: order?.side === 'bid' ? 'sell' : 'buy',
+      quantity: !order?.quantity?.isNaN() ? order?.quantity.toString() : '',
+      price: !order?.price?.isNaN() ? order?.price.toString() : '',
+      total: !total?.isNaN() ? total?.toString() : '',
+      exchange: order?.exchange ?? undefined,
     },
   });
+
+  useEffect(() => {
+    holdingsRef.current = holdings;
+    baseRef.current = base;
+
+    form.triggerValidation(['quantity', 'total']).catch(() => {});
+  }, [holdings, base, form.watch('direction')]);
 
   const submit = form.handleSubmit(async data => {
     const hub = new Hub(environment, props.address);
@@ -162,7 +203,9 @@ export const FundOrderbookLimitForm: React.FC<FundOrderbookLimitFormProps> = pro
 
     const quantity = toBigNumber(change);
     const total = quantity.multipliedBy(currentPrice);
-    form.setValue('total', !total.isNaN() ? total.decimalPlaces(4).toString() : '');
+
+    form.setValue('total', !total.isNaN() ? total.toString() : '');
+    form.triggerValidation().catch(() => {});
   };
 
   const changePrice = (change: BigNumber.Value) => {
@@ -170,7 +213,9 @@ export const FundOrderbookLimitForm: React.FC<FundOrderbookLimitFormProps> = pro
 
     const price = toBigNumber(change);
     const total = price.multipliedBy(currentQuantity);
-    form.setValue('total', !total.isNaN() ? total.decimalPlaces(4).toString() : '');
+
+    form.setValue('total', !total.isNaN() ? total.toString() : '');
+    form.triggerValidation().catch(() => {});
   };
 
   const changeTotal = (change: BigNumber.Value) => {
@@ -178,17 +223,17 @@ export const FundOrderbookLimitForm: React.FC<FundOrderbookLimitFormProps> = pro
 
     const total = toBigNumber(change);
     const quantity = total.dividedBy(currentPrice);
-    form.setValue('quantity', !quantity.isNaN() ? quantity.decimalPlaces(4).toString() : '');
+
+    form.setValue('quantity', !quantity.isNaN() ? quantity.toString() : '');
+    form.triggerValidation().catch(() => {});
   };
 
   const ready = form.formState.isValid;
-  const description =
-    ready &&
-    `Limit order: ${currentDirection === 'buy' ? 'Buy' : 'Sell'} ${currentQuantity.decimalPlaces(4).toString()} ${
-      base.symbol
-    } at a price of ${currentPrice.decimalPlaces(4).toString()} ${quote.symbol} per ${
-      base.symbol
-    } for a total of ${currentTotal.decimalPlaces(4).toString()} ${quote.symbol}`;
+  const description = `Limit order: ${currentDirection === 'buy' ? 'Buy' : 'Sell'} ${currentQuantity
+    .decimalPlaces(4)
+    .toString()} ${base.symbol} at a price of ${currentPrice.decimalPlaces(4).toString()} ${quote.symbol} per ${
+    base.symbol
+  } for a total of ${currentTotal.decimalPlaces(4).toString()} ${quote.symbol}`;
 
   return (
     <>
@@ -196,18 +241,21 @@ export const FundOrderbookLimitForm: React.FC<FundOrderbookLimitFormProps> = pro
         <form onSubmit={submit}>
           <Dropdown name="direction" label="Direction" options={directions} />
           <Dropdown name="exchange" label="Exchange" options={exchanges} />
+
           <Input
             type="text"
             name="quantity"
             label={`Quantity (${base.symbol})`}
             onChange={event => changeQuantity(event.target.value)}
           />
+
           <Input
             type="text"
             name="price"
             label={`Price (${quote.symbol} per ${base.symbol})`}
             onChange={event => changePrice(event.target.value)}
           />
+
           <Input
             type="text"
             name="total"

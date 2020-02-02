@@ -67,7 +67,7 @@ export const Textarea: React.FC<TextareaProps> = ({ name, label, rows, cols, ...
     <TextareaWrapper>
       {label && <TextareaLabel>{label}</TextareaLabel>}
       <TextareaInput {...rest} name={name} error={error} ref={ref} cols={cols || 30} rows={rows || 5} />;
-      {error && <ErrorMessage errors={form.errors} name={name!} as={TextareaError} />}
+      {error && <ErrorMessage errors={form.errors} name={name!} as={<TextareaError />} />}
     </TextareaWrapper>
   );
 };

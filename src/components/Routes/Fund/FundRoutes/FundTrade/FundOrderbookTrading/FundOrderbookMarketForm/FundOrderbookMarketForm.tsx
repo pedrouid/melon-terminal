@@ -13,6 +13,7 @@ import {
   OasisDexExchange,
   ZeroExV2TradingAdapter,
   toBigNumber,
+  ZeroExV3TradingAdapter,
 } from '@melonproject/melonjs';
 import { useOnChainQueryRefetcher } from '~/hooks/useOnChainQueryRefetcher';
 import { Dropdown } from '~/storybook/components/Dropdown/Dropdown';
@@ -25,12 +26,15 @@ import { useForm, FormContext } from 'react-hook-form';
 import { BlockActions } from '~/storybook/components/Block/Block';
 import { toTokenBaseUnit } from '~/utils/toTokenBaseUnit';
 import { NotificationBar, NotificationContent } from '~/storybook/components/NotificationBar/NotificationBar';
+import { Holding } from '@melonproject/melongql';
 import BigNumber from 'bignumber.js';
+import { fromTokenBaseUnit } from '~/utils/fromTokenBaseUnit';
 
 export interface FundOrderbookMarketFormProps {
   address: string;
   asset: TokenDefinition;
   exchanges: ExchangeDefinition[];
+  holdings: Holding[];
   order?: OrderbookItem;
   unsetOrder: () => void;
 }
@@ -45,10 +49,8 @@ export const FundOrderbookMarketForm: React.FC<FundOrderbookMarketFormProps> = p
   const account = useAccount()!;
   const refetch = useOnChainQueryRefetcher();
   const transaction = useTransaction(environment, {
-    onFinish: receipt => {
-      props.unsetOrder();
-      return refetch(receipt.blockNumber);
-    },
+    onFinish: receipt => refetch(receipt.blockNumber),
+    onAcknowledge: () => props.unsetOrder(),
   });
 
   const exchanges = props.exchanges.map(item => ({
@@ -69,6 +71,25 @@ export const FundOrderbookMarketForm: React.FC<FundOrderbookMarketFormProps> = p
     },
   ];
 
+  const quote = environment.getToken('WETH');
+  const base = props.asset;
+  const order = props.order;
+  const holdings = props.holdings;
+  const price = props.order?.price ?? new BigNumber('NaN');
+
+  // TODO: These refs are used for validation. Fix this after https://github.com/react-hook-form/react-hook-form/pull/817
+  const orderRef = useRef(order);
+  const holdingsRef = useRef(holdings);
+  const baseRef = useRef(base);
+
+  useEffect(() => {
+    holdingsRef.current = holdings;
+    orderRef.current = order;
+    baseRef.current = base;
+
+    form.triggerValidation().catch(() => {});
+  }, [holdings, order, base]);
+
   const form = useForm<FundOrderbookMarketFormValues>({
     mode: 'onChange',
     defaultValues: {
@@ -78,48 +99,53 @@ export const FundOrderbookMarketForm: React.FC<FundOrderbookMarketFormProps> = p
     validationSchema: Yup.object().shape({
       quantity: Yup.string()
         .required('Missing quantity.')
-        // tslint:disable-next-line
-        .test('valid-number', 'The given value is not a valid number.', function(value) {
+        .test('valid-number', 'The given value is not a valid number.', value => {
           const bn = new BigNumber(value);
           return !bn.isNaN() && bn.isPositive();
+        })
+        .test('max-quantity', 'Maximum quantity exceeded.', value => {
+          const quantity = orderRef.current?.quantity;
+          return new BigNumber(value).isLessThanOrEqualTo(quantity ?? new BigNumber(0));
+        })
+        .test('balance-exceeded', 'Available balance exceeded.', value => {
+          const order = orderRef.current;
+          if (order?.side === 'bid') {
+            const holdings = holdingsRef.current;
+            const asset = baseRef.current;
+            const holding = holdings.find(holding => holding.token?.symbol === asset.symbol);
+            const available = fromTokenBaseUnit(holding?.amount ?? new BigNumber(0), holding?.token?.decimals ?? 18);
+            return new BigNumber(value).isLessThanOrEqualTo(available);
+          }
+
+          return true;
         }),
+      total: Yup.string()
+        .required('Missing total.')
+        .test('max-total', 'Maximum total exceeded.', value => {
+          const total = orderRef.current?.quantity.multipliedBy(orderRef.current!.price);
+          return new BigNumber(value).isLessThanOrEqualTo(total ?? new BigNumber(0));
+        })
+        .test('balance-exceeded', 'Available balance exceeded.', value => {
+          const order = orderRef.current;
+          if (order?.side === 'ask') {
+            const holdings = holdingsRef.current;
+            const holding = holdings.find(holding => holding.token?.symbol === quote.symbol);
+            const available = fromTokenBaseUnit(holding?.amount ?? new BigNumber(0), holding?.token?.decimals ?? 18);
+            return new BigNumber(value).isLessThanOrEqualTo(available);
+          }
 
-      // .test('max', 'Maximum quantity exceeded', value => {
-      //   if (!quantityRef.current) {
-      //     return false;
-      //   }
-
-      //   return quantityRef.current!.isGreaterThanOrEqualTo(value);
-      // }),
-      total: Yup.string().required(),
-      // .test('max', 'Maximum quantity exceeded', value => {
-      //   if (!quantityRef.current) {
-      //     return false;
-      //   }
-
-      //   return quantityRef.current!.isGreaterThanOrEqualTo(value);
-      // }),
+          return true;
+        }),
     }),
   });
-
-  const base = props.asset;
-  const order = props.order;
-  const quote = environment.getToken('WETH');
-  const price = props.order?.price ?? new BigNumber('NaN');
-
-  // The refs are used for form validation.
-  const quantityRef = useRef(order?.quantity);
-  const totalRef = useRef(order?.quantity.multipliedBy(price));
 
   useEffect(() => {
     const quantity = order?.quantity ?? new BigNumber('NaN');
     const total = quantity.multipliedBy(price);
 
-    quantityRef.current = quantity;
-    totalRef.current = total;
-
     form.setValue('quantity', !quantity.isNaN() ? quantity.toString() : '');
     form.setValue('total', !total.isNaN() ? total.toString() : '');
+    form.triggerValidation().catch(() => {});
   }, [order]);
 
   const submit = form.handleSubmit(async values => {
@@ -147,24 +173,34 @@ export const FundOrderbookMarketForm: React.FC<FundOrderbookMarketFormProps> = p
       const tx = adapter.takeOrder(account.address!, order!.order, quantity);
       return transaction.start(tx, 'Take order');
     }
+
+    if (order!.exchange === ExchangeIdentifier.ZeroExV3) {
+      const adapter = await ZeroExV3TradingAdapter.create(environment, exchange.exchange, trading);
+      const tx = adapter.takeOrder(account.address!, order!.order, quantity);
+      return transaction.start(tx, 'Take order');
+    }
   });
 
   const quantity = toBigNumber(form.watch('quantity'));
   const total = toBigNumber(form.watch('total'));
 
-  const changeQuantity = (change: BigNumber.Value) => {
+  const changeQuantity = async (change: BigNumber.Value) => {
     const quantity = toBigNumber(change);
     const total = quantity.multipliedBy(price);
-    form.setValue('total', !total.isNaN() ? total.decimalPlaces(4).toString() : '');
+
+    form.setValue('total', !total.isNaN() ? total.toString() : '', true);
+    form.triggerValidation().catch(() => {});
   };
 
-  const changeTotal = (change: BigNumber.Value) => {
+  const changeTotal = async (change: BigNumber.Value) => {
     const total = toBigNumber(change);
     const quantity = total.dividedBy(price);
-    form.setValue('quantity', !quantity.isNaN() ? quantity.decimalPlaces(4).toString() : '');
+
+    form.setValue('quantity', !quantity.isNaN() ? quantity.toString() : '', true);
+    form.triggerValidation().catch(() => {});
   };
 
-  const ready = !price.isNaN() && !quantity.isNaN() && !total.isNaN();
+  const ready = form.formState.isValid;
   const description =
     ready &&
     `Market order: ${direction === 'buy' ? 'Buy' : 'Sell'} ${quantity.decimalPlaces(4).toString()} ${
@@ -179,19 +215,22 @@ export const FundOrderbookMarketForm: React.FC<FundOrderbookMarketFormProps> = p
         <form onSubmit={submit}>
           <Dropdown name="direction" label="Buy or sell" options={directions} disabled={true} value={direction} />
           <Dropdown name="exchange" label="Exchange" options={exchanges} disabled={true} value={exchange} />
+
           <Input
             type="text"
             name="quantity"
             label={`Quantity (${base.symbol})`}
             onChange={event => changeQuantity(event.target.value)}
           />
+
           <Input
             type="text"
             name="price"
             label={`Price (${quote.symbol} per ${base.symbol})`}
             disabled={true}
-            value={price.decimalPlaces(4).toString()}
+            value={price.toString()}
           />
+
           <Input
             type="text"
             name="total"
@@ -213,7 +252,11 @@ export const FundOrderbookMarketForm: React.FC<FundOrderbookMarketFormProps> = p
         </form>
       )}
 
-      {!order && <>Please select an order.</>}
+      {!order && (
+        <NotificationBar kind="neutral">
+          <NotificationContent>Please choose an order from the market.</NotificationContent>
+        </NotificationBar>
+      )}
 
       <TransactionModal transaction={transaction} />
     </FormContext>

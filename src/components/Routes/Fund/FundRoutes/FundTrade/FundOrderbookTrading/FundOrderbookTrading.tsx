@@ -75,6 +75,7 @@ export const FundOrderbookTrading: React.FC<FundOrderbookTradingProps> = props =
               asset={asset}
               order={order}
               unsetOrder={() => setOrder(undefined)}
+              holdings={props.holdings}
               exchanges={props.exchanges}
             />
           )}
@@ -85,6 +86,7 @@ export const FundOrderbookTrading: React.FC<FundOrderbookTradingProps> = props =
               asset={asset}
               order={order}
               unsetOrder={() => setOrder(undefined)}
+              holdings={props.holdings}
               exchanges={props.exchanges}
             />
           )}
