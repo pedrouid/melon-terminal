@@ -1,6 +1,11 @@
 import ApolloClient from 'apollo-client';
 import { useContext } from 'react';
-import { useQuery, QueryHookOptions as BaseQueryHookOptions } from '@apollo/react-hooks';
+import {
+  useQuery,
+  useLazyQuery,
+  QueryHookOptions as BaseQueryHookOptions,
+  LazyQueryHookOptions as BaseQueryLazyHookOptions,
+} from '@apollo/react-hooks';
 import { OperationVariables, QueryResult } from '@apollo/react-common';
 import { DocumentNode } from 'graphql';
 import { NormalizedCacheObject } from 'apollo-cache-inmemory';
@@ -8,7 +13,12 @@ import { TheGraphApollo, OnChainApollo } from '~/components/Contexts/Apollo/Apol
 import { Schema } from '@melonproject/melongql';
 
 export type QueryHookOptions<TData = any, TVariables = OperationVariables> = BaseQueryHookOptions<TData, TVariables>;
+export type QueryLazyHookOptions<TData = any, TVariables = OperationVariables> = BaseQueryLazyHookOptions<
+  TData,
+  TVariables
+>;
 export type OnChainQueryHookOptions<TVariables = OperationVariables> = QueryHookOptions<Schema, TVariables>;
+export type OnChainQueryLazyHookOptions<TVariables = OperationVariables> = QueryLazyHookOptions<Schema, TVariables>;
 export type OnChainQueryResult<TVariables = OperationVariables> = QueryResult<Schema, TVariables>;
 
 export const useContextQuery = <TData = any, TVariables = OperationVariables>(
@@ -17,6 +27,17 @@ export const useContextQuery = <TData = any, TVariables = OperationVariables>(
   options?: QueryHookOptions<TData, TVariables>
 ): QueryResult<TData, TVariables> => {
   return useQuery(query, {
+    ...options,
+    client: context,
+  });
+};
+
+export const useLazyContextQuery = <TData = any, TVariables = OperationVariables>(
+  context: ApolloClient<NormalizedCacheObject>,
+  query: DocumentNode,
+  options?: QueryLazyHookOptions<TData, TVariables>
+) => {
+  return useLazyQuery(query, {
     ...options,
     client: context,
   });
@@ -32,6 +53,14 @@ export const useOnChainQuery = <TVariables = OperationVariables>(
 ): OnChainQueryResult<TVariables> => {
   const client = useOnChainClient();
   return useContextQuery<Schema, TVariables>(client, query, options);
+};
+
+export const useLazyOnChainQuery = <TVariables = OperationVariables>(
+  query: DocumentNode,
+  options?: OnChainQueryLazyHookOptions<TVariables>
+) => {
+  const client = useOnChainClient();
+  return useLazyContextQuery<Schema, TVariables>(client, query, options);
 };
 
 export const useTheGraphClient = () => {
