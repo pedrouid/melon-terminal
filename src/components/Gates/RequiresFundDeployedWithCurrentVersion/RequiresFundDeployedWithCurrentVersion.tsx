@@ -17,10 +17,10 @@ export const RequiresFundDeployedWithCurrentVersion: React.FC<RequiresFundDeploy
   fallback = true,
 }) => {
   const [fundVersion, fundVersionQuery] = useFundVersionQuery(address);
+  const [currentVersion, currentVersionQuery] = useVersionQuery(environment.deployment.melon.addr.Version);
   const environment = useEnvironment()!;
-  const [currentVersion] = useVersionQuery(environment.deployment.melon.addr.Version);
 
-  if (fundVersionQuery.loading) {
+  if (fundVersionQuery.loading || currentVersionQuery.loading) {
     return loader || null;
   }
 
