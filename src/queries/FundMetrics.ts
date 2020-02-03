@@ -1,16 +1,17 @@
 import gql from 'graphql-tag';
 import { useTheGraphQuery } from '~/hooks/useQuery';
 
-export interface FundMetrics {
-  funds: {
-    id: string;
-  }[];
-  investorCounts: {
-    numberOfInvestors: number;
-  }[];
-  melonNetworkHistories: {
+export interface FundMetricsResult {
+  melonNetworkHistories?: {
     gav: number;
-  }[];
+  };
+  investorCounts?: {
+    numberOfInvestors: number;
+  };
+  fundCounts?: {
+    active: number;
+    nonActive: number;
+  };
 }
 
 const FundMetricsQuery = gql`
@@ -18,17 +19,17 @@ const FundMetricsQuery = gql`
     melonNetworkHistories(orderBy: timestamp, orderDirection: desc, first: 1) {
       gav
     }
-    investorCounts(orderBy: timestamp, first: 1000, orderDirection: desc) {
+    investorCounts(orderBy: timestamp, orderDirection: desc, first: 1) {
       numberOfInvestors
     }
-    funds(first: 1000) {
-      id
+    fundCounts(orderBy: timestamp, orderDirection: desc, first: 1) {
+      active
+      nonActive
     }
   }
 `;
 
 export const useFundMetricsQuery = () => {
   const result = useTheGraphQuery(FundMetricsQuery);
-
-  return [result.data, result] as [FundMetrics, typeof result];
+  return [result.data, result] as [typeof result.data, typeof result];
 };
