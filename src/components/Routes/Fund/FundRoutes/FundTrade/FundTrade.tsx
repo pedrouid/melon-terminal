@@ -39,13 +39,13 @@ export const FundTrade: React.FC<FundTradeProps> = ({ address }) => {
             <RequiresFundNotShutDown fallback={false}>
               <GridRow>
                 {!!markets.length && (
-                  <GridCol xs={12} md={6}>
+                  <GridCol xs={12} md={!!providers.length ? 6 : 12}>
                     <FundOrderbookTrading address={address} exchanges={markets} holdings={holdings} />
                   </GridCol>
                 )}
 
                 {!!providers.length && (
-                  <GridCol xs={12} md={6}>
+                  <GridCol xs={12} md={!!markets.length ? 6 : 12}>
                     <FundLiquidityProviderTrading address={address} exchanges={providers} holdings={holdings} />
                   </GridCol>
                 )}

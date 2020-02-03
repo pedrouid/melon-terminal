@@ -12,6 +12,7 @@ import { FundKyberTrading } from './FundKyberTrading/FundKyberTrading';
 import { FundUniswapTrading } from './FundUniswapTrading/FundUniswapTrading';
 import { Block } from '~/storybook/components/Block/Block';
 import { SectionTitle } from '~/storybook/components/Title/Title';
+import { GridRow, GridCol } from '~/storybook/components/Grid/Grid';
 
 export interface FundLiquidityProviderTradingProps {
   address: string;
@@ -75,9 +76,19 @@ export const FundLiquidityProviderTrading: React.FC<FundLiquidityProviderTrading
       <SectionTitle>Liquidity pool trading</SectionTitle>
 
       <FormContext {...form}>
-        <Dropdown name="takerAsset" label="Sell asset" options={options} />
-        <Dropdown name="makerAsset" label="Buy asset" options={options} />
-        <Input type="number" step="any" name="takerQuantity" label="Sell quantity" />
+        <GridRow>
+          <GridCol xs={12} sm={6}>
+            <Dropdown name="takerAsset" label="Sell asset" options={options} />
+          </GridCol>
+          <GridCol xs={12} sm={6}>
+            <Dropdown name="makerAsset" label="Buy asset" options={options} />
+          </GridCol>
+        </GridRow>
+        <GridRow>
+          <GridCol>
+            <Input type="number" step="any" name="takerQuantity" label="Sell quantity" />
+          </GridCol>
+        </GridRow>
       </FormContext>
 
       {ready &&
