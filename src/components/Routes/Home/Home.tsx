@@ -2,7 +2,6 @@ import React, { useState, useMemo, useEffect } from 'react';
 import { useHistory } from 'react-router';
 import { Link } from 'react-router-dom';
 import { Spinner } from '~/storybook/components/Spinner/Spinner';
-import { NoMatch } from '~/components/Routes/NoMatch/NoMatch';
 import { FundOverviewPagination } from '~/components/Routes/Home/FundOverviewPagination/FundOverviewPagination';
 import { useFundOverviewQuery, FundProcessed } from '~/queries/FundOverview';
 import { usePagination } from '~/hooks/usePagination';
@@ -35,6 +34,7 @@ import {
   CheckboxIcon,
 } from '~/storybook/components/Checkbox/Checkbox';
 import styled from 'styled-components';
+import { FundMetrics } from './FundMetrics/FundMetrics';
 
 interface SortChoice {
   key: keyof typeof sortChoice;
@@ -224,6 +224,7 @@ export const Home: React.FC = () => {
   return (
     <Container>
       <Grid>
+        <FundMetrics />
         <GridRow>
           <GridCol>
             <Block>
