@@ -26,6 +26,7 @@ import GANACHE from './svg/wallet/ganache.svg';
 import TWITTER from './svg/socialNetwork/twitter.svg';
 import LEFTARROW from './svg/leftArrow.svg';
 import SWAPARROWS from './svg/swapArrows.svg';
+import EXCHANGE from './svg/exchange.svg';
 import * as S from './Icons.styles';
 
 const availableIcons = {
@@ -56,6 +57,7 @@ const availableIcons = {
   TWITTER,
   LEFTARROW,
   SWAPARROWS,
+  EXCHANGE,
 };
 
 export type IconName = keyof typeof availableIcons;

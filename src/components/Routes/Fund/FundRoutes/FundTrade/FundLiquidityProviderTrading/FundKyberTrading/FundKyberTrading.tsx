@@ -17,12 +17,12 @@ import { TransactionModal } from '~/components/Common/TransactionModal/Transacti
 import { toTokenBaseUnit } from '~/utils/toTokenBaseUnit';
 import { fromTokenBaseUnit } from '~/utils/fromTokenBaseUnit';
 import { Holding } from '@melonproject/melongql';
-import { Block, BlockActions } from '~/storybook/components/Block/Block';
-import { SectionTitle } from '~/storybook/components/Title/Title';
+import { Title } from '~/storybook/components/Title/Title';
 import { Input } from '~/storybook/components/Input/Input';
 import { FormattedNumber } from '~/components/Common/FormattedNumber/FormattedNumber';
 import { Button } from '~/storybook/components/Button/Button';
 import { catchError, switchMap, map } from 'rxjs/operators';
+import { GridRow, GridCol } from '~/storybook/components/Grid/Grid';
 
 export interface FundKyberTradingProps {
   address: string;
@@ -108,23 +108,35 @@ export const FundKyberTrading: React.FC<FundKyberTradingProps> = props => {
   };
 
   return (
-    <Block>
-      <SectionTitle>Kyber network</SectionTitle>
-
-      <Input type="text" label="Buy quantity" value={valid ? value.toFixed(4) : ''} disabled={true} />
-
-      <div>
-        Rate: <FormattedNumber value="1" suffix={state.taker.symbol} /> ={' '}
-        <FormattedNumber value={state.rate} suffix={state.maker.symbol} />
-      </div>
-
-      <BlockActions>
-        <Button type="button" disabled={!ready} loading={loading} onClick={submit}>
-          Submit
-        </Button>
-      </BlockActions>
-
+    <>
+      <GridRow>
+        <GridCol justify="center">
+          <Title>Kyber network</Title>
+        </GridCol>
+        <GridCol justify="center" align="center">
+          <Input
+            type="text"
+            margin={false}
+            placeholder="Buy quantity"
+            value={valid ? value.toFixed(4) : ''}
+            disabled={true}
+          />
+        </GridCol>
+        <GridCol align="flex-end">
+          <Button type="button" disabled={!ready} loading={loading} onClick={submit}>
+            Submit
+          </Button>
+        </GridCol>
+      </GridRow>
+      <GridRow>
+        <GridCol>
+          <span>
+            Rate: <FormattedNumber value="1" suffix={state.taker.symbol} /> ={' '}
+            <FormattedNumber value={state.rate} suffix={state.maker.symbol} />
+          </span>
+        </GridCol>
+      </GridRow>
       <TransactionModal transaction={transaction} />
-    </Block>
+    </>
   );
 };

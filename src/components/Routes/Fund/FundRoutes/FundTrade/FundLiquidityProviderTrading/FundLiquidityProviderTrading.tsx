@@ -3,7 +3,7 @@ import BigNumber from 'bignumber.js';
 import * as Yup from 'yup';
 import { useForm, FormContext } from 'react-hook-form';
 import { Holding } from '@melonproject/melongql';
-import { TokenDefinition, ExchangeDefinition, sameAddress, ExchangeIdentifier } from '@melonproject/melonjs';
+import { TokenDefinition, ExchangeDefinition, ExchangeIdentifier } from '@melonproject/melonjs';
 import { useEnvironment } from '~/hooks/useEnvironment';
 import { Dropdown } from '~/storybook/components/Dropdown/Dropdown';
 import { Input } from '~/storybook/components/Input/Input';
@@ -13,6 +13,8 @@ import { FundUniswapTrading } from './FundUniswapTrading/FundUniswapTrading';
 import { Block } from '~/storybook/components/Block/Block';
 import { SectionTitle } from '~/storybook/components/Title/Title';
 import { GridRow, GridCol } from '~/storybook/components/Grid/Grid';
+import { Icons } from '~/storybook/components/Icons/Icons';
+import * as S from './FundLiquidityProviderTrading.styles';
 
 export interface FundLiquidityProviderTradingProps {
   address: string;
@@ -71,72 +73,85 @@ export const FundLiquidityProviderTrading: React.FC<FundLiquidityProviderTrading
   const takerQuantity = new BigNumber(form.watch('takerQuantity'));
   const ready = form.formState.isValid;
 
+  const switchExchange = () => {
+    const values = form.getValues();
+
+    form.setValue('makerAsset', values.takerAsset);
+    form.setValue('takerAsset', values.makerAsset);
+  };
+
   return (
     <Block>
       <SectionTitle>Liquidity pool trading</SectionTitle>
 
       <FormContext {...form}>
         <GridRow>
-          <GridCol xs={12} sm={6}>
+          <GridCol xs={12} sm={4}>
             <Dropdown name="takerAsset" label="Sell asset" options={options} />
           </GridCol>
-          <GridCol xs={12} sm={6}>
+          <GridCol xs={12} sm={4} align="center">
+            <S.ExchangeContainer onClick={switchExchange}>
+              <Icons name="EXCHANGE" />
+            </S.ExchangeContainer>
+          </GridCol>
+          <GridCol xs={12} sm={4}>
             <Dropdown name="makerAsset" label="Buy asset" options={options} />
           </GridCol>
         </GridRow>
-        <GridRow>
-          <GridCol>
+        <GridRow justify={{ sm: 'space-between' }}>
+          <GridCol xs={12} sm={3}>
             <Input type="number" step="any" name="takerQuantity" label="Sell quantity" />
+          </GridCol>
+          <GridCol xs={12} sm={6}>
+            {ready &&
+              props.exchanges.map(exchange => {
+                if (exchange.id === ExchangeIdentifier.KyberNetwork) {
+                  return (
+                    <FundKyberTrading
+                      key={exchange.id}
+                      address={props.address}
+                      holdings={props.holdings}
+                      exchange={exchange}
+                      maker={makerAsset}
+                      taker={takerAsset}
+                      quantity={takerQuantity}
+                    />
+                  );
+                }
+
+                if (exchange.id === ExchangeIdentifier.MelonEngine) {
+                  return (
+                    <FundMelonEngineTrading
+                      key={exchange.id}
+                      address={props.address}
+                      holdings={props.holdings}
+                      exchange={exchange}
+                      maker={makerAsset}
+                      taker={takerAsset}
+                      quantity={takerQuantity}
+                    />
+                  );
+                }
+
+                if (exchange.id === ExchangeIdentifier.Uniswap) {
+                  return (
+                    <FundUniswapTrading
+                      key={exchange.id}
+                      address={props.address}
+                      holdings={props.holdings}
+                      exchange={exchange}
+                      maker={makerAsset}
+                      taker={takerAsset}
+                      quantity={takerQuantity}
+                    />
+                  );
+                }
+
+                return null;
+              })}
           </GridCol>
         </GridRow>
       </FormContext>
-
-      {ready &&
-        props.exchanges.map(exchange => {
-          if (exchange.id === ExchangeIdentifier.KyberNetwork) {
-            return (
-              <FundKyberTrading
-                key={exchange.id}
-                address={props.address}
-                holdings={props.holdings}
-                exchange={exchange}
-                maker={makerAsset}
-                taker={takerAsset}
-                quantity={takerQuantity}
-              />
-            );
-          }
-
-          if (exchange.id === ExchangeIdentifier.MelonEngine) {
-            return (
-              <FundMelonEngineTrading
-                key={exchange.id}
-                address={props.address}
-                holdings={props.holdings}
-                exchange={exchange}
-                maker={makerAsset}
-                taker={takerAsset}
-                quantity={takerQuantity}
-              />
-            );
-          }
-
-          if (exchange.id === ExchangeIdentifier.Uniswap) {
-            return (
-              <FundUniswapTrading
-                key={exchange.id}
-                address={props.address}
-                holdings={props.holdings}
-                exchange={exchange}
-                maker={makerAsset}
-                taker={takerAsset}
-                quantity={takerQuantity}
-              />
-            );
-          }
-
-          return null;
-        })}
     </Block>
   );
 };

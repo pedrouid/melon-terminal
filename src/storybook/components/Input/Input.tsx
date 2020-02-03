@@ -4,9 +4,10 @@ import * as S from './Input.styles';
 
 export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string;
+  margin?: boolean;
 }
 
-export const Input: React.FC<InputProps> = ({ name, label, type, ...rest }) => {
+export const Input: React.FC<InputProps> = ({ name, label, margin = true, type, ...rest }) => {
   const form = useFormContext();
 
   if (type === 'hidden') {
@@ -19,7 +20,7 @@ export const Input: React.FC<InputProps> = ({ name, label, type, ...rest }) => {
   const error = !!(errors && errors[name!]);
 
   return (
-    <S.InputWrapper>
+    <S.InputWrapper margin={margin}>
       {label && <S.InputLabel>{label}</S.InputLabel>}
       <S.Input ref={ref} error={error} name={name} type={type} {...rest} />
       {error && <ErrorMessage errors={form.errors} name={name!} as={<S.InputError />} />}

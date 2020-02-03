@@ -4,8 +4,12 @@ export interface InputProps {
   error?: boolean;
 }
 
-export const InputWrapper = styled.div`
-  margin-bottom: ${props => props.theme.spaceUnits.l};
+export interface InputWrapperProps {
+  margin: boolean;
+}
+
+export const InputWrapper = styled.div<InputWrapperProps>`
+  margin-bottom: ${props => props.margin && props.theme.spaceUnits.l};
 `;
 
 export const InputLabel = styled.span`

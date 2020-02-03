@@ -9,11 +9,11 @@ import { useOnChainQueryRefetcher } from '~/hooks/useOnChainQueryRefetcher';
 import { TransactionModal } from '~/components/Common/TransactionModal/TransactionModal';
 import { useMelonEngineTradingQuery } from './FundMelonEngineTrading.query';
 import { FormattedNumber } from '~/components/Common/FormattedNumber/FormattedNumber';
-import { BlockActions, Block } from '~/storybook/components/Block/Block';
-import { SectionTitle } from '~/storybook/components/Title/Title';
+import { Title } from '~/storybook/components/Title/Title';
 import { Holding } from '@melonproject/melongql';
 import { toTokenBaseUnit } from '~/utils/toTokenBaseUnit';
 import { useAccount } from '~/hooks/useAccount';
+import { GridRow, GridCol } from '~/storybook/components/Grid/Grid';
 
 export interface FundMelonEngineTradingProps {
   address: string;
@@ -57,36 +57,44 @@ export const FundMelonEngineTrading: React.FC<FundMelonEngineTradingProps> = pro
   };
 
   return (
-    <Block>
-      <SectionTitle>Melon engine</SectionTitle>
-      <Input
-        type="text"
-        label="Buy quantity"
-        value={
-          !loading && !value.isNaN() && value.isLessThanOrEqualTo(liquid.dividedBy('1e18')) ? value.toFixed(4) : ''
-        }
-        disabled={true}
-      />
+    <>
+      <GridRow>
+        <GridCol justify="center">
+          <Title>Melon engine</Title>
+        </GridCol>
+        <GridCol justify="center" align="center">
+          <Input
+            margin={false}
+            type="text"
+            placeholder="Buy quantity"
+            value={
+              !loading && !value.isNaN() && value.isLessThanOrEqualTo(liquid.dividedBy('1e18')) ? value.toFixed(4) : ''
+            }
+            disabled={true}
+          />
+        </GridCol>
+        <GridCol align="flex-end">
+          <Button type="button" disabled={loading} loading={loading} onClick={submit}>
+            Submit
+          </Button>
+        </GridCol>
+      </GridRow>
+      <GridRow>
+        <GridCol>
+          {!loading && (
+            <>
+              <span>
+                Rate: <FormattedNumber value="1" suffix="MLN" /> = <FormattedNumber value={price} suffix="WETH" />
+              </span>
 
-      {!loading && (
-        <>
-          <div>
-            Rate: <FormattedNumber value="1" suffix="MLN" /> = <FormattedNumber value={price} suffix="WETH" />
-          </div>
-
-          <div>
-            Liquid ether: <FormattedNumber value={liquid.dividedBy('1e18')} suffix="WETH" />
-          </div>
-        </>
-      )}
-
-      <BlockActions>
-        <Button type="button" disabled={loading} loading={loading} onClick={submit}>
-          Submit
-        </Button>
-      </BlockActions>
-
+              <span>
+                Liquid ether: <FormattedNumber value={liquid.dividedBy('1e18')} suffix="WETH" />
+              </span>
+            </>
+          )}
+        </GridCol>
+      </GridRow>
       <TransactionModal transaction={transaction} />
-    </Block>
+    </>
   );
 };
