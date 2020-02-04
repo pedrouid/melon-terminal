@@ -10,8 +10,7 @@ import { useMelonEngineTradingQuery } from './FundMelonEngineTrading.query';
 import { Holding } from '@melonproject/melongql';
 import { toTokenBaseUnit } from '~/utils/toTokenBaseUnit';
 import { useAccount } from '~/hooks/useAccount';
-import { GridRow, GridCol } from '~/storybook/components/Grid/Grid';
-import { Title } from '~/storybook/components/Title/Title';
+import { Subtitle } from '~/storybook/components/Title/Title';
 
 export interface FundMelonEngineTradingProps {
   address: string;
@@ -38,6 +37,7 @@ export const FundMelonEngineTrading: React.FC<FundMelonEngineTradingProps> = pro
   const mln = environment.getToken('MLN');
   const weth = environment.getToken('WETH');
   const value = props.quantity.multipliedBy(price ?? new BigNumber('NaN'));
+  const valid = !value.isNaN() && !value.isLessThanOrEqualTo(liquid.dividedBy('1e18'));
   const loading = query.loading;
 
   const submit = async () => {
@@ -56,21 +56,10 @@ export const FundMelonEngineTrading: React.FC<FundMelonEngineTradingProps> = pro
 
   return (
     <>
-      <GridRow>
-        <GridCol>
-          <Title>Melon engine</Title>
-          <Button
-            type="button"
-            disabled={loading || value.isNaN() || value.isLessThanOrEqualTo(liquid.dividedBy('1e18'))}
-            loading={loading}
-            onClick={submit}
-          >
-            Buy{' '}
-            {!loading && !value.isNaN() && !value.isLessThanOrEqualTo(liquid.dividedBy('1e18')) ? value.toFixed(4) : ''}{' '}
-            WETH
-          </Button>
-        </GridCol>
-      </GridRow>
+      <Subtitle>Melon engine</Subtitle>
+      <Button type="button" disabled={loading || !valid} loading={loading} onClick={submit}>
+        {loading ? '' : valid ? `Buy ${value.toFixed(4)} ${weth.symbol}` : 'No offer'}
+      </Button>
       <TransactionModal transaction={transaction} />
     </>
   );

@@ -12,6 +12,14 @@ export const Title = styled.h1`
   white-space: nowrap;
 `;
 
+export const Subtitle = styled.h3`
+  ${TitleBase}
+  font-size: ${props => props.theme.fontSizes.l};
+  font-weight: normal;
+  border-bottom: none;
+  padding-bottom: 0;
+`;
+
 export const SectionTitle = styled.h2`
   ${TitleBase}
   font-size: ${props => props.theme.fontSizes.xl};

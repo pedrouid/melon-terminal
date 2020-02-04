@@ -12,7 +12,13 @@ export interface GridRowProps {
 }
 
 export const GridRow = styled(Row)<GridRowProps>`
-  ${props => !props.noGap && `margin-bottom: ${props.theme.spaceUnits.s}`};
+  ${props =>
+    !props.noGap &&
+    `
+    :not(:last-child) {
+      margin-bottom: ${props.theme.spaceUnits.s}
+    }
+  `};
 `;
 
 export const GridCol = styled(Col)`

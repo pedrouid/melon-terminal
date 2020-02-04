@@ -101,7 +101,7 @@ export const FundOrderbookMarketForm: React.FC<FundOrderbookMarketFormProps> = p
         .required('Missing quantity.')
         .test('valid-number', 'The given value is not a valid number.', value => {
           const bn = new BigNumber(value);
-          return !bn.isNaN() && bn.isPositive();
+          return !bn.isNaN() && !bn.isZero() && bn.isPositive();
         })
         .test('max-quantity', 'Maximum quantity exceeded.', value => {
           const quantity = orderRef.current?.quantity;

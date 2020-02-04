@@ -17,10 +17,9 @@ import { useOnChainQueryRefetcher } from '~/hooks/useOnChainQueryRefetcher';
 import { TransactionModal } from '~/components/Common/TransactionModal/TransactionModal';
 import { toTokenBaseUnit } from '~/utils/toTokenBaseUnit';
 import { Holding } from '@melonproject/melongql';
-import { Title } from '~/storybook/components/Title/Title';
+import { Subtitle } from '~/storybook/components/Title/Title';
 import { Button } from '~/storybook/components/Button/Button';
 import { catchError, switchMap, map } from 'rxjs/operators';
-import { GridRow, GridCol } from '~/storybook/components/Grid/Grid';
 
 export interface FundUniswapTradingProps {
   address: string;
@@ -130,14 +129,10 @@ export const FundUniswapTrading: React.FC<FundUniswapTradingProps> = props => {
 
   return (
     <>
-      <GridRow>
-        <GridCol>
-          <Title>Uniswap</Title>
-          <Button type="button" disabled={!ready} loading={loading} onClick={submit}>
-            Buy {valid ? value.toFixed(4) : ''} {state.maker.symbol}
-          </Button>
-        </GridCol>
-      </GridRow>
+      <Subtitle>Uniswap</Subtitle>
+      <Button type="button" disabled={!ready} loading={loading} onClick={submit}>
+        {loading ? '' : valid ? `Buy ${value.toFixed(4)} ${state.maker.symbol}` : 'No offer'}
+      </Button>
       <TransactionModal transaction={transaction} />
     </>
   );

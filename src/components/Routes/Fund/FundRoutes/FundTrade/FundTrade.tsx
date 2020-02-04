@@ -19,7 +19,7 @@ export interface FundTradeProps {
 export const FundTrade: React.FC<FundTradeProps> = ({ address }) => {
   const [exchanges, exchangesQuery] = useFundTrading(address);
   const [holdings, holdingsQuery] = useFundHoldingsQuery(address);
-  const loading = exchangesQuery.loading && holdingsQuery.loading;
+  const loading = exchangesQuery.loading || holdingsQuery.loading;
 
   const markets = exchanges.filter(exchange => {
     const supported = [ExchangeIdentifier.OasisDex, ExchangeIdentifier.ZeroExV3];

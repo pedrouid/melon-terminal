@@ -75,7 +75,7 @@ export const FundOrderbookLimitForm: React.FC<FundOrderbookLimitFormProps> = pro
         // tslint:disable-next-line
         .test('valid-number', 'The given value is not a valid number.', value => {
           const bn = new BigNumber(value);
-          return !bn.isNaN() && bn.isPositive();
+          return !bn.isNaN() && !bn.isZero() && bn.isPositive();
         })
         .test('balance-exceeded', 'Available balance exceeded.', value => {
           const values = form.getValues();
@@ -94,7 +94,7 @@ export const FundOrderbookLimitForm: React.FC<FundOrderbookLimitFormProps> = pro
         // tslint:disable-next-line
         .test('valid-number', 'The given value is not a valid number.', value => {
           const bn = new BigNumber(value);
-          return !bn.isNaN() && bn.isPositive();
+          return !bn.isNaN() && !bn.isZero() && bn.isPositive();
         }),
       total: Yup.string()
         .required('Missing total.')

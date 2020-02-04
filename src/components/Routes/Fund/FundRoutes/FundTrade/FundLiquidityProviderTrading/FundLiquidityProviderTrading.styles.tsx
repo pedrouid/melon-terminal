@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const ExchangeContainer = styled.div`
+export const SwitchButton = styled.div`
   margin: auto;
   cursor: pointer;
 `;

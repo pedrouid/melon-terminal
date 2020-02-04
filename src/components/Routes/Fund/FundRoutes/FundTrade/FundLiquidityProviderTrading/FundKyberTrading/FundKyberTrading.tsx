@@ -17,10 +17,9 @@ import { TransactionModal } from '~/components/Common/TransactionModal/Transacti
 import { toTokenBaseUnit } from '~/utils/toTokenBaseUnit';
 import { fromTokenBaseUnit } from '~/utils/fromTokenBaseUnit';
 import { Holding } from '@melonproject/melongql';
-import { Title } from '~/storybook/components/Title/Title';
+import { Subtitle } from '~/storybook/components/Title/Title';
 import { Button } from '~/storybook/components/Button/Button';
 import { catchError, switchMap, map } from 'rxjs/operators';
-import { GridRow, GridCol } from '~/storybook/components/Grid/Grid';
 
 export interface FundKyberTradingProps {
   address: string;
@@ -107,16 +106,11 @@ export const FundKyberTrading: React.FC<FundKyberTradingProps> = props => {
 
   return (
     <>
-      <GridRow>
-        <GridCol>
-          <Title>Kyber network</Title>
-          <Button type="button" disabled={!ready} loading={loading} onClick={submit}>
-            <span>
-              Buy {valid ? value.toFixed(4) : ''} {state.maker.symbol}
-            </span>
-          </Button>
-        </GridCol>
-      </GridRow>
+      <Subtitle>Kyber network</Subtitle>
+      <Button type="button" disabled={!ready} loading={loading} onClick={submit}>
+        {loading ? '' : valid ? `Buy ${value.toFixed(4)} ${state.maker.symbol}` : 'No offer'}
+      </Button>
+
       <TransactionModal transaction={transaction} />
     </>
   );
