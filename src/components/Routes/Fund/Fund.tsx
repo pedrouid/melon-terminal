@@ -25,6 +25,7 @@ const FundInvestRedeem = React.lazy(() => import('./FundRoutes/FundInvestRedeem/
 const FundTrade = React.lazy(() => import('./FundRoutes/FundTrade/FundTrade'));
 const FundPolicies = React.lazy(() => import('./FundRoutes/FundRiskProfile/FundRiskProfile'));
 const FundManagement = React.lazy(() => import('./FundRoutes/FundManagement/FundManagement'));
+const ShareFund = React.lazy(() => import('./ShareFund/ShareFund'));
 
 export interface FundRouteParams {
   address: string;
@@ -94,6 +95,7 @@ export const Fund: React.FC = () => {
                   </NotificationContent>
                 </NotificationBar>
               </RequiresNoPoliciesDeployed>
+              <ShareFund address={match.params.address} />
             </RequiresFundJustCreated>
           </RequiresFundManager>
 

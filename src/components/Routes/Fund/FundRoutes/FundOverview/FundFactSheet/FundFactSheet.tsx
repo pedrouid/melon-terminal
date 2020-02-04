@@ -116,7 +116,13 @@ export const FundFactSheet: React.FC<FundFactSheetProps> = ({ address }) => {
     <Dictionary>
       <SectionTitle>
         <span>Fund factsheet</span>
-        <TwitterLink name={fund.name} manager={isManager} />
+        <TwitterLink
+          text={
+            isManager
+              ? `Check out my on-chain fund on Melon "${name}" deployed to @ethereum and powered by @melonprotocol`
+              : `Check out this interesting on-chain fund on Melon "${name}" deployed to @ethereum and powered by @melonprotocol`
+          }
+        />
       </SectionTitle>
       <DictionaryEntry>
         <DictionaryLabel>Fund name</DictionaryLabel>
