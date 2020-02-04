@@ -30,14 +30,8 @@ export const FundMelonEngineTrading: React.FC<FundMelonEngineTradingProps> = pro
     onFinish: receipt => refetch(receipt.blockNumber),
   });
 
-  if (!(props.maker.symbol === 'WETH' && props.taker.symbol === 'MLN')) {
-    return null;
-  }
-
-  const mln = environment.getToken('MLN');
-  const weth = environment.getToken('WETH');
   const value = props.quantity.multipliedBy(price ?? new BigNumber('NaN'));
-  const valid = !value.isNaN() && !value.isLessThanOrEqualTo(liquid.dividedBy('1e18'));
+  const valid = !value.isNaN() && value.isLessThanOrEqualTo(liquid.dividedBy('1e18'));
   const loading = query.loading;
 
   const submit = async () => {
@@ -45,10 +39,10 @@ export const FundMelonEngineTrading: React.FC<FundMelonEngineTradingProps> = pro
     const trading = new Trading(environment, (await hub.getRoutes()).trading);
     const adapter = await MelonEngineTradingAdapter.create(environment, props.exchange.exchange, trading);
     const tx = adapter.takeOrder(account.address!, {
-      makerAsset: weth.address,
-      takerAsset: mln.address,
-      makerQuantity: toTokenBaseUnit(value, weth.decimals),
-      takerQuantity: toTokenBaseUnit(props.quantity, mln.decimals),
+      makerAsset: props.maker.address,
+      takerAsset: props.taker.address,
+      makerQuantity: toTokenBaseUnit(value, props.maker.decimals),
+      takerQuantity: toTokenBaseUnit(props.quantity, props.taker.decimals),
     });
 
     transaction.start(tx, 'Take order');
@@ -58,7 +52,7 @@ export const FundMelonEngineTrading: React.FC<FundMelonEngineTradingProps> = pro
     <>
       <Subtitle>Melon engine</Subtitle>
       <Button type="button" disabled={loading || !valid} loading={loading} onClick={submit}>
-        {loading ? '' : valid ? `Buy ${value.toFixed(4)} ${weth.symbol}` : 'No offer'}
+        {loading ? '' : valid ? `Buy ${value.toFixed(4)} ${props.maker.symbol}` : 'No offer'}
       </Button>
       <TransactionModal transaction={transaction} />
     </>
