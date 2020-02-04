@@ -4,6 +4,7 @@ import { FundPolicies } from '../../FundPolicies/FundPolicies';
 import { FundContracts } from './FundContracts/FundContracts';
 import { FundFactSheet } from './FundFactSheet/FundFactSheet';
 import { Grid, GridRow, GridCol } from '~/storybook/components/Grid/Grid';
+import { FundPerformanceTable } from '../FundPerfomanceTable/FundPerformanceTable';
 
 export interface FundOverviewProps {
   address: string;
@@ -11,6 +12,11 @@ export interface FundOverviewProps {
 
 export const FundOverview: React.FC<FundOverviewProps> = ({ address }) => (
   <Grid>
+    <GridRow>
+      <GridCol>
+        <FundPerformanceTable address={address} />
+      </GridCol>
+    </GridRow>
     <GridRow>
       <GridCol xs={12} sm={5}>
         <FundFactSheet address={address} />
