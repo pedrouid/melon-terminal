@@ -5,7 +5,7 @@ import { useForm, FormContext } from 'react-hook-form';
 import { Holding } from '@melonproject/melongql';
 import { TokenDefinition, ExchangeDefinition, ExchangeIdentifier, sameAddress } from '@melonproject/melonjs';
 import { useEnvironment } from '~/hooks/useEnvironment';
-import { Dropdown } from '~/storybook/components/Dropdown/Dropdown';
+import { DropdownIcons } from '~/storybook/components/DropdownIcons/DropdownIcons';
 import { Input } from '~/storybook/components/Input/Input';
 import { FundMelonEngineTrading } from './FundMelonEngineTrading/FundMelonEngineTrading';
 import { FundKyberTrading } from './FundKyberTrading/FundKyberTrading';
@@ -35,7 +35,7 @@ export const FundLiquidityProviderTrading: React.FC<FundLiquidityProviderTrading
     .filter(item => !item.historic)
     .map(token => ({
       value: token.address,
-      name: token.symbol,
+      label: token.symbol,
     }));
 
   const mln = environment.getToken('MLN');
@@ -118,7 +118,7 @@ export const FundLiquidityProviderTrading: React.FC<FundLiquidityProviderTrading
       <FormContext {...form}>
         <GridRow justify="space-between">
           <GridCol xs={12} sm={4}>
-            <Dropdown name="takerAsset" label="Sell asset" options={options} />
+            <DropdownIcons name="takerAsset" label="Sell asset" options={options} />
           </GridCol>
 
           <GridCol xs={12} sm={6} justify="flex-end">
@@ -136,7 +136,7 @@ export const FundLiquidityProviderTrading: React.FC<FundLiquidityProviderTrading
 
         <GridRow justify="space-between">
           <GridCol xs={12} sm={4}>
-            <Dropdown name="makerAsset" label="Buy asset" options={options} />
+            <DropdownIcons name="makerAsset" label="Buy asset" options={options} />
           </GridCol>
 
           <GridCol xs={12} sm={6} justify="flex-end">
