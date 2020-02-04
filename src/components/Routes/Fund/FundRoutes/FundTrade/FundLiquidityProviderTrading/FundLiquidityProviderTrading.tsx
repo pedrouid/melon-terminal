@@ -113,7 +113,7 @@ export const FundLiquidityProviderTrading: React.FC<FundLiquidityProviderTrading
 
   return (
     <Block>
-      <SectionTitle>Liquidity pool trading</SectionTitle>
+      <SectionTitle>Liquidity pools trading</SectionTitle>
 
       <FormContext {...form}>
         <GridRow justify="space-between">
