@@ -42,11 +42,8 @@ export const ShareFund: React.FC<ShareFundProps> = ({ address }) => {
     const tokens = formattedData?.tokens?.map(token => `$${token}`).join(', ');
     const exchanges = formattedData?.exchanges?.join(', ');
 
-    const formatedTwitterText = `I just deployed an on-chain fund to @ethereum, powered by @melonprotocol. My fund's name is ${formattedData?.name}, it has a ${formattedData?.managementFee}% management fee, ${formattedData?.performanceFee}% performance fee, can trade on with ${exchanges} and accepts ${tokens} as subscription assets `;
-
-    window.open(
-      `https://twitter.com/intent/tweet?text=${encodeURIComponent(formatedTwitterText)}${window.location.href}`
-    );
+    const formatedTwitterText = `I just deployed an on-chain fund to @ethereum, powered by @melonprotocol. My fund's name is ${formattedData?.name}, it has a ${formattedData?.managementFee}% management fee, ${formattedData?.performanceFee}% performance fee, can trade on ${exchanges} and accepts ${tokens} as subscription assets: ${window.location.href}.`;
+    window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(formatedTwitterText)}`);
   }, [result.data]);
 
   return (

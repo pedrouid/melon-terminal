@@ -187,6 +187,7 @@ export const Global = createGlobalStyle`
     display: inline-flex;
     align-items: center;
     text-decoration: underline;
+    cursor: pointer;
     color: ${theme.otherColors.black};
     transition: ${theme.transition.defaultAll};
     :hover{

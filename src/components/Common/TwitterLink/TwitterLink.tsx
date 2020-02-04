@@ -7,10 +7,7 @@ export interface TwitterLinkProps {
 
 export const TwitterLink: React.FC<TwitterLinkProps> = ({ text }) => {
   return (
-    <a
-      href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}${window.location.href}`}
-      target="_blank"
-    >
+    <a href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`} target="_blank">
       <Icons name="TWITTER" size="small" />
     </a>
   );

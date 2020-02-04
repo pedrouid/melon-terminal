@@ -119,8 +119,8 @@ export const FundFactSheet: React.FC<FundFactSheetProps> = ({ address }) => {
         <TwitterLink
           text={
             isManager
-              ? `Check out my on-chain fund on Melon "${name}" deployed to @ethereum and powered by @melonprotocol`
-              : `Check out this interesting on-chain fund on Melon "${name}" deployed to @ethereum and powered by @melonprotocol`
+              ? `Check out my on-chain fund on Melon "${fund.name}" deployed to @ethereum and powered by @melonprotocol on ${window.location.href}.`
+              : `Check out this interesting on-chain fund on Melon "${fund.name}" deployed to @ethereum and powered by @melonprotocol on ${window.location.href}.`
           }
         />
       </SectionTitle>
