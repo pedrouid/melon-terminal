@@ -95,8 +95,8 @@ export const FundKyberTrading: React.FC<FundKyberTradingProps> = props => {
     const adapter = await KyberTradingAdapter.create(environment, props.exchange.exchange, trading);
 
     const tx = adapter.takeOrder(account.address!, {
-      makerQuantity: toTokenBaseUnit(props.quantity, props.maker.decimals),
-      takerQuantity: toTokenBaseUnit(value, props.taker.decimals),
+      makerQuantity: toTokenBaseUnit(value, props.maker.decimals),
+      takerQuantity: toTokenBaseUnit(props.quantity, props.taker.decimals),
       makerAsset: props.maker.address,
       takerAsset: props.taker.address,
     });
