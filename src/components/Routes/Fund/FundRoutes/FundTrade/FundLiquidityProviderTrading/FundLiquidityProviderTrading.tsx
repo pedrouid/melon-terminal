@@ -11,7 +11,7 @@ import { FundMelonEngineTrading } from './FundMelonEngineTrading/FundMelonEngine
 import { FundKyberTrading } from './FundKyberTrading/FundKyberTrading';
 import { FundUniswapTrading } from './FundUniswapTrading/FundUniswapTrading';
 import { Block } from '~/storybook/components/Block/Block';
-import { SectionTitle } from '~/storybook/components/Title/Title';
+import { SectionTitle, Title } from '~/storybook/components/Title/Title';
 import { GridRow, GridCol } from '~/storybook/components/Grid/Grid';
 import { Icons } from '~/storybook/components/Icons/Icons';
 import * as S from './FundLiquidityProviderTrading.styles';
@@ -85,65 +85,80 @@ export const FundLiquidityProviderTrading: React.FC<FundLiquidityProviderTrading
       <SectionTitle>Liquidity pool trading</SectionTitle>
 
       <FormContext {...form}>
-        <GridRow>
+        <GridRow justify="space-between">
           <GridCol xs={12} sm={4}>
-            <Dropdown name="takerAsset" label="Sell asset" options={options} />
+            <S.DropdownContainer>
+              <Dropdown name="takerAsset" label="Sell asset" options={options} />
+              <S.ExchangeContainer onClick={switchExchange}>
+                <Icons name="EXCHANGE" />
+              </S.ExchangeContainer>
+              <Dropdown name="makerAsset" label="Buy asset" options={options} />
+            </S.DropdownContainer>
           </GridCol>
-          <GridCol xs={12} sm={4} align="center">
-            <S.ExchangeContainer onClick={switchExchange}>
-              <Icons name="EXCHANGE" />
-            </S.ExchangeContainer>
-          </GridCol>
-          <GridCol xs={12} sm={4}>
-            <Dropdown name="makerAsset" label="Buy asset" options={options} />
-          </GridCol>
-        </GridRow>
-        <GridRow justify={{ sm: 'space-between' }}>
-          <GridCol xs={12} sm={3}>
-            <Input type="number" step="any" name="takerQuantity" label="Sell quantity" />
-          </GridCol>
-          <GridCol xs={12} sm={6}>
+          <GridCol xs={12} sm={6} justify="flex-end">
+            <GridRow>
+              <GridCol>
+                <Input type="number" step="any" name="takerQuantity" label="Sell quantity" />
+              </GridCol>
+            </GridRow>
+            <GridRow>
+              <GridCol>
+                <span>Buy quantity</span>
+              </GridCol>
+            </GridRow>
             {ready &&
-              props.exchanges.map(exchange => {
+              props.exchanges.map((exchange, key) => {
                 if (exchange.id === ExchangeIdentifier.KyberNetwork) {
                   return (
-                    <FundKyberTrading
-                      key={exchange.id}
-                      address={props.address}
-                      holdings={props.holdings}
-                      exchange={exchange}
-                      maker={makerAsset}
-                      taker={takerAsset}
-                      quantity={takerQuantity}
-                    />
+                    <GridRow key={key}>
+                      <GridCol>
+                        <FundKyberTrading
+                          key={exchange.id}
+                          address={props.address}
+                          holdings={props.holdings}
+                          exchange={exchange}
+                          maker={makerAsset}
+                          taker={takerAsset}
+                          quantity={takerQuantity}
+                        />
+                      </GridCol>
+                    </GridRow>
                   );
                 }
 
                 if (exchange.id === ExchangeIdentifier.MelonEngine) {
                   return (
-                    <FundMelonEngineTrading
-                      key={exchange.id}
-                      address={props.address}
-                      holdings={props.holdings}
-                      exchange={exchange}
-                      maker={makerAsset}
-                      taker={takerAsset}
-                      quantity={takerQuantity}
-                    />
+                    <GridRow key={key}>
+                      <GridCol>
+                        <FundMelonEngineTrading
+                          key={exchange.id}
+                          address={props.address}
+                          holdings={props.holdings}
+                          exchange={exchange}
+                          maker={makerAsset}
+                          taker={takerAsset}
+                          quantity={takerQuantity}
+                        />
+                      </GridCol>
+                    </GridRow>
                   );
                 }
 
                 if (exchange.id === ExchangeIdentifier.Uniswap) {
                   return (
-                    <FundUniswapTrading
-                      key={exchange.id}
-                      address={props.address}
-                      holdings={props.holdings}
-                      exchange={exchange}
-                      maker={makerAsset}
-                      taker={takerAsset}
-                      quantity={takerQuantity}
-                    />
+                    <GridRow key={key}>
+                      <GridCol>
+                        <FundUniswapTrading
+                          key={exchange.id}
+                          address={props.address}
+                          holdings={props.holdings}
+                          exchange={exchange}
+                          maker={makerAsset}
+                          taker={takerAsset}
+                          quantity={takerQuantity}
+                        />
+                      </GridCol>
+                    </GridRow>
                   );
                 }
 

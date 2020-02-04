@@ -2,7 +2,7 @@ import React from 'react';
 import { ExchangeIdentifier } from '@melonproject/melonjs';
 import { RequiresFundManager } from '~/components/Gates/RequiresFundManager/RequiresFundManager';
 import { Grid, GridRow, GridCol } from '~/storybook/components/Grid/Grid';
-import { FundHoldings } from '~/components/Routes/Fund/FundHoldings/FundHoldings';
+import { FundHoldings } from '~/components/Routes/Fund/FundRoutes/FundTrade/FundHoldings/FundHoldings';
 import { RequiresFundNotShutDown } from '~/components/Gates/RequiresFundNotShutDown/RequiresFundNotShutDown';
 import { RequiresFundDeployedWithCurrentVersion } from '~/components/Gates/RequiresFundDeployedWithCurrentVersion/RequiresFundDeployedWithCurrentVersion';
 import { FundLiquidityProviderTrading } from '~/components/Routes/Fund/FundRoutes/FundTrade/FundLiquidityProviderTrading/FundLiquidityProviderTrading';
@@ -38,6 +38,11 @@ export const FundTrade: React.FC<FundTradeProps> = ({ address }) => {
           <RequiresFundDeployedWithCurrentVersion address={address} fallback={false}>
             <RequiresFundNotShutDown fallback={false}>
               <GridRow>
+                <GridCol>
+                  <FundHoldings address={address} />
+                </GridCol>
+              </GridRow>
+              <GridRow>
                 {!!markets.length && (
                   <GridCol>
                     <FundOrderbookTrading address={address} exchanges={markets} holdings={holdings} />
@@ -50,12 +55,6 @@ export const FundTrade: React.FC<FundTradeProps> = ({ address }) => {
                     <FundLiquidityProviderTrading address={address} exchanges={providers} holdings={holdings} />
                   </GridCol>
                 )}
-              </GridRow>
-
-              <GridRow>
-                <GridCol>
-                  <FundHoldings address={address} />
-                </GridCol>
               </GridRow>
             </RequiresFundNotShutDown>
           </RequiresFundDeployedWithCurrentVersion>

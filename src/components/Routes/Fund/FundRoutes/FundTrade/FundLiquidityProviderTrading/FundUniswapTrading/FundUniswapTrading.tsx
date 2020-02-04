@@ -18,8 +18,6 @@ import { TransactionModal } from '~/components/Common/TransactionModal/Transacti
 import { toTokenBaseUnit } from '~/utils/toTokenBaseUnit';
 import { Holding } from '@melonproject/melongql';
 import { Title } from '~/storybook/components/Title/Title';
-import { Input } from '~/storybook/components/Input/Input';
-import { FormattedNumber } from '~/components/Common/FormattedNumber/FormattedNumber';
 import { Button } from '~/storybook/components/Button/Button';
 import { catchError, switchMap, map } from 'rxjs/operators';
 import { GridRow, GridCol } from '~/storybook/components/Grid/Grid';
@@ -133,30 +131,11 @@ export const FundUniswapTrading: React.FC<FundUniswapTradingProps> = props => {
   return (
     <>
       <GridRow>
-        <GridCol justify="center">
-          <Title>Uniswap</Title>
-        </GridCol>
-        <GridCol justify="center" align="center">
-          <Input
-            margin={false}
-            type="text"
-            placeholder="Buy quantity"
-            value={valid ? value.toFixed(4) : ''}
-            disabled={true}
-          />
-        </GridCol>
-        <GridCol align="flex-end">
-          <Button type="button" disabled={!ready} loading={loading} onClick={submit}>
-            Submit
-          </Button>
-        </GridCol>
-      </GridRow>
-      <GridRow>
         <GridCol>
-          <span>
-            Rate: <FormattedNumber value="1" suffix={state.taker.symbol} /> ={' '}
-            <FormattedNumber value={state.rate} suffix={state.maker.symbol} />
-          </span>
+          <Title>Uniswap</Title>
+          <Button type="button" disabled={!ready} loading={loading} onClick={submit}>
+            Buy {valid ? value.toFixed(4) : ''} {state.maker.symbol}
+          </Button>
         </GridCol>
       </GridRow>
       <TransactionModal transaction={transaction} />
