@@ -1,7 +1,7 @@
 import React from 'react';
 import Select, { components, Props as ReactSelectProps } from 'react-select';
 import * as D from './DropdownIcons.styles';
-import { useFormContext, ErrorMessage } from 'react-hook-form';
+import { useForm, useFormContext, ErrorMessage, Controller } from 'react-hook-form';
 import { Icons } from '~/storybook/components/Icons/Icons';
 
 export interface DropdownProps extends ReactSelectProps {
@@ -10,8 +10,8 @@ export interface DropdownProps extends ReactSelectProps {
 
 export const DropdownIcons: React.FC<DropdownProps> = ({ name, label, ...rest }) => {
   const form = useFormContext();
+  const { control } = useForm();
   const connected = !!(form && name);
-  const ref = connected ? form.register : undefined;
   const errors = connected ? form.errors : undefined;
   const error = !!(errors && errors[name!]);
 
@@ -30,7 +30,15 @@ export const DropdownIcons: React.FC<DropdownProps> = ({ name, label, ...rest })
     <D.DropdownWrapper>
       {label && <D.DropdownLabel>{label}</D.DropdownLabel>}
 
-      <Select {...rest} ref={ref} components={{ Option }} />
+      <Controller
+        as={<Select {...rest} components={{ Option }} />}
+        name="reactSelect"
+        control={control}
+        onChange={([selected]) => {
+          // React Select return object instead of value for selecCotion
+          return { value: selected };
+        }}
+      />
 
       {error && <ErrorMessage errors={form.errors} name={name!} as={<D.DropdownError />} />}
     </D.DropdownWrapper>

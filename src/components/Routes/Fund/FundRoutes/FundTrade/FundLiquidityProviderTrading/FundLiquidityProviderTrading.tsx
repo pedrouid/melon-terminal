@@ -111,6 +111,8 @@ export const FundLiquidityProviderTrading: React.FC<FundLiquidityProviderTrading
     form.triggerValidation().catch(() => {});
   };
 
+  console.log(form.getValues());
+
   return (
     <Block>
       <SectionTitle>Liquidity pools trading</SectionTitle>
