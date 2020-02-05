@@ -3,7 +3,7 @@ import BigNumber from 'bignumber.js';
 import { useTheGraphQuery } from '~/hooks/useQuery';
 import { weiToString } from '~/utils/weiToString';
 import { calculateChangeFromSharePrice } from '~/utils/calculateChangeFromSharePrice';
-import { hexToString, Address } from '@melonproject/melonjs';
+import { Address } from '@melonproject/melonjs';
 
 interface FundFields {
   id: string;
@@ -170,7 +170,7 @@ export const useFundParticipationOverviewQuery = (investor?: Address) => {
       name: item.fund.name,
       inception: item.fund.createdAt,
       sharePrice: weiToString(item.fund.sharePrice, 4),
-      version: hexToString(item.fund.version.name),
+      version: item.fund.version.name,
       versionAddress: item.fund.version.id,
       participationAddress: item.fund.participation.id,
       tradingAddress: item.fund.trading.id,
@@ -201,7 +201,7 @@ export const useFundParticipationOverviewQuery = (investor?: Address) => {
       requestAmount: weiToString(item.amount, 4),
       requestAsset: item.asset.symbol,
       sharePrice: weiToString(item.fund.sharePrice, 4),
-      version: hexToString(item.fund.version.name),
+      version: item.fund.version.name,
       versionAddress: item.fund.version.id,
       participationAddress: item.fund.participation.id,
       tradingAddress: item.fund.trading.id,
@@ -224,7 +224,7 @@ export const useFundParticipationOverviewQuery = (investor?: Address) => {
       name: item.name,
       inception: item.createdAt,
       sharePrice: weiToString(item.sharePrice, 4),
-      version: hexToString(item.version.name),
+      version: item.version.name,
       versionAddress: item.version.id,
       participationAddress: item.participation.id,
       tradingAddress: item.trading.id,

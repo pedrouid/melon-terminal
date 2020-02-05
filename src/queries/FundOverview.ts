@@ -2,7 +2,6 @@ import gql from 'graphql-tag';
 import BigNumber from 'bignumber.js';
 import { useTheGraphQuery } from '~/hooks/useQuery';
 import { weiToString } from '~/utils/weiToString';
-import { hexToString } from '@melonproject/melonjs';
 import { calculateChangeFromSharePrice } from '~/utils/calculateChangeFromSharePrice';
 import { useCoinAPI } from '~/hooks/useCoinAPI';
 
@@ -125,7 +124,7 @@ export const useFundOverviewQuery = () => {
     shares: weiToString(item.totalSupply, 4),
     denomination: item.accounting.denominationAsset.symbol,
     investments: item.investments.length,
-    version: hexToString(item.version.name),
+    version: item.version.name,
     status: item.isShutdown ? 'Not active' : 'Active',
   }));
 
