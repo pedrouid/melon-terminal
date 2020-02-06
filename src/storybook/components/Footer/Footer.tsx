@@ -22,9 +22,6 @@ export const FooterNavigation = styled.div`
   justify-content: center;
   flex-wrap: wrap;
   text-transform: uppercase;
-  @media (${props => props.theme.mediaQueries.s}) {
-    justify-content: flex-start;
-  }
 `;
 
 export const FooterItem = styled.div`

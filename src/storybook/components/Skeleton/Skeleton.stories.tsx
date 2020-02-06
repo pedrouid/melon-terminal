@@ -3,8 +3,6 @@ import { Skeleton, SkeletonHead, SkeletonBody, SkeletonFeet } from './Skeleton';
 import { Default as Header } from '../Header/Header.stories';
 import { Default as Footer } from '../Footer/Footer.stories';
 import { Bar, BarContent } from '../Bar/Bar';
-import { DataBlockBar, DataBlockBarContent } from '../DataBlockBar/DataBlockBar';
-import { DataBlock } from '../DataBlock/DataBlock';
 import { NotificationBar, NotificationContent } from '../NotificationBar/NotificationBar';
 import { Headline } from '../Headline/Headline';
 import { Container } from '../Container/Container';

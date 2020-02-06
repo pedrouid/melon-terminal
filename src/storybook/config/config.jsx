@@ -6,6 +6,7 @@ import { withKnobs } from '@storybook/addon-knobs';
 import { ThemeProvider } from 'styled-components';
 import { Reset } from 'styled-reset';
 import { Global, theme } from '~/theme';
+import { ColorProvider } from '~/components/Contexts/Color/Color';
 
 addDecorator(withNotes);
 addDecorator(withKnobs);
@@ -14,7 +15,7 @@ addDecorator(story => (
     <Router>
       <Reset />
       <Global />
-      {story()}
+      <ColorProvider default={theme.otherColors.logo}>{story()}</ColorProvider>
     </Router>
   </ThemeProvider>
 ));

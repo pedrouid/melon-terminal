@@ -6,6 +6,8 @@ const data = {
   options: [
     { value: 'one', name: 'One' },
     { value: 'two', name: 'Two' },
+    { value: '3', name: '3' },
+    { value: '4', name: '4' },
   ],
 };
 

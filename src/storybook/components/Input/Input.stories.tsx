@@ -8,3 +8,5 @@ export const Default = () => <Input />;
 export const Disabled = () => <Input disabled={true} />;
 
 export const Placeholder = () => <Input placeholder="placeholder" />;
+
+export const Margin = () => <Input placeholder="placeholder" margin={true} />;

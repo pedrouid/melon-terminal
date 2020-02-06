@@ -22,7 +22,7 @@
   "scripts": {
     "clean": "rimraf coverage build",
     "prebuild": "yarn clean",
-    "storybook": "start-storybook --config-dir src/storybook/config",
+    "storybook": "start-storybook --config-dir src/storybook/config -p 3456",
     "storybook:build": "build-storybook --config-dir src/storybook/config --output-dir build/storybook",
     "start": "react-app-rewired start",
     "build": "react-app-rewired build",
