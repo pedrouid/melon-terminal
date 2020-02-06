@@ -14,7 +14,7 @@ import { useVersionQuery } from '~/queries/Version';
 
 const fundHeadings = ['Name', 'Inception', 'AUM [ETH]', 'Share price', 'Change', '# shares', 'Protocol', 'Status'];
 const redeemHeadings = ['Name', 'Inception', 'AUM [ETH]', 'Share price', 'Change', '# shares', 'Protocol', 'Status'];
-const requestHeadings = ['Fund name', 'Request date', 'Request asset', 'Request amount', 'Requested shares'];
+const requestHeadings = ['Fund name', 'Request date', 'Request asset', 'Request amount', 'Requested shares', 'Status'];
 
 export const WalletOverview: React.FC = () => {
   const account = useAccount();
@@ -44,7 +44,9 @@ export const WalletOverview: React.FC = () => {
   const requestsHeader = requestHeadings.map((heading, index) => <HeaderCell key={index}>{heading}</HeaderCell>);
   const requestsEmpty = !(requests && requests.length);
   const requestsRows = !requestsEmpty ? (
-    requests.map(request => <WalletOverviewInvestmentRequest {...request} key={request.address} />)
+    requests.map(request => (
+      <WalletOverviewInvestmentRequest account={account.address} {...request} key={request.address} />
+    ))
   ) : (
     <BodyRow>
       <BodyCell colSpan={12}>You do not have any pending investment requests.</BodyCell>

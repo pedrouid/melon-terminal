@@ -54,6 +54,7 @@ export interface InvestmentRequest extends Fund {
   requestShares: string;
   requestAmount: string;
   requestCreatedAt: number;
+  account?: string;
 }
 
 export interface Fund {

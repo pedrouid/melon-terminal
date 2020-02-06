@@ -25,10 +25,8 @@ export const CancelRequest: React.FC<CancelRequestProps> = props => {
   };
 
   return (
-    <>
-      <Button type="button" id="action" disabled={props.loading} onClick={() => cancel()}>
-        Cancel investment request
-      </Button>
-    </>
+    <Button type="button" id="action" disabled={props.loading} onClick={() => cancel()}>
+      Cancel investment request
+    </Button>
   );
 };

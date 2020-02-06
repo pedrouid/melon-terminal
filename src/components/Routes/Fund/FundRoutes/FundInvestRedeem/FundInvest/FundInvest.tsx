@@ -2,7 +2,7 @@ import React, { useMemo, useRef } from 'react';
 import { useEnvironment } from '~/hooks/useEnvironment';
 import { Transaction } from '@melonproject/melonjs';
 import { useOnChainQueryRefetcher } from '~/hooks/useOnChainQueryRefetcher';
-import { useTransaction, TransactionHookValues, TransactionFormValues } from '~/hooks/useTransaction';
+import { useTransaction } from '~/hooks/useTransaction';
 import { useFundInvestQuery } from '~/queries/FundInvest';
 import { Spinner } from '~/storybook/components/Spinner/Spinner';
 import { RequestInvestment } from './RequestInvestment/RequestInvestment';

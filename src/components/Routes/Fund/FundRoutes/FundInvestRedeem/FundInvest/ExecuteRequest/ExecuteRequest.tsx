@@ -1,4 +1,4 @@
-import React, { useState, forwardRef, useImperativeHandle } from 'react';
+import React, { forwardRef, useImperativeHandle } from 'react';
 import { useEnvironment } from '~/hooks/useEnvironment';
 import { TransactionHookValues, TransactionFormValues } from '~/hooks/useTransaction';
 import { Participation, Transaction } from '@melonproject/melonjs';
@@ -37,10 +37,8 @@ export const ExecuteRequest = forwardRef((props: ExecuteRequestProps, ref: React
   }));
 
   return (
-    <>
-      <Button type="button" disabled={props.loading} onClick={() => execute()}>
-        Execute investment request
-      </Button>
-    </>
+    <Button type="button" disabled={props.loading} onClick={() => execute()}>
+      Execute investment request
+    </Button>
   );
 });
