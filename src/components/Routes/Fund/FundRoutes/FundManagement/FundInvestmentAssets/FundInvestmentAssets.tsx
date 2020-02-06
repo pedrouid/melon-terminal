@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import * as Yup from 'yup';
 import { useForm, FormContext } from 'react-hook-form';
-import { Participation } from '@melonproject/melonjs';
+import { Participation, sameAddress } from '@melonproject/melonjs';
 import { AllowedInvestmentAsset } from '@melonproject/melongql';
 import { useEnvironment } from '~/hooks/useEnvironment';
 import { useTransaction } from '~/hooks/useTransaction';
@@ -70,11 +70,11 @@ export const InvestmentAssets: React.FC<InvestmentAssetsProps> = ({ address }) =
 
   const submit = form.handleSubmit(async data => {
     const assetsToAdd = data.assets.filter(
-      selected => selected && !allowedAssets?.some(available => available.token!.address === selected)
+      selected => selected && !allowedAssets?.some(available => sameAddress(available.token!.address, selected))
     );
 
     const assetsToRemove = (allowedAssets || [])
-      .filter(asset => !data.assets.some(selected => selected === asset.token!.address))
+      .filter(asset => !data.assets.some(selected => sameAddress(selected, asset.token!.address)))
       .map(item => item.token!.address) as string[];
 
     setRemoveAssets(assetsToRemove);

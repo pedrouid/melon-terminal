@@ -8,6 +8,7 @@ import {
   Hub,
   KyberTradingAdapter,
   ExchangeDefinition,
+  sameAddress,
 } from '@melonproject/melonjs';
 import { useEnvironment } from '~/hooks/useEnvironment';
 import { useAccount } from '~/hooks/useAccount';
@@ -63,8 +64,8 @@ export const FundKyberTrading: React.FC<FundKyberTradingProps> = props => {
         const weth = environment.getToken('WETH');
         const contract = new KyberNetworkProxy(environment, environment.deployment.kyber.addr.KyberNetworkProxy);
         const kyberEth = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee';
-        const srcToken = props.taker.address === weth.address ? kyberEth : props.taker.address;
-        const destToken = props.maker.address === weth.address ? kyberEth : props.maker.address;
+        const srcToken = sameAddress(props.taker.address, weth.address) ? kyberEth : props.taker.address;
+        const destToken = sameAddress(props.maker.address, weth.address) ? kyberEth : props.maker.address;
         const srcQty = toTokenBaseUnit(props.quantity, props.taker.decimals);
         const expected = await contract.getExpectedRate(srcToken, destToken, srcQty);
         return expected.expectedRate;

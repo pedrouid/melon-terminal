@@ -9,6 +9,7 @@ import {
   UniswapTradingAdapter,
   UniswapExchange,
   UniswapFactory,
+  sameAddress,
 } from '@melonproject/melonjs';
 import { useEnvironment } from '~/hooks/useEnvironment';
 import { useAccount } from '~/hooks/useAccount';
@@ -64,7 +65,7 @@ export const FundUniswapTrading: React.FC<FundUniswapTradingProps> = props => {
         const uniswapFactory = new UniswapFactory(environment, environment.deployment.uniswap.addr.UniswapFactory);
         const takerQty = toTokenBaseUnit(props.quantity, props.taker.decimals);
 
-        if (props.taker.address === weth.address) {
+        if (sameAddress(props.taker.address, weth.address)) {
           // Convert WETH into token.
           const exchangeAddress = await uniswapFactory.getExchange(props.maker.address);
           const exchange = new UniswapExchange(environment, exchangeAddress);
@@ -72,7 +73,7 @@ export const FundUniswapTrading: React.FC<FundUniswapTradingProps> = props => {
           return makerQty.dividedBy(takerQty);
         }
 
-        if (props.maker.address === weth.address) {
+        if (sameAddress(props.maker.address, weth.address)) {
           // Convert token into WETH.
           const exchangeAddress = await uniswapFactory.getExchange(props.taker.address);
           const exchange = new UniswapExchange(environment, exchangeAddress);

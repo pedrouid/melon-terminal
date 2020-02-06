@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import * as Yup from 'yup';
 import { useForm, FormContext } from 'react-hook-form';
-import { Trading } from '@melonproject/melonjs';
+import { Trading, sameAddress } from '@melonproject/melonjs';
 import { useEnvironment } from '~/hooks/useEnvironment';
 import { useTransaction } from '~/hooks/useTransaction';
 import { Button } from '~/storybook/components/Button/Button';
@@ -89,8 +89,8 @@ export const Exchanges: React.FC<ExchangesProps> = ({ address }) => {
   const exchangesOptions = environment.exchanges.map(exchange => ({
     label: `${exchange.name}`,
     value: exchange.exchange,
-    checked: !!allowedExchanges?.some(allowed => allowed && allowed.exchange === exchange.exchange),
-    disabled: !!allowedExchanges?.some(allowed => allowed && allowed.exchange === exchange.exchange),
+    checked: !!allowedExchanges?.some(allowed => allowed && sameAddress(allowed.exchange, exchange.exchange)),
+    disabled: !!allowedExchanges?.some(allowed => allowed && sameAddress(allowed.exchange, exchange.exchange)),
   }));
 
   return (
