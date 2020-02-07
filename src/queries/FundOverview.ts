@@ -4,6 +4,7 @@ import { useTheGraphQuery } from '~/hooks/useQuery';
 import { weiToString } from '~/utils/weiToString';
 import { calculateChangeFromSharePrice } from '~/utils/calculateChangeFromSharePrice';
 import { useCoinAPI } from '~/hooks/useCoinAPI';
+import { fromTokenBaseUnit } from '~/utils/fromTokenBaseUnit';
 
 export interface SharePrice {
   sharePrice: string;
@@ -114,14 +115,16 @@ export const useFundOverviewQuery = () => {
     name: item.name,
     address: item.id.substr(0, 8),
     inception: item.createdAt,
-    aumEth: weiToString(item.gav, 4),
-    aumUsd: (parseFloat(weiToString(item.gav)) * rate).toFixed(4),
-    sharePrice: weiToString(item.sharePrice, 4),
+    aumEth: fromTokenBaseUnit(item.gav, 18).toFixed(4),
+    aumUsd: fromTokenBaseUnit(item.gav, 18)
+      .multipliedBy(rate)
+      .toFixed(4),
+    sharePrice: fromTokenBaseUnit(item.sharePrice, 18).toFixed(4),
     change: calculateChangeFromSharePrice(
       item.calculationsHistory[0]?.sharePrice,
       item.calculationsHistory[1]?.sharePrice
     ),
-    shares: weiToString(item.totalSupply, 4),
+    shares: fromTokenBaseUnit(item.totalSupply, 18).toFixed(4),
     denomination: item.accounting.denominationAsset.symbol,
     investments: item.investments.length,
     version: item.version.name,
