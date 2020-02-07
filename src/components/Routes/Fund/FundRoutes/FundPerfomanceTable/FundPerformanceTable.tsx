@@ -1,6 +1,6 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useState } from 'react';
 import {
-  Table,
+  ScrollableTable,
   HeaderCell,
   HeaderRow,
   BodyCell,
@@ -19,9 +19,9 @@ export interface FundPerformanceTableProps {
 }
 
 export const FundPerformanceTable: React.FC<FundPerformanceTableProps> = ({ address }) => {
-  const [fund, assets, query] = useFundPerformanceQuery(address, ['WBTC']);
+  const [fund, assets, query] = useFundPerformanceQuery(address, ['WBTC', 'WETH', 'DAI']);
 
-  if (query.loading) {
+  if (query.loading && !assets) {
     return (
       <Block>
         <SectionTitle>Performance History</SectionTitle>
@@ -37,10 +37,11 @@ export const FundPerformanceTable: React.FC<FundPerformanceTableProps> = ({ addr
   return (
     <Block>
       <SectionTitle>Performance History</SectionTitle>
-      <Table>
+
+      <ScrollableTable>
         <thead>
           <HeaderRow>
-            <HeaderCell>Investment</HeaderCell>
+            <HeaderCell>Relative Performance</HeaderCell>
             <HeaderCellRightAlign>QTD</HeaderCellRightAlign>
             <HeaderCellRightAlign>YTD</HeaderCellRightAlign>
             <HeaderCellRightAlign>1-Month</HeaderCellRightAlign>
@@ -51,54 +52,12 @@ export const FundPerformanceTable: React.FC<FundPerformanceTableProps> = ({ addr
         </thead>
 
         <tbody>
-          <BodyRow>
-            <BodyCell>{fund.name}</BodyCell>
-            <BodyCellRightAlign>
-              <FormattedNumber value={fund.qtdReturn} colorize={true} decimals={2} suffix="%" />
-            </BodyCellRightAlign>
-            <BodyCellRightAlign>
-              <FormattedNumber value={fund.ytdReturn} colorize={true} decimals={2} suffix="%" />
-            </BodyCellRightAlign>
-            <BodyCellRightAlign>
-              <FormattedNumber value={fund.oneMonthReturn} colorize={true} decimals={2} suffix="%" />
-            </BodyCellRightAlign>
-            <BodyCellRightAlign>
-              <FormattedNumber value={fund.sixMonthReturn} colorize={true} decimals={2} suffix="%" />
-            </BodyCellRightAlign>
-            <BodyCellRightAlign>
-              <FormattedNumber value={fund.oneYearReturn} colorize={true} decimals={2} suffix="%" />
-            </BodyCellRightAlign>
-            <BodyCellRightAlign>
-              <FormattedNumber value={fund.returnSinceInception} colorize={true} decimals={2} suffix="%" />
-            </BodyCellRightAlign>
-          </BodyRow>
-
           {(assets ?? []).map(asset => (
             <Fragment key={asset.symbol}>
               <BodyRow>
-                <BodyCell>{asset.symbol}</BodyCell>
-                <BodyCellRightAlign>
-                  <FormattedNumber value={asset.qtdReturn} colorize={true} decimals={2} suffix="%" />
-                </BodyCellRightAlign>
-                <BodyCellRightAlign>
-                  <FormattedNumber value={asset.ytdReturn} colorize={true} decimals={2} suffix="%" />
-                </BodyCellRightAlign>
-                <BodyCellRightAlign>
-                  <FormattedNumber value={asset.oneMonthReturn} colorize={true} decimals={2} suffix="%" />
-                </BodyCellRightAlign>
-                <BodyCellRightAlign>
-                  <FormattedNumber value={asset.sixMonthReturn} colorize={true} decimals={2} suffix="%" />
-                </BodyCellRightAlign>
-                <BodyCellRightAlign>
-                  <FormattedNumber value={asset.oneYearReturn} colorize={true} decimals={2} suffix="%" />
-                </BodyCellRightAlign>
-                <BodyCellRightAlign>
-                  <FormattedNumber value={asset.returnSinceInception} colorize={true} decimals={2} suffix="%" />
-                </BodyCellRightAlign>
-              </BodyRow>
-
-              <BodyRow>
-                <BodyCell>Relative Performance vs. {asset.symbol}</BodyCell>
+                <BodyCell>
+                  {fund.name} vs. {asset.symbol}
+                </BodyCell>
                 <BodyCellRightAlign>
                   <FormattedNumber
                     value={fund.qtdReturn.minus(asset.qtdReturn)}
@@ -151,7 +110,7 @@ export const FundPerformanceTable: React.FC<FundPerformanceTableProps> = ({ addr
             </Fragment>
           ))}
         </tbody>
-      </Table>
+      </ScrollableTable>
     </Block>
   );
 };

@@ -1,7 +1,7 @@
 import BigNumber from 'bignumber.js';
 import gql from 'graphql-tag';
 import { useTheGraphQuery } from '~/hooks/useQuery';
-import { startOfQuarter, startOfYear, getUnixTime, subMonths, subYears, startOfDay } from 'date-fns';
+import { startOfQuarter, startOfYear, getUnixTime, subMonths, subYears, startOfDay, subDays } from 'date-fns';
 import { useFund } from '~/hooks/useFund';
 import { useMemo } from 'react';
 import { fromTokenBaseUnit } from '~/utils/fromTokenBaseUnit';
@@ -162,9 +162,9 @@ export interface FundPerformanceQueryResult {
 
 export const useFundPerformanceQuery = (address: string, symbols: string[]) => {
   const context = useFund()!;
+
   const args = useMemo(() => {
     const today = new Date();
-
     return {
       startOfQuarterDate: new BigNumber(getUnixTime(startOfQuarter(today))),
       startOfYearDate: new BigNumber(getUnixTime(startOfYear(today))),
