@@ -1,6 +1,7 @@
 import React, { Fragment, useState } from 'react';
 import {
   ScrollableTable,
+  Table,
   HeaderCell,
   HeaderRow,
   BodyCell,
@@ -39,6 +40,7 @@ export const FundPerformanceTable: React.FC<FundPerformanceTableProps> = ({ addr
       <SectionTitle>Performance History</SectionTitle>
 
       <ScrollableTable>
+        <Table>
         <thead>
           <HeaderRow>
             <HeaderCell>Relative Performance</HeaderCell>
@@ -110,6 +112,7 @@ export const FundPerformanceTable: React.FC<FundPerformanceTableProps> = ({ addr
             </Fragment>
           ))}
         </tbody>
+        </Table>
       </ScrollableTable>
     </Block>
   );
