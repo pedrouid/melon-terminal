@@ -81,7 +81,7 @@ export const FundLiquidityProviderTrading: React.FC<FundLiquidityProviderTrading
   const takerQuantity = new BigNumber(form.watch('takerQuantity'));
   const ready = form.formState.isValid;
 
-  const exchanges = (ready ? props.exchanges : [])
+  const exchanges = props.exchanges
     .map(exchange => {
       if (exchange.id === ExchangeIdentifier.KyberNetwork) {
         return [exchange, FundKyberTrading];
@@ -145,6 +145,7 @@ export const FundLiquidityProviderTrading: React.FC<FundLiquidityProviderTrading
                 {exchanges.map(([exchange, Component]) => (
                   <GridCol key={exchange.id} xs={12} sm={Math.max(4, 12 / exchanges.length)}>
                     <Component
+                      active={ready}
                       address={props.address}
                       holdings={props.holdings}
                       exchange={exchange}

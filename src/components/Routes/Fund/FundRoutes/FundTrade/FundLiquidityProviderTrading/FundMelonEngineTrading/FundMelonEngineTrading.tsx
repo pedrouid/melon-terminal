@@ -19,6 +19,7 @@ export interface FundMelonEngineTradingProps {
   maker: TokenDefinition;
   taker: TokenDefinition;
   quantity: BigNumber;
+  active?: boolean;
 }
 
 export const FundMelonEngineTrading: React.FC<FundMelonEngineTradingProps> = props => {
@@ -32,7 +33,7 @@ export const FundMelonEngineTrading: React.FC<FundMelonEngineTradingProps> = pro
 
   const value = props.quantity.multipliedBy(price ?? new BigNumber('NaN'));
   const valid = !value.isNaN() && value.isLessThanOrEqualTo(liquid.dividedBy('1e18'));
-  const loading = query.loading;
+  const ready = !query.loading && valid;
 
   const submit = async () => {
     const hub = new Hub(environment, props.address);
@@ -51,8 +52,8 @@ export const FundMelonEngineTrading: React.FC<FundMelonEngineTradingProps> = pro
   return (
     <>
       <Subtitle>Melon engine</Subtitle>
-      <Button type="button" disabled={loading || !valid} loading={loading} onClick={submit}>
-        {loading ? '' : valid ? `Buy ${value.toFixed(4)} ${props.maker.symbol}` : 'No offer'}
+      <Button type="button" disabled={!ready || !props.active} loading={ready} onClick={submit}>
+        {ready ? '' : valid ? `Buy ${value.toFixed(4)} ${props.maker.symbol}` : 'No offer'}
       </Button>
       <TransactionModal transaction={transaction} />
     </>

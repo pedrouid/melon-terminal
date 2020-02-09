@@ -29,6 +29,7 @@ export interface FundKyberTradingProps {
   maker: TokenDefinition;
   taker: TokenDefinition;
   quantity: BigNumber;
+  active?: boolean;
 }
 
 export const FundKyberTrading: React.FC<FundKyberTradingProps> = props => {
@@ -108,7 +109,7 @@ export const FundKyberTrading: React.FC<FundKyberTradingProps> = props => {
   return (
     <>
       <Subtitle>Kyber network</Subtitle>
-      <Button type="button" disabled={!ready} loading={loading} onClick={submit}>
+      <Button type="button" disabled={!ready || !props.active} loading={loading} onClick={submit}>
         {loading ? '' : valid ? `Buy ${value.toFixed(4)} ${state.maker.symbol}` : 'No offer'}
       </Button>
 
