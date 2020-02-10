@@ -12,6 +12,8 @@ import {
   ConnectionInfo,
   ConnectionInfoItem,
   HeaderTitle,
+  LogoDesktop,
+  LogoMobile,
 } from '~/storybook/components/Header/Header';
 import { Footer, FooterNavigation, FooterItem } from '~/storybook/components/Footer/Footer';
 import { Logo } from '~/storybook/components/Logo/Logo';
@@ -44,7 +46,14 @@ export const Layout: React.FC = ({ children }) => {
               </Link>
             </HeaderTitle>
             <LogoContainer>
-              <Logo name="with-bottom-text" size="small" />
+              <LogoDesktop>
+                <Logo name="with-bottom-text" size="small" />
+              </LogoDesktop>
+              <LogoMobile>
+                <Link to="/">
+                  <Logo name="with-bottom-text" size="small" />
+                </Link>
+              </LogoMobile>
             </LogoContainer>
             <ConnectionInfo>
               {account.fund && (

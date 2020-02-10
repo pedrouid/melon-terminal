@@ -14,6 +14,7 @@ export const Headline = styled.div`
 `;
 
 export const HeadlineIcon = styled.div<HeadlineIconProps>`
+  min-width: 50px;
   width: 50px;
   height: 50px;
   margin-right: ${props => props.theme.spaceUnits.s};

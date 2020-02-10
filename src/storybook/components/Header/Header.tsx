@@ -28,6 +28,20 @@ export const LogoContainer = styled.div`
   }
 `;
 
+export const LogoMobile = styled.div`
+  display: block;
+  @media (${props => props.theme.mediaQueries.m}) {
+    display: none;
+  }
+`;
+
+export const LogoDesktop = styled.div`
+  display: none;
+  @media (${props => props.theme.mediaQueries.m}) {
+    display: block;
+  }
+`;
+
 export const ConnectionInfo = styled.div`
   display: flex;
   padding: ${props => props.theme.spaceUnits.xs} 0px;
