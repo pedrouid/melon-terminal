@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import BigNumber from 'bignumber.js';
 import { Tooltip } from '~/storybook/components/Tooltip/Tooltip';
+import { numberWithCommas } from '~/utils/numberWithCommas';
 
 export interface FormattedNumberData {
   value?: BigNumber | number | string | null;
@@ -35,14 +36,24 @@ export const FormattedNumber: React.FC<FormattedNumberData> = ({
   const bn = BigNumber.isBigNumber(value) ? value : new BigNumber(value ?? 'NaN');
   const output = bn.isNaN()
     ? 'N/A'
-    : [prefix, prefix ? ' ' : '', bn.toFixed(decimals), (!suffix || suffix) === '%' ? '' : ' ', suffix];
+    : [
+        prefix,
+        prefix ? ' ' : '',
+        numberWithCommas(bn.toFixed(decimals)),
+        (!suffix || suffix) === '%' ? '' : ' ',
+        suffix,
+      ];
+
+  const bnFixed = bn.toFixed(18);
 
   if (colorize) {
     const color = bn.isNaN() || bn.isZero() ? 'grey' : bn.isPositive() ? 'green' : 'red';
     return (
       <Color color={color}>
         {tooltip ? (
-          <Tooltip value={`${prefix ? ' ' : ''}${bn.toFixed(18)}${!suffix || suffix === '%' ? '' : ' '}${suffix}`}>
+          <Tooltip
+            value={`${prefix ? ' ' : ''}${numberWithCommas(bnFixed)}${!suffix || suffix === '%' ? '' : ' '}${suffix}`}
+          >
             {output}
           </Tooltip>
         ) : (
@@ -55,7 +66,9 @@ export const FormattedNumber: React.FC<FormattedNumberData> = ({
   return (
     <NoWrap>
       {tooltip ? (
-        <Tooltip value={`${prefix ? ' ' : ''}${bn.toFixed(18)}${!suffix || suffix === '%' ? '' : ' '}${suffix}`}>
+        <Tooltip
+          value={`${prefix ? ' ' : ''}${numberWithCommas(bnFixed)}${!suffix || suffix === '%' ? '' : ' '}${suffix}`}
+        >
           {output}
         </Tooltip>
       ) : (
