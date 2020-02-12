@@ -8,7 +8,7 @@ import {
   FundPolicy,
   AssetWhitelistPolicy,
   AssetBlacklistPolicy,
-} from '~/queries/FundPolicies';
+} from '~/components/Routes/Fund/FundPolicies/FundPolicies.query';
 import { useEnvironment } from '~/hooks/useEnvironment';
 import {
   ScrollableTable,

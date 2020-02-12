@@ -1,5 +1,5 @@
 import React from 'react';
-import { useFundPoliciesQuery } from '~/queries/FundPolicies';
+import { useFundPoliciesQuery } from './FundPolicies.query';
 import { Fallback } from '~/components/Common/Fallback/Fallback';
 
 export interface RequiresNoPoliciesDeployedProps {

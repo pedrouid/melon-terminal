@@ -1,6 +1,6 @@
 import React from 'react';
 import { Spinner } from '~/storybook/components/Spinner/Spinner';
-import { useFundHoldingsQuery } from '~/queries/FundHoldings';
+import { useFundHoldingsQuery } from './FundHoldings.query';
 import * as S from './FundHoldings.styles';
 import BigNumber from 'bignumber.js';
 import {

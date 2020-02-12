@@ -3,7 +3,7 @@ import { useHistory } from 'react-router';
 import { Link } from 'react-router-dom';
 import { Spinner } from '~/storybook/components/Spinner/Spinner';
 import { FundOverviewPagination } from '~/components/Routes/Home/FundOverviewPagination/FundOverviewPagination';
-import { useFundOverviewQuery, FundProcessed } from '~/queries/FundOverview';
+import { useFundOverviewQuery, FundProcessed } from '~/components/Routes/Home/FundOverview/FundOverview.query';
 import { usePagination } from '~/hooks/usePagination';
 import { useAccount } from '~/hooks/useAccount';
 import { Grid, GridRow, GridCol } from '~/storybook/components/Grid/Grid';

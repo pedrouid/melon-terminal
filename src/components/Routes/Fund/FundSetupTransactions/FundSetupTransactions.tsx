@@ -6,7 +6,7 @@ import { useTransaction } from '~/hooks/useTransaction';
 import { TransactionReceipt } from 'web3-core';
 import { useEnvironment } from '~/hooks/useEnvironment';
 import { Transaction } from '@melonproject/melonjs';
-import { useAccountFundQuery } from '~/queries/AccountFund';
+import { useAccountFundQuery } from './AccountFund.query';
 import { Spinner } from '~/storybook/components/Spinner/Spinner';
 import { NoMatch } from '~/components/Routes/NoMatch/NoMatch';
 import { useHistory } from 'react-router';

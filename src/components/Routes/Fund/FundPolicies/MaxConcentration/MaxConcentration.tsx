@@ -1,5 +1,5 @@
 import React from 'react';
-import { MaxConcentrationPolicy } from '~/queries/FundPolicies';
+import { MaxConcentrationPolicy } from './FundPolicies.query';
 import { BodyCell } from '~/storybook/components/Table/Table';
 import { FormattedNumber } from '~/components/Common/FormattedNumber/FormattedNumber';
 import BigNumber from 'bignumber.js';

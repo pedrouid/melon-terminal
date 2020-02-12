@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { NotificationBar, NotificationContent } from '~/storybook/components/NotificationBar/NotificationBar';
-import { ShareFundQuery } from '~/queries/ShareFund';
+import { ShareFundQuery } from '~/components/Routes/Fund/ShareFund/ShareFund.query';
 import { Icons } from '~/storybook/components/Icons/Icons';
 import { useEnvironment } from '~/hooks/useEnvironment';
 import { useLazyOnChainQuery } from '~/hooks/useQuery';

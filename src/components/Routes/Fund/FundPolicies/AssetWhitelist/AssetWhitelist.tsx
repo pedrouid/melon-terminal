@@ -1,5 +1,5 @@
 import React from 'react';
-import { AssetWhitelistPolicy } from '~/queries/FundPolicies';
+import { AssetWhitelistPolicy } from './FundPolicies.query';
 import { BodyCell } from '~/storybook/components/Table/Table';
 import { DeployedEnvironment } from '@melonproject/melonjs';
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import { useEnvironment } from '~/hooks/useEnvironment';
-import { useAccountFundQuery } from '~/queries/AccountFund';
+import { useAccountFundQuery } from './AccountFund.query';
 
 export interface RequiresFundSetupInProgressProps {
   fallback?: React.ReactNode;

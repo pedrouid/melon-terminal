@@ -1,5 +1,5 @@
 import React from 'react';
-import { useFundMetricsQuery } from '~/queries/FundMetrics';
+import { useFundMetricsQuery } from '~/components/Routes/Home/FundMetrics/FundMetrics.query';
 import { useCoinAPI } from '~/hooks/useCoinAPI';
 import {
   Dictionary,

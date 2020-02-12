@@ -1,6 +1,6 @@
 import React from 'react';
-import { useFundDetailsQuery } from '~/queries/FundDetails';
-import { useFundDailyChange } from '~/queries/FundDailyChange';
+import { useFundDetailsQuery } from './FundDetails.query';
+import { useFundDailyChange } from '~/components/Routes/Fund/FundHeader/FundDailyChange.query';
 import { RequiresFundSetupComplete } from '~/components/Gates/RequiresFundSetupComplete/RequiresFundSetupComplete';
 import { EtherscanLink } from '~/components/Common/EtherscanLink/EtherscanLink';
 import { DataBlock, DataBlockSection } from '~/storybook/components/DataBlock/DataBlock';

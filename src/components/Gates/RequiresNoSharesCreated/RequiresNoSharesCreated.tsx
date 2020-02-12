@@ -1,5 +1,5 @@
 import React from 'react';
-import { useFundDetailsQuery } from '~/queries/FundDetails';
+import { useFundDetailsQuery } from './FundDetails.query';
 import BigNumber from 'bignumber.js';
 import { Fallback } from '~/components/Common/Fallback/Fallback';
 

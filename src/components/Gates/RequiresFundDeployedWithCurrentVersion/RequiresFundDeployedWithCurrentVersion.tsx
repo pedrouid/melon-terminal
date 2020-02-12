@@ -1,8 +1,8 @@
 import React from 'react';
 import { useEnvironment } from '~/hooks/useEnvironment';
-import { useFundVersionQuery } from '~/queries/FundVersion';
+import { useFundVersionQuery } from '~/components/Gates/RequiresFundDeployedWithCurrentVersion/FundVersion.query';
 import { NotificationBar, NotificationContent } from '~/storybook/components/NotificationBar/NotificationBar';
-import { useVersionQuery } from '~/queries/Version';
+import { useVersionQuery } from '~/components/Layout/Version.query';
 
 export interface RequiresFundDeployedWithCurrentVersionProps {
   address: string;

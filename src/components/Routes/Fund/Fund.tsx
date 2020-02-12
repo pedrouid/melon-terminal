@@ -20,11 +20,11 @@ import { RequiresFundDeployedWithCurrentVersion } from '~/components/Gates/Requi
 
 const NoMatch = React.lazy(() => import('~/components/Routes/NoMatch/NoMatch'));
 const FundSetupTransactions = React.lazy(() => import('./FundSetupTransactions/FundSetupTransactions'));
-const FundDetails = React.lazy(() => import('./FundRoutes/FundOverview/FundOverview'));
-const FundInvestRedeem = React.lazy(() => import('./FundRoutes/FundInvestRedeem/FundInvestRedeem'));
-const FundTrade = React.lazy(() => import('./FundRoutes/FundTrade/FundTrade'));
-const FundPolicies = React.lazy(() => import('./FundRoutes/FundRiskProfile/FundRiskProfile'));
-const FundManagement = React.lazy(() => import('./FundRoutes/FundManagement/FundManagement'));
+const FundDetails = React.lazy(() => import('./FundOverview/FundOverview'));
+const FundInvestRedeem = React.lazy(() => import('./FundInvestRedeem/FundInvestRedeem'));
+const FundTrade = React.lazy(() => import('./FundTrade/FundTrade'));
+const FundPolicies = React.lazy(() => import('./FundRiskProfile/FundRiskProfile'));
+const FundManagement = React.lazy(() => import('./FundManagement/FundManagement'));
 const ShareFund = React.lazy(() => import('./ShareFund/ShareFund'));
 
 export interface FundRouteParams {

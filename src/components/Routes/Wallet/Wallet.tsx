@@ -8,9 +8,9 @@ import { WalletHeader } from './WalletHeader/WalletHeader';
 import { WalletNavigation } from './WalletNavigation/WalletNavigation';
 
 const NoMatch = React.lazy(() => import('~/components/Routes/NoMatch/NoMatch'));
-const WalletOverview = React.lazy(() => import('./WalletRoutes/WalletOverview/WalletOverview'));
-const WalletWeth = React.lazy(() => import('./WalletRoutes/WalletWeth/WalletWeth'));
-const WalletFundSetup = React.lazy(() => import('./WalletRoutes/WalletFundSetup/WalletFundSetup'));
+const WalletOverview = React.lazy(() => import('./WalletOverview/WalletOverview'));
+const WalletWeth = React.lazy(() => import('./WalletWeth/WalletWeth'));
+const WalletFundSetup = React.lazy(() => import('./WalletFundSetup/WalletFundSetup'));
 
 export const Wallet: React.FC = () => {
   const match = useRouteMatch()!;

@@ -1,5 +1,5 @@
 import React from 'react';
-import { MaxPositionsPolicy } from '~/queries/FundPolicies';
+import { MaxPositionsPolicy } from './FundPolicies.query';
 import { BodyCell } from '~/storybook/components/Table/Table';
 
 interface MaxPositionsProps {

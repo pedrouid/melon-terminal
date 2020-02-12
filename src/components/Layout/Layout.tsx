@@ -1,7 +1,7 @@
 import React from 'react';
 import { format } from 'date-fns';
 import { useLocation } from 'react-router';
-import { usePriceFeedUpdateQuery } from '~/queries/PriceFeedUpdate';
+import { usePriceFeedUpdateQuery } from '~/components/Layout/PriceFeedUpdate.query';
 import { Link, NavLink } from '~/storybook/components/Link/Link';
 import { useAccount } from '~/hooks/useAccount';
 import { Skeleton, SkeletonHead, SkeletonBody, SkeletonFeet } from '~/storybook/components/Skeleton/Skeleton';
@@ -21,7 +21,7 @@ import { ConnectionSelector } from './ConnectionSelector/ConnectionSelector';
 import { useEnvironment } from '~/hooks/useEnvironment';
 import { Icons } from '~/storybook/components/Icons/Icons';
 import { NetworkEnum } from '~/types';
-import { useVersionQuery } from '~/queries/Version';
+import { useVersionQuery } from '~/components/Layout/Version.query';
 
 const graphiql = JSON.parse(process.env.MELON_INCLUDE_GRAPHIQL || 'false');
 
