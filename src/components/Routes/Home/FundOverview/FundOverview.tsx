@@ -216,7 +216,7 @@ export const FundOverview: React.FC = () => {
     <Block>
       <SectionTitle>
         <span>Melon fund universe</span>
-        {!account.fund && account.address && (
+        {!account.loading && !account.fund && account.address && (
           <Button kind="secondary">
             <Link to="/wallet/setup">Create your own Melon fund</Link>
           </Button>
@@ -270,15 +270,15 @@ export const FundOverview: React.FC = () => {
                     {sorted.item.key === heading.key && (sorted.item.order === 'asc' ? <>&uarr;</> : <>&darr;</>)}
                   </HeaderCell>
                 ) : (
-                  <HeaderCellRightAlign
-                    hover={true}
-                    key={key}
-                    onClick={heading.key ? () => handleChangeSortableItem(heading.key) : undefined}
-                  >
-                    {heading.value}
-                    {sorted.item.key === heading.key && (sorted.item.order === 'asc' ? <>&uarr;</> : <>&darr;</>)}
-                  </HeaderCellRightAlign>
-                )
+                    <HeaderCellRightAlign
+                      hover={true}
+                      key={key}
+                      onClick={heading.key ? () => handleChangeSortableItem(heading.key) : undefined}
+                    >
+                      {heading.value}
+                      {sorted.item.key === heading.key && (sorted.item.order === 'asc' ? <>&uarr;</> : <>&darr;</>)}
+                    </HeaderCellRightAlign>
+                  )
               )}
             </HeaderRow>
           </thead>
@@ -303,10 +303,10 @@ export const FundOverview: React.FC = () => {
                 </BodyRowHover>
               ))
             ) : (
-              <BodyRow>
-                <BodyCell colSpan={12}>No records to display</BodyCell>
-              </BodyRow>
-            )}
+                <BodyRow>
+                  <BodyCell colSpan={12}>No records to display</BodyCell>
+                </BodyRow>
+              )}
           </tbody>
         </Table>
       </ScrollableTable>

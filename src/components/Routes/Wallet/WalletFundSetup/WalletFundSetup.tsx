@@ -41,12 +41,12 @@ export const WalletFundSetup: React.FC = () => {
     name: Yup.string()
       .min(1, 'The fund name must be at least one character.')
       // tslint:disable-next-line
-      .test('nameTest', 'The fund name contains invalid characters.', async function(value) {
+      .test('nameTest', 'The fund name contains invalid characters.', async function (value) {
         const registry = new Registry(environment, environment.deployment.melon.addr.Registry);
         return await registry.isValidFundName(value);
       })
       // tslint:disable-next-line
-      .test('nameTest', 'The fund name is reserved by another manager.', async function(value) {
+      .test('nameTest', 'The fund name is reserved by another manager.', async function (value) {
         const registry = new Registry(environment, environment.deployment.melon.addr.Registry);
         return await registry.canUseFundName(account.address!, value);
       }),
@@ -134,11 +134,11 @@ export const WalletFundSetup: React.FC = () => {
   const fallback = transactionFinished ? (
     <></>
   ) : (
-    <Fallback kind="error">
-      You have already started to setup your fund or your fund has already been fully setup. Go to{' '}
-      <Link to={`/fund/${account.fund}`}>your fund</Link> to view your fund.
+      <Fallback kind="error">
+        You have already started to setup your fund or your fund has already been fully setup. Go to{' '}
+        <Link to={`/fund/${account.fund}`}>your fund</Link> to view your fund.
     </Fallback>
-  );
+    );
 
   const exchangeOptions = environment.exchanges
     .filter(exchange => !exchange.historic)
@@ -232,7 +232,7 @@ export const WalletFundSetup: React.FC = () => {
                       </p>
                       <Checkbox name="termsAndConditions" label="I accept the terms and conditions" />
                       <BlockActions>
-                        <Button type="submit">Create fund</Button>
+                        <Button type="submit">Create a fund</Button>
                       </BlockActions>
                     </BlockSection>
                   </form>

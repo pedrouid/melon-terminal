@@ -56,7 +56,7 @@ export const Layout: React.FC = ({ children }) => {
               </LogoMobile>
             </LogoContainer>
             <ConnectionInfo>
-              {account.fund && (
+              {!account.loading && account.fund && (
                 <ConnectionInfoItem>
                   <NavLink to={`/fund/${account.fund}`} title={account.fund} activeClassName="active">
                     My fund
@@ -64,10 +64,10 @@ export const Layout: React.FC = ({ children }) => {
                 </ConnectionInfoItem>
               )}
 
-              {!account.fund && account.address && (
+              {!account.loading && !account.fund && account.address && (
                 <ConnectionInfoItem>
                   <NavLink to={`/wallet/setup`} title={account.fund} activeClassName="active" exact={true}>
-                    Create fund
+                    Create a fund
                   </NavLink>
                 </ConnectionInfoItem>
               )}

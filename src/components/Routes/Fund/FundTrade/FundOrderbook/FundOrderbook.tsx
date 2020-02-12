@@ -45,12 +45,6 @@ export const FundOrderbook: React.FC<FundOrderbookProps> = props => {
     return orders?.bids[0];
   }, [orders]);
 
-  const spread = useMemo(() => {
-    const askPrice = bestAsk?.price ?? new BigNumber('NaN');
-    const bidPrice = bestBid?.price ?? new BigNumber('NaN');
-    return askPrice?.minus(bidPrice);
-  }, [bestAsk, bestBid]);
-
   const midPrice = useMemo(() => {
     const askPrice = bestAsk?.price ?? new BigNumber('NaN');
     const bidPrice = bestBid?.price ?? new BigNumber('NaN');

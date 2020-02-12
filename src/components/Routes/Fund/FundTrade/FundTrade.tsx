@@ -10,12 +10,15 @@ import { FundOrderbookTrading } from '~/components/Routes/Fund/FundTrade/FundOrd
 import { useFundHoldingsQuery } from './FundHoldings/FundHoldings.query';
 import { useFundTrading } from './FundTrade.query';
 import { FundTradeHistory } from './FundTradeHistory/FundTradeHistory';
+import { useEnvironment } from '~/hooks/useEnvironment';
+import { NetworkEnum } from '~/types';
 
 export interface FundTradeProps {
   address: string;
 }
 
 export const FundTrade: React.FC<FundTradeProps> = ({ address }) => {
+  const environment = useEnvironment()!;
   const [exchanges, exchangesQuery] = useFundTrading(address);
   const [holdings, holdingsQuery] = useFundHoldingsQuery(address);
   const loading = exchangesQuery.loading || holdingsQuery.loading;
@@ -30,6 +33,8 @@ export const FundTrade: React.FC<FundTradeProps> = ({ address }) => {
     return supported.includes(exchange.id as ExchangeIdentifier);
   });
 
+  const rfq = environment.network === NetworkEnum.MAINNET && exchanges.find(exchange => exchange.id === ExchangeIdentifier.ZeroExV2);
+
   return (
     <Grid>
       {!loading && (!!providers.length || !!markets.length) && (
@@ -41,20 +46,20 @@ export const FundTrade: React.FC<FundTradeProps> = ({ address }) => {
                   <FundHoldings address={address} />
                 </GridCol>
               </GridRow>
-              <GridRow>
-                {!!markets.length && (
+              {!!markets.length && (
+                <GridRow>
                   <GridCol>
                     <FundOrderbookTrading address={address} exchanges={markets} holdings={holdings} />
                   </GridCol>
-                )}
-              </GridRow>
-              <GridRow>
-                {!!providers.length && (
+                </GridRow>
+              )}
+              {!!providers.length && (
+                <GridRow>
                   <GridCol>
                     <FundLiquidityProviderTrading address={address} exchanges={providers} holdings={holdings} />
                   </GridCol>
-                )}
-              </GridRow>
+                </GridRow>
+              )}
             </RequiresFundNotShutDown>
           </RequiresFundDeployedWithCurrentVersion>
         </RequiresFundManager>

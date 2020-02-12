@@ -20,7 +20,6 @@ export interface FundLiquidityProviderTradingProps {
   address: string;
   exchanges: ExchangeDefinition[];
   holdings: Holding[];
-  asset?: TokenDefinition;
 }
 
 interface FundLiquidityProviderTradingFormValues {
@@ -57,12 +56,12 @@ export const FundLiquidityProviderTrading: React.FC<FundLiquidityProviderTrading
       takerQuantity: Yup.string()
         .required('Missing sell quantity.')
         // tslint:disable-next-line
-        .test('valid-number', 'The given value is not a valid number.', function(value) {
+        .test('valid-number', 'The given value is not a valid number.', function (value) {
           const bn = new BigNumber(value);
           return !bn.isNaN() && !bn.isZero() && bn.isPositive();
         })
         // tslint:disable-next-line
-        .test('balance-too-low', 'Your current balance is too low.', function(value) {
+        .test('balance-too-low', 'Your current balance is too low.', function (value) {
           const holding = holdingsRef.current.find(item => sameAddress(item.token!.address, this.parent.takerAsset))!;
           const divisor = holding ? new BigNumber(10).exponentiatedBy(holding.token!.decimals!) : new BigNumber('NaN');
           const balance = holding ? holding.amount!.dividedBy(divisor) : new BigNumber('NaN');
@@ -73,7 +72,7 @@ export const FundLiquidityProviderTrading: React.FC<FundLiquidityProviderTrading
 
   useEffect(() => {
     holdingsRef.current = props.holdings;
-    form.triggerValidation().catch(() => {});
+    form.triggerValidation().catch(() => { });
   }, [props.holdings]);
 
   const makerAsset = environment.getToken(form.watch('makerAsset')!);
@@ -108,7 +107,7 @@ export const FundLiquidityProviderTrading: React.FC<FundLiquidityProviderTrading
 
     form.setValue('makerAsset', values.takerAsset);
     form.setValue('takerAsset', values.makerAsset);
-    form.triggerValidation().catch(() => {});
+    form.triggerValidation().catch(() => { });
   };
 
   return (
