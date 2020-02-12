@@ -2,11 +2,12 @@ import React, { createContext, useMemo } from 'react';
 import { useFundContextQuery, FundContext } from './Fund.query';
 import { toChecksumAddress, isAddress } from 'web3-utils';
 import { Spinner } from '~/storybook/components/Spinner/Spinner';
+import { Container } from '~/storybook/components/Container/Container';
+import { Fallback } from '~/components/Common/Fallback/Fallback';
 
 export interface FundContextValue extends FundContext {
   loading: boolean;
   address?: string;
-  exists?: boolean;
 }
 
 export interface FundProviderProps {
@@ -24,13 +25,22 @@ export const FundProvider: React.FC<FundProviderProps> = props => {
     skip: !address,
   });
 
-  const output = useMemo(() => ({ ...fund, address, exists: !!fund?.name, loading: query.loading }), [
+  const output = useMemo(() => ({ ...fund, address, loading: query.loading }), [
     fund,
     query.loading,
   ]);
 
   if (query.loading) {
-    return <Spinner></Spinner>;
+    return <Spinner />;
   }
+
+  if (!fund.manager) {
+    return (
+      <Container>
+        <Fallback>This fund does not exist. Are you connected to the right network?</Fallback>
+      </Container>
+    );
+  }
+
   return <Fund.Provider value={output}>{props.children}</Fund.Provider>;
 };

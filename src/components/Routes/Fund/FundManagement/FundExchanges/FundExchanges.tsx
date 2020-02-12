@@ -1,7 +1,7 @@
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
 import * as Yup from 'yup';
 import { useForm, FormContext } from 'react-hook-form';
-import { Trading, sameAddress } from '@melonproject/melonjs';
+import { Trading } from '@melonproject/melonjs';
 import { useEnvironment } from '~/hooks/useEnvironment';
 import { useTransaction } from '~/hooks/useTransaction';
 import { Button } from '~/storybook/components/Button/Button';
@@ -27,54 +27,35 @@ export const FundExchanges: React.FC<ExchangesProps> = ({ address }) => {
   const account = useAccount();
   const refetch = useOnChainQueryRefetcher();
   const [details, query] = useFundExchangesQuery(address);
-  const [addExchanges, setAddExchanges] = useState<string[]>([]);
 
   const transaction = useTransaction(environment, {
     onFinish: receipt => refetch(receipt.blockNumber),
-    onAcknowledge: () => {
-      if (addExchanges?.length) {
-        setAddExchanges([]);
-      }
-    },
   });
 
-  const validationSchema = Yup.object().shape({
-    exchanges: Yup.array<string>().compact(),
-  });
+  const exchanges = useMemo(() => {
+    const exchanges = (details?.fund?.routes?.trading?.exchanges || []);
+    return exchanges
+      .map(exchange => environment.getExchange(exchange.exchange!))
+      .filter(exchange => !!exchange);
+  }, [details?.fund?.routes?.trading?.exchanges]);
+
+  const exchangesRef = useRef(exchanges);
+  useEffect(() => {
+    exchangesRef.current = exchanges;
+  }, [exchanges]);
 
   const form = useForm<ExchangesForm>({
-    validationSchema,
     mode: 'onSubmit',
     reValidateMode: 'onChange',
-  });
-
-  const allowedExchanges = details?.fund?.routes?.trading?.exchanges || [];
-
-  useEffect(() => {
-    const tradingAddress = details?.fund?.routes?.trading?.address;
-    const trading = new Trading(environment, tradingAddress);
-
-    if (addExchanges.length === 1) {
-      form.clearError('exchanges');
-      const exchangeDetails = environment.getExchange(addExchanges[0]);
-      const tx = trading.addExchange(account.address!, addExchanges[0], exchangeDetails.adapter);
-      transaction.start(tx, 'Add exchange');
-    }
-  }, [addExchanges]);
-
-  const submit = form.handleSubmit(async data => {
-    const exchangesToAdd = data.exchanges.filter(
-      selected => selected && !allowedExchanges?.some(available => available.exchange === selected)
-    );
-    setAddExchanges(exchangesToAdd);
-
-    if (exchangesToAdd.length > 1) {
-      form.setError('exchanges', 'tooMany', 'You can only add one exchange at a time');
-    }
-
-    if (!exchangesToAdd.length) {
-      form.setError('exchanges', 'noChanges', 'No changes detected');
-    }
+    validationSchema: Yup.object().shape({
+      exchanges: Yup.array<string>().compact()
+        .test('at-least-one', "You didn't select a new exchange.", (value) => {
+          return value.length > exchangesRef.current.length;
+        })
+        .test('only-one', 'You can only add one exchange at a time.', (value) => {
+          return value.length === exchangesRef.current.length + 1;
+        }),
+    }),
   });
 
   if (query.loading) {
@@ -86,12 +67,23 @@ export const FundExchanges: React.FC<ExchangesProps> = ({ address }) => {
     );
   }
 
-  const exchangesOptions = environment.exchanges.map(exchange => ({
-    label: `${exchange.name}`,
-    value: exchange.exchange,
-    checked: !!allowedExchanges?.some(allowed => allowed && sameAddress(allowed.exchange, exchange.exchange)),
-    disabled: !!allowedExchanges?.some(allowed => allowed && sameAddress(allowed.exchange, exchange.exchange)),
+  const options = environment.exchanges.filter(exchange => {
+    return !exchange.historic || exchanges?.some(allowed => allowed.id === exchange.id);
+  }).map(exchange => ({
+    label: exchange.name,
+    value: exchange.id,
+    checked: !!exchanges?.some(allowed => allowed.id === exchange.id),
+    disabled: !!exchanges?.some(allowed => allowed.id === exchange.id) || exchange.historic,
   }));
+
+  const submit = form.handleSubmit(async data => {
+    const add = data.exchanges.find(selected => selected && !exchanges.some(available => available.id === selected))!;
+    const exchange = environment.getExchange(add);
+    const address = details?.fund?.routes?.trading?.address;
+    const trading = new Trading(environment, address!);
+    const tx = trading.addExchange(account.address!, exchange.exchange, exchange.adapter);
+    transaction.start(tx, 'Add exchange');
+  });
 
   return (
     <Block>
@@ -100,7 +92,7 @@ export const FundExchanges: React.FC<ExchangesProps> = ({ address }) => {
           <SectionTitle>Define allowed exchanges</SectionTitle>
           <p>As a fund manager, you can trade on any of the exchanges selected below.</p>
 
-          <Checkboxes options={exchangesOptions} name="exchanges" />
+          <Checkboxes options={options} name="exchanges" />
 
           <BlockActions>
             <Button type="button" onClick={submit}>
