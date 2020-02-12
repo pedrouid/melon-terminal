@@ -9,7 +9,6 @@ import { FundLiquidityProviderTrading } from '~/components/Routes/Fund/FundTrade
 import { FundOrderbookTrading } from '~/components/Routes/Fund/FundTrade/FundOrderbookTrading/FundOrderbookTrading';
 import { useFundHoldingsQuery } from './FundHoldings/FundHoldings.query';
 import { useFundTrading } from './FundTrade.query';
-import { FundOpenOrders } from './FundOpenOrders/FundOpenOrders';
 import { FundTradeHistory } from './FundTradeHistory/FundTradeHistory';
 
 export interface FundTradeProps {
@@ -60,12 +59,6 @@ export const FundTrade: React.FC<FundTradeProps> = ({ address }) => {
           </RequiresFundDeployedWithCurrentVersion>
         </RequiresFundManager>
       )}
-
-      <GridRow>
-        <GridCol>
-          <FundOpenOrders address={address} />
-        </GridCol>
-      </GridRow>
 
       <GridRow>
         <GridCol>

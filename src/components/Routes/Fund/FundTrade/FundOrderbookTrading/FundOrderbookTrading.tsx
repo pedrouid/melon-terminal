@@ -6,10 +6,9 @@ import { OrderbookItem } from '../FundOrderbook/utils/aggregatedOrderbook';
 import { useEnvironment } from '~/hooks/useEnvironment';
 import { Dropdown } from '~/storybook/components/Dropdown/Dropdown';
 import { FundOrderbookMarketForm } from '../FundOrderbookMarketForm/FundOrderbookMarketForm';
-import { FundOrderbookLimitForm } from '../FundOrderbookLimitForm/FundOrderbookLimitForm';
-import * as S from './FundOrderbookTrading.styles';
 import { Block } from '~/storybook/components/Block/Block';
 import { SectionTitle } from '~/storybook/components/Title/Title';
+import * as S from './FundOrderbookTrading.styles';
 
 export interface FundOrderbookTradingProps {
   address: string;
@@ -36,17 +35,6 @@ export const FundOrderbookTrading: React.FC<FundOrderbookTradingProps> = props =
     name: `${token.symbol} / ${weth.symbol}`,
   }));
 
-  const typeOptions = [
-    {
-      value: 'limit',
-      name: 'Limit',
-    },
-    {
-      value: 'market',
-      name: 'Market',
-    },
-  ];
-
   return (
     <Block>
       <SectionTitle>Orderbook trading</SectionTitle>
@@ -61,27 +49,8 @@ export const FundOrderbookTrading: React.FC<FundOrderbookTradingProps> = props =
             onChange={event => setAsset(environment.getToken(event.target.value)!)}
           />
 
-          <Dropdown
-            name="type"
-            label="Type"
-            options={typeOptions}
-            value={type}
-            onChange={event => setType(event.target.value as 'limit' | 'market')}
-          />
-
-          {type === 'market' && asset && (
+          {asset && (
             <FundOrderbookMarketForm
-              address={props.address}
-              asset={asset}
-              order={order}
-              unsetOrder={() => setOrder(undefined)}
-              holdings={props.holdings}
-              exchanges={props.exchanges}
-            />
-          )}
-
-          {type === 'limit' && asset && (
-            <FundOrderbookLimitForm
               address={props.address}
               asset={asset}
               order={order}
