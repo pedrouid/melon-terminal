@@ -22,11 +22,9 @@ export const FundOrderbookTrading: React.FC<FundOrderbookTradingProps> = props =
 
   const [asset, setAsset] = useState(environment.getToken('DAI'));
   const [order, setOrder] = useState<OrderbookItem>();
-  const [type, setType] = useState<'limit' | 'market'>('limit');
 
   useEffect(() => {
     setOrder(undefined);
-    setType('limit');
   }, [asset]);
 
   const tokens = environment.tokens.filter(token => token !== weth && !token.historic);
@@ -69,10 +67,6 @@ export const FundOrderbookTrading: React.FC<FundOrderbookTradingProps> = props =
               exchanges={props.exchanges}
               selected={order}
               setSelected={(order?: OrderbookItem) => {
-                if (order != null && type !== 'market') {
-                  setType('market');
-                }
-
                 setOrder(order);
               }}
             />
