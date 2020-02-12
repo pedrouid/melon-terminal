@@ -79,7 +79,9 @@ export const FundInvestmentHistoryList: React.FC<FundInvestmentHistoryListProps>
                     <FormattedNumber value={fromTokenBaseUnit(investment.sharePrice, 18)} />
                   </BodyCellRightAlign>
                   <BodyCellRightAlign>
-                    {investment.action === 'Investment' && <FormattedNumber value={fromTokenBaseUnit(investment.amount, investment.asset.decimals)} />}
+                    {investment.action === 'Investment' && (
+                      <FormattedNumber value={fromTokenBaseUnit(investment.amount, investment.asset.decimals)} />
+                    )}
                   </BodyCellRightAlign>
                   <BodyCell>{investment.action === 'Investment' ? investment.asset.symbol : '(in kind)'}</BodyCell>
                   <BodyCellRightAlign>

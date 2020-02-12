@@ -68,8 +68,9 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
     state.progress < TransactionProgress.TRANSACTION_ACKNOWLEDGED &&
     state.progress > TransactionProgress.TRANSACTION_STARTED;
 
-  const price = form.watch('gasPrice') ?? defaultGasPrice;
-  const gasPriceEth = new BigNumber(options?.gas ?? 'NaN').multipliedBy('1e9').multipliedBy(price);
+  const formGasPrice = new BigNumber(form.watch('gasPrice') ?? defaultGasPrice);
+  const usedGasPrice = new BigNumber(state.sendOptions?.gasPrice ?? 'NaN');
+  const gasPriceEth = new BigNumber(options?.gas ?? 'NaN').multipliedBy('1e9').multipliedBy(formGasPrice);
   const gasPriceUsd = gasPriceEth.multipliedBy(coinApi.data.rate);
 
   const amguUsd = options?.amgu?.multipliedBy(coinApi.data.rate) ?? new BigNumber('NaN');
@@ -248,18 +249,14 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
                             <S.TransactionModalMessagesTableRowLabel>Gas cost</S.TransactionModalMessagesTableRowLabel>
                             <S.TransactionModalMessagesTableRowQuantity>
                               <FormattedNumber
-                                value={fromTokenBaseUnit(
-                                  new BigNumber(receipt.gasUsed).multipliedBy(price).multipliedBy('1e9'),
-                                  18
-                                )}
+                                value={fromTokenBaseUnit(new BigNumber(receipt.gasUsed).multipliedBy(usedGasPrice), 18)}
                                 suffix="ETH"
                               />
                               {' ('}
                               <FormattedNumber
                                 value={fromTokenBaseUnit(
                                   new BigNumber(receipt.gasUsed)
-                                    .multipliedBy(price)
-                                    .multipliedBy('1e9')
+                                    .multipliedBy(usedGasPrice)
                                     .multipliedBy(coinApi.data.rate),
                                   18
                                 )}

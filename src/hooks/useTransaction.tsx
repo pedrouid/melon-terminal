@@ -101,6 +101,7 @@ interface ValidationError {
 
 interface ExecutionPending {
   type: TransactionProgress.EXECUTION_PENDING;
+  sendOptions: SendOptions;
 }
 
 interface ExecutionReceived {
@@ -220,6 +221,7 @@ function reducer(state: TransactionState, action: TransactionAction): Transactio
       return {
         ...state,
         progress: TransactionProgress.EXECUTION_PENDING,
+        sendOptions: action.sendOptions,
         loading: true,
         error: undefined,
         hash: undefined,
@@ -286,8 +288,8 @@ function estimationError(dispatch: React.Dispatch<TransactionAction>, error: Err
   dispatch({ error, type: TransactionProgress.ESTIMATION_ERROR });
 }
 
-function executionPending(dispatch: React.Dispatch<TransactionAction>) {
-  dispatch({ type: TransactionProgress.EXECUTION_PENDING });
+function executionPending(dispatch: React.Dispatch<TransactionAction>, sendOptions: SendOptions) {
+  dispatch({ sendOptions, type: TransactionProgress.EXECUTION_PENDING });
 }
 
 function executionReceived(dispatch: React.Dispatch<TransactionAction>, hash: string) {
@@ -377,7 +379,6 @@ export function useTransaction(environment: DeployedEnvironment, options?: Trans
     }
 
     try {
-      executionPending(dispatch);
       const transaction = state.transaction!;
       const opts: SendOptions = {
         gasPrice: `${+data.gasPrice * 1e9}`,
@@ -386,6 +387,7 @@ export function useTransaction(environment: DeployedEnvironment, options?: Trans
         ...(state.sendOptions && state.sendOptions.incentive && { incentive: state.sendOptions.incentive }),
       };
 
+      executionPending(dispatch, opts);
       const tx = transaction.send(opts);
       const receipt = await new Promise<TransactionReceipt>((resolve, reject) => {
         tx.once('transactionHash', hash => executionReceived(dispatch, hash));
