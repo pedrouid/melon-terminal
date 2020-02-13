@@ -64,6 +64,7 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
   const loading = state.loading;
   const finished = state.progress >= TransactionProgress.EXECUTION_FINISHED;
   const estimated = state.progress >= TransactionProgress.ESTIMATION_FINISHED;
+  const started = state.progress >= TransactionProgress.EXECUTION_PENDING;
   const open =
     state.progress < TransactionProgress.TRANSACTION_ACKNOWLEDGED &&
     state.progress > TransactionProgress.TRANSACTION_STARTED;
@@ -150,6 +151,7 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
                       label="Gas Price (gwei)"
                       disabled={loading && estimated}
                     />
+
                     <S.CostsTable>
                       <S.CostsTableHead>
                         <S.CostsTableRow>
@@ -272,8 +274,8 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
               <S.TransactionModalActions>
                 {!finished && (
                   <S.TransactionModalAction>
-                    <Button type="button" kind="secondary" length="stretch" onClick={() => cancel()}>
-                      {estimated ? 'Cancel' : 'Close'}
+                    <Button type="button" kind="secondary" length="stretch" disabled={started} onClick={() => cancel()}>
+                      Close
                     </Button>
                   </S.TransactionModalAction>
                 )}
