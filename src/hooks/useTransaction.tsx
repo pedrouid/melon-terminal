@@ -6,6 +6,7 @@ import { Transaction, SendOptions, Deployment, Contract, DeployedEnvironment } f
 import { FormContextValues } from 'react-hook-form/dist/contextTypes';
 import { FieldValues } from 'react-hook-form/dist/types';
 import { NetworkEnum } from '~/types';
+import BigNumber from 'bignumber.js';
 
 export interface TransactionFormValues extends FieldValues {
   gasPrice: number;
@@ -361,6 +362,13 @@ export function useTransaction(environment: DeployedEnvironment, options?: Trans
     }),
   });
 
+  useEffect(() => {
+    const values = form.getValues();
+    if (state.defaultGasPrice && !values.gasPrice) {
+      form.setValue('gasPrice', state.defaultGasPrice);
+    }
+  }, [state.defaultGasPrice]);
+
   const start = (transaction: Transaction, name: string) => {
     dispatch({ transaction, name, type: TransactionProgress.TRANSACTION_STARTED });
   };
@@ -381,7 +389,7 @@ export function useTransaction(environment: DeployedEnvironment, options?: Trans
     try {
       const transaction = state.transaction!;
       const opts: SendOptions = {
-        gasPrice: `${+data.gasPrice * 1e9}`,
+        gasPrice: new BigNumber(data.gasPrice).multipliedBy('1e9').toFixed(0),
         ...(state.sendOptions && state.sendOptions.gas && { gas: state.sendOptions.gas }),
         ...(state.sendOptions && state.sendOptions.amgu && { amgu: state.sendOptions.amgu }),
         ...(state.sendOptions && state.sendOptions.incentive && { incentive: state.sendOptions.incentive }),

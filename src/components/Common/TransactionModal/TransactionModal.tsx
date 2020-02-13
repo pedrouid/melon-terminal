@@ -148,9 +148,6 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
                       type="number"
                       name="gasPrice"
                       label="Gas Price (gwei)"
-                      step=".01"
-                      max={8000000}
-                      defaultValue={defaultGasPrice}
                       disabled={loading && estimated}
                     />
                     <S.CostsTable>
