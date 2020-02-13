@@ -31,6 +31,7 @@ export const useAccountContextQuery = (address?: string) => {
   });
 
   const account = result.data?.account;
+
   const output: AccountContext = {
     fund: account?.fund?.address,
     eth: (account as any)?.eth as BigNumber,

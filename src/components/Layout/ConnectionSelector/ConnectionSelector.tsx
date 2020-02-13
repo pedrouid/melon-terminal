@@ -89,6 +89,8 @@ export const ConnectionSelector = () => {
         return 'FRAME';
       case 'ganache':
         return 'GANACHE';
+      case 'fortmatic':
+        return 'FORTMATIC';
       default:
         return null;
     }
@@ -105,7 +107,6 @@ export const ConnectionSelector = () => {
           </S.ConnectionLabel>
         )}
       </S.ConnectionSelectorToggle>
-
       {open && (
         <S.ConnectionSelectorBox>
           {connection.methods.map(method => {

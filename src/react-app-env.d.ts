@@ -29,6 +29,9 @@ declare global {
       MELON_TESTNET_PROVIDER: string;
       MELON_DEFAULT_PROVIDER: string;
       MELON_INCLUDE_GRAPHIQL: string;
+      MELON_FORTMATIC_KEY: string;
+      MELON_FORTMATIC_PROVIDER: string;
+      MELON_FORTMATIC_NETWORK: string;
     }
   }
 }

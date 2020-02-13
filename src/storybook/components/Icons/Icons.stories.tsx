@@ -31,3 +31,4 @@ export const TWITTER: React.FC = () => <Icons name="TWITTER" />;
 export const LEFTARROW: React.FC = () => <Icons name="LEFTARROW" />;
 export const SWAPARROWS: React.FC = () => <Icons name="SWAPARROWS" />;
 export const EXCHANGE: React.FC = () => <Icons name="EXCHANGE" />;
+export const FORTMATIC: React.FC = () => <Icons name="FORTMATIC" />;

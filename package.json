@@ -44,6 +44,7 @@
     "apollo-link-http": "^1.5.16",
     "bignumber.js": "^9.0.0",
     "date-fns": "^2.7.0",
+    "fortmatic": "^1.1.3",
     "graphiql": "^0.17.5",
     "graphql": "^14.5.4",
     "graphql-tag": "^2.10.1",

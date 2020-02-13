@@ -15,11 +15,12 @@ import { AppRouter } from '~/components/AppRouter';
 import { method as metamask } from './Layout/ConnectionSelector/MetaMask/MetaMask';
 import { method as frame } from './Layout/ConnectionSelector/Frame/Frame';
 import { method as ganache } from './Layout/ConnectionSelector/Ganache/Ganache';
+import { method as fortmatic } from './Layout/ConnectionSelector/Fortmatic/Fortmatic';
 import { method as anonymous } from './Layout/ConnectionSelector/Anonymous/Anonymous';
 
 const AppComponent = () => {
   const start = process.env.MELON_TESTNET ? ganache : anonymous;
-  const methods = process.env.MELON_TESTNET ? [ganache, metamask, frame] : [metamask, frame];
+  const methods = process.env.MELON_TESTNET ? [ganache, metamask, frame, fortmatic] : [metamask, frame, fortmatic];
 
   return (
     <Router>

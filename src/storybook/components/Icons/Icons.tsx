@@ -27,6 +27,7 @@ import TWITTER from './svg/socialNetwork/twitter.svg';
 import LEFTARROW from './svg/leftArrow.svg';
 import SWAPARROWS from './svg/swapArrows.svg';
 import EXCHANGE from './svg/exchange.svg';
+import FORTMATIC from './svg/wallet/fortmatic.svg';
 import * as S from './Icons.styles';
 
 const availableIcons = {
@@ -58,6 +59,7 @@ const availableIcons = {
   LEFTARROW,
   SWAPARROWS,
   EXCHANGE,
+  FORTMATIC,
 };
 
 export type IconName = keyof typeof availableIcons;
