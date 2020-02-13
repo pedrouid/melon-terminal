@@ -124,7 +124,7 @@
     },
     "conf": {
       "WETH": {
-        "name": "Wrapped ether",
+        "name": "Wrapped Ether",
         "decimals": 18,
         "initialDepositAmount": "1000000000000000000"
       },
@@ -161,7 +161,7 @@
         "decimals": 18
       },
       "MKR": {
-        "name": "Maker token",
+        "name": "Maker Token",
         "decimals": 18
       },
       "OMG": {
