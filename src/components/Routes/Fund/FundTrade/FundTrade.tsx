@@ -5,6 +5,7 @@ import { Grid, GridRow, GridCol } from '~/storybook/components/Grid/Grid';
 import { FundHoldings } from '~/components/Routes/Fund/FundTrade/FundHoldings/FundHoldings';
 import { RequiresFundNotShutDown } from '~/components/Gates/RequiresFundNotShutDown/RequiresFundNotShutDown';
 import { RequiresFundDeployedWithCurrentVersion } from '~/components/Gates/RequiresFundDeployedWithCurrentVersion/RequiresFundDeployedWithCurrentVersion';
+import { FundRequestForQuoteTrading } from './FundRequestForQuoteTrading.tsx/FundRequestForQuoteTrading';
 import { FundLiquidityProviderTrading } from '~/components/Routes/Fund/FundTrade/FundLiquidityProviderTrading/FundLiquidityProviderTrading';
 import { FundOrderbookTrading } from '~/components/Routes/Fund/FundTrade/FundOrderbookTrading/FundOrderbookTrading';
 import { useFundHoldingsQuery } from './FundHoldings/FundHoldings.query';
@@ -57,6 +58,13 @@ export const FundTrade: React.FC<FundTradeProps> = ({ address }) => {
                 <GridRow>
                   <GridCol>
                     <FundLiquidityProviderTrading address={address} exchanges={providers} holdings={holdings} />
+                  </GridCol>
+                </GridRow>
+              )}
+              {!!rfq && (
+                <GridRow>
+                  <GridCol>
+                    <FundRequestForQuoteTrading address={address} exchange={rfq} holdings={holdings} />
                   </GridCol>
                 </GridRow>
               )}
