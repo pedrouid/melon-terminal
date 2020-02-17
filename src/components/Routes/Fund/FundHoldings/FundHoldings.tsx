@@ -18,6 +18,7 @@ import { Block } from '~/storybook/components/Block/Block';
 import { FormattedNumber } from '~/components/Common/FormattedNumber/FormattedNumber';
 import { fromTokenBaseUnit } from '~/utils/fromTokenBaseUnit';
 import { Icons, IconName } from '~/storybook/components/Icons/Icons';
+import { TokenValue } from '~/components/Common/TokenValue/TokenValue';
 
 export interface FundHoldingsProps {
   address: string;
@@ -70,10 +71,10 @@ export const FundHoldings: React.FC<FundHoldingsProps> = ({ address }) => {
                   <FormattedNumber value={holding.token?.price} />
                 </BodyCellRightAlign>
                 <BodyCellRightAlign>
-                  <FormattedNumber value={fromTokenBaseUnit(holding.amount!, holding.token!.decimals!)} />
+                  <TokenValue value={holding.amount!} decimals={holding.token!.decimals!} />
                 </BodyCellRightAlign>
                 <BodyCellRightAlign>
-                  <FormattedNumber value={fromTokenBaseUnit(holding.value!, 18)} />
+                  <TokenValue value={holding.value!} />
                 </BodyCellRightAlign>
                 <BodyCellRightAlign>
                   <FormattedNumber value={holding.value?.dividedBy(totalValue).times(100)} decimals={2} suffix="%" />

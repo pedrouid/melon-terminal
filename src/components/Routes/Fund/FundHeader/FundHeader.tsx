@@ -7,6 +7,7 @@ import { DataBlock, DataBlockSection } from '~/storybook/components/DataBlock/Da
 import { Bar, BarContent } from '~/storybook/components/Bar/Bar';
 import { Headline } from '~/storybook/components/Headline/Headline';
 import { FormattedNumber } from '~/components/Common/FormattedNumber/FormattedNumber';
+import { TokenValue } from '~/components/Common/TokenValue/TokenValue';
 
 export interface FundHeaderProps {
   address: string;
@@ -30,11 +31,11 @@ export const FundHeader: React.FC<FundHeaderProps> = ({ address }) => {
         <RequiresFundSetupComplete fallback={false}>
           <DataBlockSection>
             <DataBlock label="Share price">
-              <FormattedNumber value={accounting?.sharePrice} suffix="WETH" />
+              <TokenValue value={accounting?.sharePrice} decimals={0} symbol="WETH" />
             </DataBlock>
 
             <DataBlock label="Assets under management">
-              <FormattedNumber value={accounting?.grossAssetValue} suffix="WETH" />
+              <TokenValue value={accounting?.grossAssetValue} decimals={0} symbol="WETH" />
             </DataBlock>
 
             <DataBlock label="Daily change">

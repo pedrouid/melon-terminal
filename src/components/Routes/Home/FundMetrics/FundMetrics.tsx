@@ -12,6 +12,7 @@ import { fromTokenBaseUnit } from '~/utils/fromTokenBaseUnit';
 import { FormattedNumber } from '~/components/Common/FormattedNumber/FormattedNumber';
 import { Spinner } from '~/storybook/components/Spinner/Spinner';
 import { Grid, GridCol, GridRow } from '~/storybook/components/Grid/Grid';
+import { TokenValue } from '~/components/Common/TokenValue/TokenValue';
 
 export const FundMetrics: React.FC = () => {
   const [metrics, metricsQuery] = useFundMetricsQuery();
@@ -58,13 +59,13 @@ export const FundMetrics: React.FC = () => {
             <DictionaryEntry>
               <DictionaryLabel>Total AUM (in ETH)</DictionaryLabel>
               <DictionaryData>
-                <FormattedNumber suffix="ETH" value={weiToEth} />
+                <TokenValue symbol="ETH" value={weiToEth} />
               </DictionaryData>
             </DictionaryEntry>
             <DictionaryEntry>
               <DictionaryLabel>Total AUM (in USD)</DictionaryLabel>
               <DictionaryData>
-                <FormattedNumber suffix="USD" value={mlnPrice} />
+                <TokenValue symbol="USD" value={mlnPrice} />
               </DictionaryData>
             </DictionaryEntry>
           </GridCol>

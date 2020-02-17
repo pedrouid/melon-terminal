@@ -27,6 +27,7 @@ import { Link } from '~/storybook/components/Link/Link';
 import BigNumber from 'bignumber.js';
 import { TransactionRef } from '../FundInvest/FundInvest';
 import { AccountContextValue } from '~/components/Contexts/Account/Account';
+import { TokenValue } from '~/components/Common/TokenValue/TokenValue';
 
 export interface RequestInvestmentProps {
   address: string;
@@ -218,9 +219,10 @@ export const RequestInvestment = forwardRef(
               <>
                 <div>
                   Your balance:{' '}
-                  <FormattedNumber
-                    value={fromTokenBaseUnit(allowance?.balance, asset!.token!.decimals!)}
-                    suffix={asset?.token?.symbol}
+                  <TokenValue
+                    value={allowance?.balance}
+                    decimals={asset!.token!.decimals!}
+                    symbol={asset?.token?.symbol}
                   />
                 </div>
 

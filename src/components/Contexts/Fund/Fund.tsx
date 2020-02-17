@@ -25,10 +25,7 @@ export const FundProvider: React.FC<FundProviderProps> = props => {
     skip: !address,
   });
 
-  const output = useMemo(() => ({ ...fund, address, loading: query.loading }), [
-    fund,
-    query.loading,
-  ]);
+  const output = useMemo(() => ({ ...fund, address, loading: query.loading }), [fund, query.loading]);
 
   if (query.loading) {
     return <Spinner />;

@@ -33,10 +33,8 @@ export const FundExchanges: React.FC<ExchangesProps> = ({ address }) => {
   });
 
   const exchanges = useMemo(() => {
-    const exchanges = (details?.fund?.routes?.trading?.exchanges || []);
-    return exchanges
-      .map(exchange => environment.getExchange(exchange.exchange!))
-      .filter(exchange => !!exchange);
+    const exchanges = details?.fund?.routes?.trading?.exchanges || [];
+    return exchanges.map(exchange => environment.getExchange(exchange.exchange!)).filter(exchange => !!exchange);
   }, [details?.fund?.routes?.trading?.exchanges]);
 
   const exchangesRef = useRef(exchanges);
@@ -48,11 +46,12 @@ export const FundExchanges: React.FC<ExchangesProps> = ({ address }) => {
     mode: 'onSubmit',
     reValidateMode: 'onChange',
     validationSchema: Yup.object().shape({
-      exchanges: Yup.array<string>().compact()
-        .test('at-least-one', "You didn't select a new exchange.", (value) => {
+      exchanges: Yup.array<string>()
+        .compact()
+        .test('at-least-one', "You didn't select a new exchange.", value => {
           return value.length > exchangesRef.current.length;
         })
-        .test('only-one', 'You can only add one exchange at a time.', (value) => {
+        .test('only-one', 'You can only add one exchange at a time.', value => {
           return value.length === exchangesRef.current.length + 1;
         }),
     }),
@@ -67,14 +66,16 @@ export const FundExchanges: React.FC<ExchangesProps> = ({ address }) => {
     );
   }
 
-  const options = environment.exchanges.filter(exchange => {
-    return !exchange.historic || exchanges?.some(allowed => allowed.id === exchange.id);
-  }).map(exchange => ({
-    label: exchange.name,
-    value: exchange.id,
-    checked: !!exchanges?.some(allowed => allowed.id === exchange.id),
-    disabled: !!exchanges?.some(allowed => allowed.id === exchange.id) || exchange.historic,
-  }));
+  const options = environment.exchanges
+    .filter(exchange => {
+      return !exchange.historic || exchanges?.some(allowed => allowed.id === exchange.id);
+    })
+    .map(exchange => ({
+      label: exchange.name,
+      value: exchange.id,
+      checked: !!exchanges?.some(allowed => allowed.id === exchange.id),
+      disabled: !!exchanges?.some(allowed => allowed.id === exchange.id) || exchange.historic,
+    }));
 
   const submit = form.handleSubmit(async data => {
     const add = data.exchanges.find(selected => selected && !exchanges.some(available => available.id === selected))!;

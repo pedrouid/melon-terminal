@@ -18,6 +18,7 @@ import BigNumber from 'bignumber.js';
 import { standardDeviation } from '~/utils/finance';
 import { TwitterLink } from '~/components/Common/TwitterLink/TwitterLink';
 import { useAccount } from '~/hooks/useAccount';
+import { TokenValue } from '~/components/Common/TokenValue/TokenValue';
 
 export interface NormalizedCalculation {
   sharePrice: BigNumber;
@@ -159,13 +160,13 @@ export const FundFactSheet: React.FC<FundFactSheetProps> = ({ address }) => {
       <DictionaryEntry>
         <DictionaryLabel>Gross asset value (GAV)</DictionaryLabel>
         <DictionaryData>
-          <FormattedNumber value={accounting?.grossAssetValue} suffix="WETH" />
+          <TokenValue value={accounting?.grossAssetValue} symbol="WETH" />
         </DictionaryData>
       </DictionaryEntry>
       <DictionaryEntry>
         <DictionaryLabel>Net asset value (NAV)</DictionaryLabel>
         <DictionaryData>
-          <FormattedNumber value={accounting?.netAssetValue} suffix="WETH" />
+          <TokenValue value={accounting?.netAssetValue} symbol="WETH" />
         </DictionaryData>
       </DictionaryEntry>
       <DictionaryEntry>
@@ -177,7 +178,7 @@ export const FundFactSheet: React.FC<FundFactSheetProps> = ({ address }) => {
       <DictionaryEntry>
         <DictionaryLabel>Share price</DictionaryLabel>
         <DictionaryData>
-          <FormattedNumber value={accounting?.sharePrice} suffix="WETH" />
+          <TokenValue value={accounting?.sharePrice} symbol="WETH" />
         </DictionaryData>
       </DictionaryEntry>
       <DictionaryEntry>

@@ -13,6 +13,7 @@ import { SectionTitle } from '~/storybook/components/Title/Title';
 import { DictionaryData, DictionaryEntry, DictionaryLabel } from '~/storybook/components/Dictionary/Dictionary';
 import { fromTokenBaseUnit } from '~/utils/fromTokenBaseUnit';
 import { FormattedNumber } from '~/components/Common/FormattedNumber/FormattedNumber';
+import { TokenValue } from '~/components/Common/TokenValue/TokenValue';
 
 export interface ClaimFeesProps {
   address: string;
@@ -62,13 +63,13 @@ export const ClaimFees: React.FC<ClaimFeesProps> = ({ address }) => {
       <DictionaryEntry>
         <DictionaryLabel>Accrued management fee</DictionaryLabel>
         <DictionaryData>
-          <FormattedNumber value={fromTokenBaseUnit(feeManagerInfo!.managementFeeAmount, 18)}></FormattedNumber>
+          <TokenValue value={feeManagerInfo!.managementFeeAmount} />
         </DictionaryData>
       </DictionaryEntry>
       <DictionaryEntry>
         <DictionaryLabel>Accrued performance fee</DictionaryLabel>
         <DictionaryData>
-          <FormattedNumber value={fromTokenBaseUnit(feeManagerInfo!.performanceFeeAmount, 18)}></FormattedNumber>
+          <TokenValue value={feeManagerInfo!.performanceFeeAmount} />
         </DictionaryData>
       </DictionaryEntry>
 

@@ -16,6 +16,7 @@ import { BigNumber } from 'bignumber.js';
 import { useCoinAPI } from '~/hooks/useCoinAPI';
 import { useEnvironment } from '~/hooks/useEnvironment';
 import { NetworkEnum } from '~/types';
+import { TokenValue } from '../TokenValue/TokenValue';
 
 function progressToStep(progress: number) {
   if (progress >= TransactionProgress.EXECUTION_FINISHED) {
@@ -170,10 +171,10 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
                               <FormattedNumber value={options.gas} decimals={0} />
                             </S.CostsTableCell>
                             <S.CostsTableCell>
-                              <FormattedNumber value={fromTokenBaseUnit(gasPriceEth, 18)} suffix="ETH" />
+                              <TokenValue value={gasPriceEth} symbol="ETH" />
                             </S.CostsTableCell>
                             <S.CostsTableCell>
-                              <FormattedNumber value={fromTokenBaseUnit(gasPriceUsd, 18)} suffix="USD" />
+                              <TokenValue value={gasPriceUsd} symbol="USD" />
                             </S.CostsTableCell>
                           </S.CostsTableRow>
                         )}
@@ -183,10 +184,10 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
                             <S.CostsTableCellText>Asset management gas</S.CostsTableCellText>
                             <S.CostsTableCell />
                             <S.CostsTableCell>
-                              <FormattedNumber value={fromTokenBaseUnit(options.amgu, 18)} suffix="ETH" />
+                              <TokenValue value={options.amgu} symbol="ETH" />
                             </S.CostsTableCell>
                             <S.CostsTableCell>
-                              <FormattedNumber value={fromTokenBaseUnit(amguUsd, 18)} suffix="USD" />
+                              <TokenValue value={amguUsd} symbol="USD" />
                             </S.CostsTableCell>
                           </S.CostsTableRow>
                         )}
@@ -196,10 +197,10 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
                             <S.CostsTableCellText>Incentive</S.CostsTableCellText>
                             <S.CostsTableCell />
                             <S.CostsTableCell>
-                              <FormattedNumber value={fromTokenBaseUnit(options.incentive, 18)} suffix="ETH" />
+                              <TokenValue value={options.incentive} symbol="ETH" />
                             </S.CostsTableCell>
                             <S.CostsTableCell>
-                              <FormattedNumber value={fromTokenBaseUnit(incentiveUsd, 18)} suffix="USD" />
+                              <TokenValue value={incentiveUsd} symbol="USD" />
                             </S.CostsTableCell>
                           </S.CostsTableRow>
                         )}
@@ -209,10 +210,10 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
                             <S.CostsTableCellText>Total</S.CostsTableCellText>
                             <S.CostsTableCell />
                             <S.CostsTableCell>
-                              <FormattedNumber value={fromTokenBaseUnit(totalEth, 18)} suffix="ETH" />
+                              <TokenValue value={totalEth} symbol="ETH" />
                             </S.CostsTableCell>
                             <S.CostsTableCell>
-                              <FormattedNumber value={fromTokenBaseUnit(totalUsd, 18)} suffix="USD" />
+                              <TokenValue value={totalUsd} symbol="USD" />
                             </S.CostsTableCell>
                           </S.CostsTableRowTotal>
                         )}

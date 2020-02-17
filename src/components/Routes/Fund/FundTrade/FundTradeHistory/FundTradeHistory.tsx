@@ -16,6 +16,7 @@ import { SectionTitle } from '~/storybook/components/Title/Title';
 import { useFundTradeHistoryQuery } from './FundTradeHistory.query';
 import { FormattedDate } from '~/components/Common/FormattedDate/FormattedDate';
 import { FormattedNumber } from '~/components/Common/FormattedNumber/FormattedNumber';
+import { TokenValue } from '~/components/Common/TokenValue/TokenValue';
 
 export interface FundTradeHistoryProps {
   address: string;
@@ -54,10 +55,10 @@ export const FundTradeHistory: React.FC<FundTradeHistoryProps> = ({ address }) =
                   <BodyCell>{call.buyAsset?.symbol}</BodyCell>
                   <BodyCell>{call.sellAsset?.symbol}</BodyCell>
                   <BodyCellRightAlign>
-                    <FormattedNumber value={call.buyQuantity} />
+                    <TokenValue value={call.buyQuantity} />
                   </BodyCellRightAlign>
                   <BodyCellRightAlign>
-                    <FormattedNumber value={call.sellQuantity} />
+                    <TokenValue value={call.sellQuantity} />
                   </BodyCellRightAlign>
                   <BodyCell>{call.signature?.label}</BodyCell>
                 </BodyRow>

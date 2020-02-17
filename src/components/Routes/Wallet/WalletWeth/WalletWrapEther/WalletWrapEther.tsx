@@ -16,6 +16,7 @@ import { FormattedNumber } from '~/components/Common/FormattedNumber/FormattedNu
 import * as S from './WalletWrapEther.styles';
 import { toTokenBaseUnit } from '~/utils/toTokenBaseUnit';
 import { fromTokenBaseUnit } from '~/utils/fromTokenBaseUnit';
+import { TokenValue } from '~/components/Common/TokenValue/TokenValue';
 
 export const WalletWrapEther: React.FC = () => {
   const environment = useEnvironment()!;
@@ -61,10 +62,10 @@ export const WalletWrapEther: React.FC = () => {
         <form onSubmit={submit}>
           <S.WalletWrapEtherBalances>
             <S.WalletWrapEtherBalance>
-              <FormattedNumber value={fromTokenBaseUnit(account.eth!, 18)} suffix="ETH" />
+              <TokenValue value={account.eth!} symbol="ETH" />
             </S.WalletWrapEtherBalance>
             <S.WalletWrapEtherBalance>
-              <FormattedNumber value={fromTokenBaseUnit(account.weth!, 18)} suffix="WETH" />
+              <TokenValue value={account.weth!} symbol="WETH" />
             </S.WalletWrapEtherBalance>
           </S.WalletWrapEtherBalances>
           <Input id="quantityEth" name="quantityEth" label="Quantity" type="number" step="any" />

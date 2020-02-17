@@ -6,6 +6,7 @@ import { EtherscanLink } from '~/components/Common/EtherscanLink/EtherscanLink';
 import { FormattedNumber } from '~/components/Common/FormattedNumber/FormattedNumber';
 import { fromTokenBaseUnit } from '~/utils/fromTokenBaseUnit';
 import { DataBlockSection, DataBlock } from '~/storybook/components/DataBlock/DataBlock';
+import { TokenValue } from '~/components/Common/TokenValue/TokenValue';
 
 export const WalletHeader: React.FC = () => {
   const account = useAccount()!;
@@ -16,7 +17,7 @@ export const WalletHeader: React.FC = () => {
         <Headline title="Your account" text={<EtherscanLink address={account.address} />} icon="wallet" />
         <DataBlockSection>
           <DataBlock label="Balance">
-            <FormattedNumber value={fromTokenBaseUnit(account.eth!, 18)} suffix="ETH" />
+            <TokenValue value={account.eth!} symbol="ETH" />
           </DataBlock>
         </DataBlockSection>
       </BarContent>

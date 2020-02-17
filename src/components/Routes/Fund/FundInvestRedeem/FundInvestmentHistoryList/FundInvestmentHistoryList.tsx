@@ -18,6 +18,7 @@ import { FormattedDate } from '~/components/Common/FormattedDate/FormattedDate';
 import { fromTokenBaseUnit } from '~/utils/fromTokenBaseUnit';
 import { FormattedNumber } from '~/components/Common/FormattedNumber/FormattedNumber';
 import { EtherscanLink } from '~/components/Common/EtherscanLink/EtherscanLink';
+import { TokenValue } from '~/components/Common/TokenValue/TokenValue';
 
 export interface FundInvestmentHistoryListProps {
   address: string;
@@ -73,19 +74,19 @@ export const FundInvestmentHistoryList: React.FC<FundInvestmentHistoryListProps>
                   </BodyCell>
                   <BodyCell>{investment.action}</BodyCell>
                   <BodyCellRightAlign>
-                    <FormattedNumber value={fromTokenBaseUnit(investment.shares, 18)} />
+                    <TokenValue value={investment.shares} />
                   </BodyCellRightAlign>
                   <BodyCellRightAlign>
-                    <FormattedNumber value={fromTokenBaseUnit(investment.sharePrice, 18)} />
+                    <TokenValue value={investment.sharePrice} />
                   </BodyCellRightAlign>
                   <BodyCellRightAlign>
                     {investment.action === 'Investment' && (
-                      <FormattedNumber value={fromTokenBaseUnit(investment.amount, investment.asset.decimals)} />
+                      <TokenValue value={investment.amount} decimals={investment.asset.decimals} />
                     )}
                   </BodyCellRightAlign>
                   <BodyCell>{investment.action === 'Investment' ? investment.asset.symbol : '(in kind)'}</BodyCell>
                   <BodyCellRightAlign>
-                    <FormattedNumber value={fromTokenBaseUnit(investment.amountInDenominationAsset, 18)} />
+                    <TokenValue value={investment.amountInDenominationAsset} />
                   </BodyCellRightAlign>
                 </BodyRow>
               );
