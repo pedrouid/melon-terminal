@@ -90,7 +90,7 @@ export const RequestInvestment = forwardRef(
     const [allowance, query] = useAccountAllowanceQuery(account.address, investmentAsset, participation);
 
     useEffect(() => {
-      if (allowance?.balance.isLessThan(investmentAmount)) {
+      if (allowance?.balance.isLessThan(toTokenBaseUnit(investmentAmount, token!.decimals))) {
         form.setError(
           'investmentAmount',
           'tooLow',
