@@ -59,13 +59,13 @@ export const FundMetrics: React.FC = () => {
             <DictionaryEntry>
               <DictionaryLabel>Total AUM (in ETH)</DictionaryLabel>
               <DictionaryData>
-                <TokenValue symbol="ETH" value={weiToEth} />
+                <FormattedNumber tooltip={true} decimals={0} value={weiToEth} suffix="ETH" />
               </DictionaryData>
             </DictionaryEntry>
             <DictionaryEntry>
               <DictionaryLabel>Total AUM (in USD)</DictionaryLabel>
               <DictionaryData>
-                <TokenValue symbol="USD" value={mlnPrice} />
+                <FormattedNumber value={mlnPrice} decimals={0} suffix="USD" />
               </DictionaryData>
             </DictionaryEntry>
           </GridCol>
