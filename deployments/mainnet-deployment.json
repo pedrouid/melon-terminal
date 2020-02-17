@@ -7,40 +7,40 @@
   },
   "melon": {
     "addr": {
-      "KyberPriceFeed": "0x0A554101Cebd9Ea4AB911aa6e4A7Cd57802102A3",
-      "EthfinexAdapter": "0xED42551460095824e5Eb0388aAF07d87B86AbcdD",
-      "KyberAdapter": "0x94128c7f5F8dd521109CE38f8304D32587ACb848",
-      "OasisDexAdapter": "0x1Eb5F58058686FDE3322CD22bed96BA36d7f7f63",
-      "OasisDexAccessor": "0x97D260D684a8184bfd332DBe3AbFCAd874eE3FBD",
-      "UniswapAdapter": "0x8926f5EdeB4295Ea37a4062507d776dbD120950F",
-      "ZeroExV2Adapter": "0x37A75A0b685d24524D91806b669240b11f2c9684",
-      "ZeroExV3Adapter": "0x54EA5cf808F25dbe2bb21d816eD3Fa5c76b522c5",
-      "EngineAdapter": "0xb1c48eA183190006d3389Ba2F37a0f76E853c12a",
-      "PriceTolerance": "0x20b37AeC81B3D364B4615B28b199A2e44DBb0427",
-      "UserWhitelist": "0x05d495Ebf5ACA8ace45C08e103E3c2cA1de2D7B8",
-      "ManagementFee": "0x7Ab47C5B238F0DB90F6c1e19B90eA258435D63f0",
-      "PerformanceFee": "0xB9a506D844cc86df06bf354E46B155A806222Bb7",
-      "AccountingFactory": "0xf58035737D7dF063966e360947cD26FBBeC3DCe7",
-      "FeeManagerFactory": "0x0fD46e3CE7523f1d9982539a44b853ab962528eb",
-      "ParticipationFactory": "0x6784703C34E4502FC120D4CD7472850B480bE825",
-      "PolicyManagerFactory": "0x58FA120e508b000C19cb6bAADA30C1d97A9F07Ee",
-      "SharesFactory": "0x04431b64303e6379B818296Ff7D54481FD7Fa7E4",
-      "TradingFactory": "0xD07Dca4960CE250b54cd98577ec15Eb14d6D16ec",
-      "VaultFactory": "0x91313A7bfc5F6Ca957274beEaae436E26088faf2",
-      "Engine": "0xD0CB33018Ee403dbD1d5cD021C289F27811ABb32",
-      "Registry": "0x69ccf58f882443BF0E1328E445361245fCfD3FBB",
-      "Version": "0x8FF596adD51aceE3f060dff7A75dEC5015c69e55"
+      "KyberPriceFeed": "0x24d73974e5224BF5f9A6E091e19dE3ac54be860C",
+      "EthfinexAdapter": "0x42cAD86BEEF643B6669A3f134B67D4287edaDdD3",
+      "KyberAdapter": "0x33D9a2a17A237c4815586B099F49bCE0005a927f",
+      "OasisDexAdapter": "0xaEc9b76C4e01976C3711125A5A1a2911c0165399",
+      "OasisDexAccessor": "0x4cc6BF239292946cACf29Ead443017fdf96Cf1F7",
+      "UniswapAdapter": "0x3FDA51D218919B96a850E7b66D412A4604E4901D",
+      "ZeroExV2Adapter": "0x03f2121b9b86db6d2E3373c3acAFaf043d7C42aF",
+      "ZeroExV3Adapter": "0x4132f47401c352218a10A29d1D86A4c87EADD604",
+      "EngineAdapter": "0x759aD2faF96Ea898D00C924beF110beC22032c05",
+      "PriceTolerance": "0x3D2748E0fCE3374da85D0B4612aE151719A659Fc",
+      "UserWhitelist": "0xb983471f53074Fd8eE9960e7Bec389eC9DfA0B3e",
+      "ManagementFee": "0x8dA03CBC5BCe3c672b178e303dE399e5c3843DA1",
+      "PerformanceFee": "0xd6101a700f1f5033747EB31f1E01f00a1c1A5DE9",
+      "AccountingFactory": "0x334725A316BD84C7fd69bF92C7CD05DF49d19c8E",
+      "FeeManagerFactory": "0xb9d1CfE7939d861E5deF3f531b22E38fDE1e5661",
+      "ParticipationFactory": "0x986BB0574605963fcCb55372147C1a342c27dDFe",
+      "PolicyManagerFactory": "0xBb35e7E655b8B3b4D2B7f8b385b1217164d5A26a",
+      "SharesFactory": "0x099ca2CED330cea3cDce7355150495Ae750C9B4E",
+      "TradingFactory": "0xc509bD6bB324DDB6DdEd2ac93e59D4DeAc32b4d4",
+      "VaultFactory": "0x3c551588b64d1E282f734fAd7D28c4CBC2940386",
+      "Engine": "0x342814604Cd5CC4bdeed100EDEbD51CAc3fd98c9",
+      "Registry": "0xb9Cb55C9366a224647B7ff66252b3613185DA0B9",
+      "Version": "0x5f9AE054C7F0489888B1ea46824b4B9618f8A711"
     },
     "conf": {
       "priceTolerance": 10,
       "userWhitelist": ["0x0d580ae50B58fe08514dEAB4e38c0DFdB0D30adC"],
       "registryOwner": "0x0d580ae50B58fe08514dEAB4e38c0DFdB0D30adC",
       "engineDelay": 2592000,
-      "maxSpread": "100000000000000000",
+      "maxSpread": "150000000000000000",
       "versionOwner": "0x0d580ae50B58fe08514dEAB4e38c0DFdB0D30adC",
       "initialMGM": "0x0d580ae50B58fe08514dEAB4e38c0DFdB0D30adC",
       "initialUpdater": "0x0d580ae50B58fe08514dEAB4e38c0DFdB0D30adC",
-      "versionName": "1.0.6-test.1",
+      "versionName": "1.1.0",
       "exchangeTakesCustody": {
         "oasis": true,
         "kyber": false,
@@ -67,7 +67,7 @@
   },
   "oasis": {
     "addr": {
-      "OasisDexExchange": "0x39755357759cE0d7f32dC8dC45414CCa409AE24e"
+      "OasisDexExchange": "0x794e6e91555438aFc3ccF1c5076A74F42133d08D"
     },
     "conf": {
       "closeTime": "9999999999999",
@@ -110,8 +110,8 @@
       "ENG": "0xf0ee6b27b759c9893ce4f094b49ad28fd15a23e4",
       "KNC": "0xdd974d5c2e2928dea5f71b9825b8b646686bd200",
       "LINK": "0x514910771af9ca656af840dff83e8264ecf986ca",
-      "MKR": "0x9f8f72aa9304c8b593d555f12ef6589cc3a579a2",
       "MANA": "0x0f5d2fb29fb7d3cfee444a200298f468908cc942",
+      "MKR": "0x9f8f72aa9304c8b593d555f12ef6589cc3a579a2",
       "OMG": "0xd26114cd6EE289AccF82350c8d8487fedB8A0C07",
       "REP": "0x1985365e9f78359a9B6AD760e32412f4a445E862",
       "REN": "0x408e41876cccdc0f92210600ef50372656052a38",
@@ -129,77 +129,99 @@
         "initialDepositAmount": "1000000000000000000"
       },
       "MLN": {
-        "name": "Melon Token",
-        "decimals": 18
+        "name": "Melon",
+        "decimals": 18,
+        "reserveMin": "44266376899446186143"
       },
       "ANT": {
-        "name": "Aragon Network Token",
-        "decimals": 18
+        "name": "Aragon Network",
+        "decimals": 18,
+        "reserveMin": "342083875233544858929"
       },
       "BAT": {
         "name": "Basic Attention Token",
-        "decimals": 18
+        "decimals": 18,
+        "reserveMin": "912375039211224702810"
       },
       "DAI": {
         "name": "Multi-Collateral Dai",
-        "decimals": 18
+        "decimals": 18,
+        "reserveMin": "283075578324490529074"
       },
       "ENG": {
-        "name": "Enigma Token",
-        "decimals": 8
+        "name": "Enigma",
+        "decimals": 8,
+        "reserveMin": "52441843889"
       },
       "KNC": {
         "name": "Kyber Network",
-        "decimals": 18
+        "decimals": 18,
+        "reserveMin": "605977096443979462492"
       },
       "LINK": {
-        "name": "ChainLink",
-        "decimals": 18
+        "name": "Chainlink",
+        "decimals": 18,
+        "reserveMin": "62963171673479219637"
       },
       "MANA": {
         "name": "Decentraland",
-        "decimals": 18
+        "decimals": 18,
+        "reserveMin": "4497260574547067938002"
       },
       "MKR": {
-        "name": "Maker Token",
-        "decimals": 18
+        "name": "Maker",
+        "decimals": 18,
+        "reserveMin": "447502970620050062"
       },
       "OMG": {
         "name": "OmiseGo",
-        "decimals": 18
+        "decimals": 18,
+        "reserveMin": "206599071370609291590"
       },
       "REP": {
-        "name": "Augur Reputation Token",
-        "decimals": 18
+        "name": "Augur Reputation",
+        "decimals": 18,
+        "reserveMin": "16991598107773581116"
       },
       "REN": {
         "name": "Republic Project",
-        "decimals": 18
+        "decimals": 18,
+        "reserveMin": "4132182393854523979825"
       },
       "RLC": {
-        "name": "iExec Token",
-        "decimals": 9
+        "name": "iExec",
+        "decimals": 9,
+        "reserveMin": "384127742843"
       },
       "SAI": {
         "name": "Sai Stable Coin",
-        "decimals": 18
-      },
-      "USDT": {
-        "name": "Tether USD",
-        "decimals": 6
+        "decimals": 18,
+        "reserveMin": "281617642592700035235"
       },
       "USDC": {
         "name": "USD Coin",
-        "decimals": 6
+        "decimals": 6,
+        "reserveMin": "282703338"
+      },
+      "USDT": {
+        "name": "Tether USD",
+        "decimals": 6,
+        "reserveMin": "282703338"
       },
       "WBTC": {
-        "name": "Wrapped BTC",
-        "decimals": 8
+        "name": "Wrapped Bitcoin",
+        "decimals": 8,
+        "reserveMin": "2716105"
       },
       "ZRX": {
         "name": "0x Protocol Token",
-        "decimals": 18
+        "decimals": 18,
+        "reserveMin": "828697793129947226897"
       }
     }
+  },
+  "postDeployment": {
+    "deployerWethAmount": "100000000000000000000",
+    "kyberReserveAmount": "100000000000000000000"
   }
 }
