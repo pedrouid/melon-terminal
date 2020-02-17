@@ -9,7 +9,7 @@ import { useOnChainQueryRefetcher } from '~/hooks/useOnChainQueryRefetcher';
 import { TransactionModal } from '~/components/Common/TransactionModal/TransactionModal';
 import { Button } from '~/storybook/components/Button/Button';
 import { catchError, switchMap } from 'rxjs/operators';
-import { SignedOrder } from '@0x/order-utils';
+import { SignedOrder } from '@0x/order-utils-v2';
 import { Subtitle } from '~/storybook/components/Title/Title';
 
 export interface FundRequestForQuoteOfferProps {

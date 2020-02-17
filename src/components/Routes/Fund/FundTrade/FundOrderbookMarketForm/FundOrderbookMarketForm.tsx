@@ -6,12 +6,10 @@ import { TransactionModal } from '~/components/Common/TransactionModal/Transacti
 import {
   TokenDefinition,
   ExchangeDefinition,
-  Hub,
   Trading,
   ExchangeIdentifier,
   OasisDexTradingAdapter,
   OasisDexExchange,
-  ZeroExV2TradingAdapter,
   toBigNumber,
   ZeroExV3TradingAdapter,
 } from '@melonproject/melonjs';
@@ -29,6 +27,7 @@ import { NotificationBar, NotificationContent } from '~/storybook/components/Not
 import { Holding } from '@melonproject/melongql';
 import BigNumber from 'bignumber.js';
 import { fromTokenBaseUnit } from '~/utils/fromTokenBaseUnit';
+import { SignedOrder } from '@0x/order-utils';
 
 export interface FundOrderbookMarketFormProps {
   trading: string;
@@ -167,15 +166,23 @@ export const FundOrderbookMarketForm: React.FC<FundOrderbookMarketFormProps> = p
       return transaction.start(tx, 'Take order');
     }
 
-    if (order!.exchange === ExchangeIdentifier.ZeroExV2) {
-      const adapter = await ZeroExV2TradingAdapter.create(environment, exchange.exchange, trading);
-      const tx = adapter.takeOrder(account.address!, order!.order, quantity);
-      return transaction.start(tx, 'Take order');
-    }
-
     if (order!.exchange === ExchangeIdentifier.ZeroExV3) {
       const adapter = await ZeroExV3TradingAdapter.create(environment, exchange.exchange, trading);
-      const tx = adapter.takeOrder(account.address!, order!.order, quantity);
+      const offer = order?.order.order as SignedOrder;
+      const tx = adapter.takeOrder(
+        account.address!,
+        {
+          ...offer,
+          expirationTimeSeconds: new BigNumber(offer.expirationTimeSeconds),
+          takerAssetAmount: new BigNumber(offer.takerAssetAmount),
+          takerFee: new BigNumber(offer.takerFee),
+          makerAssetAmount: new BigNumber(offer.makerAssetAmount),
+          makerFee: new BigNumber(offer.makerFee),
+          salt: new BigNumber(offer.salt),
+        },
+        quantity
+      );
+
       return transaction.start(tx, 'Take order');
     }
   });

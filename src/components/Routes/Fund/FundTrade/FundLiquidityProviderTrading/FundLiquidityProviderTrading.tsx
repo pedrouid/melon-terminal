@@ -56,7 +56,7 @@ export const FundLiquidityProviderTrading: React.FC<FundLiquidityProviderTrading
       takerQuantity: Yup.string()
         .required('Missing sell quantity.')
         // tslint:disable-next-line
-        .test('valid-number', 'The given value is not a valid number.', function(value) {
+        .test('valid-number', 'The given value is not a valid number.', function (value) {
           const bn = new BigNumber(value);
           return !bn.isNaN() && !bn.isZero() && bn.isPositive();
         })
@@ -71,7 +71,7 @@ export const FundLiquidityProviderTrading: React.FC<FundLiquidityProviderTrading
   });
 
   useEffect(() => {
-    holdingsRef.current = props.holdings
+    holdingsRef.current = props.holdings;
     form.triggerValidation().catch(() => { });
   }, [props.holdings, form.formState.touched]);
 

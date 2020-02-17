@@ -193,6 +193,7 @@
     websocket "^1.0.29"
 
 "@0x/order-utils-v2@npm:@0x/order-utils@8.4.0", "@0x/order-utils@^8.2.4", "@0x/order-utils@^8.4.0":
+  name "@0x/order-utils-v2"
   version "8.4.0"
   resolved "https://registry.yarnpkg.com/@0x/order-utils/-/order-utils-8.4.0.tgz#f7fe9c73f9fd82ab05ec3c04951049e904aab46a"
   integrity sha512-EQh/YpfSKZSbfxetgN6RQmYuc2EpbpWF4f6WUAzm/JjXkCNAK429cMgofVr6Zy4U9ldj89zcODsnK6y6gnNIZQ==
