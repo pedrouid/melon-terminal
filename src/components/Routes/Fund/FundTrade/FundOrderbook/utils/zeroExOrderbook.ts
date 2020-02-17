@@ -68,9 +68,10 @@ export function zeroExOrderbook(
 
   return Rx.using(
     () => {
-      const provider = OrderbookProvider.getOrderbookForWebsocketProvider({
+      const provider = OrderbookProvider.getOrderbookForPollingProvider({
         httpEndpoint: endpoint.http,
-        websocketEndpoint: endpoint.ws,
+        pollingIntervalMs: 10000,
+        perPage: 100,
       });
 
       return {
