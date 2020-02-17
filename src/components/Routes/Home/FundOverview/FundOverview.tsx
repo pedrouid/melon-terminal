@@ -292,7 +292,9 @@ export const FundOverview: React.FC = () => {
                   <BodyCell>
                     <FormattedDate timestamp={fund.inception} format="yyyy/MM/dd" />
                   </BodyCell>
-                  <BodyCellRightAlign>{fund.sharePrice}</BodyCellRightAlign>
+                  <BodyCellRightAlign>
+                    <FormattedNumber value={fund.sharePrice} />
+                  </BodyCellRightAlign>
                   <BodyCellRightAlign>
                     <FormattedNumber value={fund.change} colorize={true} decimals={2} suffix="%" />
                   </BodyCellRightAlign>
@@ -300,9 +302,11 @@ export const FundOverview: React.FC = () => {
                     <TokenValue decimals={0} value={fund.aumEth} />
                   </BodyCellRightAlign>
                   <BodyCellRightAlign>
-                    <TokenValue decimals={0} value={fund.aumUsd || 0} />
+                    <FormattedNumber decimals={2} value={fund.aumUsd} />
                   </BodyCellRightAlign>
-                  <BodyCellRightAlign>{fund.shares}</BodyCellRightAlign>
+                  <BodyCellRightAlign>
+                    <FormattedNumber value={fund.shares} />
+                  </BodyCellRightAlign>
                   <BodyCell>{fund.version}</BodyCell>
                   <BodyCell>{fund.status}</BodyCell>
                 </BodyRowHover>

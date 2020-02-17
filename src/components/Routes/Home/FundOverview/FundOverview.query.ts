@@ -46,11 +46,11 @@ export interface FundProcessed {
   name: string;
   address: string;
   inception: number;
-  aumEth: string;
-  aumUsd: string;
-  sharePrice: string;
+  aumEth: BigNumber;
+  aumUsd: BigNumber;
+  sharePrice: BigNumber;
   change: BigNumber;
-  shares: string;
+  shares: BigNumber;
   denomination: string;
   investments: number;
   version: string;
@@ -115,16 +115,14 @@ export const useFundOverviewQuery = () => {
     name: item.name,
     address: item.id.substr(0, 8),
     inception: item.createdAt,
-    aumEth: fromTokenBaseUnit(item.gav, 18).toFixed(4),
-    aumUsd: fromTokenBaseUnit(item.gav, 18)
-      .multipliedBy(rate)
-      .toFixed(4),
-    sharePrice: fromTokenBaseUnit(item.sharePrice, 18).toFixed(4),
+    aumEth: fromTokenBaseUnit(item.gav, 18),
+    aumUsd: fromTokenBaseUnit(item.gav, 18).multipliedBy(rate),
+    sharePrice: fromTokenBaseUnit(item.sharePrice, 18),
     change: calculateChangeFromSharePrice(
       item.calculationsHistory[0]?.sharePrice,
       item.calculationsHistory[1]?.sharePrice
     ),
-    shares: fromTokenBaseUnit(item.totalSupply, 18).toFixed(4),
+    shares: fromTokenBaseUnit(item.totalSupply, 18),
     denomination: item.accounting.denominationAsset.symbol,
     investments: item.investments.length,
     version: item.version.name,

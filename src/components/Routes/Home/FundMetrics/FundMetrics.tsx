@@ -12,7 +12,6 @@ import { fromTokenBaseUnit } from '~/utils/fromTokenBaseUnit';
 import { FormattedNumber } from '~/components/Common/FormattedNumber/FormattedNumber';
 import { Spinner } from '~/storybook/components/Spinner/Spinner';
 import { Grid, GridCol, GridRow } from '~/storybook/components/Grid/Grid';
-import { TokenValue } from '~/components/Common/TokenValue/TokenValue';
 
 export const FundMetrics: React.FC = () => {
   const [metrics, metricsQuery] = useFundMetricsQuery();
