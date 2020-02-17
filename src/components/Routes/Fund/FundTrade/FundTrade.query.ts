@@ -14,6 +14,7 @@ const FundTrading = gql`
       name
       routes {
         trading {
+          address
           exchanges {
             exchange
           }
@@ -30,6 +31,7 @@ export const useFundTrading = (fund?: string) => {
     variables: { fund },
   });
 
+  const trading = result.data?.fund?.routes?.trading?.address;
   const exchanges = useMemo(() => {
     const addresses = (result.data?.fund?.routes?.trading?.exchanges || []).map(item => item.exchange!);
     return addresses.reduce<ExchangeDefinition[]>((carry, current) => {
@@ -38,5 +40,5 @@ export const useFundTrading = (fund?: string) => {
     }, []);
   }, [result.data]);
 
-  return [exchanges, result] as [typeof exchanges, typeof result];
+  return [exchanges, trading, result] as [typeof exchanges, typeof trading, typeof result];
 };

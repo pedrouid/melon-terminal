@@ -20,16 +20,16 @@ import { toTokenBaseUnit } from '~/utils/toTokenBaseUnit';
 import { Holding } from '@melonproject/melongql';
 import { Subtitle } from '~/storybook/components/Title/Title';
 import { Button } from '~/storybook/components/Button/Button';
-import { catchError, switchMap, map } from 'rxjs/operators';
+import { catchError, map, switchMapTo, expand } from 'rxjs/operators';
 
 export interface FundUniswapTradingProps {
-  address: string;
+  trading: string;
   exchange: ExchangeDefinition;
   holdings: Holding[];
   maker: TokenDefinition;
   taker: TokenDefinition;
   quantity: BigNumber;
-  active?: boolean;
+  active: boolean;
 }
 
 export const FundUniswapTrading: React.FC<FundUniswapTradingProps> = props => {
@@ -60,45 +60,49 @@ export const FundUniswapTrading: React.FC<FundUniswapTradingProps> = props => {
       ...(!(props.maker === state.maker && props.taker === state.taker) && { rate: new BigNumber('NaN') }),
     }));
 
-    const observable$ = Rx.timer(500).pipe(
-      switchMap(async () => {
-        const weth = environment.getToken('WETH');
-        const uniswapFactory = new UniswapFactory(environment, environment.deployment.uniswap.addr.UniswapFactory);
-        const takerQty = toTokenBaseUnit(props.quantity, props.taker.decimals);
+    const fetch$ = Rx.defer(async () => {
+      const weth = environment.getToken('WETH');
+      const uniswapFactory = new UniswapFactory(environment, environment.deployment.uniswap.addr.UniswapFactory);
+      const takerQty = toTokenBaseUnit(props.quantity, props.taker.decimals);
 
-        if (sameAddress(props.taker.address, weth.address)) {
-          // Convert WETH into token.
-          const exchangeAddress = await uniswapFactory.getExchange(props.maker.address);
-          const exchange = new UniswapExchange(environment, exchangeAddress);
-          const makerQty = await exchange.getEthToTokenInputPrice(takerQty);
-          return makerQty.dividedBy(takerQty);
-        }
-
-        if (sameAddress(props.maker.address, weth.address)) {
-          // Convert token into WETH.
-          const exchangeAddress = await uniswapFactory.getExchange(props.taker.address);
-          const exchange = new UniswapExchange(environment, exchangeAddress);
-          const makerQty = await exchange.getTokenToEthInputPrice(takerQty);
-          return makerQty.dividedBy(takerQty);
-        }
-
-        // Convert token into token.
-        const [sourceExchangeAddress, targetExchangeAddress] = await Promise.all([
-          uniswapFactory.getExchange(props.taker.address),
-          uniswapFactory.getExchange(props.maker.address),
-        ]);
-
-        const sourceExchange = new UniswapExchange(environment, sourceExchangeAddress);
-        const targetExchange = new UniswapExchange(environment, targetExchangeAddress);
-        const intermediateEth = await sourceExchange.getTokenToEthInputPrice(takerQty);
-        const makerQty = await targetExchange.getEthToTokenInputPrice(intermediateEth);
+      if (sameAddress(props.taker.address, weth.address)) {
+        // Convert WETH into token.
+        const exchangeAddress = await uniswapFactory.getExchange(props.maker.address);
+        const exchange = new UniswapExchange(environment, exchangeAddress);
+        const makerQty = await exchange.getEthToTokenInputPrice(takerQty);
         return makerQty.dividedBy(takerQty);
-      }),
+      }
+
+      if (sameAddress(props.maker.address, weth.address)) {
+        // Convert token into WETH.
+        const exchangeAddress = await uniswapFactory.getExchange(props.taker.address);
+        const exchange = new UniswapExchange(environment, exchangeAddress);
+        const makerQty = await exchange.getTokenToEthInputPrice(takerQty);
+        return makerQty.dividedBy(takerQty);
+      }
+
+      // Convert token into token.
+      const [sourceExchangeAddress, targetExchangeAddress] = await Promise.all([
+        uniswapFactory.getExchange(props.taker.address),
+        uniswapFactory.getExchange(props.maker.address),
+      ]);
+
+      const sourceExchange = new UniswapExchange(environment, sourceExchangeAddress);
+      const targetExchange = new UniswapExchange(environment, targetExchangeAddress);
+      const intermediateEth = await sourceExchange.getTokenToEthInputPrice(takerQty);
+      const makerQty = await targetExchange.getEthToTokenInputPrice(intermediateEth);
+      return makerQty.dividedBy(takerQty);
+    });
+
+    // Refetch every 5 seconds.
+    const polling$ = fetch$.pipe(expand(() => Rx.timer(5000).pipe(switchMapTo(fetch$))));
+    const observable$ = polling$.pipe(
       catchError(() => Rx.of(new BigNumber(0))),
       map(value => value.multipliedBy(new BigNumber(10).exponentiatedBy(props.taker.decimals - props.maker.decimals)))
     );
 
-    const subscription = observable$.subscribe(rate => {
+    const empty$ = Rx.of(new BigNumber(0));
+    const subscription = (props.active ? observable$ : empty$).subscribe(rate => {
       setState(previous => ({
         ...previous,
         rate,
@@ -115,8 +119,7 @@ export const FundUniswapTrading: React.FC<FundUniswapTradingProps> = props => {
   const ready = !loading && valid;
 
   const submit = async () => {
-    const hub = new Hub(environment, props.address);
-    const trading = new Trading(environment, (await hub.getRoutes()).trading);
+    const trading = new Trading(environment, props.trading);
     const adapter = await UniswapTradingAdapter.create(environment, props.exchange.exchange, trading);
 
     const tx = adapter.takeOrder(account.address!, {

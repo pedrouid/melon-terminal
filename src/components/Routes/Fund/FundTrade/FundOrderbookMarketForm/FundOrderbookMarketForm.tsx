@@ -31,7 +31,7 @@ import BigNumber from 'bignumber.js';
 import { fromTokenBaseUnit } from '~/utils/fromTokenBaseUnit';
 
 export interface FundOrderbookMarketFormProps {
-  address: string;
+  trading: string;
   asset: TokenDefinition;
   exchanges: ExchangeDefinition[];
   holdings: Holding[];
@@ -149,8 +149,7 @@ export const FundOrderbookMarketForm: React.FC<FundOrderbookMarketFormProps> = p
   }, [order]);
 
   const submit = form.handleSubmit(async values => {
-    const hub = new Hub(environment, props.address);
-    const trading = new Trading(environment, (await hub.getRoutes()).trading);
+    const trading = new Trading(environment, props.trading);
     const exchange = environment.getExchange(order!.exchange);
 
     const taker = order!.side === 'bid' ? base : quote;

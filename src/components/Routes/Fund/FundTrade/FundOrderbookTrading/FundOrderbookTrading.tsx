@@ -11,7 +11,7 @@ import { SectionTitle } from '~/storybook/components/Title/Title';
 import * as S from './FundOrderbookTrading.styles';
 
 export interface FundOrderbookTradingProps {
-  address: string;
+  trading: string;
   exchanges: ExchangeDefinition[];
   holdings: Holding[];
 }
@@ -49,7 +49,7 @@ export const FundOrderbookTrading: React.FC<FundOrderbookTradingProps> = props =
 
           {asset && (
             <FundOrderbookMarketForm
-              address={props.address}
+              trading={props.trading}
               asset={asset}
               order={order}
               unsetOrder={() => setOrder(undefined)}
@@ -62,7 +62,6 @@ export const FundOrderbookTrading: React.FC<FundOrderbookTradingProps> = props =
         {asset && (
           <S.FundOrderbook>
             <FundOrderbook
-              address={props.address}
               asset={asset}
               exchanges={props.exchanges}
               selected={order}

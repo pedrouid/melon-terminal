@@ -13,13 +13,13 @@ import { useAccount } from '~/hooks/useAccount';
 import { Subtitle } from '~/storybook/components/Title/Title';
 
 export interface FundMelonEngineTradingProps {
-  address: string;
+  trading: string;
   exchange: ExchangeDefinition;
   holdings: Holding[];
   maker: TokenDefinition;
   taker: TokenDefinition;
   quantity: BigNumber;
-  active?: boolean;
+  active: boolean;
 }
 
 export const FundMelonEngineTrading: React.FC<FundMelonEngineTradingProps> = props => {
@@ -36,8 +36,7 @@ export const FundMelonEngineTrading: React.FC<FundMelonEngineTradingProps> = pro
   const ready = !query.loading && valid;
 
   const submit = async () => {
-    const hub = new Hub(environment, props.address);
-    const trading = new Trading(environment, (await hub.getRoutes()).trading);
+    const trading = new Trading(environment, props.trading);
     const adapter = await MelonEngineTradingAdapter.create(environment, props.exchange.exchange, trading);
     const tx = adapter.takeOrder(account.address!, {
       makerAsset: props.maker.address,

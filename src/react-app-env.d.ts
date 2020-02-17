@@ -32,6 +32,7 @@ declare global {
       MELON_FORTMATIC_KEY: string;
       MELON_FORTMATIC_PROVIDER: string;
       MELON_FORTMATIC_NETWORK: string;
+      MELON_API_GATEWAY: string;
     }
   }
 }

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, useMemo, useLayoutEffect } from 'react';
+import React, { useEffect, useRef, useState, useMemo } from 'react';
 import BigNumber from 'bignumber.js';
 import * as Yup from 'yup';
 import { useForm, FormContext } from 'react-hook-form';
@@ -11,11 +11,11 @@ import { Block } from '~/storybook/components/Block/Block';
 import { SectionTitle } from '~/storybook/components/Title/Title';
 import { GridRow, GridCol } from '~/storybook/components/Grid/Grid';
 import { Icons } from '~/storybook/components/Icons/Icons';
+import { FundRequestForQuoteOffer } from './FundRequestForQuoteOffer';
 import * as S from './FundRequestForQuoteTrading.styles';
-import { Spinner } from '~/storybook/components/Spinner/Spinner';
 
 export interface FundRequestForQuoteTradingProps {
-  address: string;
+  trading: string;
   exchange: ExchangeDefinition;
   holdings: Holding[];
 }
@@ -48,32 +48,41 @@ function useMarkets() {
 
   useEffect(() => {
     (async () => {
-      const result = await (await fetch('https://gateway.avantgarde.finance/rfq/markets')).json();
+      try {
+        const result = await (await fetch(`${process.env.MELON_API_GATEWAY}/rfq/markets`)).json();
 
-      setState({
-        loading: false,
-        markets: result?.items ?? [],
-      });
+        setState({
+          loading: false,
+          markets: result?.items ?? [],
+        });
+      } catch (e) {
+        setState({
+          loading: false,
+          markets: [],
+        });
+      }
     })();
   }, []);
 
   const markets = useMemo(() => {
-    return state.markets.filter((item) => item.status === 'available').reduce((carry, current) => {
-      const baseToken = environment.getToken(current.base.address);
-      const quoteToken = environment.getToken(current.quote.address);
-      if (!baseToken || !quoteToken || baseToken.historic || quoteToken.historic) {
-        return carry;
-      }
+    return state.markets
+      .filter(item => item.status === 'available')
+      .reduce((carry, current) => {
+        const baseToken = environment.getToken(current.base.address);
+        const quoteToken = environment.getToken(current.quote.address);
+        if (!baseToken || !quoteToken || baseToken.historic || quoteToken.historic) {
+          return carry;
+        }
 
-      const baseEntries = carry.get(baseToken) ?? new Map();
-      baseEntries.set(quoteToken, current.id);
+        const baseEntries = carry.get(baseToken) ?? new Map();
+        baseEntries.set(quoteToken, [current.id, 'buy']);
 
-      const quoteEntries = carry.get(quoteToken) ?? new Map();
-      quoteEntries.set(baseToken, current.id);
+        const quoteEntries = carry.get(quoteToken) ?? new Map();
+        quoteEntries.set(baseToken, [current.id, 'sell']);
 
-      return carry.set(baseToken, baseEntries).set(quoteToken, quoteEntries);
-    }, new Map<TokenDefinition, Map<TokenDefinition, string>>());
-  }, [environment.tokens, state.markets])
+        return carry.set(baseToken, baseEntries).set(quoteToken, quoteEntries);
+      }, new Map<TokenDefinition, Map<TokenDefinition, [string, 'sell' | 'buy']>>());
+  }, [environment.tokens, state.markets]);
 
   return [markets, state.loading] as [typeof markets, typeof state.loading];
 }
@@ -96,12 +105,12 @@ export const FundRequestForQuoteTrading: React.FC<FundRequestForQuoteTradingProp
       takerQuantity: Yup.string()
         .required('Missing sell quantity.')
         // tslint:disable-next-line
-        .test('valid-number', 'The given value is not a valid number.', function (value) {
+        .test('valid-number', 'The given value is not a valid number.', function(value) {
           const bn = new BigNumber(value);
           return !bn.isNaN() && !bn.isZero() && bn.isPositive();
         })
         // tslint:disable-next-line
-        .test('balance-too-low', 'Your current balance is too low.', function (value) {
+        .test('balance-too-low', 'The balance of the fund is lower than the provided value.', function(value) {
           const holding = holdingsRef.current.find(item => sameAddress(item.token!.address, this.parent.takerAsset))!;
           const divisor = holding ? new BigNumber(10).exponentiatedBy(holding.token!.decimals!) : new BigNumber('NaN');
           const balance = holding ? holding.amount!.dividedBy(divisor) : new BigNumber('NaN');
@@ -112,8 +121,8 @@ export const FundRequestForQuoteTrading: React.FC<FundRequestForQuoteTradingProp
 
   useEffect(() => {
     holdingsRef.current = props.holdings;
-    form.triggerValidation().catch(() => { });
-  }, [props.holdings]);
+    form.triggerValidation().catch(() => {});
+  }, [props.holdings, form.formState.touched]);
 
   const takerAsset = environment.getToken(form.watch('takerAsset') ?? '');
   const makerAsset = environment.getToken(form.watch('makerAsset') ?? '');
@@ -124,7 +133,7 @@ export const FundRequestForQuoteTrading: React.FC<FundRequestForQuoteTradingProp
       return [] as TokenDefinition[];
     }
 
-    return markets.has(takerAsset) ? Array.from(markets.get(takerAsset)!.keys()) : [] as TokenDefinition[];
+    return markets.has(takerAsset) ? Array.from(markets.get(takerAsset)!.keys()) : ([] as TokenDefinition[]);
   }, [markets, takerAsset]);
 
   useEffect(() => {
@@ -139,15 +148,14 @@ export const FundRequestForQuoteTrading: React.FC<FundRequestForQuoteTradingProp
     }
   }, [makerCandidates, makerAsset]);
 
-  const takerQuantity = new BigNumber(form.watch('takerQuantity'));
-  const ready = form.formState.isValid;
-
   const switchDirection = () => {
     const values = form.getValues();
 
-    form.setValue('makerAsset', values.takerAsset);
-    form.setValue('takerAsset', values.makerAsset);
-    form.triggerValidation().catch(() => { });
+    form.reset({
+      ...values,
+      makerAsset: values.takerAsset,
+      takerAsset: values.makerAsset,
+    });
   };
 
   const takerOptions = takerCandidates.map(token => ({
@@ -162,31 +170,40 @@ export const FundRequestForQuoteTrading: React.FC<FundRequestForQuoteTradingProp
 
   const handleTakerAssetChange = (value: string) => {
     const token = environment.getToken(value)!;
-    const candidates = (token && markets.has(token) ? Array.from(markets.get(token)!.keys()) : [] as TokenDefinition[]);
+    const candidates = token && markets.has(token) ? Array.from(markets.get(token)!.keys()) : ([] as TokenDefinition[]);
     if (!makerAsset || !candidates.includes(makerAsset)) {
       form.setValue('makerAsset', candidates[0]?.address);
     }
   };
 
+  const [market, side] = markets.get(takerAsset)?.get(makerAsset) ?? [];
+  const amount = new BigNumber(form.watch('takerQuantity') ?? 'NaN');
+  const ready = !!(form.formState.isValid && market && amount && !amount.isNaN());
+
   return (
     <Block>
       <SectionTitle>Private market maker</SectionTitle>
-      {loading && <Spinner />}
 
       <FormContext {...form}>
         <GridRow justify="space-between">
           <GridCol xs={12} sm={4}>
-            <Dropdown name="takerAsset" label="Sell asset" options={takerOptions} onChange={event => handleTakerAssetChange(event.target.value)} />
+            <Dropdown
+              name="takerAsset"
+              label="Sell asset"
+              disabled={loading}
+              options={takerOptions}
+              onChange={event => handleTakerAssetChange(event.target.value)}
+            />
           </GridCol>
 
           <GridCol xs={12} sm={6} justify="flex-end">
-            <Input type="number" step="any" name="takerQuantity" label="Sell quantity" />
+            <Input type="number" step="any" name="takerQuantity" disabled={loading} label="Sell quantity" />
           </GridCol>
         </GridRow>
 
         <GridRow>
           <GridCol xs={12} sm={4}>
-            <S.SwitchButton onClick={switchDirection}>
+            <S.SwitchButton onClick={loading ? undefined : switchDirection}>
               <Icons name="EXCHANGE" />
             </S.SwitchButton>
           </GridCol>
@@ -194,7 +211,19 @@ export const FundRequestForQuoteTrading: React.FC<FundRequestForQuoteTradingProp
 
         <GridRow justify="space-between">
           <GridCol xs={12} sm={4}>
-            <Dropdown name="makerAsset" label="Buy asset" options={makerOptions} />
+            <Dropdown name="makerAsset" label="Buy asset" disabled={loading} options={makerOptions} />
+          </GridCol>
+
+          <GridCol xs={12} sm={6}>
+            <FundRequestForQuoteOffer
+              active={ready}
+              exchange={props.exchange}
+              trading={props.trading}
+              market={market}
+              side={side}
+              symbol={makerAsset?.symbol}
+              amount={amount}
+            />
           </GridCol>
         </GridRow>
       </FormContext>

@@ -57,6 +57,7 @@ module.exports = override(
   ),
   addWebpackPlugin(
     new webpack.DefinePlugin({
+      'process.env.MELON_API_GATEWAY': JSON.stringify(process.env.MELON_API_GATEWAY),
       'process.env.MELON_FORTMATIC_KEY': JSON.stringify(process.env.MELON_FORTMATIC_KEY),
       'process.env.MELON_FORTMATIC_PROVIDER': JSON.stringify(process.env.MELON_FORTMATIC_PROVIDER),
       'process.env.MELON_FORTMATIC_NETWORK': JSON.stringify(process.env.MELON_FORTMATIC_NETWORK),

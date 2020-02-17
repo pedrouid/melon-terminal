@@ -5,7 +5,6 @@ import {
   TokenDefinition,
   KyberNetworkProxy,
   Trading,
-  Hub,
   KyberTradingAdapter,
   ExchangeDefinition,
   sameAddress,
@@ -20,16 +19,16 @@ import { fromTokenBaseUnit } from '~/utils/fromTokenBaseUnit';
 import { Holding } from '@melonproject/melongql';
 import { Subtitle } from '~/storybook/components/Title/Title';
 import { Button } from '~/storybook/components/Button/Button';
-import { catchError, switchMap, map } from 'rxjs/operators';
+import { catchError, map, expand, switchMapTo } from 'rxjs/operators';
 
 export interface FundKyberTradingProps {
-  address: string;
+  trading: string;
   exchange: ExchangeDefinition;
   holdings: Holding[];
   maker: TokenDefinition;
   taker: TokenDefinition;
   quantity: BigNumber;
-  active?: boolean;
+  active: boolean;
 }
 
 export const FundKyberTrading: React.FC<FundKyberTradingProps> = props => {
@@ -60,22 +59,26 @@ export const FundKyberTrading: React.FC<FundKyberTradingProps> = props => {
       ...(!(props.maker === state.maker && props.taker === state.taker) && { rate: new BigNumber('NaN') }),
     }));
 
-    const observable$ = Rx.timer(500).pipe(
-      switchMap(async () => {
-        const weth = environment.getToken('WETH');
-        const contract = new KyberNetworkProxy(environment, environment.deployment.kyber.addr.KyberNetworkProxy);
-        const kyberEth = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee';
-        const srcToken = sameAddress(props.taker.address, weth.address) ? kyberEth : props.taker.address;
-        const destToken = sameAddress(props.maker.address, weth.address) ? kyberEth : props.maker.address;
-        const srcQty = toTokenBaseUnit(props.quantity, props.taker.decimals);
-        const expected = await contract.getExpectedRate(srcToken, destToken, srcQty);
-        return expected.expectedRate;
-      }),
+    const fetch$ = Rx.defer(async () => {
+      const weth = environment.getToken('WETH');
+      const contract = new KyberNetworkProxy(environment, environment.deployment.kyber.addr.KyberNetworkProxy);
+      const kyberEth = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee';
+      const srcToken = sameAddress(props.taker.address, weth.address) ? kyberEth : props.taker.address;
+      const destToken = sameAddress(props.maker.address, weth.address) ? kyberEth : props.maker.address;
+      const srcQty = toTokenBaseUnit(props.quantity, props.taker.decimals);
+      const expected = await contract.getExpectedRate(srcToken, destToken, srcQty);
+      return expected.expectedRate;
+    });
+
+    // Refetch every 5 seconds.
+    const polling$ = fetch$.pipe(expand(() => Rx.timer(5000).pipe(switchMapTo(fetch$))));
+    const observable$ = polling$.pipe(
       catchError(() => Rx.of(new BigNumber(0))),
       map(value => fromTokenBaseUnit(value, 18))
     );
 
-    const subscription = observable$.subscribe(rate => {
+    const empty$ = Rx.of(new BigNumber(0));
+    const subscription = (props.active ? observable$ : empty$).subscribe(rate => {
       setState(previous => ({
         ...previous,
         rate,
@@ -84,7 +87,7 @@ export const FundKyberTrading: React.FC<FundKyberTradingProps> = props => {
     });
 
     return () => subscription.unsubscribe();
-  }, [props.maker, props.taker, props.quantity.valueOf()]);
+  }, [props.active, props.maker, props.taker, props.quantity.valueOf()]);
 
   const valid = !state.rate.isNaN() && !state.rate.isZero();
   const value = props.quantity.multipliedBy(state.rate);
@@ -92,8 +95,7 @@ export const FundKyberTrading: React.FC<FundKyberTradingProps> = props => {
   const ready = !loading && valid;
 
   const submit = async () => {
-    const hub = new Hub(environment, props.address);
-    const trading = new Trading(environment, (await hub.getRoutes()).trading);
+    const trading = new Trading(environment, props.trading);
     const adapter = await KyberTradingAdapter.create(environment, props.exchange.exchange, trading);
 
     const tx = adapter.takeOrder(account.address!, {

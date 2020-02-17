@@ -20,7 +20,7 @@ export interface FundTradeProps {
 
 export const FundTrade: React.FC<FundTradeProps> = ({ address }) => {
   const environment = useEnvironment()!;
-  const [exchanges, exchangesQuery] = useFundTrading(address);
+  const [exchanges, trading, exchangesQuery] = useFundTrading(address);
   const [holdings, holdingsQuery] = useFundHoldingsQuery(address);
   const loading = exchangesQuery.loading || holdingsQuery.loading;
 
@@ -49,24 +49,24 @@ export const FundTrade: React.FC<FundTradeProps> = ({ address }) => {
                   <FundHoldings address={address} />
                 </GridCol>
               </GridRow>
-              {!!markets.length && (
+              {!!markets.length && !!trading && (
                 <GridRow>
                   <GridCol>
-                    <FundOrderbookTrading address={address} exchanges={markets} holdings={holdings} />
+                    <FundOrderbookTrading trading={trading} exchanges={markets} holdings={holdings} />
                   </GridCol>
                 </GridRow>
               )}
-              {!!providers.length && (
+              {!!providers.length && !!trading && (
                 <GridRow>
                   <GridCol>
-                    <FundLiquidityProviderTrading address={address} exchanges={providers} holdings={holdings} />
+                    <FundLiquidityProviderTrading trading={trading} exchanges={providers} holdings={holdings} />
                   </GridCol>
                 </GridRow>
               )}
-              {!!rfq && (
+              {!!rfq && !!trading && (
                 <GridRow>
                   <GridCol>
-                    <FundRequestForQuoteTrading address={address} exchange={rfq} holdings={holdings} />
+                    <FundRequestForQuoteTrading trading={trading} exchange={rfq} holdings={holdings} />
                   </GridCol>
                 </GridRow>
               )}

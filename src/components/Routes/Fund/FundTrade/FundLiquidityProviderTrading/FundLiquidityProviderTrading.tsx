@@ -3,7 +3,7 @@ import BigNumber from 'bignumber.js';
 import * as Yup from 'yup';
 import { useForm, FormContext } from 'react-hook-form';
 import { Holding } from '@melonproject/melongql';
-import { TokenDefinition, ExchangeDefinition, ExchangeIdentifier, sameAddress } from '@melonproject/melonjs';
+import { ExchangeDefinition, ExchangeIdentifier, sameAddress } from '@melonproject/melonjs';
 import { useEnvironment } from '~/hooks/useEnvironment';
 import { Dropdown } from '~/storybook/components/Dropdown/Dropdown';
 import { Input } from '~/storybook/components/Input/Input';
@@ -17,7 +17,7 @@ import { Icons } from '~/storybook/components/Icons/Icons';
 import * as S from './FundLiquidityProviderTrading.styles';
 
 export interface FundLiquidityProviderTradingProps {
-  address: string;
+  trading: string;
   exchanges: ExchangeDefinition[];
   holdings: Holding[];
 }
@@ -56,12 +56,12 @@ export const FundLiquidityProviderTrading: React.FC<FundLiquidityProviderTrading
       takerQuantity: Yup.string()
         .required('Missing sell quantity.')
         // tslint:disable-next-line
-        .test('valid-number', 'The given value is not a valid number.', function(value) {
+        .test('valid-number', 'The given value is not a valid number.', function (value) {
           const bn = new BigNumber(value);
           return !bn.isNaN() && !bn.isZero() && bn.isPositive();
         })
         // tslint:disable-next-line
-        .test('balance-too-low', 'Your current balance is too low.', function(value) {
+        .test('balance-too-low', 'The balance of the is lower than the provided value.', function (value) {
           const holding = holdingsRef.current.find(item => sameAddress(item.token!.address, this.parent.takerAsset))!;
           const divisor = holding ? new BigNumber(10).exponentiatedBy(holding.token!.decimals!) : new BigNumber('NaN');
           const balance = holding ? holding.amount!.dividedBy(divisor) : new BigNumber('NaN');
@@ -72,8 +72,8 @@ export const FundLiquidityProviderTrading: React.FC<FundLiquidityProviderTrading
 
   useEffect(() => {
     holdingsRef.current = props.holdings;
-    form.triggerValidation().catch(() => {});
-  }, [props.holdings]);
+    form.triggerValidation().catch(() => { });
+  }, [props.holdings, form.formState.touched]);
 
   const makerAsset = environment.getToken(form.watch('makerAsset')!);
   const takerAsset = environment.getToken(form.watch('takerAsset')!);
@@ -105,9 +105,11 @@ export const FundLiquidityProviderTrading: React.FC<FundLiquidityProviderTrading
   const switchDirection = () => {
     const values = form.getValues();
 
-    form.setValue('makerAsset', values.takerAsset);
-    form.setValue('takerAsset', values.makerAsset);
-    form.triggerValidation().catch(() => {});
+    form.reset({
+      ...values,
+      makerAsset: values.takerAsset,
+      takerAsset: values.makerAsset,
+    });
   };
 
   return (
@@ -145,7 +147,7 @@ export const FundLiquidityProviderTrading: React.FC<FundLiquidityProviderTrading
                   <GridCol key={exchange.id} xs={12} sm={Math.max(4, 12 / exchanges.length)}>
                     <Component
                       active={ready}
-                      address={props.address}
+                      trading={props.trading}
                       holdings={props.holdings}
                       exchange={exchange}
                       maker={makerAsset}

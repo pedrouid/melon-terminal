@@ -9,7 +9,6 @@ import BigNumber from 'bignumber.js';
 import { FundOrderbookPrice } from './FundOrderbookPrice';
 
 export interface FundOrderbookProps {
-  address: string;
   exchanges: ExchangeDefinition[];
   setSelected: (order?: OrderbookItem) => void;
   selected?: OrderbookItem;
