@@ -28,11 +28,15 @@ export const ConnectionButton: React.FC<ConnectionButtonProps> = ({
   const click = () => {
     if (active) {
       connection.disconnect();
-      location.pathname.match(/^\/wallet/g) && history.push('/');
+
+      if (location.pathname.match(/^\/wallet/g)) {
+        history.push('/');
+      }
     } else {
       connection.connect(name);
     }
   };
+
   return (
     <S.ConnectionButtonWrapper>
       <S.ConnectionButton onClick={click}>

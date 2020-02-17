@@ -36,7 +36,7 @@ const connect = (): Rx.Observable<ConnectionAction> => {
       return connectionEstablished(eth, network, accounts);
     }).pipe(retryWhen(error => error.pipe(delay(1000))));
 
-    return connection$;
+    return Rx.concat(connection$, Rx.NEVER);
   });
 };
 
@@ -50,10 +50,10 @@ export const Ganache: React.FC<ConnectionMethodProps> = ({ connect, disconnect, 
           Connect
         </Button>
       ) : (
-        <Button length="stretch" onClick={() => disconnect()}>
-          Disconnect
+          <Button length="stretch" onClick={() => disconnect()}>
+            Disconnect
         </Button>
-      )}
+        )}
     </>
   );
 };

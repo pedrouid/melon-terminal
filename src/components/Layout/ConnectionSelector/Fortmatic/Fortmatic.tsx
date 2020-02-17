@@ -44,7 +44,7 @@ const connect = () => {
       return connectionEstablished(eth, network, accounts);
     }).pipe(retryWhen(error => error.pipe(delay(1000))));
 
-    return connection$;
+    return Rx.concat(connection$, Rx.NEVER);
   });
 };
 
