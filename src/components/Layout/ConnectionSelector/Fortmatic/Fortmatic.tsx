@@ -17,17 +17,16 @@ interface EthResource extends Rx.Unsubscribable {
   eth: Eth;
 }
 
-// melon default provider
 const connect = () => {
-  const customNodeOptions = {
-    rpcUrl: process.env.MELON_FORTMATIC_PROVIDER,
-    chainId: process.env.MELON_FORTMATIC_NETWORK,
-  };
-
-  const fm = new Fortmatic(process.env.MELON_FORTMATIC_KEY, customNodeOptions);
-  const provider = fm.getProvider();
-
   const create = () => {
+    const customNodeOptions = {
+      rpcUrl: process.env.MELON_FORTMATIC_PROVIDER,
+      chainId: process.env.MELON_FORTMATIC_NETWORK,
+    };
+
+    const fm = new Fortmatic(process.env.MELON_FORTMATIC_KEY, customNodeOptions);
+    const provider = fm.getProvider();
+
     const eth = new Eth(provider, undefined, {
       transactionConfirmationBlocks: 1,
     });
@@ -44,7 +43,7 @@ const connect = () => {
       return connectionEstablished(eth, network, accounts);
     }).pipe(retryWhen(error => error.pipe(delay(1000))));
 
-    return connection$;
+    return Rx.concat(connection$, Rx.NEVER);
   });
 };
 

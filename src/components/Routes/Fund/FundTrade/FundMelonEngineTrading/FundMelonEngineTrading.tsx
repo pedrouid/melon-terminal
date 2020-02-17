@@ -27,9 +27,7 @@ export const FundMelonEngineTrading: React.FC<FundMelonEngineTradingProps> = pro
   const environment = useEnvironment()!;
   const account = useAccount()!;
   const refetch = useOnChainQueryRefetcher();
-  const transaction = useTransaction(environment, {
-    onFinish: receipt => refetch(receipt.blockNumber),
-  });
+  const transaction = useTransaction(environment);
 
   const value = props.quantity.multipliedBy(price ?? new BigNumber('NaN'));
   const valid = !value.isNaN() && value.isLessThanOrEqualTo(liquid.dividedBy('1e18'));

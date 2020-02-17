@@ -46,7 +46,7 @@ function mapOrders(
       price,
       side,
       exchange: ExchangeIdentifier.ZeroExV3,
-      id: `zeroexv3:${order.order.salt}`,
+      id: `zeroexv3:${order.order.salt}:${order.order.signature}`,
     } as OrderbookItem;
   });
 }
@@ -98,8 +98,8 @@ export function zeroExOrderbook(
 
       return polling$.pipe<Orderbook>(
         map(([b, a]) => ({
-          bids: mapOrders(b, takerAsset, makerAsset, 'bid'),
-          asks: mapOrders(a, makerAsset, takerAsset, 'ask'),
+          bids: mapOrders(b as any, takerAsset, makerAsset, 'bid'),
+          asks: mapOrders(a as any, makerAsset, takerAsset, 'ask'),
         }))
       );
     }

@@ -45,7 +45,7 @@ export const FundKyberTrading: React.FC<FundKyberTradingProps> = props => {
   const refetch = useOnChainQueryRefetcher();
 
   const transaction = useTransaction(environment, {
-    onFinish: receipt => refetch(receipt.blockNumber),
+    handleError: () => 'The transaction failed. The rate offered by the exchange may have changed. Please try again.',
   });
 
   useEffect(() => {

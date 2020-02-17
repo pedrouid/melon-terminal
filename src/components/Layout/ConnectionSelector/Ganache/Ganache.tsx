@@ -24,13 +24,7 @@ const connect = (): Rx.Observable<ConnectionAction> => {
       transactionConfirmationBlocks: 1,
     });
 
-    return {
-      eth,
-      unsubscribe: () => {
-        console.log('DISCONNECT GANACHE');
-        return provider.disconnect();
-      },
-    };
+    return { eth, unsubscribe: () => provider.disconnect() };
   };
 
   return Rx.using(create, resource => {
@@ -42,7 +36,7 @@ const connect = (): Rx.Observable<ConnectionAction> => {
       return connectionEstablished(eth, network, accounts);
     }).pipe(retryWhen(error => error.pipe(delay(1000))));
 
-    return connection$;
+    return Rx.concat(connection$, Rx.NEVER);
   });
 };
 

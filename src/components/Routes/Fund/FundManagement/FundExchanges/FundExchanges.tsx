@@ -28,9 +28,7 @@ export const FundExchanges: React.FC<ExchangesProps> = ({ address }) => {
   const refetch = useOnChainQueryRefetcher();
   const [details, query] = useFundExchangesQuery(address);
 
-  const transaction = useTransaction(environment, {
-    onFinish: receipt => refetch(receipt.blockNumber),
-  });
+  const transaction = useTransaction(environment);
 
   const exchanges = useMemo(() => {
     const exchanges = details?.fund?.routes?.trading?.exchanges || [];

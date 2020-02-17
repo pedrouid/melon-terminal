@@ -9,7 +9,7 @@ import { useOnChainQueryRefetcher } from '~/hooks/useOnChainQueryRefetcher';
 import { TransactionModal } from '~/components/Common/TransactionModal/TransactionModal';
 import { Button } from '~/storybook/components/Button/Button';
 import { catchError, switchMap } from 'rxjs/operators';
-import { SignedOrder } from '@0x/order-utils';
+import { SignedOrder } from '@0x/order-utils-v2';
 import { Subtitle } from '~/storybook/components/Title/Title';
 
 export interface FundRequestForQuoteOfferProps {
@@ -36,9 +36,7 @@ export const FundRequestForQuoteOffer: React.FC<FundRequestForQuoteOfferProps> =
   const active = !!(props.market && props.side && props.amount && !props.amount.isNaN() && !props.amount.isZero());
   const ready = active && !state.loading && !state.price.isZero();
 
-  const transaction = useTransaction(environment, {
-    onFinish: receipt => refetch(receipt.blockNumber),
-  });
+  const transaction = useTransaction(environment);
 
   useEffect(() => {
     setState(() => ({

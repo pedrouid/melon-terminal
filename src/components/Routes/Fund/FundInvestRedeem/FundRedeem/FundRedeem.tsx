@@ -9,7 +9,6 @@ import { useTransaction } from '~/hooks/useTransaction';
 import { TransactionModal } from '~/components/Common/TransactionModal/TransactionModal';
 import { Spinner } from '~/storybook/components/Spinner/Spinner';
 import { useAccount } from '~/hooks/useAccount';
-import { useOnChainQueryRefetcher } from '~/hooks/useOnChainQueryRefetcher';
 import { Input } from '~/storybook/components/Input/Input';
 import { Button } from '~/storybook/components/Button/Button';
 import { Block, BlockActions } from '~/storybook/components/Block/Block';
@@ -31,7 +30,6 @@ export interface FundRedeemProps {
 export const FundRedeem: React.FC<FundRedeemProps> = ({ address }) => {
   const environment = useEnvironment()!;
   const account = useAccount();
-  const refetch = useOnChainQueryRefetcher();
   const [result, query] = useFundInvestQuery(address);
 
   const participationAddress = result?.account?.participation?.address;
@@ -40,9 +38,7 @@ export const FundRedeem: React.FC<FundRedeemProps> = ({ address }) => {
 
   const participationContract = new Participation(environment, participationAddress);
 
-  const transaction = useTransaction(environment, {
-    onFinish: receipt => refetch(receipt.blockNumber),
-  });
+  const transaction = useTransaction(environment);
 
   const validationSchema = Yup.object().shape({
     shareQuantity: Yup.mixed<BigNumber>()

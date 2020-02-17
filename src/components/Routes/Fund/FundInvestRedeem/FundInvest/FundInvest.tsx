@@ -29,13 +29,18 @@ export const FundInvest: React.FC<FundInvestProps> = ({ address }) => {
   const transactionRef = useRef<TransactionRef>();
 
   const transaction = useTransaction(environment, {
-    onFinish: receipt => refetch(receipt.blockNumber),
     onAcknowledge: () => {
       if (transactionRef.current) {
         transactionRef.current.next(transaction.start);
       }
     },
+    handleError: (error, validation) => {
+      if (validation?.name === 'NoInvestmentRequestError') {
+        return 'Your investment request cannot be found. It may have already been executed by someone else.';
+      }
+    },
   });
+
   const account = result?.account;
   const allowedAssets = result?.fund?.routes?.participation?.allowedAssets;
   const action = useMemo(() => {

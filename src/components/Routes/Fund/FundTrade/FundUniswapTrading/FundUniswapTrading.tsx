@@ -45,9 +45,7 @@ export const FundUniswapTrading: React.FC<FundUniswapTradingProps> = props => {
   const account = useAccount()!;
   const refetch = useOnChainQueryRefetcher();
 
-  const transaction = useTransaction(environment, {
-    onFinish: receipt => refetch(receipt.blockNumber),
-  });
+  const transaction = useTransaction(environment);
 
   useEffect(() => {
     setState(previous => ({

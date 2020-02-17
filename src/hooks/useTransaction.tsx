@@ -2,14 +2,27 @@ import React, { useEffect, useReducer } from 'react';
 import * as Yup from 'yup';
 import { useForm } from 'react-hook-form';
 import { TransactionReceipt } from 'web3-core';
-import { Transaction, SendOptions, Deployment, Contract, DeployedEnvironment } from '@melonproject/melonjs';
+import {
+  Transaction,
+  SendOptions,
+  Deployment,
+  Contract,
+  DeployedEnvironment,
+  ValidationError as TransactionValidationError,
+} from '@melonproject/melonjs';
 import { FormContextValues } from 'react-hook-form/dist/contextTypes';
 import { FieldValues } from 'react-hook-form/dist/types';
 import { NetworkEnum } from '~/types';
 import BigNumber from 'bignumber.js';
+import { useOnChainQueryRefetcher } from './useOnChainQueryRefetcher';
 
 export interface TransactionFormValues extends FieldValues {
   gasPrice: number;
+}
+
+export interface TransactionError extends Error {
+  customMessage?: string;
+  dismiss?: boolean;
 }
 
 export interface TransactionState {
@@ -21,8 +34,9 @@ export interface TransactionState {
   name?: string;
   hash?: string;
   receipt?: TransactionReceipt;
-  error?: Error;
+  error?: TransactionError;
   loading: boolean;
+  handled?: string;
 }
 
 export enum TransactionProgress {
@@ -97,7 +111,8 @@ interface ValidationFinished {
 
 interface ValidationError {
   type: TransactionProgress.VALIDATION_ERROR;
-  error: Error;
+  error: TransactionError;
+  handled?: string;
 }
 
 interface ExecutionPending {
@@ -117,7 +132,8 @@ interface ExecutionFinished {
 
 interface ExecutionError {
   type: TransactionProgress.EXECUTION_ERROR;
-  error: Error;
+  error: TransactionError;
+  handled?: string;
 }
 
 export interface EthGasStation {
@@ -252,6 +268,7 @@ function reducer(state: TransactionState, action: TransactionAction): Transactio
         progress: TransactionProgress.EXECUTION_ERROR,
         loading: false,
         error: action.error,
+        handled: action.handled,
       };
     }
 
@@ -268,8 +285,8 @@ function validationFinished(dispatch: React.Dispatch<TransactionAction>) {
   dispatch({ type: TransactionProgress.VALIDATION_FINISHED });
 }
 
-function validationError(dispatch: React.Dispatch<TransactionAction>, error: Error) {
-  dispatch({ error, type: TransactionProgress.VALIDATION_ERROR });
+function validationError(dispatch: React.Dispatch<TransactionAction>, error: TransactionError, handled?: string) {
+  dispatch({ error, handled, type: TransactionProgress.VALIDATION_ERROR });
 }
 
 function estimationPending(dispatch: React.Dispatch<TransactionAction>) {
@@ -301,8 +318,8 @@ function executionFinished(dispatch: React.Dispatch<TransactionAction>, receipt:
   dispatch({ receipt, type: TransactionProgress.EXECUTION_FINISHED });
 }
 
-function executionError(dispatch: React.Dispatch<TransactionAction>, error: Error) {
-  dispatch({ error, type: TransactionProgress.EXECUTION_ERROR });
+function executionError(dispatch: React.Dispatch<TransactionAction>, error: TransactionError, handled?: string) {
+  dispatch({ error, handled, type: TransactionProgress.EXECUTION_ERROR });
 }
 
 export interface TransactionOptions {
@@ -310,6 +327,7 @@ export interface TransactionOptions {
   onFinish?: (receipt: TransactionReceipt) => void;
   onAcknowledge?: (receipt: TransactionReceipt) => void;
   onError?: (error: Error) => void;
+  handleError?: (error?: Error, validationError?: TransactionValidationError) => string | void;
 }
 
 export interface TransactionHookValues<FormValues extends TransactionFormValues = TransactionFormValues> {
@@ -352,6 +370,8 @@ export function useTransaction(environment: DeployedEnvironment, options?: Trans
     loading: false,
   } as TransactionState);
 
+  const refetch = useOnChainQueryRefetcher();
+
   const form = useForm<TransactionFormValues>({
     mode: 'onSubmit',
     reValidateMode: 'onBlur',
@@ -386,6 +406,17 @@ export function useTransaction(environment: DeployedEnvironment, options?: Trans
       return;
     }
 
+    // on-submit validation
+    try {
+      const transaction = state.transaction!;
+      await transaction.validate();
+    } catch (error) {
+      const handled = await (options?.handleError && options.handleError(error));
+      validationError(dispatch, error, handled || undefined);
+      return;
+    }
+
+    // actual submit
     try {
       const transaction = state.transaction!;
       const opts: SendOptions = {
@@ -403,30 +434,43 @@ export function useTransaction(environment: DeployedEnvironment, options?: Trans
         tx.once('error', error => reject((error as any).error ? (error as any).error : error));
       });
 
+      await refetch(receipt.blockNumber);
       await (options?.onFinish && options.onFinish(receipt));
       executionFinished(dispatch, receipt);
     } catch (error) {
-      executionError(dispatch, error);
+      // post-error validation
+      await refetch(error.blockNumber);
+
+      try {
+        const transaction = state.transaction!;
+        await transaction.validate();
+        const handled = await (options?.handleError && options.handleError(error));
+        executionError(dispatch, error, handled || undefined);
+      } catch (validationError) {
+        const handled = await (options?.handleError && options.handleError(error, validationError));
+        executionError(dispatch, validationError, handled || undefined);
+        return;
+      }
     }
   });
 
   useEffect(() => {
     switch (state.progress) {
       case TransactionProgress.TRANSACTION_ACKNOWLEDGED: {
-        options && options.onAcknowledge && options.onAcknowledge(state.receipt!);
+        options?.onAcknowledge && options.onAcknowledge(state.receipt!);
         break;
       }
 
       case TransactionProgress.EXECUTION_ERROR:
       case TransactionProgress.ESTIMATION_ERROR:
       case TransactionProgress.VALIDATION_ERROR: {
-        options && options.onError && options.onError(state.error!);
+        options?.onError && options.onError(state.error!);
         break;
       }
 
-      // Automatically start validation when the modal is opened.
+      // Automatically start validation when the modal is opened (pre-submit validation)
       case TransactionProgress.TRANSACTION_STARTED: {
-        options && options.onStart && options.onStart();
+        options?.onStart && options.onStart();
 
         (async () => {
           try {
@@ -437,7 +481,8 @@ export function useTransaction(environment: DeployedEnvironment, options?: Trans
 
             validationFinished(dispatch);
           } catch (error) {
-            validationError(dispatch, error);
+            const handled = await (options?.handleError && options.handleError(error));
+            validationError(dispatch, error, handled || undefined);
           }
         })();
         break;

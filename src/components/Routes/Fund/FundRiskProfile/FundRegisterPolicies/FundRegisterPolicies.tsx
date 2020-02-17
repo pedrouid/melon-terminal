@@ -57,7 +57,6 @@ export const FundRegisterPolicies: React.FC<FundRegisterPoliciesProps> = ({ addr
         transaction.start(tx, `Register ${selectedPolicy.name} policy`);
       }
     },
-    onFinish: receipt => refetch(receipt.blockNumber),
   });
 
   const startTransaction = (

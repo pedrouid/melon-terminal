@@ -33,6 +33,7 @@ import {
   CheckboxIcon,
 } from '~/storybook/components/Checkbox/Checkbox';
 import styled from 'styled-components';
+import { TokenValue } from '~/components/Common/TokenValue/TokenValue';
 
 interface SortChoice {
   key: keyof typeof sortChoice;
@@ -293,10 +294,14 @@ export const FundOverview: React.FC = () => {
                   </BodyCell>
                   <BodyCellRightAlign>{fund.sharePrice}</BodyCellRightAlign>
                   <BodyCellRightAlign>
-                    <FormattedNumber tooltip={true} value={fund.change} colorize={true} decimals={2} suffix="%" />
+                    <FormattedNumber value={fund.change} colorize={true} decimals={2} suffix="%" />
                   </BodyCellRightAlign>
-                  <BodyCellRightAlign>{fund.aumEth}</BodyCellRightAlign>
-                  <BodyCellRightAlign>{fund.aumUsd || ''}</BodyCellRightAlign>
+                  <BodyCellRightAlign>
+                    <TokenValue decimals={0} value={fund.aumEth} />
+                  </BodyCellRightAlign>
+                  <BodyCellRightAlign>
+                    <TokenValue decimals={0} value={fund.aumUsd || 0} />
+                  </BodyCellRightAlign>
                   <BodyCellRightAlign>{fund.shares}</BodyCellRightAlign>
                   <BodyCell>{fund.version}</BodyCell>
                   <BodyCell>{fund.status}</BodyCell>
