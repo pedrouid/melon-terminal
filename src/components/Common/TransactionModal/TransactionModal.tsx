@@ -148,6 +148,7 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
                     <Input
                       id="gas-price"
                       type="number"
+                      step=".1"
                       name="gasPrice"
                       label="Gas Price (gwei)"
                       disabled={loading && estimated}
