@@ -33,6 +33,7 @@ declare global {
       MELON_FORTMATIC_PROVIDER: string;
       MELON_FORTMATIC_NETWORK: string;
       MELON_API_GATEWAY: string;
+      MELON_WALLET_CONNECT_PROVIDER: string;
     }
   }
 }

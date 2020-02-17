@@ -61,6 +61,7 @@ module.exports = override(
       'process.env.MELON_FORTMATIC_KEY': JSON.stringify(process.env.MELON_FORTMATIC_KEY),
       'process.env.MELON_FORTMATIC_PROVIDER': JSON.stringify(process.env.MELON_FORTMATIC_PROVIDER),
       'process.env.MELON_FORTMATIC_NETWORK': JSON.stringify(process.env.MELON_FORTMATIC_NETWORK),
+      'process.env.MELON_WALLET_CONNECT_PROVIDER': JSON.stringify(process.env.MELON_WALLET_CONNECT_PROVIDER),
       'process.env.MELON_INCLUDE_GRAPHIQL': JSON.stringify(process.env.MELON_INCLUDE_GRAPHIQL),
       'process.env.MELON_DEFAULT_PROVIDER': JSON.stringify(process.env.MELON_DEFAULT_PROVIDER),
       'process.env.MELON_MAINNET': JSON.stringify(mainnet),

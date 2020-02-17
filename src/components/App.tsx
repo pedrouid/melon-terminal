@@ -16,11 +16,14 @@ import { method as metamask } from './Layout/ConnectionSelector/MetaMask/MetaMas
 import { method as frame } from './Layout/ConnectionSelector/Frame/Frame';
 import { method as ganache } from './Layout/ConnectionSelector/Ganache/Ganache';
 import { method as fortmatic } from './Layout/ConnectionSelector/Fortmatic/Fortmatic';
+import { method as walletConnect } from './Layout/ConnectionSelector/WalletConnect/WalletConnect';
 import { method as anonymous } from './Layout/ConnectionSelector/Anonymous/Anonymous';
 
 const AppComponent = () => {
   const start = process.env.MELON_TESTNET ? ganache : anonymous;
-  const methods = process.env.MELON_TESTNET ? [ganache, metamask, frame, fortmatic] : [metamask, frame, fortmatic];
+  const methods = process.env.MELON_TESTNET
+    ? [ganache, metamask, frame, fortmatic, walletConnect]
+    : [metamask, frame, fortmatic, walletConnect];
 
   return (
     <Router>
