@@ -17,9 +17,7 @@ export const WalletOverviewInvestmentRequest: React.FC<InvestmentRequest> = prop
   const refetch = useOnChainQueryRefetcher();
   const [status, query] = useInvestmentRequestStatusQuery(props.account!, props.address);
 
-  const transaction = useTransaction(environment, {
-    onFinish: receipt => refetch(receipt.blockNumber),
-  });
+  const transaction = useTransaction(environment);
 
   const execute = () => {
     const contract = new Participation(environment, status?.address!);

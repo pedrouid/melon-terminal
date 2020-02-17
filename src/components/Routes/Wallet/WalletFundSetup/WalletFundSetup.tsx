@@ -88,7 +88,6 @@ export const WalletFundSetup: React.FC = () => {
   const transaction = useTransaction(environment, {
     onFinish: receipt => {
       setTransactionFinished(true);
-      refetch(receipt.blockNumber);
     },
     onAcknowledge: () => {
       if (!account.fund) {

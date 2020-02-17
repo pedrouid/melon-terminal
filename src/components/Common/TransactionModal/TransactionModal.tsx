@@ -62,6 +62,7 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
   const output = !!(hash || receipt);
 
   const error = state.error;
+  const handled = state.handled;
   const loading = state.loading;
   const finished = state.progress >= TransactionProgress.EXECUTION_FINISHED;
   const estimated = state.progress >= TransactionProgress.ESTIMATION_FINISHED;
@@ -101,7 +102,7 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
 
           {error && (
             <NotificationBar kind="error">
-              <NotificationContent>{error.message}</NotificationContent>
+              <NotificationContent>{handled ? handled : error.message}</NotificationContent>
               <NotificationContent>
                 <a href={errorReportingUri} target="_blank">
                   Report error
@@ -282,7 +283,7 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
                   </S.TransactionModalAction>
                 )}
 
-                {!finished && estimated && (
+                {!finished && estimated && !handled && (
                   <S.TransactionModalAction>
                     <Button type="submit" kind="success" length="stretch" disabled={loading}>
                       {error ? 'Retry' : 'Confirm'}

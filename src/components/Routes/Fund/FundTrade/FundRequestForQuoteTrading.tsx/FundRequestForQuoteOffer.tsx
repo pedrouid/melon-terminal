@@ -36,9 +36,7 @@ export const FundRequestForQuoteOffer: React.FC<FundRequestForQuoteOfferProps> =
   const active = !!(props.market && props.side && props.amount && !props.amount.isNaN() && !props.amount.isZero());
   const ready = active && !state.loading && !state.price.isZero();
 
-  const transaction = useTransaction(environment, {
-    onFinish: receipt => refetch(receipt.blockNumber),
-  });
+  const transaction = useTransaction(environment);
 
   useEffect(() => {
     setState(() => ({

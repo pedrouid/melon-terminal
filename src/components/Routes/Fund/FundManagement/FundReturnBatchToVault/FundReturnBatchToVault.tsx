@@ -27,9 +27,7 @@ export const ReturnBatchToVault: React.FC<ReturnBatchToVaultProps> = ({ address 
 
   const hub = new Hub(environment, address);
 
-  const transaction = useTransaction(environment, {
-    onFinish: receipt => refetch(receipt.blockNumber),
-  });
+  const transaction = useTransaction(environment);
 
   const submit = async () => {
     const assets = (info!.routes!.accounting!.holdings!.map(holding => holding.token?.address) || []) as string[];

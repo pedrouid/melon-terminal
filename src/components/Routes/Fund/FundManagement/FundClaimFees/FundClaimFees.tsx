@@ -31,9 +31,7 @@ export const ClaimFees: React.FC<ClaimFeesProps> = ({ address }) => {
   const feeManagerAddress = feeManagerInfo && feeManagerInfo.address;
   const feeManager = new FeeManager(environment, feeManagerAddress);
 
-  const transaction = useTransaction(environment, {
-    onFinish: receipt => refetch(receipt.blockNumber),
-  });
+  const transaction = useTransaction(environment);
 
   const submitAllFees = () => {
     const tx = accounting.triggerRewardAllFees(account.address!);

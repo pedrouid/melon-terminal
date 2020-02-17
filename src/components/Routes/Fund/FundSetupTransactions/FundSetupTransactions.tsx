@@ -117,7 +117,6 @@ export const FundSetupTransactions: React.FC = () => {
   const refetch = useOnChainQueryRefetcher();
   const transaction = useTransaction(environment, {
     onStart: () => setAcknowledged(false),
-    onFinish: receipt => refetch(receipt.blockNumber),
     onAcknowledge: () => setAcknowledged(true),
   });
 
