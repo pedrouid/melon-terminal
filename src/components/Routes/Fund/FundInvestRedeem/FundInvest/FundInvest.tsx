@@ -36,7 +36,7 @@ export const FundInvest: React.FC<FundInvestProps> = ({ address }) => {
     },
     handleError: (error, validation) => {
       if (validation?.name === 'NoInvestmentRequestError') {
-        return 'Your investment request cannot be found. It may have already been executed by someone else.';
+        return 'Your investment request was already successfully executed by someone else.';
       }
     },
   });

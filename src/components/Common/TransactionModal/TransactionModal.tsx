@@ -100,9 +100,9 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
             <S.TransactionModalNetwork>{NetworkEnum[environment.network]} </S.TransactionModalNetwork>
           </S.TransactionModalTitle>
 
-          {error && (
+          {error && !handled && (
             <NotificationBar kind="error">
-              <NotificationContent>{handled ? handled : error.message}</NotificationContent>
+              <NotificationContent>{error.message}</NotificationContent>
               <NotificationContent>
                 <a href={errorReportingUri} target="_blank">
                   Report error
@@ -111,12 +111,18 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
             </NotificationBar>
           )}
 
+          {error && handled && (
+            <NotificationBar kind="neutral">
+              <NotificationContent>{handled}</NotificationContent>
+            </NotificationBar>
+          )}
+
           <S.TransactionModalContent>
             {!estimated && !error && <Spinner />}
 
             {finished && <NotificationBar kind="success">Transaction successful!</NotificationBar>}
 
-            {estimated && !finished && (
+            {estimated && !finished && !handled && (
               <ProgressBar step={currentStep} loading={loadingStep(state.progress)}>
                 <ProgressBarStep />
                 <ProgressBarStep />
@@ -125,7 +131,7 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
               </ProgressBar>
             )}
 
-            {!finished && estimated && gas && (
+            {!finished && estimated && gas && !handled && (
               <S.EthGasStation>
                 <S.EthGasStationButton onClick={() => !loading && setGasPrice(gas!.low)} disabled={loading}>
                   <S.EthGasStationButtonGwei>{gas.low}</S.EthGasStationButtonGwei>
@@ -143,7 +149,7 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
             )}
 
             <S.TransactionModalForm onSubmit={submit}>
-              {estimated && !finished && (
+              {estimated && !finished && !handled && (
                 <>
                   <S.TransactionModalFeeForm>
                     <Input
@@ -225,7 +231,7 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
                 </>
               )}
 
-              {output && (
+              {output && !handled && (
                 <S.TransactionModalMessages>
                   <S.TransactionModalMessagesTable>
                     <S.TransactionModalMessagesTableBody>
