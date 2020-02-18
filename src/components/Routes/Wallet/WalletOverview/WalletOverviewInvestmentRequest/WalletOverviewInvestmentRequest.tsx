@@ -8,13 +8,11 @@ import { Button } from '~/storybook/components/Button/Button.styles';
 import { useEnvironment } from '~/hooks/useEnvironment';
 import { useAccount } from '~/hooks/useAccount';
 import { useTransaction } from '~/hooks/useTransaction';
-import { useOnChainQueryRefetcher } from '~/hooks/useOnChainQueryRefetcher';
 import { TransactionModal } from '~/components/Common/TransactionModal/TransactionModal';
 
 export const WalletOverviewInvestmentRequest: React.FC<InvestmentRequest> = props => {
   const environment = useEnvironment()!;
   const account = useAccount();
-  const refetch = useOnChainQueryRefetcher();
   const [status, query] = useInvestmentRequestStatusQuery(props.account!, props.address);
 
   const transaction = useTransaction(environment);
@@ -47,6 +45,10 @@ export const WalletOverviewInvestmentRequest: React.FC<InvestmentRequest> = prop
           Execute investment request
         </Button>
       );
+    }
+
+    if (status?.investmentRequestState === 'WAITING') {
+      return <>Waiting for execution window ()</>;
     }
 
     return <></>;

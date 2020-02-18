@@ -15,6 +15,12 @@ const FundInvestQuery = gql`
         hasInvested
         investmentRequestState
         canCancelRequest
+        request {
+          investmentAsset
+          investmentAmount
+          requestedShares
+          timestamp
+        }
       }
       shares(address: $fund) {
         address

@@ -1,7 +1,7 @@
 import React, { useMemo, useRef } from 'react';
+import { format } from 'date-fns';
 import { useEnvironment } from '~/hooks/useEnvironment';
-import { Transaction } from '@melonproject/melonjs';
-import { useOnChainQueryRefetcher } from '~/hooks/useOnChainQueryRefetcher';
+import { Transaction, sameAddress } from '@melonproject/melonjs';
 import { useTransaction } from '~/hooks/useTransaction';
 import { useFundInvestQuery } from './FundInvest.query';
 import { Spinner } from '~/storybook/components/Spinner/Spinner';
@@ -12,6 +12,8 @@ import { Block } from '~/storybook/components/Block/Block';
 import { SectionTitle } from '~/storybook/components/Title/Title';
 import { RequiresFundCreatedAfter } from '~/components/Gates/RequiresFundCreatedAfter/RequiresFundCreatedAfter';
 import { TransactionModal } from '~/components/Common/TransactionModal/TransactionModal';
+import { usePriceFeedUpdateQuery } from '~/components/Layout/PriceFeedUpdate.query';
+import { TokenValue } from '~/components/Common/TokenValue/TokenValue';
 
 export interface FundInvestProps {
   address: string;
@@ -24,7 +26,10 @@ export interface TransactionRef {
 export const FundInvest: React.FC<FundInvestProps> = ({ address }) => {
   const environment = useEnvironment()!;
   const [result, query] = useFundInvestQuery(address);
-  const refetch = useOnChainQueryRefetcher();
+  const [priceUpdate] = usePriceFeedUpdateQuery();
+
+  const oneDay = 24 * 60 * 60 * 1000;
+  const nextUpdate = new Date(priceUpdate?.getTime() || 0 + oneDay);
 
   const transactionRef = useRef<TransactionRef>();
 
@@ -40,6 +45,10 @@ export const FundInvest: React.FC<FundInvestProps> = ({ address }) => {
       }
     },
   });
+
+  const request = result?.account?.participation?.request;
+  const twentyFourHoursAfterRequest = new Date((request?.timestamp?.getTime() || 0) + oneDay);
+  const symbol = environment.tokens.find(token => sameAddress(token.address, request?.investmentAsset))?.symbol;
 
   const account = result?.account;
   const allowedAssets = result?.fund?.routes?.participation?.allowedAssets;
@@ -109,10 +118,24 @@ export const FundInvest: React.FC<FundInvestProps> = ({ address }) => {
           />
         )}
         {action === 'waiting' && (
-          <p>
-            You need to wait before you can execute your investment request. The time-window to execute your investment
-            request is between the next price update and 24 hours after your investment request.
-          </p>
+          <>
+            <p>You have a pending investment request:</p>
+
+            <p>
+              Requested shares:&nbsp;&nbsp;<TokenValue value={request?.requestedShares}></TokenValue>
+              <br />
+              Investment amount: <TokenValue value={request?.investmentAmount}></TokenValue> {symbol}
+              <br />
+              Request date: {format(request?.timestamp || 0, 'yyyy-MM-dd hh:mm a')}
+            </p>
+
+            <p>Wait for the excecution window to execute your investment request.</p>
+            <p>
+              Execution window start: {format(nextUpdate, 'yyyy-MM-dd hh:mm a')}
+              <br />
+              Execution window end:&nbsp;&nbsp;&nbsp;{format(twentyFourHoursAfterRequest, 'yyyy-MM-dd hh:mm a')}
+            </p>
+          </>
         )}
         <TransactionModal transaction={transaction} />
       </RequiresFundCreatedAfter>
