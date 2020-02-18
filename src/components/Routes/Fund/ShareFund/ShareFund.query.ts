@@ -11,22 +11,6 @@ export interface ShareFund {
         rate: number;
       };
     };
-    participation?: {
-      allowedAssets?: [
-        {
-          token?: {
-            symbol?: string;
-          };
-        }
-      ];
-    };
-    trading?: {
-      exchanges?: [
-        {
-          exchange?: string;
-        }
-      ];
-    };
   };
 }
 
@@ -45,18 +29,6 @@ export const ShareFundQuery = gql`
           }
           managementFee {
             rate
-          }
-        }
-        participation {
-          allowedAssets {
-            token {
-              symbol
-            }
-          }
-        }
-        trading {
-          exchanges {
-            exchange
           }
         }
       }

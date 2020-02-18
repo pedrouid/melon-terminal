@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import { NotificationBar, NotificationContent } from '~/storybook/components/NotificationBar/NotificationBar';
 import { ShareFundQuery } from '~/components/Routes/Fund/ShareFund/ShareFund.query';
 import { Icons } from '~/storybook/components/Icons/Icons';
-import { useEnvironment } from '~/hooks/useEnvironment';
 import { useLazyOnChainQuery } from '~/hooks/useQuery';
 
 export interface ShareFundProps {
@@ -11,7 +10,6 @@ export interface ShareFundProps {
 
 export const ShareFund: React.FC<ShareFundProps> = ({ address }) => {
   const [fetch, result] = useLazyOnChainQuery(ShareFundQuery);
-  const environment = useEnvironment();
 
   const onClick = () => {
     if (result.loading) return;
@@ -32,17 +30,10 @@ export const ShareFund: React.FC<ShareFundProps> = ({ address }) => {
       name: result.data?.fund?.name,
       managementFee: result.data?.fund?.routes?.feeManager?.managementFee?.rate,
       performanceFee: result.data?.fund?.routes?.feeManager?.performanceFee?.rate,
-      tokens: result.data?.fund?.routes?.participation?.allowedAssets?.map(e => e.token?.symbol),
-      exchanges: result.data?.fund?.routes?.trading?.exchanges?.map(e => {
-        const item = environment?.getExchange(e.exchange!);
-        return item && item.name;
-      }),
     };
 
-    const tokens = formattedData?.tokens?.map(token => `$${token}`).join(', ');
-    const exchanges = formattedData?.exchanges?.join(', ');
+    const formatedTwitterText = `I just deployed an on-chain fund to @ethereum, powered by @melonprotocol. My fund's name is ${formattedData?.name}, it has a ${formattedData?.managementFee}% management fee, ${formattedData?.performanceFee}% performance fee. Check out its full profile here: ${window.location.href}.`;
 
-    const formatedTwitterText = `I just deployed an on-chain fund to @ethereum, powered by @melonprotocol. My fund's name is ${formattedData?.name}, it has a ${formattedData?.managementFee}% management fee, ${formattedData?.performanceFee}% performance fee, can trade on ${exchanges} and accepts ${tokens} as subscription assets: ${window.location.href}.`;
     window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(formatedTwitterText)}`);
   }, [result.data]);
 
