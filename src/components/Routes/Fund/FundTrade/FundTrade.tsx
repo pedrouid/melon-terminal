@@ -34,9 +34,10 @@ export const FundTrade: React.FC<FundTradeProps> = ({ address }) => {
     return supported.includes(exchange.id as ExchangeIdentifier);
   });
 
-  const rfq =
-    environment.network === NetworkEnum.MAINNET &&
-    exchanges.find(exchange => exchange.id === ExchangeIdentifier.ZeroExV2);
+  const rfq = false;
+  // const rfq =
+  //   environment.network === NetworkEnum.MAINNET &&
+  //   exchanges.find(exchange => exchange.id === ExchangeIdentifier.ZeroExV2);
 
   return (
     <Grid>
