@@ -195,10 +195,6 @@ export const Global = createGlobalStyle`
     }
   }
 
-  div + span {
-    margin-left: 10px;
-  }
-
   hr {
     border: 0;
     height: 0;

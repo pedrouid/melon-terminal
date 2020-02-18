@@ -14,7 +14,6 @@ import {
 import { useEnvironment } from '~/hooks/useEnvironment';
 import { useAccount } from '~/hooks/useAccount';
 import { useTransaction } from '~/hooks/useTransaction';
-import { useOnChainQueryRefetcher } from '~/hooks/useOnChainQueryRefetcher';
 import { TransactionModal } from '~/components/Common/TransactionModal/TransactionModal';
 import { toTokenBaseUnit } from '~/utils/toTokenBaseUnit';
 import { Holding } from '@melonproject/melongql';
@@ -43,7 +42,6 @@ export const FundUniswapTrading: React.FC<FundUniswapTradingProps> = props => {
 
   const environment = useEnvironment()!;
   const account = useAccount()!;
-  const refetch = useOnChainQueryRefetcher();
 
   const transaction = useTransaction(environment);
 

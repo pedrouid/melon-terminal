@@ -12,7 +12,6 @@ import {
 import { useEnvironment } from '~/hooks/useEnvironment';
 import { useAccount } from '~/hooks/useAccount';
 import { useTransaction } from '~/hooks/useTransaction';
-import { useOnChainQueryRefetcher } from '~/hooks/useOnChainQueryRefetcher';
 import { TransactionModal } from '~/components/Common/TransactionModal/TransactionModal';
 import { toTokenBaseUnit } from '~/utils/toTokenBaseUnit';
 import { fromTokenBaseUnit } from '~/utils/fromTokenBaseUnit';
@@ -42,7 +41,6 @@ export const FundKyberTrading: React.FC<FundKyberTradingProps> = props => {
 
   const environment = useEnvironment()!;
   const account = useAccount()!;
-  const refetch = useOnChainQueryRefetcher();
 
   const transaction = useTransaction(environment, {
     handleError: () => 'The transaction failed. The rate offered by the exchange may have changed. Please try again.',

@@ -22,6 +22,7 @@ import { useEnvironment } from '~/hooks/useEnvironment';
 import { Icons } from '~/storybook/components/Icons/Icons';
 import { NetworkEnum } from '~/types';
 import { useVersionQuery } from '~/components/Layout/Version.query';
+import * as S from './Layout.styles';
 
 const graphiql = JSON.parse(process.env.MELON_INCLUDE_GRAPHIQL || 'false');
 
@@ -42,7 +43,7 @@ export const Layout: React.FC = ({ children }) => {
             <HeaderTitle>
               <Link to="/">
                 {!home && <Icons name="LEFTARROW" size="small" />}
-                <span>Melon Manager Interface</span>
+                <S.AppName>Melon Manager Interface</S.AppName>
               </Link>
             </HeaderTitle>
             <LogoContainer>

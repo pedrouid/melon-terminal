@@ -4,6 +4,7 @@ import { startWith } from 'rxjs/operators';
 import { DeployedEnvironment, ExchangeDefinition, ExchangeIdentifier, TokenDefinition } from '@melonproject/melonjs';
 import { zeroExOrderbook } from './zeroExOrderbook';
 import { matchingMarketOrderbook } from './matchingMarketOrderbook';
+import { useMemo } from 'react';
 
 export interface OrderbookItem {
   id: string;
@@ -78,43 +79,69 @@ export function aggregatedOrderbook(
   environment: DeployedEnvironment,
   exchanges: ExchangeDefinition[],
   makerAsset: TokenDefinition,
-  takerAsset: TokenDefinition
+  takerAsset?: TokenDefinition
 ) {
-  const empty = {
-    asks: [],
-    bids: [],
-  } as Orderbook;
-
   const ids = exchanges.map(item => item.id);
-  const streams = [
-    ...(ids.includes(ExchangeIdentifier.ZeroExV3)
-      ? [zeroExOrderbook(environment, makerAsset, takerAsset).pipe(startWith(empty))]
-      : []),
-    ...(ids.includes(ExchangeIdentifier.OasisDex)
-      ? [matchingMarketOrderbook(environment, makerAsset, takerAsset).pipe(startWith(empty))]
-      : []),
-  ];
 
-  if (!streams.length) {
-    return Rx.NEVER;
-  }
+  const zeroExActive = ids.includes(ExchangeIdentifier.ZeroExV3);
+  const zeroEx = zeroExOrderbook(zeroExActive, environment, makerAsset, takerAsset);
 
-  return Rx.combineLatest(streams, (...groups) => {
-    const empty = [] as OrderbookItem[];
+  const matchingMarketActive = ids.includes(ExchangeIdentifier.OasisDex);
+  const matchingMarket = matchingMarketOrderbook(matchingMarketActive, environment, makerAsset, takerAsset);
 
-    const asksOnly = groups.map(item => item.asks);
-    const asksFlat = empty.concat
-      .apply(empty, asksOnly)
-      .sort((a, b) => a.price.comparedTo(b.price))
-      .slice(0, 20) as OrderbookItem[];
+  return useMemo(() => {
+    const empty = {
+      asks: [],
+      bids: [],
+    } as Orderbook;
 
-    const asksQuantity = asksFlat.reduce((carry, current) => carry.plus(current.quantity), new BigNumber(0));
-    const asks = asksFlat
-      .reduce((carry, current, index) => {
+    const streams = [zeroEx.pipe(startWith(empty)), matchingMarket.pipe(startWith(empty))];
+
+    return Rx.combineLatest(streams, (...groups) => {
+      const empty = [] as OrderbookItem[];
+
+      const asksOnly = groups.map(item => item.asks);
+      const asksFlat = empty.concat
+        .apply(empty, asksOnly)
+        .sort((a, b) => a.price.comparedTo(b.price))
+        .slice(0, 20) as OrderbookItem[];
+
+      const asksQuantity = asksFlat.reduce((carry, current) => carry.plus(current.quantity), new BigNumber(0));
+      const asks = asksFlat
+        .reduce((carry, current, index) => {
+          const previous = carry[index - 1]?.total ?? new BigNumber(0);
+          const total = current.quantity.plus(previous);
+          const relative = total
+            .dividedBy(asksQuantity)
+            .multipliedBy(100)
+            .decimalPlaces(0)
+            .toNumber();
+
+          const change = findPriceChange(current.price, carry[index - 1]?.price);
+
+          const item: OrderbookItem = {
+            ...current,
+            change,
+            total,
+            relative,
+          };
+
+          return [...carry, item];
+        }, [] as OrderbookItem[])
+        .reverse();
+
+      const bidsOnly = groups.map(item => item.bids);
+      const bidsFlat = empty.concat
+        .apply(empty, bidsOnly)
+        .sort((a, b) => b.price.comparedTo(a.price))
+        .slice(0, 20) as OrderbookItem[];
+
+      const bidsQuantity = bidsFlat.reduce((carry, current) => carry.plus(current.quantity), new BigNumber(0));
+      const bids = bidsFlat.reduce((carry, current, index) => {
         const previous = carry[index - 1]?.total ?? new BigNumber(0);
         const total = current.quantity.plus(previous);
         const relative = total
-          .dividedBy(asksQuantity)
+          .dividedBy(bidsQuantity)
           .multipliedBy(100)
           .decimalPlaces(0)
           .toNumber();
@@ -129,39 +156,11 @@ export function aggregatedOrderbook(
         };
 
         return [...carry, item];
-      }, [] as OrderbookItem[])
-      .reverse();
+      }, [] as OrderbookItem[]);
 
-    const bidsOnly = groups.map(item => item.bids);
-    const bidsFlat = empty.concat
-      .apply(empty, bidsOnly)
-      .sort((a, b) => b.price.comparedTo(a.price))
-      .slice(0, 20) as OrderbookItem[];
+      const decimals = findPriceDecimals(asks, bids);
 
-    const bidsQuantity = bidsFlat.reduce((carry, current) => carry.plus(current.quantity), new BigNumber(0));
-    const bids = bidsFlat.reduce((carry, current, index) => {
-      const previous = carry[index - 1]?.total ?? new BigNumber(0);
-      const total = current.quantity.plus(previous);
-      const relative = total
-        .dividedBy(bidsQuantity)
-        .multipliedBy(100)
-        .decimalPlaces(0)
-        .toNumber();
-
-      const change = findPriceChange(current.price, carry[index - 1]?.price);
-
-      const item: OrderbookItem = {
-        ...current,
-        change,
-        total,
-        relative,
-      };
-
-      return [...carry, item];
-    }, [] as OrderbookItem[]);
-
-    const decimals = findPriceDecimals(asks, bids);
-
-    return { asks, bids, decimals } as Orderbook;
-  });
+      return { asks, bids, decimals } as Orderbook;
+    });
+  }, [zeroEx, matchingMarket]);
 }

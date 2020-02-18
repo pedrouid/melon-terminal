@@ -8,7 +8,6 @@ import { useEnvironment } from '~/hooks/useEnvironment';
 import { TransactionModal } from '~/components/Common/TransactionModal/TransactionModal';
 import { useTransaction } from '~/hooks/useTransaction';
 import { useAccount } from '~/hooks/useAccount';
-import { useOnChainQueryRefetcher } from '~/hooks/useOnChainQueryRefetcher';
 import { Input } from '~/storybook/components/Input/Input';
 import { Button } from '~/storybook/components/Button/Button';
 import { Grid, GridRow, GridCol } from '~/storybook/components/Grid/Grid';
@@ -34,19 +33,18 @@ export const WalletFundSetup: React.FC = () => {
   const environment = useEnvironment()!;
   const history = useHistory();
   const account = useAccount();
-  const refetch = useOnChainQueryRefetcher();
   const [transactionFinished, setTransactionFinished] = useState(false);
 
   const validationSchema = Yup.object().shape({
     name: Yup.string()
       .min(1, 'The fund name must be at least one character.')
       // tslint:disable-next-line
-      .test('nameTest', 'The fund name contains invalid characters.', async function(value) {
+      .test('nameTest', 'The fund name contains invalid characters.', async function (value) {
         const registry = new Registry(environment, environment.deployment.melon.addr.Registry);
         return await registry.isValidFundName(value);
       })
       // tslint:disable-next-line
-      .test('nameTest', 'The fund name is reserved by another manager.', async function(value) {
+      .test('nameTest', 'The fund name is reserved by another manager.', async function (value) {
         const registry = new Registry(environment, environment.deployment.melon.addr.Registry);
         return await registry.canUseFundName(account.address!, value);
       }),
@@ -133,11 +131,11 @@ export const WalletFundSetup: React.FC = () => {
   const fallback = transactionFinished ? (
     <></>
   ) : (
-    <Fallback kind="error">
-      You have already started to setup your fund or your fund has already been fully setup. Go to{' '}
-      <Link to={`/fund/${account.fund}`}>your fund</Link> to view your fund.
+      <Fallback kind="error">
+        You have already started to setup your fund or your fund has already been fully setup. Go to{' '}
+        <Link to={`/fund/${account.fund}`}>your fund</Link> to view your fund.
     </Fallback>
-  );
+    );
 
   const exchangeOptions = environment.exchanges
     .filter(exchange => !exchange.historic)

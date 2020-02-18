@@ -7,12 +7,10 @@ import { useTransaction } from '~/hooks/useTransaction';
 import { TransactionModal } from '~/components/Common/TransactionModal/TransactionModal';
 import { useEnvironment } from '~/hooks/useEnvironment';
 import { useAccount } from '~/hooks/useAccount';
-import { useOnChainQueryRefetcher } from '~/hooks/useOnChainQueryRefetcher';
 import { Block, BlockActions } from '~/storybook/components/Block/Block';
 import { Title } from '~/storybook/components/Title/Title';
 import { Input } from '~/storybook/components/Input/Input';
 import { Button } from '~/storybook/components/Button/Button';
-import { FormattedNumber } from '~/components/Common/FormattedNumber/FormattedNumber';
 import * as S from './WalletWrapEther.styles';
 import { toTokenBaseUnit } from '~/utils/toTokenBaseUnit';
 import { fromTokenBaseUnit } from '~/utils/fromTokenBaseUnit';
@@ -21,7 +19,6 @@ import { TokenValue } from '~/components/Common/TokenValue/TokenValue';
 export const WalletWrapEther: React.FC = () => {
   const environment = useEnvironment()!;
   const account = useAccount();
-  const refetch = useOnChainQueryRefetcher();
   const transaction = useTransaction(environment);
 
   const validationSchema = Yup.object().shape({

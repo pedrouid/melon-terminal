@@ -6,7 +6,6 @@ import { useEnvironment } from '~/hooks/useEnvironment';
 import { useTransaction } from '~/hooks/useTransaction';
 import { Button } from '~/storybook/components/Button/Button';
 import { TransactionModal } from '~/components/Common/TransactionModal/TransactionModal';
-import { useOnChainQueryRefetcher } from '~/hooks/useOnChainQueryRefetcher';
 import { Block, BlockActions } from '~/storybook/components/Block/Block';
 import { SectionTitle } from '~/storybook/components/Title/Title';
 import { Spinner } from '~/storybook/components/Spinner/Spinner';
@@ -25,7 +24,6 @@ export interface ExchangesForm {
 export const FundExchanges: React.FC<ExchangesProps> = ({ address }) => {
   const environment = useEnvironment()!;
   const account = useAccount();
-  const refetch = useOnChainQueryRefetcher();
   const [details, query] = useFundExchangesQuery(address);
 
   const transaction = useTransaction(environment);

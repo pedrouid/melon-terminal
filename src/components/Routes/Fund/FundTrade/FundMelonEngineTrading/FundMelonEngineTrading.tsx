@@ -4,7 +4,6 @@ import { ExchangeDefinition, Hub, MelonEngineTradingAdapter, TokenDefinition, Tr
 import { useEnvironment } from '~/hooks/useEnvironment';
 import { Button } from '~/storybook/components/Button/Button';
 import { useTransaction } from '~/hooks/useTransaction';
-import { useOnChainQueryRefetcher } from '~/hooks/useOnChainQueryRefetcher';
 import { TransactionModal } from '~/components/Common/TransactionModal/TransactionModal';
 import { useMelonEngineTradingQuery } from './FundMelonEngineTrading.query';
 import { Holding } from '@melonproject/melongql';
@@ -26,7 +25,6 @@ export const FundMelonEngineTrading: React.FC<FundMelonEngineTradingProps> = pro
   const [price, liquid, query] = useMelonEngineTradingQuery();
   const environment = useEnvironment()!;
   const account = useAccount()!;
-  const refetch = useOnChainQueryRefetcher();
   const transaction = useTransaction(environment);
 
   const value = props.quantity.multipliedBy(price ?? new BigNumber('NaN'));

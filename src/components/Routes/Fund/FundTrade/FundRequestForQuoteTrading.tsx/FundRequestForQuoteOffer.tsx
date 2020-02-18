@@ -5,7 +5,6 @@ import { ExchangeDefinition, Trading, ZeroExV2TradingAdapter } from '@melonproje
 import { useEnvironment } from '~/hooks/useEnvironment';
 import { useAccount } from '~/hooks/useAccount';
 import { useTransaction } from '~/hooks/useTransaction';
-import { useOnChainQueryRefetcher } from '~/hooks/useOnChainQueryRefetcher';
 import { TransactionModal } from '~/components/Common/TransactionModal/TransactionModal';
 import { Button } from '~/storybook/components/Button/Button';
 import { catchError, switchMap } from 'rxjs/operators';
@@ -30,7 +29,6 @@ export const FundRequestForQuoteOffer: React.FC<FundRequestForQuoteOfferProps> =
 
   const environment = useEnvironment()!;
   const account = useAccount()!;
-  const refetch = useOnChainQueryRefetcher();
 
   const loading = state.loading;
   const active = !!(props.market && props.side && props.amount && !props.amount.isNaN() && !props.amount.isZero());

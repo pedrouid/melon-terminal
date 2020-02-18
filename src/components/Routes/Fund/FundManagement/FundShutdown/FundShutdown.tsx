@@ -5,7 +5,6 @@ import { Button } from '~/storybook/components/Button/Button';
 import { TransactionModal } from '~/components/Common/TransactionModal/TransactionModal';
 import { Hub, Version, Trading } from '@melonproject/melonjs';
 import { useAccount } from '~/hooks/useAccount';
-import { useOnChainQueryRefetcher } from '~/hooks/useOnChainQueryRefetcher';
 import { Block, BlockActions } from '~/storybook/components/Block/Block';
 import { SectionTitle } from '~/storybook/components/Title/Title';
 import { useFundShutdownQuery } from '~/components/Routes/Fund/FundManagement/FundShutdown/FundShutdown.query';
@@ -18,7 +17,6 @@ export interface ShutdownProps {
 export const Shutdown: React.FC<ShutdownProps> = ({ address }) => {
   const environment = useEnvironment()!;
   const account = useAccount();
-  const refetch = useOnChainQueryRefetcher();
   const [info, _] = useFundShutdownQuery(address);
 
   const assetsInTrading = useMemo(() => {

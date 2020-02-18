@@ -12,7 +12,6 @@ import { NoMatch } from '~/components/Routes/NoMatch/NoMatch';
 import { useHistory } from 'react-router';
 import { versionContract } from '~/utils/deploymentContracts';
 import { useAccount } from '~/hooks/useAccount';
-import { useOnChainQueryRefetcher } from '~/hooks/useOnChainQueryRefetcher';
 import { Block, BlockActions } from '~/storybook/components/Block/Block';
 import { SectionTitle } from '~/storybook/components/Title/Title';
 import { GridCol, GridRow, Grid } from '~/storybook/components/Grid/Grid';
@@ -114,7 +113,6 @@ export const FundSetupTransactions: React.FC = () => {
   const [checked, setChecked] = useState<boolean[]>();
 
   const [acknowledged, setAcknowledged] = useState(!!history.location.state);
-  const refetch = useOnChainQueryRefetcher();
   const transaction = useTransaction(environment, {
     onStart: () => setAcknowledged(false),
     onAcknowledge: () => setAcknowledged(true),

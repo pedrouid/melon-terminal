@@ -21,7 +21,6 @@ import { UserWhitelistConfiguration } from '../UserWhitelistConfiguration/UserWh
 import { AssetWhitelistConfiguration } from '../AssetWhitelistConfiguration/AssetWhitelistConfiguration';
 import { AssetBlacklistConfiguration } from '../AssetBlacklistConfiguration/AssetBlacklistConfiguration';
 import { useAccount } from '~/hooks/useAccount';
-import { useOnChainQueryRefetcher } from '~/hooks/useOnChainQueryRefetcher';
 import { Block } from '~/storybook/components/Block/Block';
 import { SectionTitle } from '~/storybook/components/Title/Title';
 import { Spinner } from '~/storybook/components/Spinner/Spinner';
@@ -40,7 +39,6 @@ export interface FundRegisterPoliciesProps {
 export const FundRegisterPolicies: React.FC<FundRegisterPoliciesProps> = ({ address }) => {
   const environment = useEnvironment()!;
   const account = useAccount()!;
-  const refetch = useOnChainQueryRefetcher();
   const [selectedPolicy, setSelectedPolicy] = useState<PolicyDefinition>();
   const [policyManager, query] = useFundPoliciesQuery(address);
 

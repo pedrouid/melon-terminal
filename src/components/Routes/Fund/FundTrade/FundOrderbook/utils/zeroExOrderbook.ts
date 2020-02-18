@@ -1,3 +1,4 @@
+import { useMemo, useEffect } from 'react';
 import * as Rx from 'rxjs';
 import { equals } from 'ramda';
 import { Orderbook as OrderbookProvider } from '@0x/orderbook';
@@ -37,10 +38,35 @@ function mapOrders(
   side: 'bid' | 'ask'
 ) {
   return orders.map(order => {
-    const quantity = fromTokenBaseUnit(order.order.makerAssetAmount, makerAsset.decimals);
-    const price = fromTokenBaseUnit(order.order.takerAssetAmount, takerAsset.decimals).dividedBy(quantity);
+    const quantity =
+      side === 'bid'
+        ? fromTokenBaseUnit(order.order.takerAssetAmount, takerAsset.decimals)
+        : fromTokenBaseUnit(order.order.makerAssetAmount, makerAsset.decimals);
 
-    return {
+    const price =
+      side === 'bid'
+        ? fromTokenBaseUnit(order.order.makerAssetAmount, makerAsset.decimals).dividedBy(quantity)
+        : fromTokenBaseUnit(order.order.takerAssetAmount, takerAsset.decimals).dividedBy(quantity);
+
+    if (side === 'bid') {
+      console.log(
+        JSON.stringify(
+          {
+            price,
+            quantity,
+            order: {
+              ...order.order,
+              makerTokenAddress: assetDataUtils.decodeERC20AssetData(order.order.makerAssetData).tokenAddress,
+              takerTokenAddress: assetDataUtils.decodeERC20AssetData(order.order.takerAssetData).tokenAddress,
+            },
+          },
+          undefined,
+          4
+        )
+      );
+    }
+
+    const result = {
       order,
       quantity,
       price,
@@ -48,61 +74,61 @@ function mapOrders(
       exchange: ExchangeIdentifier.ZeroExV3,
       id: `zeroexv3:${order.order.salt}:${order.order.signature}`,
     } as OrderbookItem;
+
+    return result;
   });
 }
 
 export function zeroExOrderbook(
+  active: boolean,
   environment: DeployedEnvironment,
   makerAsset: TokenDefinition,
-  takerAsset: TokenDefinition
+  takerAsset?: TokenDefinition
 ) {
-  const network = environment.network as NetworkEnum;
-  const endpoint = endpoints[network];
+  const provider = useMemo(() => {
+    const network = environment.network as NetworkEnum;
+    const endpoint = endpoints[network];
 
-  if (!endpoint) {
-    return Rx.NEVER;
-  }
+    return OrderbookProvider.getOrderbookForWebsocketProvider({
+      httpEndpoint: endpoint.http,
+      websocketEndpoint: endpoint.ws,
+    });
+  }, [active, environment]);
 
-  const makerAssetData = assetDataUtils.encodeERC20AssetData(makerAsset.address);
-  const takerAssetData = assetDataUtils.encodeERC20AssetData(takerAsset.address);
+  useEffect(() => {
+    return () => {
+      provider && provider.destroyAsync();
+    };
+  }, [provider]);
 
-  return Rx.using(
-    () => {
-      const provider = OrderbookProvider.getOrderbookForPollingProvider({
-        httpEndpoint: endpoint.http,
-        pollingIntervalMs: 10000,
-        perPage: 100,
-      });
-
-      return {
-        provider,
-        unsubscribe: () => provider.destroyAsync(),
-      };
-    },
-    resource => {
-      const provider = (resource as any).provider as OrderbookProvider;
-
-      const bids$ = Rx.defer(() => provider.getOrdersAsync(takerAssetData, makerAssetData)).pipe(
-        catchError(() => Rx.of([]))
-      );
-
-      const asks$ = Rx.defer(() => provider.getOrdersAsync(makerAssetData, takerAssetData)).pipe(
-        catchError(() => Rx.of([]))
-      );
-
-      const delay$ = Rx.timer(5000);
-      const orders$ = Rx.combineLatest([bids$, asks$]);
-      const polling$ = orders$.pipe(
-        expand(() => delay$.pipe(concatMap(() => orders$))),
-        distinctUntilChanged((a, b) => equals(a, b))
-      );
-
-      return polling$.pipe<Orderbook>(
-        map(([b, a]) => ({
-          bids: mapOrders(b as any, takerAsset, makerAsset, 'bid'),
-          asks: mapOrders(a as any, makerAsset, takerAsset, 'ask'),
-        }))
-      );
+  return useMemo(() => {
+    if (!(provider && takerAsset && makerAsset)) {
+      return Rx.EMPTY;
     }
-  );
+
+    const makerAssetData = assetDataUtils.encodeERC20AssetData(makerAsset.address);
+    const takerAssetData = assetDataUtils.encodeERC20AssetData(takerAsset.address);
+
+    const bids$ = Rx.defer(() => provider.getOrdersAsync(makerAssetData, takerAssetData)).pipe(
+      catchError(() => Rx.of([]))
+    );
+
+    const asks$ = Rx.defer(() => provider.getOrdersAsync(takerAssetData, makerAssetData)).pipe(
+      catchError(() => Rx.of([]))
+    );
+
+    const delay$ = Rx.timer(1000);
+    const orders$ = Rx.combineLatest([bids$, asks$]);
+    const polling$ = orders$.pipe(
+      expand(() => delay$.pipe(concatMap(() => orders$))),
+      distinctUntilChanged((a, b) => equals(a, b))
+    );
+
+    return polling$.pipe<Orderbook>(
+      map(([b, a]) => ({
+        bids: mapOrders(b as any, takerAsset, makerAsset, 'bid'),
+        asks: mapOrders(a as any, makerAsset, takerAsset, 'ask'),
+      }))
+    );
+  }, [provider, takerAsset, makerAsset]);
 }

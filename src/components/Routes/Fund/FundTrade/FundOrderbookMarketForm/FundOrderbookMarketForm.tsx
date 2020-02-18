@@ -13,7 +13,6 @@ import {
   toBigNumber,
   ZeroExV3TradingAdapter,
 } from '@melonproject/melonjs';
-import { useOnChainQueryRefetcher } from '~/hooks/useOnChainQueryRefetcher';
 import { Dropdown } from '~/storybook/components/Dropdown/Dropdown';
 import { Button } from '~/storybook/components/Button/Button';
 import { Input } from '~/storybook/components/Input/Input';
@@ -46,7 +45,6 @@ interface FundOrderbookMarketFormValues {
 export const FundOrderbookMarketForm: React.FC<FundOrderbookMarketFormProps> = props => {
   const environment = useEnvironment()!;
   const account = useAccount()!;
-  const refetch = useOnChainQueryRefetcher();
   const transaction = useTransaction(environment, {
     onAcknowledge: () => props.unsetOrder(),
   });
@@ -168,20 +166,7 @@ export const FundOrderbookMarketForm: React.FC<FundOrderbookMarketFormProps> = p
     if (order!.exchange === ExchangeIdentifier.ZeroExV3) {
       const adapter = await ZeroExV3TradingAdapter.create(environment, exchange.exchange, trading);
       const offer = order?.order.order as SignedOrder;
-      const tx = adapter.takeOrder(
-        account.address!,
-        {
-          ...offer,
-          expirationTimeSeconds: new BigNumber(offer.expirationTimeSeconds),
-          takerAssetAmount: new BigNumber(offer.takerAssetAmount),
-          takerFee: new BigNumber(offer.takerFee),
-          makerAssetAmount: new BigNumber(offer.makerAssetAmount),
-          makerFee: new BigNumber(offer.makerFee),
-          salt: new BigNumber(offer.salt),
-        },
-        quantity
-      );
-
+      const tx = adapter.takeOrder(account.address!, offer, quantity);
       return transaction.start(tx, 'Take order');
     }
   });

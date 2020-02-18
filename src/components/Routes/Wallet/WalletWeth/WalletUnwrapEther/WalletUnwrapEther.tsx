@@ -7,7 +7,6 @@ import { useTransaction } from '~/hooks/useTransaction';
 import { TransactionModal } from '~/components/Common/TransactionModal/TransactionModal';
 import { useEnvironment } from '~/hooks/useEnvironment';
 import { useAccount } from '~/hooks/useAccount';
-import { useOnChainQueryRefetcher } from '~/hooks/useOnChainQueryRefetcher';
 import { Block, BlockActions } from '~/storybook/components/Block/Block';
 import { Title } from '~/storybook/components/Title/Title';
 import { Input } from '~/storybook/components/Input/Input';
@@ -21,7 +20,6 @@ import { TokenValue } from '~/components/Common/TokenValue/TokenValue';
 export const WalletUnwrapEther: React.FC = () => {
   const environment = useEnvironment()!;
   const account = useAccount();
-  const refetch = useOnChainQueryRefetcher();
   const transaction = useTransaction(environment);
 
   const validationSchema = Yup.object().shape({

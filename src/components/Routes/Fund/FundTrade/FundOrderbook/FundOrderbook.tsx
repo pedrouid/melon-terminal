@@ -1,7 +1,6 @@
 import React, { useMemo, useState, useEffect, useCallback } from 'react';
 import { useEnvironment } from '~/hooks/useEnvironment';
 import { Orderbook, aggregatedOrderbook, OrderbookItem } from './utils/aggregatedOrderbook';
-import * as Rx from 'rxjs';
 import * as S from './FundOrderbook.styles';
 import { TokenDefinition, ExchangeDefinition } from '@melonproject/melonjs';
 import { FormattedNumber } from '~/components/Common/FormattedNumber/FormattedNumber';
@@ -20,20 +19,16 @@ export const FundOrderbook: React.FC<FundOrderbookProps> = props => {
   const [orders, setOrders] = useState<Orderbook>();
 
   const maker = useMemo(() => environment.getToken('WETH'), [environment]);
-  const orderbook = useMemo(() => {
-    if (!(maker && props.asset)) {
-      return Rx.EMPTY;
-    }
-
-    return aggregatedOrderbook(environment, props.exchanges, maker, props.asset);
-  }, [props.asset]);
+  const orderbook = aggregatedOrderbook(environment, props.exchanges, maker, props.asset);
 
   useEffect(() => {
     const subscription = orderbook.subscribe({
       next: orders => setOrders(orders),
     });
 
-    return () => subscription.unsubscribe();
+    return () => {
+      subscription.unsubscribe();
+    };
   }, [orderbook]);
 
   const bestAsk = useMemo(() => {

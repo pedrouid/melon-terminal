@@ -7,7 +7,6 @@ import { TransactionModal } from '~/components/Common/TransactionModal/Transacti
 import { useFundDetailsQuery } from './FundDetails.query';
 import { Spinner } from '~/storybook/components/Spinner/Spinner';
 import { useAccount } from '~/hooks/useAccount';
-import { useOnChainQueryRefetcher } from '~/hooks/useOnChainQueryRefetcher';
 import { Block, BlockActions } from '~/storybook/components/Block/Block';
 import { SectionTitle } from '~/storybook/components/Title/Title';
 import { DictionaryData, DictionaryEntry, DictionaryLabel } from '~/storybook/components/Dictionary/Dictionary';
@@ -22,7 +21,6 @@ export interface ClaimFeesProps {
 export const ClaimFees: React.FC<ClaimFeesProps> = ({ address }) => {
   const environment = useEnvironment()!;
   const account = useAccount();
-  const refetch = useOnChainQueryRefetcher();
   const [details, query] = useFundDetailsQuery(address);
 
   const accountingAddress = details && details.routes && details.routes.accounting && details.routes.accounting.address;

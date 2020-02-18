@@ -23,7 +23,6 @@ export interface FundPerformanceTableProps {
 
 const TableDescription = styled(LabelSideInfo)`
   font-size: ${props => props.theme.fontSizes.s};
-  padding: ${props => props.theme.spaceUnits.s};
 `;
 
 export const FundPerformanceTable: React.FC<FundPerformanceTableProps> = ({ address }) => {
@@ -119,11 +118,10 @@ export const FundPerformanceTable: React.FC<FundPerformanceTableProps> = ({ addr
               </Fragment>
             ))}
           </tbody>
-          <tfoot>
-            <TableDescription>Fund share price and assets benchmarked against ETH</TableDescription>
-          </tfoot>
         </Table>
       </ScrollableTable>
+
+      <TableDescription>Fund share price and assets benchmarked against ETH</TableDescription>
     </Block>
   );
 };

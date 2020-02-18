@@ -10,6 +10,7 @@ import {
 import { concatMap, expand, distinctUntilChanged, map, catchError } from 'rxjs/operators';
 import { Orderbook, OrderbookItem } from './aggregatedOrderbook';
 import { fromTokenBaseUnit } from '~/utils/fromTokenBaseUnit';
+import { useMemo } from 'react';
 
 export interface OasisDexOrderbookItem extends OrderbookItem {
   type: ExchangeIdentifier.OasisDex;
@@ -45,32 +46,39 @@ function mapOrders(
 }
 
 export function matchingMarketOrderbook(
+  active: boolean,
   environment: DeployedEnvironment,
   makerAsset: TokenDefinition,
-  takerAsset: TokenDefinition
+  takerAsset?: TokenDefinition
 ) {
-  const exchange = environment.deployment.oasis.addr.OasisDexExchange;
-  const contract = new OasisDexAccessor(environment, environment.deployment.melon.addr.OasisDexAccessor);
+  return useMemo(() => {
+    if (!(active && makerAsset && takerAsset)) {
+      return Rx.EMPTY;
+    }
 
-  const bids$ = Rx.defer(() => contract.getOrders(exchange, makerAsset.address, takerAsset.address)).pipe(
-    catchError(() => Rx.of([]))
-  );
+    const exchange = environment.deployment.oasis.addr.OasisDexExchange;
+    const contract = new OasisDexAccessor(environment, environment.deployment.melon.addr.OasisDexAccessor);
 
-  const asks$ = Rx.defer(() => contract.getOrders(exchange, takerAsset.address, makerAsset.address)).pipe(
-    catchError(() => Rx.of([]))
-  );
+    const bids$ = Rx.defer(() => contract.getOrders(exchange, makerAsset.address, takerAsset.address)).pipe(
+      catchError(() => Rx.of([]))
+    );
 
-  const delay$ = Rx.timer(10000);
-  const orders$ = Rx.combineLatest(bids$, asks$);
-  const polling$ = orders$.pipe(
-    expand(() => delay$.pipe(concatMap(() => orders$))),
-    distinctUntilChanged((a, b) => equals(a, b))
-  );
+    const asks$ = Rx.defer(() => contract.getOrders(exchange, takerAsset.address, makerAsset.address)).pipe(
+      catchError(() => Rx.of([]))
+    );
 
-  return polling$.pipe<Orderbook>(
-    map(([b, a]) => ({
-      bids: mapOrders(b, takerAsset, makerAsset, 'bid'),
-      asks: mapOrders(a, makerAsset, takerAsset, 'ask'),
-    }))
-  );
+    const delay$ = Rx.timer(10000);
+    const orders$ = Rx.combineLatest(bids$, asks$);
+    const polling$ = orders$.pipe(
+      expand(() => delay$.pipe(concatMap(() => orders$))),
+      distinctUntilChanged((a, b) => equals(a, b))
+    );
+
+    return polling$.pipe<Orderbook>(
+      map(([b, a]) => ({
+        bids: mapOrders(b, makerAsset, takerAsset!, 'bid'),
+        asks: mapOrders(a, takerAsset, makerAsset, 'ask'),
+      }))
+    );
+  }, [active, environment, makerAsset, takerAsset]);
 }
