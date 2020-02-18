@@ -55,7 +55,6 @@ export const FundFactSheet: React.FC<FundFactSheetProps> = ({ address }) => {
   const routes = fund.routes;
   const creation = fund.creationTime;
   const accounting = routes?.accounting;
-  console.log(accounting?.grossAssetValue.toString());
   const shares = routes?.shares;
   const version = routes?.version;
   const feeManager = routes?.feeManager;
