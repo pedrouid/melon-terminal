@@ -1,7 +1,6 @@
 import React from 'react';
 import { Spinner } from '~/storybook/components/Spinner/Spinner';
 import { useFundInvestments } from '~/components/Routes/Fund/FundInvestRedeem/FundInvestorsList/FundInvestments.query';
-import { weiToString } from '~/utils/weiToString';
 import {
   ScrollableTable,
   Table,
@@ -16,6 +15,7 @@ import {
 import { Block } from '~/storybook/components/Block/Block';
 import { SectionTitle } from '~/storybook/components/Title/Title';
 import { EtherscanLink } from '~/components/Common/EtherscanLink/EtherscanLink';
+import { fromTokenBaseUnit } from '~/utils/fromTokenBaseUnit';
 
 export interface FundInvestorsListProps {
   address: string;
@@ -60,7 +60,7 @@ export const FundInvestorsList: React.FC<FundInvestorsListProps> = ({ address })
                   <BodyCell>
                     <EtherscanLink address={investement.owner.id}>{investement.owner.id}</EtherscanLink>
                   </BodyCell>
-                  <BodyCellRightAlign>{weiToString(investement.shares.toString(), 4)}</BodyCellRightAlign>
+                  <BodyCellRightAlign>{fromTokenBaseUnit(investement.shares, 18)}</BodyCellRightAlign>
                 </BodyRow>
               );
             })}

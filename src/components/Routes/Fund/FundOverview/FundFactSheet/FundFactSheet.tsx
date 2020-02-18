@@ -172,7 +172,7 @@ export const FundFactSheet: React.FC<FundFactSheetProps> = ({ address }) => {
       <DictionaryEntry>
         <DictionaryLabel>Total number of shares</DictionaryLabel>
         <DictionaryData>
-          <FormattedNumber value={shares?.totalSupply} />
+          <TokenValue value={shares?.totalSupply} decimals={0} />
         </DictionaryData>
       </DictionaryEntry>
       <DictionaryEntry>

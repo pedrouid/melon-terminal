@@ -11,6 +11,7 @@ export interface FormattedNumberData {
   decimals?: number;
   colorize?: boolean;
   tooltip?: boolean;
+  tooltipDecimals?: number;
 }
 
 interface ColorProps {
@@ -32,6 +33,7 @@ export const FormattedNumber: React.FC<FormattedNumberData> = ({
   decimals = 4,
   colorize = false,
   tooltip = false,
+  tooltipDecimals = 18,
 }) => {
   const bn = BigNumber.isBigNumber(value) ? value : new BigNumber(value ?? 'NaN');
   const output = bn.isNaN()
@@ -44,7 +46,7 @@ export const FormattedNumber: React.FC<FormattedNumberData> = ({
         suffix,
       ];
 
-  const bnFixed = bn.toFixed(18);
+  const bnFixed = bn.toFixed(tooltipDecimals);
 
   if (colorize) {
     const color = bn.isNaN() || bn.isZero() ? 'grey' : bn.isPositive() ? 'green' : 'red';

@@ -9,19 +9,58 @@ import { useAccount } from '~/hooks/useAccount';
 import { Block } from '~/storybook/components/Block/Block';
 import { SectionTitle } from '~/storybook/components/Title/Title';
 import { GridRow, Grid, GridCol } from '~/storybook/components/Grid/Grid';
-import { ScrollableTable, BodyRow, BodyCell, HeaderCell, Table, HeaderRow } from '~/storybook/components/Table/Table';
+import {
+  ScrollableTable,
+  BodyRow,
+  BodyCell,
+  HeaderCell,
+  Table,
+  HeaderRow,
+  HeaderCellRightAlign,
+} from '~/storybook/components/Table/Table';
 import { useVersionQuery } from '~/components/Layout/Version.query';
 
-const fundHeadings = ['Name', 'Inception', 'AUM [ETH]', 'Share price', 'Change', '# shares', 'Protocol', 'Status'];
-const redeemHeadings = ['Name', 'Inception', 'AUM [ETH]', 'Share price', 'Change', '# shares', 'Protocol', 'Status'];
-const requestHeadings = ['Fund name', 'Request date', 'Request asset', 'Request amount', 'Requested shares', 'Status'];
+const fundHeadings = [
+  { name: 'Name', align: 'left' },
+  { name: 'Inception', align: 'left' },
+  { name: 'AUM [ETH]', align: 'right' },
+  { name: 'Share price', align: 'right' },
+  { name: 'Change', align: 'right' },
+  { name: '# shares', align: 'right' },
+  { name: 'Protocol', align: 'left' },
+  { name: 'Status', align: 'left' },
+];
+const redeemHeadings = [
+  { name: 'Name', align: 'left' },
+  { name: 'Inception', align: 'left' },
+  { name: 'AUM [ETH]', align: 'right' },
+  { name: 'Share price', align: 'right' },
+  { name: 'Change', align: 'right' },
+  { name: '# shares', align: 'right' },
+  { name: 'Protocol', align: 'left' },
+  { name: 'Status', align: 'left' },
+];
+const requestHeadings = [
+  { name: 'Fund name', align: 'left' },
+  { name: 'Request date', align: 'left' },
+  { name: 'Request asset', align: 'left' },
+  { name: 'Request amount', align: 'right' },
+  { name: 'Requested shares', align: 'right' },
+  { name: 'Status', align: 'left' },
+];
 
 export const WalletOverview: React.FC = () => {
   const account = useAccount();
   const [version] = useVersionQuery();
 
   const [invested, requests, managed, query] = useFundParticipationOverviewQuery(account.address);
-  const managedHeader = fundHeadings.map((heading, index) => <HeaderCell key={index}>{heading}</HeaderCell>);
+  const managedHeader = fundHeadings.map((heading, index) => {
+    if (heading.align === 'left') {
+      return <HeaderCell key={index}>{heading.name}</HeaderCell>;
+    } else {
+      return <HeaderCellRightAlign key={index}>{heading.name}</HeaderCellRightAlign>;
+    }
+  });
   const managedEmpty = !(managed && managed.length);
   const managedRows = !managedEmpty ? (
     managed.map(fund => <WalletOverviewManagedFund fund={fund} key={fund.address} version={version} />)
@@ -31,7 +70,13 @@ export const WalletOverview: React.FC = () => {
     </BodyRow>
   );
 
-  const investedHeader = redeemHeadings.map((heading, index) => <HeaderCell key={index}>{heading}</HeaderCell>);
+  const investedHeader = redeemHeadings.map((heading, index) => {
+    if (heading.align === 'left') {
+      return <HeaderCell key={index}>{heading.name}</HeaderCell>;
+    } else {
+      return <HeaderCellRightAlign key={index}>{heading.name}</HeaderCellRightAlign>;
+    }
+  });
   const investedEmpty = !(invested && invested.length);
   const investedRows = !investedEmpty ? (
     invested.map(fund => <WalletOverviewInvestedFund fund={fund} key={fund.address} version={version} />)
@@ -41,7 +86,13 @@ export const WalletOverview: React.FC = () => {
     </BodyRow>
   );
 
-  const requestsHeader = requestHeadings.map((heading, index) => <HeaderCell key={index}>{heading}</HeaderCell>);
+  const requestsHeader = requestHeadings.map((heading, index) => {
+    if (heading.align === 'left') {
+      return <HeaderCell key={index}>{heading.name}</HeaderCell>;
+    } else {
+      return <HeaderCellRightAlign key={index}>{heading.name}</HeaderCellRightAlign>;
+    }
+  });
   const requestsEmpty = !(requests && requests.length);
   const requestsRows = !requestsEmpty ? (
     requests.map(request => (

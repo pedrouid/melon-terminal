@@ -1,16 +1,15 @@
 import gql from 'graphql-tag';
 import BigNumber from 'bignumber.js';
 import { useTheGraphQuery } from '~/hooks/useQuery';
-import { weiToString } from '~/utils/weiToString';
 import { calculateChangeFromSharePrice } from '~/utils/calculateChangeFromSharePrice';
 import { Address } from '@melonproject/melonjs';
 
 interface FundFields {
   id: string;
   name: string;
-  gav: string;
-  sharePrice: string;
-  totalSupply: string;
+  gav: BigNumber;
+  sharePrice: BigNumber;
+  totalSupply: BigNumber;
   isShutdown: boolean;
   createdAt: number;
   manager: string;
@@ -32,15 +31,15 @@ interface FundFields {
   };
   calculationsHistory: {
     id: string;
-    sharePrice: string;
+    sharePrice: BigNumber;
     timestamp: string;
   }[];
 }
 
 interface InvestmentRequestFields {
   id: string;
-  amount: string;
-  shares: string;
+  amount: BigNumber;
+  shares: BigNumber;
   requestTimestamp: number;
   fund: FundFields;
   asset: {
@@ -51,8 +50,8 @@ interface InvestmentRequestFields {
 
 export interface InvestmentRequest extends Fund {
   requestAsset: string;
-  requestShares: string;
-  requestAmount: string;
+  requestShares: BigNumber;
+  requestAmount: BigNumber;
   requestCreatedAt: number;
   account?: string;
 }
@@ -61,9 +60,9 @@ export interface Fund {
   name: string;
   address: string;
   inception: number;
-  gav?: string;
+  gav?: BigNumber;
   isShutDown?: boolean;
-  sharePrice: string;
+  sharePrice: BigNumber;
   version: string;
   versionAddress: string;
   participationAddress: string;
@@ -72,7 +71,7 @@ export interface Fund {
   ownedAssets: string[];
   manager: string;
   change: BigNumber;
-  shares?: string;
+  shares?: BigNumber;
 }
 
 export interface SharePrice {
@@ -170,7 +169,7 @@ export const useFundParticipationOverviewQuery = (investor?: Address) => {
       address: item.fund.id,
       name: item.fund.name,
       inception: item.fund.createdAt,
-      sharePrice: weiToString(item.fund.sharePrice, 4),
+      sharePrice: item.fund.sharePrice,
       version: item.fund.version.name,
       versionAddress: item.fund.version.id,
       participationAddress: item.fund.participation.id,
@@ -178,12 +177,12 @@ export const useFundParticipationOverviewQuery = (investor?: Address) => {
       accountingAddress: item.fund.accounting.id,
       ownedAssets: (item.fund.accounting.ownedAssets || []).map(asset => asset.id),
       manager: item.fund.manager,
-      gav: weiToString(item.fund.gav, 4),
+      gav: item.fund.gav,
       change: calculateChangeFromSharePrice(
         item.fund.calculationsHistory[0]?.sharePrice,
         item.fund.calculationsHistory[1]?.sharePrice
       ),
-      shares: weiToString(item.fund.totalSupply, 4),
+      shares: item.fund.totalSupply,
       isShutDown: item.fund.isShutdown,
     };
 
@@ -198,10 +197,10 @@ export const useFundParticipationOverviewQuery = (investor?: Address) => {
       name: item.fund.name,
       inception: item.fund.createdAt,
       requestCreatedAt: item.requestTimestamp,
-      requestShares: weiToString(item.shares, 4),
-      requestAmount: weiToString(item.amount, 4),
+      requestShares: item.shares,
+      requestAmount: item.amount,
       requestAsset: item.asset.symbol,
-      sharePrice: weiToString(item.fund.sharePrice, 4),
+      sharePrice: item.fund.sharePrice,
       version: item.fund.version.name,
       versionAddress: item.fund.version.id,
       participationAddress: item.fund.participation.id,
@@ -224,7 +223,7 @@ export const useFundParticipationOverviewQuery = (investor?: Address) => {
       address: item.id,
       name: item.name,
       inception: item.createdAt,
-      sharePrice: weiToString(item.sharePrice, 4),
+      sharePrice: item.sharePrice,
       version: item.version.name,
       versionAddress: item.version.id,
       participationAddress: item.participation.id,
@@ -232,12 +231,12 @@ export const useFundParticipationOverviewQuery = (investor?: Address) => {
       accountingAddress: item.accounting.id,
       ownedAssets: (item.accounting.ownedAssets || []).map(asset => asset.id),
       manager: item.manager,
-      gav: weiToString(item.gav, 4),
+      gav: item.gav,
       change: calculateChangeFromSharePrice(
         item.calculationsHistory[0]?.sharePrice,
         item.calculationsHistory[1]?.sharePrice
       ),
-      shares: weiToString(item.totalSupply, 4),
+      shares: item.totalSupply,
       isShutDown: item.isShutdown,
     };
 

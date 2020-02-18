@@ -1,10 +1,10 @@
 import BigNumber from 'bignumber.js';
 
-export function calculateChangeFromSharePrice(current?: string, previous?: string): BigNumber {
-  if (current != null && previous != null) {
-    const bnCurrent = new BigNumber(current);
-    const bnPrevious = new BigNumber(previous);
+export function calculateChangeFromSharePrice(current?: BigNumber, previous?: BigNumber): BigNumber {
+  const bnCurrent = BigNumber.isBigNumber(current) ? current : new BigNumber(current ?? 'NaN');
+  const bnPrevious = BigNumber.isBigNumber(previous) ? previous : new BigNumber(previous ?? 'NaN');
 
+  if (!bnCurrent.isZero() && !bnPrevious.isZero()) {
     return bnCurrent
       .dividedBy(bnPrevious)
       .minus(1)

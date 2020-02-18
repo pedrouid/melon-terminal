@@ -1,7 +1,6 @@
 import gql from 'graphql-tag';
 import BigNumber from 'bignumber.js';
 import { useTheGraphQuery } from '~/hooks/useQuery';
-import { weiToString } from '~/utils/weiToString';
 import { calculateChangeFromSharePrice } from '~/utils/calculateChangeFromSharePrice';
 import { useCoinAPI } from '~/hooks/useCoinAPI';
 import { fromTokenBaseUnit } from '~/utils/fromTokenBaseUnit';
@@ -13,9 +12,9 @@ export interface SharePrice {
 export interface Fund {
   id: string;
   name: string;
-  gav: string;
-  sharePrice: string;
-  totalSupply: string;
+  gav: BigNumber;
+  sharePrice: BigNumber;
+  totalSupply: BigNumber;
   isShutdown: boolean;
   createdAt: number;
   investments: [
@@ -36,7 +35,7 @@ export interface Fund {
   };
   calculationsHistory: {
     id: string;
-    sharePrice: string;
+    sharePrice: BigNumber;
     timestamp: string;
   }[];
 }
@@ -115,14 +114,14 @@ export const useFundOverviewQuery = () => {
     name: item.name,
     address: item.id.substr(0, 8),
     inception: item.createdAt,
-    aumEth: fromTokenBaseUnit(item.gav, 18),
-    aumUsd: fromTokenBaseUnit(item.gav, 18).multipliedBy(rate),
-    sharePrice: fromTokenBaseUnit(item.sharePrice, 18),
+    aumEth: item.gav,
+    aumUsd: new BigNumber(item.gav).multipliedBy(rate),
+    sharePrice: item.sharePrice,
     change: calculateChangeFromSharePrice(
       item.calculationsHistory[0]?.sharePrice,
       item.calculationsHistory[1]?.sharePrice
     ),
-    shares: fromTokenBaseUnit(item.totalSupply, 18),
+    shares: item.totalSupply,
     denomination: item.accounting.denominationAsset.symbol,
     investments: item.investments.length,
     version: item.version.name,

@@ -8,7 +8,7 @@ export interface FundDailyChangeQueryResult {
   fund: {
     calculationsHistory: {
       id: string;
-      sharePrice: string;
+      sharePrice: BigNumber;
       timestamp: string;
     }[];
   };

@@ -83,7 +83,7 @@ export const FundOrderbookMarketForm: React.FC<FundOrderbookMarketFormProps> = p
     orderRef.current = order;
     baseRef.current = base;
 
-    form.triggerValidation().catch(() => { });
+    form.triggerValidation().catch(() => {});
   }, [holdings, order, base]);
 
   const form = useForm<FundOrderbookMarketFormValues>({
@@ -141,7 +141,7 @@ export const FundOrderbookMarketForm: React.FC<FundOrderbookMarketFormProps> = p
 
     form.setValue('quantity', !quantity.isNaN() ? quantity.toString() : '');
     form.setValue('total', !total.isNaN() ? total.toString() : '');
-    form.triggerValidation().catch(() => { });
+    form.triggerValidation().catch(() => {});
   }, [order]);
 
   const submit = form.handleSubmit(async values => {
@@ -179,7 +179,7 @@ export const FundOrderbookMarketForm: React.FC<FundOrderbookMarketFormProps> = p
     const total = quantity.multipliedBy(price);
 
     form.setValue('total', !total.isNaN() ? total.toString() : '', true);
-    form.triggerValidation().catch(() => { });
+    form.triggerValidation().catch(() => {});
   };
 
   const changeTotal = async (change: BigNumber.Value) => {
@@ -187,16 +187,16 @@ export const FundOrderbookMarketForm: React.FC<FundOrderbookMarketFormProps> = p
     const quantity = total.dividedBy(price);
 
     form.setValue('quantity', !quantity.isNaN() ? quantity.toString() : '', true);
-    form.triggerValidation().catch(() => { });
+    form.triggerValidation().catch(() => {});
   };
 
   const ready = form.formState.isValid;
   const description =
     ready &&
     `Market order: ${direction === 'buy' ? 'Buy' : 'Sell'} ${quantity.decimalPlaces(4).toString()} ${
-    base.symbol
+      base.symbol
     } at a price of ${price.decimalPlaces(4).toString()} ${quote.symbol} per ${
-    base.symbol
+      base.symbol
     } for a total of ${total.decimalPlaces(4).toString()} ${quote.symbol}`;
 
   return (

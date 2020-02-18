@@ -1,8 +1,9 @@
 import React from 'react';
 import { useHistory } from 'react-router';
 import { Fund } from '~/components/Routes/Wallet/WalletOverview/FundParticipationOverview.query';
-import { BodyCell, BodyRowHover } from '~/storybook/components/Table/Table';
+import { BodyCell, BodyRowHover, BodyCellRightAlign } from '~/storybook/components/Table/Table';
 import { FormattedDate } from '~/components/Common/FormattedDate/FormattedDate';
+import { TokenValue } from '~/components/Common/TokenValue/TokenValue';
 
 export interface WalletOverviewInvestedFundProps {
   fund: Fund;
@@ -21,10 +22,16 @@ export const WalletOverviewInvestedFund: React.FC<WalletOverviewInvestedFundProp
       <BodyCell>
         <FormattedDate timestamp={fund.inception} />
       </BodyCell>
-      <BodyCell>{fund.gav}</BodyCell>
-      <BodyCell>{fund.sharePrice}</BodyCell>
-      <BodyCell>{fund.change.toFixed(2)}</BodyCell>
-      <BodyCell>{fund.shares}</BodyCell>
+      <BodyCellRightAlign>
+        <TokenValue value={fund?.gav}></TokenValue>
+      </BodyCellRightAlign>
+      <BodyCellRightAlign>
+        <TokenValue value={fund?.sharePrice}></TokenValue>
+      </BodyCellRightAlign>
+      <BodyCellRightAlign>{fund.change.toFixed(2)}%</BodyCellRightAlign>
+      <BodyCellRightAlign>
+        <TokenValue value={fund?.shares}></TokenValue>
+      </BodyCellRightAlign>
       <BodyCell>
         {fund.version} {fund.version === version?.name ? '(current)' : '(old)'}
       </BodyCell>
