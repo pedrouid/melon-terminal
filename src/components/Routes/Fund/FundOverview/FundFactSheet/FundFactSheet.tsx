@@ -55,6 +55,7 @@ export const FundFactSheet: React.FC<FundFactSheetProps> = ({ address }) => {
   const routes = fund.routes;
   const creation = fund.creationTime;
   const accounting = routes?.accounting;
+  console.log(accounting?.grossAssetValue.toString());
   const shares = routes?.shares;
   const version = routes?.version;
   const feeManager = routes?.feeManager;
@@ -160,13 +161,13 @@ export const FundFactSheet: React.FC<FundFactSheetProps> = ({ address }) => {
       <DictionaryEntry>
         <DictionaryLabel>Gross asset value (GAV)</DictionaryLabel>
         <DictionaryData>
-          <TokenValue value={accounting?.grossAssetValue} symbol="WETH" />
+          <TokenValue value={accounting?.grossAssetValue} symbol="WETH" decimals={0} />
         </DictionaryData>
       </DictionaryEntry>
       <DictionaryEntry>
         <DictionaryLabel>Net asset value (NAV)</DictionaryLabel>
         <DictionaryData>
-          <TokenValue value={accounting?.netAssetValue} symbol="WETH" />
+          <TokenValue value={accounting?.netAssetValue} symbol="WETH" decimals={0} />
         </DictionaryData>
       </DictionaryEntry>
       <DictionaryEntry>
@@ -178,7 +179,7 @@ export const FundFactSheet: React.FC<FundFactSheetProps> = ({ address }) => {
       <DictionaryEntry>
         <DictionaryLabel>Share price</DictionaryLabel>
         <DictionaryData>
-          <TokenValue value={accounting?.sharePrice} symbol="WETH" />
+          <TokenValue value={accounting?.sharePrice} symbol="WETH" decimals={0} />
         </DictionaryData>
       </DictionaryEntry>
       <DictionaryEntry>
