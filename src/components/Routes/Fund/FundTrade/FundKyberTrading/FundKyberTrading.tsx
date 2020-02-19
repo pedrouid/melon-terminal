@@ -19,7 +19,6 @@ import { Holding } from '@melonproject/melongql';
 import { Subtitle } from '~/storybook/components/Title/Title';
 import { Button } from '~/storybook/components/Button/Button';
 import { catchError, map, expand, switchMapTo } from 'rxjs/operators';
-import { BlockSection } from '~/storybook/components/Block/Block';
 
 export interface FundKyberTradingProps {
   trading: string;
@@ -109,7 +108,7 @@ export const FundKyberTrading: React.FC<FundKyberTradingProps> = props => {
   };
 
   return (
-    <BlockSection>
+    <>
       <Subtitle>
         Kyber Network (1 {state.taker.symbol} = {state.rate.toFixed(4)} {state.maker.symbol})
       </Subtitle>
@@ -118,6 +117,6 @@ export const FundKyberTrading: React.FC<FundKyberTradingProps> = props => {
       </Button>
 
       <TransactionModal transaction={transaction} />
-    </BlockSection>
+    </>
   );
 };

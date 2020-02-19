@@ -7,10 +7,10 @@ import { ExchangeDefinition, sameAddress, TokenDefinition } from '@melonproject/
 import { useEnvironment } from '~/hooks/useEnvironment';
 import { Dropdown } from '~/storybook/components/Dropdown/Dropdown';
 import { Input } from '~/storybook/components/Input/Input';
-import { Block, BlockSection } from '~/storybook/components/Block/Block';
-import { SectionTitle } from '~/storybook/components/Title/Title';
+import { Block } from '~/storybook/components/Block/Block';
+import { Grid, GridRow, GridCol } from '~/storybook/components/Grid/Grid';
+import { SectionTitle, Subtitle } from '~/storybook/components/Title/Title';
 import { FundRequestForQuoteOffer } from './FundRequestForQuoteOffer';
-import * as S from './FundRequestForQuoteTrading.styles';
 
 export interface FundRequestForQuoteTradingProps {
   trading: string;
@@ -103,12 +103,12 @@ export const FundRequestForQuoteTrading: React.FC<FundRequestForQuoteTradingProp
       takerQuantity: Yup.string()
         .required('Missing sell quantity.')
         // tslint:disable-next-line
-        .test('valid-number', 'The given value is not a valid number.', function(value) {
+        .test('valid-number', 'The given value is not a valid number.', function (value) {
           const bn = new BigNumber(value);
           return !bn.isNaN() && !bn.isZero() && bn.isPositive();
         })
         // tslint:disable-next-line
-        .test('balance-too-low', 'The balance of the fund is lower than the provided value.', function(value) {
+        .test('balance-too-low', 'The balance of the fund is lower than the provided value.', function (value) {
           const holding = holdingsRef.current.find(item => sameAddress(item.token!.address, this.parent.takerAsset))!;
           const divisor = holding ? new BigNumber(10).exponentiatedBy(holding.token!.decimals!) : new BigNumber('NaN');
           const balance = holding ? holding.amount!.dividedBy(divisor) : new BigNumber('NaN');
@@ -119,7 +119,7 @@ export const FundRequestForQuoteTrading: React.FC<FundRequestForQuoteTradingProp
 
   useEffect(() => {
     holdingsRef.current = props.holdings;
-    form.triggerValidation().catch(() => {});
+    form.triggerValidation().catch(() => { });
   }, [props.holdings, form.formState.touched]);
 
   const takerAsset = environment.getToken(form.watch('takerAsset') ?? '');
@@ -173,38 +173,43 @@ export const FundRequestForQuoteTrading: React.FC<FundRequestForQuoteTradingProp
       <SectionTitle>Request for quote on 0x</SectionTitle>
 
       <FormContext {...form}>
-        <BlockSection>
-          <SectionTitle>Choose the assets to swap:</SectionTitle>
-          <Dropdown
-            name="takerAsset"
-            label="Sell this asset:"
-            disabled={loading}
-            options={takerOptions}
-            onChange={event => handleTakerAssetChange(event.target.value)}
-          />
-          <Dropdown name="makerAsset" label="To buy this asset:" disabled={loading} options={makerOptions} />
-        </BlockSection>
+        <Grid>
+          <GridRow>
+            <GridCol>
+              <SectionTitle>Choose the assets to swap</SectionTitle>
+              <Dropdown
+                name="takerAsset"
+                label="Sell this asset"
+                disabled={loading}
+                options={takerOptions}
+                onChange={event => handleTakerAssetChange(event.target.value)}
+              />
 
-        <S.OptionsContainer>
-          <BlockSection>
-            <SectionTitle>{`Specify an amount of ${takerAsset?.symbol} to sell:`}</SectionTitle>
-            <Input type="number" step="any" name="takerQuantity" disabled={loading} label="Quantity" />
-          </BlockSection>
+              <Dropdown name="makerAsset" label="To buy this asset" disabled={loading} options={makerOptions} />
+            </GridCol>
+          </GridRow>
 
-          <BlockSection>
-            <SectionTitle>Review quote:</SectionTitle>
-            <FundRequestForQuoteOffer
-              active={ready}
-              exchange={props.exchange}
-              trading={props.trading}
-              market={market}
-              side={side}
-              symbol={makerAsset?.symbol}
-              amount={amount}
-            />
-          </BlockSection>
-        </S.OptionsContainer>
-      </FormContext>
-    </Block>
+          <GridRow>
+            <GridCol md={6}>
+              <SectionTitle>{`Specify an amount of ${takerAsset?.symbol} to sell`}</SectionTitle>
+              <Input type="number" step="any" name="takerQuantity" disabled={loading} label="Quantity" />
+            </GridCol>
+
+            <GridCol md={6}>
+              <SectionTitle>Review quote</SectionTitle>
+              <FundRequestForQuoteOffer
+                active={ready}
+                exchange={props.exchange}
+                trading={props.trading}
+                market={market}
+                side={side}
+                symbol={makerAsset?.symbol}
+                amount={amount}
+              />
+            </GridCol>
+          </GridRow>
+        </Grid>
+      </FormContext >
+    </Block >
   );
 };

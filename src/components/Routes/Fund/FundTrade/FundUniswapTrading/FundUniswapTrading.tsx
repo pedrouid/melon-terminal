@@ -4,7 +4,6 @@ import * as Rx from 'rxjs';
 import {
   TokenDefinition,
   Trading,
-  Hub,
   ExchangeDefinition,
   UniswapTradingAdapter,
   UniswapExchange,
@@ -19,8 +18,8 @@ import { toTokenBaseUnit } from '~/utils/toTokenBaseUnit';
 import { Holding } from '@melonproject/melongql';
 import { Subtitle } from '~/storybook/components/Title/Title';
 import { Button } from '~/storybook/components/Button/Button';
-import { BlockSection } from '~/storybook/components/Block/Block';
 import { catchError, map, switchMapTo, expand } from 'rxjs/operators';
+
 export interface FundUniswapTradingProps {
   trading: string;
   exchange: ExchangeDefinition;
@@ -128,7 +127,7 @@ export const FundUniswapTrading: React.FC<FundUniswapTradingProps> = props => {
   };
 
   return (
-    <BlockSection>
+    <>
       <Subtitle>
         Uniswap (1 {state.taker.symbol} = {state.rate.toFixed(4)} {state.maker.symbol})
       </Subtitle>
@@ -137,6 +136,6 @@ export const FundUniswapTrading: React.FC<FundUniswapTradingProps> = props => {
         {loading ? '' : valid ? `Buy ${value.toFixed(4)} ${state.maker.symbol}` : 'No offer'}
       </Button>
       <TransactionModal transaction={transaction} />
-    </BlockSection>
+    </>
   );
 };
