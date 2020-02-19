@@ -104,7 +104,7 @@ export function aggregatedOrderbook(
       const asksFlat = empty.concat
         .apply(empty, asksOnly)
         .sort((a, b) => a.price.comparedTo(b.price))
-        .slice(0, 20) as OrderbookItem[];
+        .slice(0, 10) as OrderbookItem[];
 
       const asksQuantity = asksFlat.reduce((carry, current) => carry.plus(current.quantity), new BigNumber(0));
       const asks = asksFlat
@@ -134,7 +134,7 @@ export function aggregatedOrderbook(
       const bidsFlat = empty.concat
         .apply(empty, bidsOnly)
         .sort((a, b) => b.price.comparedTo(a.price))
-        .slice(0, 20) as OrderbookItem[];
+        .slice(0, 10) as OrderbookItem[];
 
       const bidsQuantity = bidsFlat.reduce((carry, current) => carry.plus(current.quantity), new BigNumber(0));
       const bids = bidsFlat.reduce((carry, current, index) => {
