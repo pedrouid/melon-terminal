@@ -10,6 +10,8 @@ import { Button } from '~/storybook/components/Button/Button';
 import { catchError, switchMap } from 'rxjs/operators';
 import { SignedOrder } from '@0x/order-utils-v2';
 import { Subtitle } from '~/storybook/components/Title/Title';
+import { BlockSection } from '~/storybook/components/Block/Block';
+import * as S from './FundRequestForQuoteTrading.styles';
 
 export interface FundRequestForQuoteOfferProps {
   active: boolean;
@@ -121,8 +123,12 @@ export const FundRequestForQuoteOffer: React.FC<FundRequestForQuoteOfferProps> =
   };
 
   return (
-    <>
-      <Subtitle>Offer</Subtitle>
+    <S.ButtonContainer>
+      <Subtitle>
+        {props.market
+          ? `Rate: (1 ${props.market?.split('-')[0]} = ${state.price.toFixed(4)} ${props.market?.split('-')[1]})`
+          : null}
+      </Subtitle>
       <Button type="button" disabled={!(ready && props.active)} loading={loading} onClick={submit}>
         {loading
           ? ''
@@ -130,8 +136,7 @@ export const FundRequestForQuoteOffer: React.FC<FundRequestForQuoteOfferProps> =
           ? `Buy ${state.price.multipliedBy(props.amount!).toFixed(4)} ${props.symbol}`
           : 'No offer'}
       </Button>
-
       <TransactionModal transaction={transaction} />
-    </>
+    </S.ButtonContainer>
   );
 };

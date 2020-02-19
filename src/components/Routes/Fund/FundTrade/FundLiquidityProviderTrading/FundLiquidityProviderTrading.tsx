@@ -107,7 +107,6 @@ export const FundLiquidityProviderTrading: React.FC<FundLiquidityProviderTrading
       <SectionTitle>Liquidity pools trading</SectionTitle>
 
       <FormContext {...form}>
-
         <BlockSection>
           <SectionTitle>Choose the assets to swap:</SectionTitle>
 

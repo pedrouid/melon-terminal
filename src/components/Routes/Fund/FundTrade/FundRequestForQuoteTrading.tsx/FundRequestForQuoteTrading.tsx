@@ -7,7 +7,7 @@ import { ExchangeDefinition, sameAddress, TokenDefinition } from '@melonproject/
 import { useEnvironment } from '~/hooks/useEnvironment';
 import { Dropdown } from '~/storybook/components/Dropdown/Dropdown';
 import { Input } from '~/storybook/components/Input/Input';
-import { Block } from '~/storybook/components/Block/Block';
+import { Block, BlockSection } from '~/storybook/components/Block/Block';
 import { SectionTitle } from '~/storybook/components/Title/Title';
 import { GridRow, GridCol } from '~/storybook/components/Grid/Grid';
 import { Icons } from '~/storybook/components/Icons/Icons';
@@ -148,16 +148,6 @@ export const FundRequestForQuoteTrading: React.FC<FundRequestForQuoteTradingProp
     }
   }, [makerCandidates, makerAsset]);
 
-  const switchDirection = () => {
-    const values = form.getValues();
-
-    form.reset({
-      ...values,
-      makerAsset: values.takerAsset,
-      takerAsset: values.makerAsset,
-    });
-  };
-
   const takerOptions = takerCandidates.map(token => ({
     value: token.address,
     name: token.symbol,
@@ -182,39 +172,29 @@ export const FundRequestForQuoteTrading: React.FC<FundRequestForQuoteTradingProp
 
   return (
     <Block>
-      <SectionTitle>Private market maker</SectionTitle>
+      <SectionTitle>Request for quote on 0x</SectionTitle>
 
       <FormContext {...form}>
-        <GridRow justify="space-between">
-          <GridCol xs={12} sm={4}>
-            <Dropdown
-              name="takerAsset"
-              label="Sell asset"
-              disabled={loading}
-              options={takerOptions}
-              onChange={event => handleTakerAssetChange(event.target.value)}
-            />
-          </GridCol>
+        <BlockSection>
+          <SectionTitle>Choose the assets to swap:</SectionTitle>
+          <Dropdown
+            name="takerAsset"
+            label="Sell this asset:"
+            disabled={loading}
+            options={takerOptions}
+            onChange={event => handleTakerAssetChange(event.target.value)}
+          />
+          <Dropdown name="makerAsset" label="To buy this asset:" disabled={loading} options={makerOptions} />
+        </BlockSection>
 
-          <GridCol xs={12} sm={6} justify="flex-end">
-            <Input type="number" step="any" name="takerQuantity" disabled={loading} label="Sell quantity" />
-          </GridCol>
-        </GridRow>
+        <S.OptionsContainer>
+          <BlockSection>
+            <SectionTitle>{`Specify an amount of ${takerAsset?.symbol} to sell:`}</SectionTitle>
+            <Input type="number" step="any" name="takerQuantity" disabled={loading} label="Quantity" />
+          </BlockSection>
 
-        <GridRow>
-          <GridCol xs={12} sm={4}>
-            <S.SwitchButton onClick={loading ? undefined : switchDirection}>
-              <Icons name="EXCHANGE" />
-            </S.SwitchButton>
-          </GridCol>
-        </GridRow>
-
-        <GridRow justify="space-between">
-          <GridCol xs={12} sm={4}>
-            <Dropdown name="makerAsset" label="Buy asset" disabled={loading} options={makerOptions} />
-          </GridCol>
-
-          <GridCol xs={12} sm={6}>
+          <BlockSection>
+            <SectionTitle>Review quote:</SectionTitle>
             <FundRequestForQuoteOffer
               active={ready}
               exchange={props.exchange}
@@ -224,8 +204,8 @@ export const FundRequestForQuoteTrading: React.FC<FundRequestForQuoteTradingProp
               symbol={makerAsset?.symbol}
               amount={amount}
             />
-          </GridCol>
-        </GridRow>
+          </BlockSection>
+        </S.OptionsContainer>
       </FormContext>
     </Block>
   );

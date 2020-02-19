@@ -26,4 +26,4 @@ export const optionsContainer = styled(BlockActions)`
   @media (${props => props.theme.mediaQueries.m}) {
     flex-direction: row;
   }
-`
+`;

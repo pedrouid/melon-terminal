@@ -97,7 +97,6 @@ export const FundUniswapTrading: React.FC<FundUniswapTradingProps> = props => {
       map(value => value.multipliedBy(new BigNumber(10).exponentiatedBy(props.taker.decimals - props.maker.decimals)))
     );
 
-
     const subscription = observable$.subscribe(rate => {
       setState(previous => ({
         ...previous,
@@ -133,7 +132,7 @@ export const FundUniswapTrading: React.FC<FundUniswapTradingProps> = props => {
       <Subtitle>
         Uniswap (1 {state.taker.symbol} = {state.rate.toFixed(4)} {state.maker.symbol})
       </Subtitle>
-      
+
       <Button type="button" disabled={!ready || !props.active} loading={loading} onClick={submit}>
         {loading ? '' : valid ? `Buy ${value.toFixed(4)} ${state.maker.symbol}` : 'No offer'}
       </Button>

@@ -60,7 +60,9 @@ export const FundInvestorsList: React.FC<FundInvestorsListProps> = ({ address })
                 <BodyCell>
                   <EtherscanLink address={investement.owner.id}>{investement.owner.id}</EtherscanLink>
                 </BodyCell>
-                <BodyCellRightAlign><TokenValue value={investement.shares} /></BodyCellRightAlign>
+                <BodyCellRightAlign>
+                  <TokenValue value={investement.shares} />
+                </BodyCellRightAlign>
               </BodyRow>
             ))}
           </tbody>
