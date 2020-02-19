@@ -24,21 +24,23 @@ function mapOrders(
   side: 'bid' | 'ask'
 ) {
   return orders.map(order => {
-    const quantity =
+    const buyQuantity =
       side === 'bid'
         ? fromTokenBaseUnit(order.buyQuantity, makerAsset.decimals)
         : fromTokenBaseUnit(order.sellQuantity, takerAsset.decimals);
 
-    const price =
+    const sellQuantity =
       side === 'bid'
-        ? fromTokenBaseUnit(order.sellQuantity, takerAsset.decimals).dividedBy(quantity)
-        : fromTokenBaseUnit(order.buyQuantity, makerAsset.decimals).dividedBy(quantity);
+        ? fromTokenBaseUnit(order.sellQuantity, takerAsset.decimals)
+        : fromTokenBaseUnit(order.buyQuantity, makerAsset.decimals);
+
+    const price = sellQuantity.dividedBy(buyQuantity);
 
     return {
       order,
-      quantity,
       price,
       side,
+      quantity: buyQuantity,
       exchange: ExchangeIdentifier.OasisDex,
       id: `matchingmarket:${order.id.toString()}`,
     } as OrderbookItem;

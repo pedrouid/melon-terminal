@@ -5,7 +5,7 @@ import { Orderbook as OrderbookProvider } from '@0x/orderbook';
 import { APIOrder as ZeroExOrder } from '@0x/types';
 import { assetDataUtils } from '@0x/order-utils';
 import { DeployedEnvironment, ExchangeIdentifier, TokenDefinition } from '@melonproject/melonjs';
-import { catchError, concatMap, distinctUntilChanged, expand, map, tap } from 'rxjs/operators';
+import { catchError, concatMap, distinctUntilChanged, expand, map } from 'rxjs/operators';
 import { NetworkEnum } from '~/types';
 import { Orderbook, OrderbookItem } from './aggregatedOrderbook';
 import { fromTokenBaseUnit } from '~/utils/fromTokenBaseUnit';
@@ -38,39 +38,23 @@ function mapOrders(
   side: 'bid' | 'ask'
 ) {
   return orders.map(order => {
-    const quantity =
+    const buyQuantity =
       side === 'bid'
         ? fromTokenBaseUnit(order.order.takerAssetAmount, takerAsset.decimals)
         : fromTokenBaseUnit(order.order.makerAssetAmount, makerAsset.decimals);
 
-    const price =
+    const sellQuantity =
       side === 'bid'
-        ? fromTokenBaseUnit(order.order.makerAssetAmount, makerAsset.decimals).dividedBy(quantity)
-        : fromTokenBaseUnit(order.order.takerAssetAmount, takerAsset.decimals).dividedBy(quantity);
+        ? fromTokenBaseUnit(order.order.makerAssetAmount, makerAsset.decimals)
+        : fromTokenBaseUnit(order.order.takerAssetAmount, takerAsset.decimals);
 
-    if (side === 'bid') {
-      console.log(
-        JSON.stringify(
-          {
-            price,
-            quantity,
-            order: {
-              ...order.order,
-              makerTokenAddress: assetDataUtils.decodeERC20AssetData(order.order.makerAssetData).tokenAddress,
-              takerTokenAddress: assetDataUtils.decodeERC20AssetData(order.order.takerAssetData).tokenAddress,
-            },
-          },
-          undefined,
-          4
-        )
-      );
-    }
+    const price = sellQuantity.dividedBy(buyQuantity);
 
     const result = {
       order,
-      quantity,
       price,
       side,
+      quantity: buyQuantity,
       exchange: ExchangeIdentifier.ZeroExV3,
       id: `zeroexv3:${order.order.salt}:${order.order.signature}`,
     } as OrderbookItem;
@@ -126,8 +110,8 @@ export function zeroExOrderbook(
 
     return polling$.pipe<Orderbook>(
       map(([b, a]) => ({
-        bids: mapOrders(b as any, takerAsset, makerAsset, 'bid'),
-        asks: mapOrders(a as any, makerAsset, takerAsset, 'ask'),
+        bids: mapOrders(b as any, makerAsset, takerAsset, 'bid'),
+        asks: mapOrders(a as any, takerAsset, makerAsset, 'ask'),
       }))
     );
   }, [provider, takerAsset, makerAsset]);
