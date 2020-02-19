@@ -43,7 +43,7 @@ export const Layout: React.FC = ({ children }) => {
             <HeaderTitle>
               <Link to="/">
                 {!home && <Icons name="LEFTARROW" size="small" />}
-                <S.AppName>Melon Manager Interface</S.AppName>
+                <S.AppName>Melon Terminal</S.AppName>
               </Link>
             </HeaderTitle>
             <LogoContainer>
