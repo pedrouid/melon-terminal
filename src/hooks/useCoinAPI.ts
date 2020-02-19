@@ -30,7 +30,7 @@ export const useCoinAPI = (props?: UseCoinAPIProps) => {
         setState({ state: 'error', data: {} as CoinAPIResult });
       }
     })();
-  }, [props]);
+  }, [props?.base, props?.quote]);
 
   return state;
 };

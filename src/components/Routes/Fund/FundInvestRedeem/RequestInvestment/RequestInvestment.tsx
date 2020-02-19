@@ -21,13 +21,21 @@ import { BlockActions } from '~/storybook/components/Block/Block';
 import { Button } from '~/storybook/components/Button/Button';
 import { Dropdown } from '~/storybook/components/Dropdown/Dropdown';
 import { Spinner } from '~/storybook/components/Spinner/Spinner';
-import { FormattedNumber } from '~/components/Common/FormattedNumber/FormattedNumber';
 import { NotificationBar, NotificationContent } from '~/storybook/components/NotificationBar/NotificationBar';
 import { Link } from '~/storybook/components/Link/Link';
 import BigNumber from 'bignumber.js';
 import { TransactionRef } from '../FundInvest/FundInvest';
 import { AccountContextValue } from '~/components/Contexts/Account/Account';
 import { TokenValue } from '~/components/Common/TokenValue/TokenValue';
+import { useInvestorTotalExposureQuery } from './InvestorTotalExposure.query';
+import { useCoinAPI } from '~/hooks/useCoinAPI';
+import {
+  CheckboxContainer,
+  CheckboxInput,
+  CheckboxMask,
+  CheckboxIcon,
+  CheckboxLabel,
+} from '~/storybook/components/Checkbox/Checkbox';
 
 export interface RequestInvestmentProps {
   address: string;
@@ -42,6 +50,7 @@ interface RequestInvestmentFormValues {
   investmentAsset?: string;
   investmentAmount: BigNumber;
   requestedShares: BigNumber;
+  acknowledgeLimit: boolean;
 }
 
 export const RequestInvestment = forwardRef(
@@ -49,6 +58,7 @@ export const RequestInvestment = forwardRef(
     const environment = useEnvironment()!;
     const account = useAccount();
     const [formValues, setFormValues] = useState<RequestInvestmentFormValues>();
+    const daiRate = useCoinAPI();
 
     const allowedAssets = props.allowedAssets || [];
     const initialAsset = allowedAssets[0];
@@ -65,6 +75,7 @@ export const RequestInvestment = forwardRef(
         .transform((value, _) => new BigNumber(value))
         .test('positive', 'Number of shares has to be positive', (value: BigNumber) => value.isGreaterThan(0)),
       investmentAsset: Yup.string(),
+      acknowledgeLimit: Yup.boolean(),
     });
 
     const defaultValues = {
@@ -88,6 +99,20 @@ export const RequestInvestment = forwardRef(
     const asset = allowedAssets.find(allowedAsset => sameAddress(allowedAsset.token?.address, investmentAsset));
     const participation = props.account?.participation?.address;
     const [allowance, query] = useAccountAllowanceQuery(account.address, investmentAsset, participation);
+
+    const [currentWethExposure] = useInvestorTotalExposureQuery(account.address);
+    const tokenRate = useCoinAPI({ base: asset?.token?.symbol });
+    const currentDaiExposure = currentWethExposure?.multipliedBy(daiRate.data.rate) || new BigNumber(0);
+    const additionalDaiExposure = new BigNumber(investmentAmount)
+      .multipliedBy(tokenRate.data.rate)
+      .multipliedBy('1e18');
+    const totalDaiExposure = currentDaiExposure.plus(additionalDaiExposure);
+
+    const councilExposureLimit = parseInt(process.env.MELON_MAX_EXPOSURE!, 10);
+    const needsAcknowledgement = totalDaiExposure.isGreaterThanOrEqualTo(
+      new BigNumber(councilExposureLimit).multipliedBy('1e18')
+    );
+    const acknowledged = form.watch('acknowledgeLimit') as boolean;
 
     useEffect(() => {
       if (allowance?.balance.isLessThan(toTokenBaseUnit(investmentAmount, token!.decimals))) {
@@ -113,7 +138,7 @@ export const RequestInvestment = forwardRef(
           amount.isNaN() ? new BigNumber(0) : amount.decimalPlaces(asset!.token!.decimals!)
         );
       }
-    }, [multiplier]);
+    }, [asset, multiplier]);
 
     const action = useMemo(() => {
       if (allowance?.allowance.isGreaterThanOrEqualTo(toTokenBaseUnit(investmentAmount, token!.decimals))) {
@@ -163,6 +188,7 @@ export const RequestInvestment = forwardRef(
             investmentAsset: values.investmentAsset!,
             investmentAmount: values.investmentAmount,
             requestedShares: values.requestedShares,
+            acknowledgeLimit: values.acknowledgeLimit,
           });
           approveAmount(environment, account, token, values.investmentAmount);
           break;
@@ -217,14 +243,16 @@ export const RequestInvestment = forwardRef(
 
             {(query.loading && !asset && <Spinner />) || (
               <>
-                <div>
-                  Your balance:{' '}
-                  <TokenValue
-                    value={allowance?.balance}
-                    decimals={asset!.token!.decimals!}
-                    symbol={asset?.token?.symbol}
-                  />
-                </div>
+                <NotificationBar kind="neutral">
+                  <NotificationContent>
+                    Your balance:{' '}
+                    <TokenValue
+                      value={allowance?.balance}
+                      decimals={asset!.token!.decimals!}
+                      symbol={asset?.token?.symbol}
+                    />
+                  </NotificationContent>
+                </NotificationBar>
 
                 {asset?.token?.symbol === 'WETH' && (
                   <NotificationBar kind="neutral">
@@ -259,8 +287,40 @@ export const RequestInvestment = forwardRef(
                   disabled={props.loading}
                   onChange={handleInvestmentAmountChange}
                 />
+
+                {needsAcknowledgement && (
+                  <>
+                    <NotificationBar kind="error">
+                      <NotificationContent>
+                        After this investment, your maximum exposure to Melon funds will exceed the current limit set by
+                        the Melon Council (DAI 50k).
+                      </NotificationContent>
+                    </NotificationBar>
+                    <CheckboxContainer>
+                      <CheckboxInput
+                        type="checkbox"
+                        ref={form.register}
+                        name="acknowledgeLimit"
+                        id="acknowledgeLimit"
+                      />
+                      <CheckboxMask>
+                        <CheckboxIcon />
+                      </CheckboxMask>
+                      <CheckboxLabel htmlFor="acknowledgeLimit">
+                        I acknowledge that I am aware of the risks associated with having a large exposure to Melon
+                        funds.
+                      </CheckboxLabel>
+                    </CheckboxContainer>
+                  </>
+                )}
+
                 <BlockActions>
-                  <Button type="submit" disabled={props.loading || !!form.errors.investmentAmount}>
+                  <Button
+                    type="submit"
+                    disabled={
+                      props.loading || !!form.errors.investmentAmount || (needsAcknowledgement && !acknowledged)
+                    }
+                  >
                     Invest
                   </Button>
                 </BlockActions>
