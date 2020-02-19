@@ -143,6 +143,10 @@ export interface EthGasStation {
 }
 
 function reducer(state: TransactionState, action: TransactionAction): TransactionState {
+  if (state.progress === TransactionProgress.TRANSACTION_CANCELLED && action.type !== TransactionProgress.TRANSACTION_STARTED) {
+    return state;
+  }
+
   switch (action.type) {
     case TransactionProgress.TRANSACTION_STARTED:
       return {
