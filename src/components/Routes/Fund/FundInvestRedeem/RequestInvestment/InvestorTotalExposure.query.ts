@@ -13,7 +13,7 @@ export interface InvestorTotalExposureResult {
 }
 
 export interface InvestorTotalExposureVariables {
-  address: string;
+  address?: string;
 }
 
 const InvestorExposureQuery = gql`
@@ -29,14 +29,14 @@ const InvestorExposureQuery = gql`
 export const useInvestorTotalExposureQuery = (address?: string) => {
   const result = useTheGraphQuery<InvestorTotalExposureResult, InvestorTotalExposureVariables>(InvestorExposureQuery, {
     variables: {
-      address: address!.toLowerCase(),
+      address: address?.toLowerCase(),
     },
     skip: !address,
   });
 
-  const totalExposure = result?.data?.investor.investments.reduce((carry, item) => {
+  const totalExposure = result?.data?.investor?.investments?.reduce((carry, item) => {
     return carry.plus(new BigNumber(item.gav));
   }, new BigNumber(0));
 
-  return [totalExposure, result] as [BigNumber, typeof result];
+  return [totalExposure, result] as [typeof totalExposure, typeof result];
 };
