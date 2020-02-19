@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import { useEnvironment } from '~/hooks/useEnvironment';
 import { useTransaction } from '~/hooks/useTransaction';
 import { Button } from '~/storybook/components/Button/Button';
@@ -7,8 +7,7 @@ import { Hub, Trading } from '@melonproject/melonjs';
 import { useAccount } from '~/hooks/useAccount';
 import { Block, BlockActions } from '~/storybook/components/Block/Block';
 import { SectionTitle } from '~/storybook/components/Title/Title';
-import { useFundShutdownQuery } from './FundShutdown.query';
-import { Spinner } from '~/storybook/components/Spinner/Spinner';
+import { useFundReturnBatchToVaultQuery } from './FundReturnBatchToVaultQuery.query';
 
 export interface ReturnBatchToVaultProps {
   address: string;
@@ -17,25 +16,17 @@ export interface ReturnBatchToVaultProps {
 export const ReturnBatchToVault: React.FC<ReturnBatchToVaultProps> = ({ address }) => {
   const environment = useEnvironment()!;
   const account = useAccount();
-  const [info, _] = useFundShutdownQuery(address);
-
-  const assetsInTrading = useMemo(() => {
-    return info.routes?.trading?.lockedAssets;
-  }, [info]);
-
-  const hub = new Hub(environment, address);
-
+  const [addresses] = useFundReturnBatchToVaultQuery(address);
   const transaction = useTransaction(environment);
-
   const submit = async () => {
-    const assets = (info!.routes!.accounting!.holdings!.map(holding => holding.token?.address) || []) as string[];
-
-    const trading = new Trading(environment, (await hub.getRoutes()).trading);
-    const tx = trading.returnBatchToVault(account.address!, assets);
+    const hub = new Hub(environment, address);
+    const td = (await hub.getRoutes()).trading;
+    const trading = new Trading(environment, td);
+    const tx = trading.returnBatchToVault(account.address!, addresses);
     transaction.start(tx, 'Return assets to vault');
   };
 
-  if (!assetsInTrading) {
+  if (!(addresses && addresses.length)) {
     return <></>;
   }
 
@@ -46,15 +37,11 @@ export const ReturnBatchToVault: React.FC<ReturnBatchToVaultProps> = ({ address 
         Some of your fund's assets have not been returned to the vault contract. This can happen when trading. In order
         to be able to use all your assets for trading, you have to move the assets back to vault
       </p>
-      {info?.address ? (
-        <BlockActions>
-          <Button type="submit" kind="success" onClick={() => submit()}>
-            Move assets to vault
-          </Button>
-        </BlockActions>
-      ) : (
-        <Spinner />
-      )}
+      <BlockActions>
+        <Button type="submit" kind="success" onClick={() => submit()}>
+          Move assets to vault
+        </Button>
+      </BlockActions>
 
       <TransactionModal transaction={transaction} />
     </Block>

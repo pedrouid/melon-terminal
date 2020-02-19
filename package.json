@@ -36,7 +36,7 @@
     "@0x/order-utils-v2": "npm:@0x/order-utils@8.4.0",
     "@0x/orderbook": "^2.2.1",
     "@apollo/react-hooks": "^3.1.3",
-    "@melonproject/melongql": "^0.0.38",
+    "@melonproject/melongql": "^0.0.39",
     "@melonproject/melonjs": "^0.0.103",
     "apollo-cache-inmemory": "^1.6.3",
     "apollo-client": "^2.6.4",

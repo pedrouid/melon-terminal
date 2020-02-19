@@ -47,7 +47,7 @@ export const FundMelonEngineTrading: React.FC<FundMelonEngineTradingProps> = pro
   return (
     <>
       <Subtitle>
-        Melon Engine (1 {props.taker.symbol} = {price.toFixed(4)} {props.maker.symbol} )
+        Melon Engine (1 {props.taker.symbol} = {price.toFixed(4)} {props.maker.symbol})
       </Subtitle>
       <Button type="button" disabled={!ready || !props.active} loading={ready} onClick={submit}>
         {ready
