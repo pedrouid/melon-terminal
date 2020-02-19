@@ -3,7 +3,7 @@ import BigNumber from 'bignumber.js';
 import { FormattedNumber } from '../FormattedNumber/FormattedNumber';
 
 export interface TokenValueProps {
-  value?: BigNumber;
+  value?: BigNumber.Value;
   symbol?: string;
   decimals?: number;
   digits?: number;

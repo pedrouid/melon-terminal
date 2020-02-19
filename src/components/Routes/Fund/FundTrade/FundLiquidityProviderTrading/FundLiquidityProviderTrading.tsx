@@ -110,8 +110,8 @@ export const FundLiquidityProviderTrading: React.FC<FundLiquidityProviderTrading
           <GridRow>
             <GridCol>
               <SectionTitle>Choose the assets to swap</SectionTitle>
-              <Dropdown name="takerAsset" label="Sell this asset" options={options} />
-              <Dropdown name="makerAsset" label="To buy this asset" options={options} />
+              <Dropdown name="takerAsset" label="Sell this asset" options={options} onChange={() => form.triggerValidation().catch(() => { })} />
+              <Dropdown name="makerAsset" label="To buy this asset" options={options} onChange={() => form.triggerValidation().catch(() => { })} />
             </GridCol>
           </GridRow>
 

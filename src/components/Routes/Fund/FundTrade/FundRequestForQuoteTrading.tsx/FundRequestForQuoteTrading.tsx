@@ -136,14 +136,18 @@ export const FundRequestForQuoteTrading: React.FC<FundRequestForQuoteTradingProp
 
   useEffect(() => {
     if (!takerAsset || !takerCandidates.includes(takerAsset)) {
-      form.setValue('takerAsset', takerCandidates[0]?.address, true);
+      form.setValue('takerAsset', takerCandidates[0]?.address);
     }
+
+    form.triggerValidation().catch(() => { });
   }, [takerCandidates, takerAsset]);
 
   useEffect(() => {
     if (!makerAsset || !makerCandidates.includes(makerAsset)) {
-      form.setValue('makerAsset', makerCandidates[0]?.address, true);
+      form.setValue('makerAsset', makerCandidates[0]?.address);
     }
+
+    form.triggerValidation().catch(() => { });
   }, [makerCandidates, makerAsset]);
 
   const takerOptions = takerCandidates.map(token => ({
@@ -160,7 +164,7 @@ export const FundRequestForQuoteTrading: React.FC<FundRequestForQuoteTradingProp
     const token = environment.getToken(value)!;
     const candidates = token && markets.has(token) ? Array.from(markets.get(token)!.keys()) : ([] as TokenDefinition[]);
     if (!makerAsset || !candidates.includes(makerAsset)) {
-      form.setValue('makerAsset', candidates[0]?.address);
+      form.setValue('makerAsset', candidates[0]?.address, true);
     }
   };
 

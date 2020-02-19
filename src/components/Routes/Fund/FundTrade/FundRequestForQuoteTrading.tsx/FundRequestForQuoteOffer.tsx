@@ -1,15 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import BigNumber from 'bignumber.js';
 import * as Rx from 'rxjs';
-import { ExchangeDefinition, Trading, ZeroExV2TradingAdapter } from '@melonproject/melonjs';
+import { ExchangeDefinition, Trading, ZeroExV2TradingAdapter, TokenDefinition } from '@melonproject/melonjs';
 import { useEnvironment } from '~/hooks/useEnvironment';
 import { useAccount } from '~/hooks/useAccount';
 import { useTransaction } from '~/hooks/useTransaction';
 import { TransactionModal } from '~/components/Common/TransactionModal/TransactionModal';
 import { Button } from '~/storybook/components/Button/Button';
 import { catchError, switchMap } from 'rxjs/operators';
-import { SignedOrder } from '@0x/order-utils-v2';
+import { SignedOrder, assetDataUtils } from '@0x/order-utils-v2';
 import { Subtitle } from '~/storybook/components/Title/Title';
+import { FormattedDate } from '~/components/Common/FormattedDate/FormattedDate';
+import { NotificationBar, NotificationContent } from '~/storybook/components/NotificationBar/NotificationBar';
+import { FormattedNumber } from '~/components/Common/FormattedNumber/FormattedNumber';
+import { TokenValue } from '~/components/Common/TokenValue/TokenValue';
 
 export interface FundRequestForQuoteOfferProps {
   active: boolean;
@@ -22,6 +26,14 @@ export interface FundRequestForQuoteOfferProps {
 }
 
 export const FundRequestForQuoteOffer: React.FC<FundRequestForQuoteOfferProps> = props => {
+  const [quote, setQuote] = useState<{
+    offer: SignedOrder,
+    taker: TokenDefinition,
+    maker: TokenDefinition,
+    price: BigNumber,
+    amount: BigNumber,
+  }>();
+
   const [state, setState] = useState(() => ({
     price: new BigNumber(0),
     loading: false,
@@ -99,26 +111,44 @@ export const FundRequestForQuoteOffer: React.FC<FundRequestForQuoteOfferProps> =
         })
       ).json();
 
-      if (result?.data) {
-        const order = result.data['0xv2order'] as SignedOrder;
-        const trading = new Trading(environment, props.trading);
-        const adapter = await ZeroExV2TradingAdapter.create(environment, props.exchange.exchange, trading);
-        const tx = adapter.takeOrder(account.address!, {
-          ...order,
-          expirationTimeSeconds: new BigNumber(order.expirationTimeSeconds),
-          takerAssetAmount: new BigNumber(order.takerAssetAmount),
-          takerFee: new BigNumber(order.takerFee),
-          makerAssetAmount: new BigNumber(order.makerAssetAmount),
-          makerFee: new BigNumber(order.makerFee),
-          salt: new BigNumber(order.salt),
-        });
+      if (result?.data && result.data['0xv2order']) {
+        const offer = result.data['0xv2order'] as SignedOrder;
+        const taker = assetDataUtils.decodeERC20AssetData(offer.takerAssetData).tokenAddress;
+        const maker = assetDataUtils.decodeERC20AssetData(offer.makerAssetData).tokenAddress;
 
-        transaction.start(tx, 'Take order');
+        setQuote({
+          price: new BigNumber(result?.price ?? 'NaN'),
+          amount: new BigNumber(result?.amount ?? 'NaN'),
+          taker: environment.getToken(taker)!,
+          maker: environment.getToken(maker)!,
+          offer: {
+            ...offer,
+            expirationTimeSeconds: new BigNumber(offer.expirationTimeSeconds),
+            takerAssetAmount: new BigNumber(offer.takerAssetAmount),
+            takerFee: new BigNumber(offer.takerFee),
+            makerAssetAmount: new BigNumber(offer.makerAssetAmount),
+            makerFee: new BigNumber(offer.makerFee),
+            salt: new BigNumber(offer.salt),
+          },
+        });
       }
     } catch (e) {
       // TODO: Handle errors.
     }
   };
+
+  useEffect(() => {
+    if (!quote) {
+      return;
+    }
+
+    (async () => {
+      const trading = new Trading(environment, props.trading);
+      const adapter = await ZeroExV2TradingAdapter.create(environment, props.exchange.exchange, trading);
+      const tx = adapter.takeOrder(account.address!, quote.offer);
+      transaction.start(tx, 'Take order');
+    })();
+  }, [quote]);
 
   return (
     <>
@@ -134,7 +164,18 @@ export const FundRequestForQuoteOffer: React.FC<FundRequestForQuoteOfferProps> =
             ? `Buy ${state.price.multipliedBy(props.amount!).toFixed(4)} ${props.symbol}`
             : 'No offer'}
       </Button>
-      <TransactionModal transaction={transaction} />
+
+      <TransactionModal transaction={transaction}>
+        <NotificationBar kind="neutral">
+          <NotificationContent>
+            You are buying <TokenValue value={quote?.offer.makerAssetAmount} decimals={quote?.maker.decimals} symbol={quote?.maker.symbol} />{' '}
+            in exchange for <TokenValue value={quote?.offer.takerAssetAmount} decimals={quote?.taker.decimals} symbol={quote?.taker.symbol} />.<br />
+            (Rate: <TokenValue value={1} digits={0} decimals={0} symbol={quote?.taker.symbol} /> = <TokenValue value={quote?.price} decimals={0} symbol={quote?.maker.symbol} />)
+            <br /><br />
+            This quote is valid until <FormattedDate timestamp={quote?.offer?.expirationTimeSeconds} />.
+          </NotificationContent>
+        </NotificationBar>
+      </TransactionModal>
     </>
   );
 };

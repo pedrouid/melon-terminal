@@ -48,6 +48,7 @@ export interface TransactionModalProps extends Partial<ModalProps> {
 
 export const TransactionModal: React.FC<TransactionModalProps> = ({
   transaction: { form, state, cancel, submit, acknowledge },
+  children,
   ...rest
 }) => {
   const gas = state.ethGasStation;
@@ -283,6 +284,8 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
                   </S.TransactionModalMessagesTable>
                 </S.TransactionModalMessages>
               )}
+
+              {estimated && !finished && !handled ? children : null}
 
               <S.TransactionModalActions>
                 {!finished && (
