@@ -43,7 +43,7 @@ export const FundHoldings: React.FC<FundHoldingsProps> = ({ address }) => {
   return (
     <Block>
       <SectionTitle>Portfolio Holdings</SectionTitle>
-      <ScrollableTable>
+      <ScrollableTable maxHeight="650px">
         <Table>
           <thead>
             <HeaderRow>

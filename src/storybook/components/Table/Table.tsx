@@ -1,11 +1,19 @@
 import styled, { css } from 'styled-components';
 
-export const ScrollableTable = styled.div`
+export interface ScrollableTableProps {
+  maxHeight?: string;
+}
+
+export const ScrollableTable = styled.div<ScrollableTableProps>`
   overflow: auto;
   display: block;
   overflow-x: auto;
   white-space: nowrap;
   margin-bottom: 25px;
+
+  ${props => props.maxHeight && `
+    max-height: ${props.maxHeight};
+  `}
 `;
 
 export const Table = styled.table`
