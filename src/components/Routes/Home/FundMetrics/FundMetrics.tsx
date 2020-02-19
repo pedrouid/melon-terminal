@@ -35,7 +35,7 @@ export const FundMetrics: React.FC = () => {
 
   return (
     <Dictionary>
-      <SectionTitle>Network metrics</SectionTitle>
+      <SectionTitle>Network Metrics</SectionTitle>
       <Grid>
         <GridRow>
           <GridCol xs={12} sm={6}>

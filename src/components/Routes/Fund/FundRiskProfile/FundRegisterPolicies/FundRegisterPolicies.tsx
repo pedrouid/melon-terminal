@@ -65,7 +65,7 @@ export const FundRegisterPolicies: React.FC<FundRegisterPoliciesProps> = ({ addr
   if (query.loading) {
     return (
       <Block>
-        <SectionTitle>Configure fund ruleset</SectionTitle>
+        <SectionTitle>Configure Fund Ruleset</SectionTitle>
         <Spinner />
       </Block>
     );
@@ -73,7 +73,7 @@ export const FundRegisterPolicies: React.FC<FundRegisterPoliciesProps> = ({ addr
 
   return (
     <Block>
-      <SectionTitle>Configure fund ruleset</SectionTitle>
+      <SectionTitle>Configure Fund Ruleset</SectionTitle>
       <p>Configure the risk management profile of your fund and the rules to be enforced by the smart contracts.</p>
 
       <p>Please select the policy that you want to add:</p>

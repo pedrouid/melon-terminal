@@ -85,7 +85,7 @@ export const InvestmentAssets: React.FC<InvestmentAssetsProps> = ({ address }) =
   if (query.loading) {
     return (
       <Block>
-        <SectionTitle>Define investment assets</SectionTitle>
+        <SectionTitle>Define Investment Assets</SectionTitle>
         <Spinner />
       </Block>
     );
@@ -105,14 +105,14 @@ export const InvestmentAssets: React.FC<InvestmentAssetsProps> = ({ address }) =
     <Block>
       <FormContext {...form}>
         <form onSubmit={submit}>
-          <SectionTitle>Define investment assets</SectionTitle>
+          <SectionTitle>Define Investment Assets</SectionTitle>
           <p>Investors will be able to invest in your funds using any of the assets selected below.</p>
 
           <Checkboxes options={tokensOptions} name="assets" />
 
           <BlockActions>
             <Button type="button" onClick={submit}>
-              Set investment assets
+              Set Investment Assets
             </Button>
           </BlockActions>
         </form>

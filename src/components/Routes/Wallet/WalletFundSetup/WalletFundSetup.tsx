@@ -189,7 +189,7 @@ export const WalletFundSetup: React.FC = () => {
                       />
                     </BlockSection>
                     <BlockSection>
-                      <SectionTitle>Supported exchanges</SectionTitle>
+                      <SectionTitle>Supported Exchanges</SectionTitle>
                       <NotificationBar kind="neutral">
                         <NotificationContent>
                           Exchanges can be set up now and you can add more exchanges later.
@@ -198,7 +198,7 @@ export const WalletFundSetup: React.FC = () => {
                       <Checkboxes options={exchangeOptions} name="exchanges" />
                     </BlockSection>
                     <BlockSection>
-                      <SectionTitle>Allowed investment assets</SectionTitle>
+                      <SectionTitle>Allowed Investment Assets</SectionTitle>
                       <NotificationBar kind="neutral">
                         <NotificationContent>
                           Investment assets can be set up now and they can be changed later.
@@ -229,7 +229,7 @@ export const WalletFundSetup: React.FC = () => {
                       </p>
                       <Checkbox name="termsAndConditions" label="I accept the terms and conditions" />
                       <BlockActions>
-                        <Button type="submit">Create a fund</Button>
+                        <Button type="submit">Create a Fund</Button>
                       </BlockActions>
                     </BlockSection>
                   </form>

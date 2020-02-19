@@ -17,7 +17,7 @@ export const FundNavigation: React.FC<FundNavigationProps> = ({ address }) => {
             Overview
           </TabLink>
           <TabLink to={`/fund/${address}/invest`} exact={true} activeClassName="active">
-            Invest &amp; redeem
+            Invest &amp; Redeem
           </TabLink>
           <TabLink to={`/fund/${address}/trade`} exact={true} activeClassName="active">
             Trade

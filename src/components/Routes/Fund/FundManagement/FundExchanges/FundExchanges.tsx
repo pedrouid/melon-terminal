@@ -86,14 +86,14 @@ export const FundExchanges: React.FC<ExchangesProps> = ({ address }) => {
     <Block>
       <FormContext {...form}>
         <form onSubmit={submit}>
-          <SectionTitle>Define allowed exchanges</SectionTitle>
+          <SectionTitle>Define Allowed Exchanges</SectionTitle>
           <p>As a fund manager, you can trade on any of the exchanges selected below.</p>
 
           <Checkboxes options={options} name="exchanges" />
 
           <BlockActions>
             <Button type="button" onClick={submit}>
-              Set allowed exchanges
+              Set Allowed Exchanges
             </Button>
           </BlockActions>
         </form>

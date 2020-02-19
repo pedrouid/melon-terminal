@@ -54,7 +54,7 @@ export const FundMelonEngineTrading: React.FC<FundMelonEngineTradingProps> = pro
           ? ''
           : valid
           ? `Buy ${value.toFixed(4)} ${props.maker.symbol} at ${price.toFixed(4)} ${props.maker.symbol}`
-          : 'No offer'}
+          : 'No Offer'}
       </Button>
       <TransactionModal transaction={transaction} />
     </>

@@ -51,7 +51,7 @@ export const Shutdown: React.FC<ShutdownProps> = ({ address }) => {
 
   return (
     <Block>
-      <SectionTitle>Shut down fund</SectionTitle>
+      <SectionTitle>Shut Down Fund</SectionTitle>
       <p>
         Shutting down your fund closes the fund for new investors and trades will no longer be possible. Investors can
         still redeem their shares whenever they want.
@@ -59,7 +59,7 @@ export const Shutdown: React.FC<ShutdownProps> = ({ address }) => {
       {info?.address ? (
         <BlockActions>
           <Button type="submit" kind="danger" onClick={() => submit()}>
-            Shutdown fund
+            Shut Down Fund
           </Button>
         </BlockActions>
       ) : (

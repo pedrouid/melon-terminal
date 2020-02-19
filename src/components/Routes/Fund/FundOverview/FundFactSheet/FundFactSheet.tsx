@@ -116,7 +116,7 @@ export const FundFactSheet: React.FC<FundFactSheetProps> = ({ address }) => {
   return (
     <Dictionary>
       <SectionTitle>
-        <span>Fund factsheet</span>
+        <span>Fund Factsheet</span>
         <TwitterLink
           text={
             isManager

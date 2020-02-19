@@ -162,7 +162,7 @@ export const FundRequestForQuoteOffer: React.FC<FundRequestForQuoteOfferProps> =
           ? ''
           : ready
           ? `Buy ${state.price.multipliedBy(props.amount!).toFixed(4)} ${props.symbol}`
-          : 'No offer'}
+          : 'No Offer'}
       </Button>
 
       <TransactionModal transaction={transaction}>

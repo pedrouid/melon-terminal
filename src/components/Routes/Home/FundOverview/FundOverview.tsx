@@ -216,10 +216,10 @@ export const FundOverview: React.FC = () => {
   return (
     <Block>
       <SectionTitle>
-        <span>Melon fund universe</span>
+        <span>Melon Fund Universe</span>
         {!account.loading && !account.fund && account.address && (
           <Button kind="secondary">
-            <Link to="/wallet/setup">Create your own Melon fund</Link>
+            <Link to="/wallet/setup">Create Your Own Melon Fund</Link>
           </Button>
         )}
       </SectionTitle>

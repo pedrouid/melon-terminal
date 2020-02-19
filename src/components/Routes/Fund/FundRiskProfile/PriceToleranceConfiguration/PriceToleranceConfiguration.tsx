@@ -50,12 +50,12 @@ export const PriceToleranceConfiguration: React.FC<PriceToleranceConfigurationPr
 
   return (
     <>
-      <SectionTitle>Configure price tolerance policy</SectionTitle>
+      <SectionTitle>Configure Price Tolerance Policy</SectionTitle>
       <FormContext {...form}>
         <form onSubmit={submit}>
           <Input name="priceTolerance" label="Price tolerance (%)" type="number" step="any" id="priceTolerance" />
           <BlockActions>
-            <Button type="submit">Add price tolerance policy</Button>
+            <Button type="submit">Add Price Tolerance Policy</Button>
           </BlockActions>
         </form>
       </FormContext>

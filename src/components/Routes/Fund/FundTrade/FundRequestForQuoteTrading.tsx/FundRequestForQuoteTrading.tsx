@@ -174,7 +174,7 @@ export const FundRequestForQuoteTrading: React.FC<FundRequestForQuoteTradingProp
 
   return (
     <Block>
-      <SectionTitle>Request for quote on 0x</SectionTitle>
+      <SectionTitle>Request a Quote on 0x</SectionTitle>
 
       <FormContext {...form}>
         <Grid>
@@ -195,7 +195,7 @@ export const FundRequestForQuoteTrading: React.FC<FundRequestForQuoteTradingProp
 
           <GridRow>
             <GridCol md={6}>
-              <SectionTitle>{`Specify an amount of ${takerAsset?.symbol} to sell`}</SectionTitle>
+              <SectionTitle>{`Specify an amount of ${takerAsset?.symbol} to sell `}</SectionTitle>
               <Input type="number" step="any" name="takerQuantity" disabled={loading} label="Quantity" />
             </GridCol>
 

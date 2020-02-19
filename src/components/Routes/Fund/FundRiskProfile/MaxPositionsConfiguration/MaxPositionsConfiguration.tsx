@@ -50,13 +50,13 @@ export const MaxPositionsConfiguration: React.FC<MaxPositionsConfigurationProps>
 
   return (
     <>
-      <SectionTitle>Configure max positions policy</SectionTitle>
+      <SectionTitle>Configure Max Positions Policy</SectionTitle>
 
       <FormContext {...form}>
         <form onSubmit={submit}>
           <Input name="maxPositions" label="Maximum number of positions" type="number" step={1} id="maxPositions" />
           <BlockActions>
-            <Button type="submit">Add max positions policy</Button>
+            <Button type="submit">Add Max Positions Policy</Button>
           </BlockActions>
         </form>
       </FormContext>

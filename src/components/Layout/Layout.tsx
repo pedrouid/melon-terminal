@@ -60,7 +60,7 @@ export const Layout: React.FC = ({ children }) => {
               {!account.loading && account.fund && (
                 <ConnectionInfoItem>
                   <NavLink to={`/fund/${account.fund}`} title={account.fund} activeClassName="active">
-                    My fund
+                    My Fund
                   </NavLink>
                 </ConnectionInfoItem>
               )}
@@ -68,7 +68,7 @@ export const Layout: React.FC = ({ children }) => {
               {!account.loading && !account.fund && account.address && (
                 <ConnectionInfoItem>
                   <NavLink to={`/wallet/setup`} title={account.fund} activeClassName="active" exact={true}>
-                    Create a fund
+                    Create a Fund
                   </NavLink>
                 </ConnectionInfoItem>
               )}
@@ -76,7 +76,7 @@ export const Layout: React.FC = ({ children }) => {
               {account.address && (
                 <ConnectionInfoItem>
                   <NavLink to="/wallet" title={account.address} activeClassName="active" exact={true}>
-                    My wallet
+                    My Wallet
                   </NavLink>
                 </ConnectionInfoItem>
               )}
@@ -99,17 +99,17 @@ export const Layout: React.FC = ({ children }) => {
             </FooterItem>
             <FooterItem>
               <a href="https://github.com/avantgardefinance/interface/issues" target="_blank">
-                Report an issue
+                Report an Issue
               </a>
             </FooterItem>
 
             {graphiql && (
               <>
                 <FooterItem>
-                  <Link to="/playground/onchain">Network explorer</Link>
+                  <Link to="/playground/onchain">Network Explorer</Link>
                 </FooterItem>
                 <FooterItem>
-                  <Link to="/playground/thegraph">Graph explorer</Link>
+                  <Link to="/playground/thegraph">Graph Explorer</Link>
                 </FooterItem>
               </>
             )}

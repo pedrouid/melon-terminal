@@ -52,7 +52,7 @@ export const ClaimFees: React.FC<ClaimFeesProps> = ({ address }) => {
 
   return (
     <Block>
-      <SectionTitle>Claim fees</SectionTitle>
+      <SectionTitle>Claim Fees</SectionTitle>
 
       <p>Claim management fees and performance fees for the fund.</p>
 
@@ -71,10 +71,10 @@ export const ClaimFees: React.FC<ClaimFeesProps> = ({ address }) => {
 
       <BlockActions>
         <Button type="submit" onClick={() => submitAllFees()} disabled={!feeManagerInfo?.performanceFee?.canUpdate}>
-          Claim all fees
+          Claim All Fees
         </Button>
         <Button type="submit" onClick={() => submitManagementFees()}>
-          Claim management fees
+          Claim Management Fees
         </Button>
       </BlockActions>
 

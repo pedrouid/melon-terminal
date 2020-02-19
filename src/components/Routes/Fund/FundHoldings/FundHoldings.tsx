@@ -30,7 +30,7 @@ export const FundHoldings: React.FC<FundHoldingsProps> = ({ address }) => {
   if (query.loading) {
     return (
       <Block>
-        <SectionTitle>Portfolio holdings</SectionTitle>
+        <SectionTitle>Portfolio Holdings</SectionTitle>
         <Spinner />
       </Block>
     );
@@ -42,7 +42,7 @@ export const FundHoldings: React.FC<FundHoldingsProps> = ({ address }) => {
 
   return (
     <Block>
-      <SectionTitle>Portfolio holdings</SectionTitle>
+      <SectionTitle>Portfolio Holdings</SectionTitle>
       <ScrollableTable>
         <Table>
           <thead>

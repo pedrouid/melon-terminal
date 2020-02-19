@@ -103,7 +103,7 @@ export const FundLiquidityProviderTrading: React.FC<FundLiquidityProviderTrading
 
   return (
     <Block>
-      <SectionTitle>Liquidity pools trading</SectionTitle>
+      <SectionTitle>Liquidity Pool Trading</SectionTitle>
 
       <FormContext {...form}>
         <Grid>
@@ -127,12 +127,12 @@ export const FundLiquidityProviderTrading: React.FC<FundLiquidityProviderTrading
 
           <GridRow>
             <GridCol md={6}>
-              <SectionTitle>{`Specify an amount of ${takerAsset.symbol} to sell`}</SectionTitle>
+              <SectionTitle>{`Specify an amount of ${takerAsset.symbol} to sell `}</SectionTitle>
               <Input type="number" step="any" name="takerQuantity" label="Quantity" />
             </GridCol>
 
             <GridCol md={6}>
-              <SectionTitle>Choose your exchange and swap</SectionTitle>
+              <SectionTitle>Choose your pool and swap</SectionTitle>
 
               <Grid noGap={true}>
                 {!!(exchanges && exchanges.length) &&

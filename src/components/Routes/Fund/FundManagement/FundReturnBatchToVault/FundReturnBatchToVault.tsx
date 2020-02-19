@@ -32,14 +32,15 @@ export const ReturnBatchToVault: React.FC<ReturnBatchToVaultProps> = ({ address 
 
   return (
     <Block>
-      <SectionTitle>Move assets to vault</SectionTitle>
+      <SectionTitle>Move Assets to Vault</SectionTitle>
       <p>
         Some of your fund's assets have not been returned to the vault contract. This can happen when trading. In order
         to be able to use all your assets for trading, you have to move the assets back to vault
       </p>
+
       <BlockActions>
         <Button type="submit" kind="success" onClick={() => submit()}>
-          Move assets to vault
+          Move Assets to Vault
         </Button>
       </BlockActions>
 

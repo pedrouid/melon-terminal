@@ -57,12 +57,12 @@ export const UserWhitelistConfiguration: React.FC<UserWhitelistConfigurationProp
 
   return (
     <>
-      <SectionTitle>Configure user whitelist policy</SectionTitle>
+      <SectionTitle>Configure User Whitelist Policy</SectionTitle>
       <FormContext {...form}>
         <form onSubmit={submit}>
           <Textarea name="userWhitelist" placeholder={`${zeroAddress}\n${zeroAddress}`} id="userWhitelist" />
           <BlockActions>
-            <Button type="submit">Add user whitelist policy</Button>
+            <Button type="submit">Add User Whitelist Policy</Button>
           </BlockActions>
         </form>
       </FormContext>

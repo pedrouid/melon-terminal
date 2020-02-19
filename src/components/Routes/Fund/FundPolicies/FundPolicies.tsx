@@ -82,7 +82,7 @@ export const FundPolicies: React.FC<FundPoliciesProps> = ({ address }) => {
   if (query.loading) {
     return (
       <Block>
-        <SectionTitle>Fund ruleset</SectionTitle>
+        <SectionTitle>Fund Ruleset</SectionTitle>
         <Spinner />
       </Block>
     );
@@ -92,7 +92,7 @@ export const FundPolicies: React.FC<FundPoliciesProps> = ({ address }) => {
 
   return (
     <Block>
-      <SectionTitle>Fund ruleset</SectionTitle>
+      <SectionTitle>Fund Ruleset</SectionTitle>
       {policies && policies.length ? (
         <ScrollableTable>
           <Table>

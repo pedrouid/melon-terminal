@@ -109,7 +109,7 @@ export const WalletOverview: React.FC = () => {
       <GridRow>
         <GridCol xs={12} sm={12}>
           <Block>
-            <SectionTitle>Managed funds</SectionTitle>
+            <SectionTitle>Managed Funds</SectionTitle>
             {query.loading && <Spinner />}
 
             {!query.loading && (
@@ -128,7 +128,7 @@ export const WalletOverview: React.FC = () => {
       <GridRow>
         <GridCol xs={12} sm={12}>
           <Block>
-            <SectionTitle>Funds with owned shares</SectionTitle>
+            <SectionTitle>Funds with Owned Shares</SectionTitle>
             {query.loading && <Spinner />}
 
             {!query.loading && (
@@ -147,7 +147,7 @@ export const WalletOverview: React.FC = () => {
       <GridRow>
         <GridCol xs={12} sm={12}>
           <Block>
-            <SectionTitle>Pending investment requests</SectionTitle>
+            <SectionTitle>Pending Investment Requests</SectionTitle>
             {query.loading && <Spinner />}
 
             {!query.loading && (

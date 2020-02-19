@@ -19,15 +19,15 @@ export const FundContracts: React.FC<FundContractsProps> = ({ address }) => {
 
   const contracts = [
     { name: 'Accounting', field: 'accounting' },
-    { name: 'Fee manager', field: 'feeManager' },
+    { name: 'Fee Manager', field: 'feeManager' },
     { name: 'Participation', field: 'participation' },
-    { name: 'Policy manager', field: 'policyManager' },
+    { name: 'Policy Manager', field: 'policyManager' },
     { name: 'Shares', field: 'shares' },
     { name: 'Trading', field: 'trading' },
     { name: 'Vault', field: 'vault' },
     { name: 'Registry', field: 'registry' },
     { name: 'Version', field: 'version' },
-    { name: 'Price source', field: 'priceSource' },
+    { name: 'Price Source', field: 'priceSource' },
   ];
 
   const routes = fund?.routes;
@@ -40,7 +40,7 @@ export const FundContracts: React.FC<FundContractsProps> = ({ address }) => {
 
   return (
     <Dictionary>
-      <SectionTitle>Fund contracts</SectionTitle>
+      <SectionTitle>Fund Contracts</SectionTitle>
       {query.loading && <Spinner />}
 
       {!query.loading &&

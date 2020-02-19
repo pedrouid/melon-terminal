@@ -16,7 +16,7 @@ export const WalletOverviewAccountBalance: React.FC<WalletOverviewAccountBalance
   if (query.loading) {
     return (
       <Block>
-        <SectionTitle>Account balances</SectionTitle>
+        <SectionTitle>Account Balances</SectionTitle>
         <Spinner />
       </Block>
     );
@@ -24,7 +24,7 @@ export const WalletOverviewAccountBalance: React.FC<WalletOverviewAccountBalance
 
   return (
     <Block>
-      <SectionTitle>Account balances</SectionTitle>
+      <SectionTitle>Account Balances</SectionTitle>
       {balances.map(token => (
         <S.Balance key={token.symbol}>
           <TokenValue value={token.balance} decimals={token.decimals} symbol={token.symbol} />

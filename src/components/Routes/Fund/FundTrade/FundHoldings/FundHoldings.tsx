@@ -16,7 +16,7 @@ export const FundHoldings: React.FC<FundHoldingsProps> = ({ address }) => {
   if (query.loading) {
     return (
       <Block>
-        <SectionTitle>Portfolio holdings</SectionTitle>
+        <SectionTitle>Portfolio Holdings</SectionTitle>
         <Spinner />
       </Block>
     );
@@ -24,7 +24,7 @@ export const FundHoldings: React.FC<FundHoldingsProps> = ({ address }) => {
 
   return (
     <Block>
-      <SectionTitle>Portfolio holdings</SectionTitle>
+      <SectionTitle>Portfolio Holdings</SectionTitle>
       {holdings.map((holding, key) => (
         <S.Balance key={key}>
           <TokenValue value={holding.amount} decimals={holding.token!.decimals!} symbol={holding.token?.symbol} />

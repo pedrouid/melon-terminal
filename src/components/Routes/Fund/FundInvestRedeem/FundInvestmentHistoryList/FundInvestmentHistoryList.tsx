@@ -30,7 +30,7 @@ export const FundInvestmentHistoryList: React.FC<FundInvestmentHistoryListProps>
   if (fundInvestmentQuery.loading) {
     return (
       <Block>
-        <SectionTitle>Investment history</SectionTitle>
+        <SectionTitle>Investment History</SectionTitle>
         <Spinner />
       </Block>
     );
@@ -39,7 +39,7 @@ export const FundInvestmentHistoryList: React.FC<FundInvestmentHistoryListProps>
   if (!fundInvestment || !fundInvestment.length) {
     return (
       <Block>
-        <SectionTitle>Investment history</SectionTitle>
+        <SectionTitle>Investment History</SectionTitle>
         <NoEntries>No entries.</NoEntries>
       </Block>
     );
@@ -47,7 +47,7 @@ export const FundInvestmentHistoryList: React.FC<FundInvestmentHistoryListProps>
 
   return (
     <Block>
-      <SectionTitle>Investment history</SectionTitle>
+      <SectionTitle>Investment History</SectionTitle>
       <ScrollableTable>
         <Table>
           <thead>

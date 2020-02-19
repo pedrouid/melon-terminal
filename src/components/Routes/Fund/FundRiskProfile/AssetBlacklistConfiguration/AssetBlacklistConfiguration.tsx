@@ -50,13 +50,13 @@ export const AssetBlacklistConfiguration: React.FC<AssetBlacklistConfigurationPr
 
   return (
     <>
-      <SectionTitle>Configure asset blacklist policy</SectionTitle>
+      <SectionTitle>Configure Asset Blacklist Policy</SectionTitle>
       <FormContext {...form}>
         <form onSubmit={submit}>
           <Checkboxes options={options} name="assetBlacklist" />
 
           <BlockActions>
-            <Button type="submit">Add asset blacklist policy</Button>
+            <Button type="submit">Add Asset Blacklist Policy</Button>
           </BlockActions>
         </form>
       </FormContext>

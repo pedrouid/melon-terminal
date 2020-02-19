@@ -113,7 +113,7 @@ export const FundKyberTrading: React.FC<FundKyberTradingProps> = props => {
         Kyber Network (1 {state.taker.symbol} = {state.rate.toFixed(4)} {state.maker.symbol})
       </Subtitle>
       <Button type="button" disabled={!ready || !props.active} loading={loading} onClick={submit}>
-        {loading ? '' : valid ? `Buy ${value.toFixed(4)} ${state.maker.symbol}` : 'No offer'}
+        {loading ? '' : valid ? `Buy ${value.toFixed(4)} ${state.maker.symbol}` : 'No Offer'}
       </Button>
 
       <TransactionModal transaction={transaction} />

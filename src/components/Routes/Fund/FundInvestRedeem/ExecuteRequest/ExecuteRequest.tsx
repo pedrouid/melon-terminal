@@ -38,7 +38,7 @@ export const ExecuteRequest = forwardRef((props: ExecuteRequestProps, ref: React
 
   return (
     <Button type="button" disabled={props.loading} onClick={() => execute()}>
-      Execute investment request
+      Execute Investment Request
     </Button>
   );
 });

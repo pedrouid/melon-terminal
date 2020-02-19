@@ -1,17 +1,17 @@
 import React from 'react';
-
 import WalletWrapEther from './WalletWrapEther/WalletWrapEther';
 import WalletUnwrapEther from './WalletUnwrapEther/WalletUnwrapEther';
-
 import { Grid, GridRow, GridCol } from '~/storybook/components/Grid/Grid';
 import { NotificationBar, NotificationContent } from '~/storybook/components/NotificationBar/NotificationBar';
+
 
 const WalletWeth: React.FC = () => {
   return (
     <>
+
       <NotificationBar kind="neutral">
         <NotificationContent>
-          The process of wrapping your Ether will get you WETH (Wrapped Ether) that you can then use to invest in a
+          The process of wrapping your Ether will get you <a href="https://weth.io/" target="blank">WETH</a> (Wrapped Ether) that you can then use to invest in a
           fund. Funds only accept investments in ERC20 tokens, so Ether needs to be wrapped to be invested in a fund.
         </NotificationContent>
       </NotificationBar>

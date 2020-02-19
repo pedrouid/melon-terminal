@@ -35,7 +35,7 @@ export const FundOrderbookTrading: React.FC<FundOrderbookTradingProps> = props =
 
   return (
     <Block>
-      <SectionTitle>Orderbook trading</SectionTitle>
+      <SectionTitle>Orderbook Trading</SectionTitle>
 
       <S.FundOrderbookTrading>
         <S.FundOrderbookForm>

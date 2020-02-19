@@ -50,13 +50,13 @@ export const AssetWhitelistConfiguration: React.FC<AssetWhitelistConfigurationPr
 
   return (
     <>
-      <SectionTitle>Configure asset whitelist policy</SectionTitle>
+      <SectionTitle>Configure Asset Whitelist Policy</SectionTitle>
       <FormContext {...form}>
         <form onSubmit={submit}>
           <Checkboxes options={options} name="assetWhitelist" />
 
           <BlockActions>
-            <Button type="submit">Add asset whitelist policy</Button>
+            <Button type="submit">Add Asset Whitelist Policy</Button>
           </BlockActions>
         </form>
       </FormContext>

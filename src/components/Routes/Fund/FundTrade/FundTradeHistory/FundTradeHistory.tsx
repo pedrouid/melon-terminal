@@ -27,7 +27,7 @@ export const FundTradeHistory: React.FC<FundTradeHistoryProps> = ({ address }) =
 
   return (
     <Block>
-      <SectionTitle>Trading history</SectionTitle>
+      <SectionTitle>Trading History</SectionTitle>
 
       {query.loading && <Spinner />}
       {!query.loading && !calls.length && <NoEntries>No entries.</NoEntries>}

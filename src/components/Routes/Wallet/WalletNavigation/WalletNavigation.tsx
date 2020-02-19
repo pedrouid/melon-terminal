@@ -17,7 +17,7 @@ export const WalletNavigation: React.FC = () => {
           </TabLink>
           {!account.fund && (
             <TabLink to={`/wallet/setup`} activeClassName="active">
-              Create a fund
+              Create a Fund
             </TabLink>
           )}
         </TabBarSection>
