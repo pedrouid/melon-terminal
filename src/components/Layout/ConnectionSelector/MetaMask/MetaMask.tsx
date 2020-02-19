@@ -1,6 +1,6 @@
 import React from 'react';
 import * as Rx from 'rxjs';
-import { map, switchMap, mapTo } from 'rxjs/operators';
+import { map, switchMap, mapTo, tap } from 'rxjs/operators';
 import { Eth } from 'web3-eth';
 import { networkFromId } from '~/utils/networkFromId';
 import {
@@ -38,6 +38,7 @@ const connect = (): Rx.Observable<ConnectionAction> => {
   );
 
   const accounts$ = Rx.concat(enable$, Rx.fromEvent<string[]>(ethereum, 'accountsChanged')).pipe(
+    tap(accounts => console.log(accounts)),
     map(accounts => accountsChanged(accounts))
   );
 
@@ -53,10 +54,10 @@ export const MetaMask: React.FC<ConnectionMethodProps> = ({ connect, disconnect,
           Connect
         </Button>
       ) : (
-        <Button length="stretch" onClick={() => disconnect()}>
-          Disconnect
+          <Button length="stretch" onClick={() => disconnect()}>
+            Disconnect
         </Button>
-      )}
+        )}
     </>
   );
 };
