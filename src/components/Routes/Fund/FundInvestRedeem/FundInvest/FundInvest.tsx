@@ -29,7 +29,7 @@ export const FundInvest: React.FC<FundInvestProps> = ({ address }) => {
   const [priceUpdate] = usePriceFeedUpdateQuery();
 
   const oneDay = 24 * 60 * 60 * 1000;
-  const nextUpdate = new Date(priceUpdate?.getTime() || 0 + oneDay);
+  const nextUpdate = new Date((priceUpdate?.getTime() || 0) + oneDay);
 
   const transactionRef = useRef<TransactionRef>();
 
@@ -129,7 +129,7 @@ export const FundInvest: React.FC<FundInvestProps> = ({ address }) => {
               Request date: {format(request?.timestamp || 0, 'yyyy-MM-dd hh:mm a')}
             </p>
 
-            <p>Wait for the excecution window to execute your investment request.</p>
+            <p>Wait for the execution window to execute your investment request.</p>
             <p>
               Execution window start: {format(nextUpdate, 'yyyy-MM-dd hh:mm a')}
               <br />
