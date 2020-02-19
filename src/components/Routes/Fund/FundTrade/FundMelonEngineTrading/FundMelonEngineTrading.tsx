@@ -10,6 +10,7 @@ import { Holding } from '@melonproject/melongql';
 import { toTokenBaseUnit } from '~/utils/toTokenBaseUnit';
 import { useAccount } from '~/hooks/useAccount';
 import { Subtitle } from '~/storybook/components/Title/Title';
+import { BlockSection } from '~/storybook/components/Block/Block';
 
 export interface FundMelonEngineTradingProps {
   trading: string;
@@ -45,12 +46,18 @@ export const FundMelonEngineTrading: React.FC<FundMelonEngineTradingProps> = pro
   };
 
   return (
-    <>
-      <Subtitle>Melon engine</Subtitle>
+    <BlockSection>
+      <Subtitle>
+        Melon Engine (1 {props.taker.symbol} = {price.toFixed(4)} {props.maker.symbol} )
+      </Subtitle>
       <Button type="button" disabled={!ready || !props.active} loading={ready} onClick={submit}>
-        {ready ? '' : valid ? `Buy ${value.toFixed(4)} ${props.maker.symbol}` : 'No offer'}
+        {ready
+          ? ''
+          : valid
+          ? `Buy ${value.toFixed(4)} ${props.maker.symbol} at ${price.toFixed(4)} ${props.maker.symbol}`
+          : 'No offer'}
       </Button>
       <TransactionModal transaction={transaction} />
-    </>
+    </BlockSection>
   );
 };

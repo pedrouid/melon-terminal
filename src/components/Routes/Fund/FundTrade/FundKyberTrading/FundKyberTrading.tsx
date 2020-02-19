@@ -19,6 +19,7 @@ import { Holding } from '@melonproject/melongql';
 import { Subtitle } from '~/storybook/components/Title/Title';
 import { Button } from '~/storybook/components/Button/Button';
 import { catchError, map, expand, switchMapTo } from 'rxjs/operators';
+import { BlockSection } from '~/storybook/components/Block/Block';
 
 export interface FundKyberTradingProps {
   trading: string;
@@ -64,7 +65,9 @@ export const FundKyberTrading: React.FC<FundKyberTradingProps> = props => {
       const srcToken = sameAddress(props.taker.address, weth.address) ? kyberEth : props.taker.address;
       const destToken = sameAddress(props.maker.address, weth.address) ? kyberEth : props.maker.address;
       const srcQty = toTokenBaseUnit(props.quantity, props.taker.decimals);
+
       const expected = await contract.getExpectedRate(srcToken, destToken, srcQty);
+
       return expected.expectedRate;
     });
 
@@ -75,8 +78,7 @@ export const FundKyberTrading: React.FC<FundKyberTradingProps> = props => {
       map(value => fromTokenBaseUnit(value, 18))
     );
 
-    const empty$ = Rx.of(new BigNumber(0));
-    const subscription = (props.active ? observable$ : empty$).subscribe(rate => {
+    const subscription = observable$.subscribe(rate => {
       setState(previous => ({
         ...previous,
         rate,
@@ -85,7 +87,7 @@ export const FundKyberTrading: React.FC<FundKyberTradingProps> = props => {
     });
 
     return () => subscription.unsubscribe();
-  }, [props.active, props.maker, props.taker, props.quantity.valueOf()]);
+  }, [props.maker, props.taker, props.quantity.valueOf()]);
 
   const valid = !state.rate.isNaN() && !state.rate.isZero();
   const value = props.quantity.multipliedBy(state.rate);
@@ -107,13 +109,15 @@ export const FundKyberTrading: React.FC<FundKyberTradingProps> = props => {
   };
 
   return (
-    <>
-      <Subtitle>Kyber network</Subtitle>
+    <BlockSection>
+      <Subtitle>
+        Kyber Network (1 {state.taker.symbol} = {state.rate.toFixed(4)} {state.maker.symbol})
+      </Subtitle>
       <Button type="button" disabled={!ready || !props.active} loading={loading} onClick={submit}>
         {loading ? '' : valid ? `Buy ${value.toFixed(4)} ${state.maker.symbol}` : 'No offer'}
       </Button>
 
       <TransactionModal transaction={transaction} />
-    </>
+    </BlockSection>
   );
 };

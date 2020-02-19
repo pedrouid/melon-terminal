@@ -19,8 +19,8 @@ import { toTokenBaseUnit } from '~/utils/toTokenBaseUnit';
 import { Holding } from '@melonproject/melongql';
 import { Subtitle } from '~/storybook/components/Title/Title';
 import { Button } from '~/storybook/components/Button/Button';
+import { BlockSection } from '~/storybook/components/Block/Block';
 import { catchError, map, switchMapTo, expand } from 'rxjs/operators';
-
 export interface FundUniswapTradingProps {
   trading: string;
   exchange: ExchangeDefinition;
@@ -97,8 +97,8 @@ export const FundUniswapTrading: React.FC<FundUniswapTradingProps> = props => {
       map(value => value.multipliedBy(new BigNumber(10).exponentiatedBy(props.taker.decimals - props.maker.decimals)))
     );
 
-    const empty$ = Rx.of(new BigNumber(0));
-    const subscription = (props.active ? observable$ : empty$).subscribe(rate => {
+
+    const subscription = observable$.subscribe(rate => {
       setState(previous => ({
         ...previous,
         rate,
@@ -129,12 +129,15 @@ export const FundUniswapTrading: React.FC<FundUniswapTradingProps> = props => {
   };
 
   return (
-    <>
-      <Subtitle>Uniswap</Subtitle>
+    <BlockSection>
+      <Subtitle>
+        Uniswap (1 {state.taker.symbol} = {state.rate.toFixed(4)} {state.maker.symbol})
+      </Subtitle>
+      
       <Button type="button" disabled={!ready || !props.active} loading={loading} onClick={submit}>
         {loading ? '' : valid ? `Buy ${value.toFixed(4)} ${state.maker.symbol}` : 'No offer'}
       </Button>
       <TransactionModal transaction={transaction} />
-    </>
+    </BlockSection>
   );
 };

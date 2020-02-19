@@ -10,10 +10,9 @@ import { Input } from '~/storybook/components/Input/Input';
 import { FundMelonEngineTrading } from '../FundMelonEngineTrading/FundMelonEngineTrading';
 import { FundKyberTrading } from '../FundKyberTrading/FundKyberTrading';
 import { FundUniswapTrading } from '../FundUniswapTrading/FundUniswapTrading';
-import { Block } from '~/storybook/components/Block/Block';
+import { Block, BlockSection, BlockActions } from '~/storybook/components/Block/Block';
 import { SectionTitle } from '~/storybook/components/Title/Title';
-import { GridRow, GridCol } from '~/storybook/components/Grid/Grid';
-import { Icons } from '~/storybook/components/Icons/Icons';
+
 import * as S from './FundLiquidityProviderTrading.styles';
 
 export interface FundLiquidityProviderTradingProps {
@@ -57,12 +56,12 @@ export const FundLiquidityProviderTrading: React.FC<FundLiquidityProviderTrading
       takerQuantity: Yup.string()
         .required('Missing sell quantity.')
         // tslint:disable-next-line
-        .test('valid-number', 'The given value is not a valid number.', function (value) {
+        .test('valid-number', 'The given value is not a valid number.', function(value) {
           const bn = new BigNumber(value);
           return !bn.isNaN() && !bn.isZero() && bn.isPositive();
         })
         // tslint:disable-next-line
-        .test('balance-too-low', 'The balance of the is lower than the provided value.', function (value) {
+        .test('balance-too-low', 'The balance of the is lower than the provided value.', function(value) {
           const holding = holdingsRef.current.find(item => sameAddress(item.token!.address, this.parent.takerAsset))!;
           const divisor = holding ? new BigNumber(10).exponentiatedBy(holding.token!.decimals!) : new BigNumber('NaN');
           const balance = holding ? holding.amount!.dividedBy(divisor) : new BigNumber('NaN');
@@ -73,7 +72,7 @@ export const FundLiquidityProviderTrading: React.FC<FundLiquidityProviderTrading
 
   useEffect(() => {
     holdingsRef.current = props.holdings;
-    form.triggerValidation().catch(() => { });
+    form.triggerValidation().catch(() => {});
   }, [props.holdings, form.formState.touched]);
 
   const makerAsset = environment.getToken(form.watch('makerAsset')!);
@@ -103,64 +102,50 @@ export const FundLiquidityProviderTrading: React.FC<FundLiquidityProviderTrading
     })
     .filter(value => !!value) as [ExchangeDefinition, React.ElementType][];
 
-  const switchDirection = () => {
-    const values = form.getValues();
-
-    form.reset({
-      ...values,
-      makerAsset: values.takerAsset,
-      takerAsset: values.makerAsset,
-    });
-  };
-
   return (
     <Block>
       <SectionTitle>Liquidity pools trading</SectionTitle>
 
       <FormContext {...form}>
-        <GridRow justify="space-between">
-          <GridCol xs={12} sm={4}>
-            <Dropdown name="takerAsset" label="Sell asset" options={options} onChange={() => form.triggerValidation().catch(() => { })} />
-          </GridCol>
 
-          <GridCol xs={12} sm={6} justify="flex-end">
-            <Input type="number" step="any" name="takerQuantity" label="Sell quantity" />
-          </GridCol>
-        </GridRow>
+        <BlockSection>
+          <SectionTitle>Choose the assets to swap:</SectionTitle>
 
-        <GridRow>
-          <GridCol xs={12} sm={4}>
-            <S.SwitchButton onClick={switchDirection}>
-              <Icons name="EXCHANGE" />
-            </S.SwitchButton>
-          </GridCol>
-        </GridRow>
+          <S.DropdownContainer>
+            <Dropdown name="takerAsset" label="Sell this asset:" options={options} />
+          </S.DropdownContainer>
 
-        <GridRow justify="space-between">
-          <GridCol xs={12} sm={4}>
-            <Dropdown name="makerAsset" label="Buy asset" options={options} onChange={() => form.triggerValidation().catch(() => { })} />
-          </GridCol>
+          <S.DropdownContainer>
+            <Dropdown name="makerAsset" label="To buy this asset:" options={options} />
+          </S.DropdownContainer>
+        </BlockSection>
 
-          <GridCol xs={12} sm={6} justify="flex-end">
-            {!!(exchanges && exchanges.length) && (
-              <GridRow>
-                {exchanges.map(([exchange, Component]) => (
-                  <GridCol key={exchange.id} xs={12} sm={Math.max(4, 12 / exchanges.length)}>
-                    <Component
-                      active={ready}
-                      trading={props.trading}
-                      holdings={props.holdings}
-                      exchange={exchange}
-                      maker={makerAsset}
-                      taker={takerAsset}
-                      quantity={takerQuantity}
-                    />
-                  </GridCol>
+        <S.optionsContainer>
+          <BlockSection>
+            <SectionTitle>{`Specify an amount of ${takerAsset.symbol} to sell: `}</SectionTitle>
+
+            <S.DropdownContainer>
+              <Input type="number" step="any" name="takerQuantity" label="Quantity" />
+            </S.DropdownContainer>
+          </BlockSection>
+          <BlockSection>
+            <SectionTitle>Choose your exchange and swap:</SectionTitle>
+            <S.ExchangeContainer>
+              {!!(exchanges && exchanges.length) &&
+                exchanges.map(([exchange, Component]) => (
+                  <Component
+                    active={ready}
+                    key={exchange.id}
+                    holdings={props.holdings}
+                    exchange={exchange}
+                    maker={makerAsset}
+                    taker={takerAsset}
+                    quantity={takerQuantity}
+                  />
                 ))}
-              </GridRow>
-            )}
-          </GridCol>
-        </GridRow>
+            </S.ExchangeContainer>
+          </BlockSection>
+        </S.optionsContainer>
       </FormContext>
     </Block>
   );
