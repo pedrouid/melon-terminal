@@ -100,27 +100,31 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
             <S.TransactionModalNetwork>{NetworkEnum[environment.network]} </S.TransactionModalNetwork>
           </S.TransactionModalTitle>
 
-          {error && !handled && (
-            <NotificationBar kind="error">
-              <NotificationContent>{error.message}</NotificationContent>
-              <NotificationContent>
-                <a href={errorReportingUri} target="_blank">
-                  Report error
-                </a>
-              </NotificationContent>
-            </NotificationBar>
-          )}
-
-          {error && handled && (
-            <NotificationBar kind="neutral">
-              <NotificationContent>{handled}</NotificationContent>
-            </NotificationBar>
-          )}
-
           <S.TransactionModalContent>
             {!estimated && !error && <Spinner />}
 
-            {finished && <NotificationBar kind="success">Transaction successful!</NotificationBar>}
+            {error && !handled && (
+              <NotificationBar kind="error">
+                <NotificationContent>{error.message}</NotificationContent>
+                <NotificationContent>
+                  <a href={errorReportingUri} target="_blank">
+                    Report error
+                  </a>
+                </NotificationContent>
+              </NotificationBar>
+            )}
+
+            {error && handled && (
+              <NotificationBar kind="neutral">
+                <NotificationContent>{handled}</NotificationContent>
+              </NotificationBar>
+            )}
+
+            {finished && (
+              <NotificationBar kind="success">
+                <NotificationContent>Transaction successful!</NotificationContent>
+              </NotificationBar>
+            )}
 
             {estimated && !finished && !handled && (
               <ProgressBar step={currentStep} loading={loadingStep(state.progress)}>

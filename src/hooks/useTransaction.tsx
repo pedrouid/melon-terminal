@@ -448,8 +448,8 @@ export function useTransaction(environment: DeployedEnvironment, options?: Trans
       });
 
       await refetch(receipt.blockNumber);
-      await (options?.onFinish && options.onFinish(receipt));
       executionFinished(dispatch, receipt);
+      await (options?.onFinish && options.onFinish(receipt));
     } catch (error) {
       // post-error validation
       await refetch(error.blockNumber);
