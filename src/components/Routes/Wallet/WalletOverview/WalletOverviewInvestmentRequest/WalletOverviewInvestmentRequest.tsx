@@ -16,7 +16,13 @@ export const WalletOverviewInvestmentRequest: React.FC<InvestmentRequest> = prop
   const account = useAccount();
   const [status, query] = useInvestmentRequestStatusQuery(props.account!, props.address);
 
-  const transaction = useTransaction(environment);
+  const transaction = useTransaction(environment, {
+    handleError: (error, validation) => {
+      if (validation?.name === 'NoInvestmentRequestError') {
+        return 'Your investment request was already successfully executed by someone else.';
+      }
+    },
+  });
 
   const execute = () => {
     const contract = new Participation(environment, status?.address!);
