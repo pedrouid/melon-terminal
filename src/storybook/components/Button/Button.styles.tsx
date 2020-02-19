@@ -78,8 +78,8 @@ export const Button = styled.button<ButtonProps>`
       height: 32px;
     `}
     ${props =>
-    props.length === 'stretch' &&
-    css`
+      props.length === 'stretch' &&
+      css`
         width: 100%;
       `}
   & + & {

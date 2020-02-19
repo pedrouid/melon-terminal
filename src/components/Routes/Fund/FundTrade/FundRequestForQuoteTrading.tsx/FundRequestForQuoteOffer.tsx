@@ -27,11 +27,11 @@ export interface FundRequestForQuoteOfferProps {
 
 export const FundRequestForQuoteOffer: React.FC<FundRequestForQuoteOfferProps> = props => {
   const [quote, setQuote] = useState<{
-    offer: SignedOrder,
-    taker: TokenDefinition,
-    maker: TokenDefinition,
-    price: BigNumber,
-    amount: BigNumber,
+    offer: SignedOrder;
+    taker: TokenDefinition;
+    maker: TokenDefinition;
+    price: BigNumber;
+    amount: BigNumber;
   }>();
 
   const [state, setState] = useState(() => ({
@@ -161,17 +161,30 @@ export const FundRequestForQuoteOffer: React.FC<FundRequestForQuoteOfferProps> =
         {loading
           ? ''
           : ready
-            ? `Buy ${state.price.multipliedBy(props.amount!).toFixed(4)} ${props.symbol}`
-            : 'No offer'}
+          ? `Buy ${state.price.multipliedBy(props.amount!).toFixed(4)} ${props.symbol}`
+          : 'No offer'}
       </Button>
 
       <TransactionModal transaction={transaction}>
         <NotificationBar kind="neutral">
           <NotificationContent>
-            You are buying <TokenValue value={quote?.offer.makerAssetAmount} decimals={quote?.maker.decimals} symbol={quote?.maker.symbol} />{' '}
-            in exchange for <TokenValue value={quote?.offer.takerAssetAmount} decimals={quote?.taker.decimals} symbol={quote?.taker.symbol} />.<br />
-            (Rate: <TokenValue value={1} digits={0} decimals={0} symbol={quote?.taker.symbol} /> = <TokenValue value={quote?.price} decimals={0} symbol={quote?.maker.symbol} />)
-            <br /><br />
+            You are buying{' '}
+            <TokenValue
+              value={quote?.offer.makerAssetAmount}
+              decimals={quote?.maker.decimals}
+              symbol={quote?.maker.symbol}
+            />{' '}
+            in exchange for{' '}
+            <TokenValue
+              value={quote?.offer.takerAssetAmount}
+              decimals={quote?.taker.decimals}
+              symbol={quote?.taker.symbol}
+            />
+            .<br />
+            (Rate: <TokenValue value={1} digits={0} decimals={0} symbol={quote?.taker.symbol} /> ={' '}
+            <TokenValue value={quote?.price} decimals={0} symbol={quote?.maker.symbol} />)
+            <br />
+            <br />
             This quote is valid until <FormattedDate timestamp={quote?.offer?.expirationTimeSeconds} />.
           </NotificationContent>
         </NotificationBar>

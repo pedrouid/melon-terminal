@@ -147,13 +147,13 @@ export function reducer(state: ConnectionState, action: ConnectionAction): Conne
 
     case ConnectionActionType.ACCOUNTS_CHANGED: {
       const accounts = action.accounts || [];
-      const account = state.account && accounts.find(address => sameAddress(address, state.account)) || accounts[0];
+      const account = (state.account && accounts.find(address => sameAddress(address, state.account))) || accounts[0];
       return { ...state, account, accounts };
     }
 
     case ConnectionActionType.CONNECTION_ESTABLISHED: {
       const accounts = action.accounts || [];
-      const account = state.account && accounts.find(address => sameAddress(address, state.account)) || accounts[0];
+      const account = (state.account && accounts.find(address => sameAddress(address, state.account))) || accounts[0];
       return { ...state, account, network: action.network, accounts: action.accounts, eth: action.eth };
     }
 

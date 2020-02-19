@@ -6,7 +6,7 @@ export interface GridProps {
   noGap?: boolean;
 }
 
-export const Grid = styled(Container) <GridProps>`
+export const Grid = styled(Container)<GridProps>`
   width: 100%;
   ${props => !props.noGap && `margin: ${props.theme.spaceUnits.l} auto;`}
 `;
@@ -15,7 +15,7 @@ export interface GridRowProps {
   noGap?: boolean;
 }
 
-export const GridRow = styled(Row) <GridRowProps>`
+export const GridRow = styled(Row)<GridRowProps>`
   ${props =>
     !props.noGap &&
     `

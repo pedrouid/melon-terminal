@@ -103,12 +103,12 @@ export const FundRequestForQuoteTrading: React.FC<FundRequestForQuoteTradingProp
       takerQuantity: Yup.string()
         .required('Missing sell quantity.')
         // tslint:disable-next-line
-        .test('valid-number', 'The given value is not a valid number.', function (value) {
+        .test('valid-number', 'The given value is not a valid number.', function(value) {
           const bn = new BigNumber(value);
           return !bn.isNaN() && !bn.isZero() && bn.isPositive();
         })
         // tslint:disable-next-line
-        .test('balance-too-low', 'The balance of the fund is lower than the provided value.', function (value) {
+        .test('balance-too-low', 'The balance of the fund is lower than the provided value.', function(value) {
           const holding = holdingsRef.current.find(item => sameAddress(item.token!.address, this.parent.takerAsset))!;
           const divisor = holding ? new BigNumber(10).exponentiatedBy(holding.token!.decimals!) : new BigNumber('NaN');
           const balance = holding ? holding.amount!.dividedBy(divisor) : new BigNumber('NaN');
@@ -119,7 +119,7 @@ export const FundRequestForQuoteTrading: React.FC<FundRequestForQuoteTradingProp
 
   useEffect(() => {
     holdingsRef.current = props.holdings;
-    form.triggerValidation().catch(() => { });
+    form.triggerValidation().catch(() => {});
   }, [props.holdings, form.formState.touched]);
 
   const takerAsset = environment.getToken(form.watch('takerAsset') ?? '');
@@ -139,7 +139,7 @@ export const FundRequestForQuoteTrading: React.FC<FundRequestForQuoteTradingProp
       form.setValue('takerAsset', takerCandidates[0]?.address);
     }
 
-    form.triggerValidation().catch(() => { });
+    form.triggerValidation().catch(() => {});
   }, [takerCandidates, takerAsset]);
 
   useEffect(() => {
@@ -147,7 +147,7 @@ export const FundRequestForQuoteTrading: React.FC<FundRequestForQuoteTradingProp
       form.setValue('makerAsset', makerCandidates[0]?.address);
     }
 
-    form.triggerValidation().catch(() => { });
+    form.triggerValidation().catch(() => {});
   }, [makerCandidates, makerAsset]);
 
   const takerOptions = takerCandidates.map(token => ({
@@ -213,7 +213,7 @@ export const FundRequestForQuoteTrading: React.FC<FundRequestForQuoteTradingProp
             </GridCol>
           </GridRow>
         </Grid>
-      </FormContext >
-    </Block >
+      </FormContext>
+    </Block>
   );
 };
