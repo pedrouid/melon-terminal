@@ -38,8 +38,6 @@ export const FundTradeHistory: React.FC<FundTradeHistoryProps> = ({ address }) =
               <HeaderRow>
                 <HeaderCell>Time</HeaderCell>
                 <HeaderCell>Exchange</HeaderCell>
-                <HeaderCell>Buy asset</HeaderCell>
-                <HeaderCell>Sell asset</HeaderCell>
                 <HeaderCellRightAlign>Buy quantity</HeaderCellRightAlign>
                 <HeaderCellRightAlign>Sell quantity</HeaderCellRightAlign>
                 <HeaderCell>Order type</HeaderCell>
@@ -52,8 +50,6 @@ export const FundTradeHistory: React.FC<FundTradeHistoryProps> = ({ address }) =
                     <FormattedDate timestamp={call.timestamp} />
                   </BodyCell>
                   <BodyCell>{call.exchange?.name}</BodyCell>
-                  <BodyCell>{call.buyAsset?.symbol}</BodyCell>
-                  <BodyCell>{call.sellAsset?.symbol}</BodyCell>
                   <BodyCellRightAlign>
                     <FormattedNumber tooltip={true} value={call.buyQuantity} suffix={call.buyAsset?.symbol} />
                   </BodyCellRightAlign>
