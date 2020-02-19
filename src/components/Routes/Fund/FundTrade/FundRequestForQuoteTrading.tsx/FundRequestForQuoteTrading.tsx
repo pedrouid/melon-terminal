@@ -9,8 +9,6 @@ import { Dropdown } from '~/storybook/components/Dropdown/Dropdown';
 import { Input } from '~/storybook/components/Input/Input';
 import { Block, BlockSection } from '~/storybook/components/Block/Block';
 import { SectionTitle } from '~/storybook/components/Title/Title';
-import { GridRow, GridCol } from '~/storybook/components/Grid/Grid';
-import { Icons } from '~/storybook/components/Icons/Icons';
 import { FundRequestForQuoteOffer } from './FundRequestForQuoteOffer';
 import * as S from './FundRequestForQuoteTrading.styles';
 

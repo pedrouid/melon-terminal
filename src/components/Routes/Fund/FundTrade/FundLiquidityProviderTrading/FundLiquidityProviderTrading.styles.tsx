@@ -15,13 +15,12 @@ export const DropdownContainer = styled.div`
 `;
 
 export const ExchangeContainer = styled.div`
-  display: flex:
+  display: flex;
   flex-direction: row;
   justify-content: space-around;
-  
 `;
 
-export const optionsContainer = styled(BlockActions)`
+export const OptionsContainer = styled(BlockActions)`
   flex-direction: column;
   @media (${props => props.theme.mediaQueries.m}) {
     flex-direction: row;

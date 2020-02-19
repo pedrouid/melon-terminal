@@ -10,7 +10,7 @@ import { Input } from '~/storybook/components/Input/Input';
 import { FundMelonEngineTrading } from '../FundMelonEngineTrading/FundMelonEngineTrading';
 import { FundKyberTrading } from '../FundKyberTrading/FundKyberTrading';
 import { FundUniswapTrading } from '../FundUniswapTrading/FundUniswapTrading';
-import { Block, BlockSection, BlockActions } from '~/storybook/components/Block/Block';
+import { Block, BlockSection } from '~/storybook/components/Block/Block';
 import { SectionTitle } from '~/storybook/components/Title/Title';
 
 import * as S from './FundLiquidityProviderTrading.styles';
@@ -119,7 +119,7 @@ export const FundLiquidityProviderTrading: React.FC<FundLiquidityProviderTrading
           </S.DropdownContainer>
         </BlockSection>
 
-        <S.optionsContainer>
+        <S.OptionsContainer>
           <BlockSection>
             <SectionTitle>{`Specify an amount of ${takerAsset.symbol} to sell: `}</SectionTitle>
 
@@ -144,7 +144,7 @@ export const FundLiquidityProviderTrading: React.FC<FundLiquidityProviderTrading
                 ))}
             </S.ExchangeContainer>
           </BlockSection>
-        </S.optionsContainer>
+        </S.OptionsContainer>
       </FormContext>
     </Block>
   );
