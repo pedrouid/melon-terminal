@@ -160,6 +160,10 @@ export interface FundPerformanceQueryResult {
   assets: AssetPerformance[];
 }
 
+export interface AssetReturnObject {
+  [symbol: string]: AssetCalculatedReturns;
+}
+
 export const useFundPerformanceQuery = (address: string, symbols: string[]) => {
   const context = useFund()!;
 
@@ -175,7 +179,7 @@ export const useFundPerformanceQuery = (address: string, symbols: string[]) => {
   }, []);
 
   const options = {
-    skip: !context.creationTime,
+    skip: !context.creationTime || symbols.length === 0,
     variables: {
       ...args,
       symbols,
@@ -194,7 +198,7 @@ export const useFundPerformanceQuery = (address: string, symbols: string[]) => {
   }, [result.data?.fund, context.name]);
 
   const assets = useMemo(() => {
-    return result.data?.assets ? result.data?.assets.map(item => computeAssetBenchmarkData(item)) : undefined;
+    return result.data?.assets ? assembleAssetReturnObject(result.data?.assets) : undefined;
   }, [result.data?.assets]);
 
   return [fund, assets, result] as [typeof fund, typeof assets, typeof result];
@@ -255,4 +259,12 @@ function computeAssetBenchmarkData(input: AssetPerformance): AssetCalculatedRetu
     oneYearReturn: calculateReturn(data.currentPx, data.oneYearBackPx),
     returnSinceInception: calculateReturn(data.currentPx, data.inceptionDatePx),
   };
+}
+
+function assembleAssetReturnObject(input: AssetPerformance[]): AssetReturnObject {
+  const returnObject: AssetReturnObject = input.reduce((carry, asset) => {
+    return { ...carry, [asset.symbol]: computeAssetBenchmarkData(asset) };
+  }, {});
+
+  return returnObject as AssetReturnObject;
 }

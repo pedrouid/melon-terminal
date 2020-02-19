@@ -2,7 +2,7 @@ import styled, { css } from 'styled-components';
 
 export interface ButtonProps {
   kind?: 'secondary' | 'warning' | 'danger' | 'success';
-  size?: 'large' | 'small';
+  size?: 'large' | 'small' | 'extrasmall';
   length?: 'stretch';
   disabled?: boolean;
   loading?: boolean;
@@ -77,6 +77,11 @@ export const Button = styled.button<ButtonProps>`
     css`
       height: 32px;
     `}
+    ${props =>
+      props.size === 'extrasmall' &&
+      css`
+        height: 24px;
+      `}
     ${props =>
       props.length === 'stretch' &&
       css`

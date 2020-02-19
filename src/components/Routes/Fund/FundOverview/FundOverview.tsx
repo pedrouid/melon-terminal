@@ -13,16 +13,16 @@ export interface FundOverviewProps {
 export const FundOverview: React.FC<FundOverviewProps> = ({ address }) => (
   <Grid>
     <GridRow>
-      <GridCol>
-        <FundPerformanceTable address={address} />
-      </GridCol>
-    </GridRow>
-    <GridRow>
       <GridCol xs={12} sm={5}>
         <FundFactSheet address={address} />
       </GridCol>
       <GridCol xs={12} sm={7}>
         <FundHoldings address={address} />
+      </GridCol>
+    </GridRow>
+    <GridRow>
+      <GridCol>
+        <FundPerformanceTable address={address} />
       </GridCol>
     </GridRow>
     <GridRow>
