@@ -151,6 +151,7 @@ function reducer(state: TransactionState, action: TransactionAction): Transactio
         transaction: action.transaction,
         name: action.name,
         error: undefined,
+        handled: undefined,
         hash: undefined,
         receipt: undefined,
         defaultGasPrice: undefined,
@@ -166,6 +167,7 @@ function reducer(state: TransactionState, action: TransactionAction): Transactio
         transaction: undefined,
         name: undefined,
         error: undefined,
+        handled: undefined,
         hash: undefined,
         receipt: undefined,
         defaultGasPrice: undefined,
@@ -187,6 +189,7 @@ function reducer(state: TransactionState, action: TransactionAction): Transactio
         progress: TransactionProgress.VALIDATION_PENDING,
         loading: true,
         error: undefined,
+        handled: undefined,
       };
     }
 
@@ -196,6 +199,7 @@ function reducer(state: TransactionState, action: TransactionAction): Transactio
         progress: TransactionProgress.VALIDATION_ERROR,
         loading: false,
         error: action.error,
+        handled: action.handled,
       };
     }
 
@@ -241,6 +245,7 @@ function reducer(state: TransactionState, action: TransactionAction): Transactio
         sendOptions: action.sendOptions,
         loading: true,
         error: undefined,
+        handled: undefined,
         hash: undefined,
       };
     }
@@ -367,6 +372,7 @@ export function useTransaction(environment: DeployedEnvironment, options?: Trans
     hash: undefined,
     receipt: undefined,
     error: undefined,
+    handled: undefined,
     loading: false,
   } as TransactionState);
 
