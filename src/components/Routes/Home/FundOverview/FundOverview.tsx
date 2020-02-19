@@ -193,7 +193,7 @@ export const FundOverview: React.FC = () => {
   if (query.loading) {
     return (
       <Block>
-        <SectionTitle>Melon fund universe</SectionTitle>
+        <SectionTitle>Melon Fund Universe</SectionTitle>
         <Spinner />
       </Block>
     );

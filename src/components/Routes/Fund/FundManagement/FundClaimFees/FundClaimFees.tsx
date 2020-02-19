@@ -44,7 +44,7 @@ export const ClaimFees: React.FC<ClaimFeesProps> = ({ address }) => {
   if (query.loading) {
     return (
       <Block>
-        <SectionTitle>Claim fees</SectionTitle>
+        <SectionTitle>Claim Fees</SectionTitle>
         <Spinner />
       </Block>
     );

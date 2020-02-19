@@ -56,7 +56,7 @@ export const FundExchanges: React.FC<ExchangesProps> = ({ address }) => {
   if (query.loading) {
     return (
       <Block>
-        <SectionTitle>Define allowed exchanges</SectionTitle>
+        <SectionTitle>Define Allowed Exchanges</SectionTitle>
         <Spinner />
       </Block>
     );

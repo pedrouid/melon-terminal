@@ -155,7 +155,7 @@ export const FundRequestForQuoteOffer: React.FC<FundRequestForQuoteOfferProps> =
       <Subtitle>
         {props.market
           ? `Rate: (1 ${props.market?.split('-')[0]} = ${state.price.toFixed(4)} ${props.market?.split('-')[1]})`
-          : `No rate`}
+          : `No Rate`}
       </Subtitle>
       <Button type="button" disabled={!(ready && props.active)} loading={loading} onClick={submit}>
         {loading

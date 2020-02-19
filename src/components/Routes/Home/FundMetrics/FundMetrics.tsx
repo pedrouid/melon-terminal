@@ -20,7 +20,7 @@ export const FundMetrics: React.FC = () => {
   if (metricsQuery.loading || !metrics) {
     return (
       <Dictionary>
-        <SectionTitle>Network metrics</SectionTitle>
+        <SectionTitle>Network Metrics</SectionTitle>
         <Spinner />
       </Dictionary>
     );

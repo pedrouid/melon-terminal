@@ -40,7 +40,7 @@ export const FundFactSheet: React.FC<FundFactSheetProps> = ({ address }) => {
   if (!fundQuery || fundQuery.loading || !calculationsQuery || calculationsQuery.loading) {
     return (
       <Dictionary>
-        <SectionTitle>Fund factsheet</SectionTitle>
+        <SectionTitle>Fund Factsheet</SectionTitle>
         <Spinner />
       </Dictionary>
     );
