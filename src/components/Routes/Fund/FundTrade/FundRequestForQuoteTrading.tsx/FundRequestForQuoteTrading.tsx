@@ -76,7 +76,7 @@ function useMarkets() {
         baseEntries.set(quoteToken, [current.id, 'buy']);
 
         const quoteEntries = carry.get(quoteToken) ?? new Map();
-        quoteEntries.set(baseToken, [current.id, 'sell']);
+        // quoteEntries.set(baseToken, [current.id, 'sell']);
 
         return carry.set(baseToken, baseEntries).set(quoteToken, quoteEntries);
       }, new Map<TokenDefinition, Map<TokenDefinition, [string, 'sell' | 'buy']>>());
@@ -98,8 +98,8 @@ export const FundRequestForQuoteTrading: React.FC<FundRequestForQuoteTradingProp
       takerQuantity: '1',
     },
     validationSchema: Yup.object().shape({
-      makerAsset: Yup.string().required(),
-      takerAsset: Yup.string().required(),
+      makerAsset: Yup.string().required('Missing required buy asset.'),
+      takerAsset: Yup.string().required('Missing required sell asset.'),
       takerQuantity: Yup.string()
         .required('Missing sell quantity.')
         // tslint:disable-next-line
