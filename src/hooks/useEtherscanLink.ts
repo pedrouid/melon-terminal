@@ -26,6 +26,10 @@ export const useEtherscanLink = ({ address, hash }: UseEtherscanLinkProps) => {
       return `https://kovan.etherscan.io/${link}`;
     }
 
+    if (network === NetworkEnum.RINKEBY) {
+      return `https://rinkeby.etherscan.io/${link}`;
+    }
+
     return null;
   }, [address, hash]);
 

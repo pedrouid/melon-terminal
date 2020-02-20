@@ -76,6 +76,15 @@ export const config: ConfigMap = {
       },
     },
   }),
+  ...(JSON.parse(process.env.MELON_RINKEBY) && {
+    [NetworkEnum.RINKEBY]: {
+      subgraph: process.env.MELON_RINKEBY_SUBGRAPH,
+      deployment: async () => {
+        // @ts-ignore
+        return loadDeployment(() => import('deployments/rinkeby-deployment'), process.env.MELON_RINKEBY_DEPLOYMENT);
+      },
+    },
+  }),
   ...(JSON.parse(process.env.MELON_TESTNET) && {
     [NetworkEnum.TESTNET]: {
       subgraph: process.env.MELON_TESTNET_SUBGRAPH,

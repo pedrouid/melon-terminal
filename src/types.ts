@@ -1,7 +1,8 @@
 export type Maybe<T> = T | null | undefined;
 
 export enum NetworkEnum {
-  'TESTNET' = 4,
   'MAINNET' = 1,
+  'RINKEBY' = 4,
   'KOVAN' = 42,
+  'TESTNET' = 4447,
 }

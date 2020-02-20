@@ -16,18 +16,20 @@ const {
 
 const mainnet = validateDeployment('MAINNET');
 const kovan = validateDeployment('KOVAN');
+const rinkeby = validateDeployment('RINKEBY');
 const testnet = process.env.NODE_ENV === 'development' && validateGanache();
 
 const mainnetDeploymentAlias = mainnet && deploymentAlias(process.env.MELON_MAINNET_DEPLOYMENT);
 const kovanDeploymentAlias = kovan && deploymentAlias(process.env.MELON_KOVAN_DEPLOYMENT);
+const rinkebyDeploymentAlias = rinkeby && deploymentAlias(process.env.MELON_RINKEBY_DEPLOYMENT);
 const testnetDeploymentAlias = testnet && deploymentAlias(process.env.MELON_TESTNET_DEPLOYMENT);
 const testnetAccountsAlias = testnet && deploymentAlias(process.env.MELON_TESTNET_ACCOUNTS);
 
 const root = path.resolve(__dirname, 'src');
 const empty = path.join(root, 'utils', 'emptyImport');
 
-if (!mainnet && !kovan && !testnet) {
-  throw new Error('You have to provide at least one deployment. Supported networks: MAINNET, KOVAN, TESTNET.');
+if (!mainnet && !kovan && !rinkeby && !testnet) {
+  throw new Error('You have to provide at least one deployment. Supported networks: MAINNET, KOVAN, RINKEBY, TESTNET.');
 }
 
 module.exports = override(
@@ -41,6 +43,7 @@ module.exports = override(
   addWebpackAlias({
     'deployments/mainnet-deployment': mainnetDeploymentAlias || empty,
     'deployments/kovan-deployment': kovanDeploymentAlias || empty,
+    'deployments/rinkeby-deployment': rinkebyDeploymentAlias || empty,
     'deployments/testnet-deployment': testnetDeploymentAlias || empty,
     'deployments/testnet-accounts': testnetAccountsAlias || empty,
   }),
@@ -66,11 +69,18 @@ module.exports = override(
       'process.env.MELON_DEFAULT_PROVIDER': JSON.stringify(process.env.MELON_DEFAULT_PROVIDER),
       'process.env.MELON_MAINNET': JSON.stringify(mainnet),
       'process.env.MELON_KOVAN': JSON.stringify(kovan),
+      'process.env.MELON_RINKEBY': JSON.stringify(rinkeby),
       'process.env.MELON_TESTNET': JSON.stringify(testnet),
       ...(mainnet && {
         'process.env.MELON_MAINNET_SUBGRAPH': JSON.stringify(process.env.MELON_MAINNET_SUBGRAPH),
         ...(!mainnetDeploymentAlias && {
           'process.env.MELON_MAINNET_DEPLOYMENT': JSON.stringify(process.env.MELON_MAINNET_DEPLOYMENT),
+        }),
+      }),
+      ...(rinkeby && {
+        'process.env.MELON_RINKEBY_SUBGRAPH': JSON.stringify(process.env.MELON_RINKEBY_SUBGRAPH),
+        ...(!rinkebyDeploymentAlias && {
+          'process.env.MELON_RINKEBY_DEPLOYMENT': JSON.stringify(process.env.MELON_RINKEBY_DEPLOYMENT),
         }),
       }),
       ...(kovan && {

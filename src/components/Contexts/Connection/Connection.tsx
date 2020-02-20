@@ -151,6 +151,14 @@ export function reducer(state: ConnectionState, action: ConnectionAction): Conne
       return { ...state, account, accounts };
     }
 
+    case ConnectionActionType.ACCOUNT_CHANGED: {
+      if (!(state.accounts || []).find(address => sameAddress(address, action.account))) {
+        throw new Error('Invalid account selected.');
+      }
+
+      return { ...state, account: action.account };
+    }
+
     case ConnectionActionType.CONNECTION_ESTABLISHED: {
       const accounts = action.accounts || [];
       const account = (state.account && accounts.find(address => sameAddress(address, state.account))) || accounts[0];

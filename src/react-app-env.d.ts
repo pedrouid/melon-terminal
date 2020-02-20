@@ -23,6 +23,9 @@ declare global {
       MELON_KOVAN: string;
       MELON_KOVAN_SUBGRAPH: string;
       MELON_KOVAN_DEPLOYMENT?: string;
+      MELON_RINKEBY: string;
+      MELON_RINKEBY_SUBGRAPH: string;
+      MELON_RINKEBY_DEPLOYMENT?: string;
       MELON_TESTNET: string;
       MELON_TESTNET_SUBGRAPH: string;
       MELON_TESTNET_DEPLOYMENT?: string;
