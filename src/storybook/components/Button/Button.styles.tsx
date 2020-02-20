@@ -77,13 +77,13 @@ export const Button = styled.button<ButtonProps>`
       height: 32px;
     `}
     ${props =>
-    props.size === 'extrasmall' &&
-    css`
+      props.size === 'extrasmall' &&
+      css`
         height: 24px;
       `}
     ${props =>
-    props.length === 'stretch' &&
-    css`
+      props.length === 'stretch' &&
+      css`
         width: 100%;
       `}
   & + & {

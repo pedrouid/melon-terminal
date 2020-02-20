@@ -75,7 +75,7 @@ export const FundKyberTrading: React.FC<FundKyberTradingProps> = props => {
     const polling$ = fetch$.pipe(expand(() => Rx.timer(5000).pipe(switchMapTo(fetch$))));
     const observable$ = polling$.pipe(
       map(value => fromTokenBaseUnit(value, 18)),
-      catchError(() => Rx.of(new BigNumber('NaN'))),
+      catchError(() => Rx.of(new BigNumber('NaN')))
     );
 
     const subscription = observable$.subscribe(rate => {
@@ -112,10 +112,19 @@ export const FundKyberTrading: React.FC<FundKyberTradingProps> = props => {
   return (
     <>
       <Subtitle>
-        Kyber Network (<FormattedNumber value={1} suffix={state.taker.symbol} decimals={0} /> = <FormattedNumber value={rate} suffix={state.maker.symbol} />)
+        Kyber Network (<FormattedNumber value={1} suffix={state.taker.symbol} decimals={0} /> ={' '}
+        <FormattedNumber value={rate} suffix={state.maker.symbol} />)
       </Subtitle>
       <Button type="button" disabled={!ready || !props.active} loading={loading} onClick={submit}>
-        {loading ? '' : valid ? (<>Buy <FormattedNumber value={value} suffix={state.maker.symbol} /></>) : 'No Offer'}
+        {loading ? (
+          ''
+        ) : valid ? (
+          <>
+            Buy <FormattedNumber value={value} suffix={state.maker.symbol} />
+          </>
+        ) : (
+          'No Offer'
+        )}
       </Button>
       <TransactionModal transaction={transaction} />
     </>

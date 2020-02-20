@@ -75,11 +75,11 @@ export const FundRequestForQuoteOffer: React.FC<FundRequestForQuoteOfferProps> =
           },
         });
 
-        const result = await (query).json();
+        const result = await query.json();
 
         return props.side === 'sell'
           ? new BigNumber(1).dividedBy(result.price ?? 'NaN')
-          : new BigNumber(result.price ?? 'NaN')
+          : new BigNumber(result.price ?? 'NaN');
       }),
       catchError(() => Rx.of(new BigNumber(0)))
     );
@@ -159,23 +159,20 @@ export const FundRequestForQuoteOffer: React.FC<FundRequestForQuoteOfferProps> =
   const symbols = props.market?.split('-', 2) ?? [];
   const maker = props.side === 'sell' ? symbols[1] : symbols[0];
   const taker = props.side === 'sell' ? symbols[0] : symbols[1];
-  const rate = props.side === 'sell'
-    ? new BigNumber(1).dividedBy(quote?.price ?? 'NaN')
-    : new BigNumber(quote?.price ?? 'NaN')
+  const rate =
+    props.side === 'sell' ? new BigNumber(1).dividedBy(quote?.price ?? 'NaN') : new BigNumber(quote?.price ?? 'NaN');
 
   return (
     <>
       <Subtitle>
-        {props.market && ready
-          ? `Rate: (1 ${maker} = ${state.price.toFixed(4)} ${taker})`
-          : `No Rate`}
+        {props.market && ready ? `Rate: (1 ${maker} = ${state.price.toFixed(4)} ${taker})` : `No Rate`}
       </Subtitle>
       <Button type="button" disabled={!(ready && props.active)} loading={loading} onClick={submit}>
         {loading
           ? ''
           : ready
-            ? `Buy ${state.price.multipliedBy(props.amount!).toFixed(4)} ${props.symbol}`
-            : 'No Offer'}
+          ? `Buy ${state.price.multipliedBy(props.amount!).toFixed(4)} ${props.symbol}`
+          : 'No Offer'}
       </Button>
 
       <TransactionModal transaction={transaction}>

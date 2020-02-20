@@ -50,10 +50,19 @@ export const FundMelonEngineTrading: React.FC<FundMelonEngineTradingProps> = pro
   return (
     <>
       <Subtitle>
-        Melon Engine (<FormattedNumber value={1} suffix={props.taker.symbol} decimals={0} /> = <FormattedNumber value={rate} suffix={props.maker.symbol} />)
+        Melon Engine (<FormattedNumber value={1} suffix={props.taker.symbol} decimals={0} /> ={' '}
+        <FormattedNumber value={rate} suffix={props.maker.symbol} />)
       </Subtitle>
       <Button type="button" disabled={!ready || !props.active} loading={loading} onClick={submit}>
-        {loading ? '' : valid ? (<>Buy <FormattedNumber value={value} suffix={props.maker.symbol} /></>) : 'No Offer'}
+        {loading ? (
+          ''
+        ) : valid ? (
+          <>
+            Buy <FormattedNumber value={value} suffix={props.maker.symbol} />
+          </>
+        ) : (
+          'No Offer'
+        )}
       </Button>
       <TransactionModal transaction={transaction} />
     </>
