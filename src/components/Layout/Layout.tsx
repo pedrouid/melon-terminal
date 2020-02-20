@@ -23,6 +23,7 @@ import { Icons } from '~/storybook/components/Icons/Icons';
 import { NetworkEnum } from '~/types';
 import { useVersionQuery } from '~/components/Layout/Version.query';
 import * as S from './Layout.styles';
+import { FormattedDate } from '../Common/FormattedDate/FormattedDate';
 
 const graphiql = JSON.parse(process.env.MELON_INCLUDE_GRAPHIQL || 'false');
 
@@ -120,7 +121,9 @@ export const Layout: React.FC = ({ children }) => {
 
             {update && (
               <FooterItem>
-                <span>Last pricefeed update at {format(update, 'yyyy-MM-dd hh:mm a')}</span>
+                <span>
+                  Last pricefeed update at <FormattedDate timestamp={update} />
+                </span>
               </FooterItem>
             )}
 
