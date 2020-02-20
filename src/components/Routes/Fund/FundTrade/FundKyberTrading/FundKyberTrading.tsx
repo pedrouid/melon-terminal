@@ -19,6 +19,7 @@ import { Holding } from '@melonproject/melongql';
 import { Subtitle } from '~/storybook/components/Title/Title';
 import { Button } from '~/storybook/components/Button/Button';
 import { catchError, map, expand, switchMapTo } from 'rxjs/operators';
+import { FormattedNumber } from '~/components/Common/FormattedNumber/FormattedNumber';
 
 export interface FundKyberTradingProps {
   trading: string;
@@ -73,8 +74,8 @@ export const FundKyberTrading: React.FC<FundKyberTradingProps> = props => {
     // Refetch every 5 seconds.
     const polling$ = fetch$.pipe(expand(() => Rx.timer(5000).pipe(switchMapTo(fetch$))));
     const observable$ = polling$.pipe(
-      catchError(() => Rx.of(new BigNumber(0))),
-      map(value => fromTokenBaseUnit(value, 18))
+      map(value => fromTokenBaseUnit(value, 18)),
+      catchError(() => Rx.of(new BigNumber('NaN'))),
     );
 
     const subscription = observable$.subscribe(rate => {
@@ -88,8 +89,9 @@ export const FundKyberTrading: React.FC<FundKyberTradingProps> = props => {
     return () => subscription.unsubscribe();
   }, [props.maker, props.taker, props.quantity.valueOf()]);
 
-  const valid = !state.rate.isNaN() && !state.rate.isZero();
   const value = props.quantity.multipliedBy(state.rate);
+  const valid = !value.isNaN() && !value.isZero();
+  const rate = valid ? state.rate : new BigNumber('NaN');
   const loading = state.state === 'loading';
   const ready = !loading && valid;
 
@@ -110,12 +112,11 @@ export const FundKyberTrading: React.FC<FundKyberTradingProps> = props => {
   return (
     <>
       <Subtitle>
-        Kyber Network (1 {state.taker.symbol} = {state.rate.toFixed(4)} {state.maker.symbol})
+        Kyber Network (<FormattedNumber value={1} suffix={state.taker.symbol} decimals={0} /> = <FormattedNumber value={rate} suffix={state.maker.symbol} />)
       </Subtitle>
       <Button type="button" disabled={!ready || !props.active} loading={loading} onClick={submit}>
-        {loading ? '' : valid ? `Buy ${value.toFixed(4)} ${state.maker.symbol}` : 'No Offer'}
+        {loading ? '' : valid ? (<>Buy <FormattedNumber value={value} suffix={state.maker.symbol} /></>) : 'No Offer'}
       </Button>
-
       <TransactionModal transaction={transaction} />
     </>
   );
