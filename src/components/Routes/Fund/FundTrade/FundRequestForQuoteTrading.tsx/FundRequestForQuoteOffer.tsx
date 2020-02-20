@@ -44,7 +44,7 @@ export const FundRequestForQuoteOffer: React.FC<FundRequestForQuoteOfferProps> =
 
   const loading = state.loading;
   const active = !!(props.market && props.side && props.amount && !props.amount.isNaN() && !props.amount.isZero());
-  const ready = active && !state.loading && !state.price.isZero();
+  const ready = active && !state.loading && !state.price.isZero() && !state.price.isNaN();
 
   const transaction = useTransaction(environment);
 
@@ -153,7 +153,7 @@ export const FundRequestForQuoteOffer: React.FC<FundRequestForQuoteOfferProps> =
   return (
     <>
       <Subtitle>
-        {props.market
+        {props.market && ready
           ? `Rate: (1 ${props.market?.split('-')[0]} = ${state.price.toFixed(4)} ${props.market?.split('-')[1]})`
           : `No Rate`}
       </Subtitle>
