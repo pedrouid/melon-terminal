@@ -142,6 +142,7 @@ export const WalletFundSetup: React.FC = () => {
     .map(exchange => ({
       label: exchange.name,
       value: exchange.id,
+      checked: true,
     }));
 
   const tokensOptions = environment.tokens
@@ -149,6 +150,7 @@ export const WalletFundSetup: React.FC = () => {
     .map(token => ({
       label: `${token.symbol} (${token.name})`,
       value: token.address,
+      checked: true,
     }));
 
   return (
