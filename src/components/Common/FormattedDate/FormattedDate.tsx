@@ -16,5 +16,5 @@ export const FormattedDate: React.FC<FormattedDateProps> = props => {
     props.timestamp instanceof Date
       ? props.timestamp
       : new Date(new BigNumber(props.timestamp).integerValue().toNumber() * 1000);
-  return <>{format(date, props.format || 'yyyy/MM/dd hh:mm a')}</>;
+  return <>{format(date, props.format || 'yyyy/MM/dd HH:mm O')}</>;
 };
