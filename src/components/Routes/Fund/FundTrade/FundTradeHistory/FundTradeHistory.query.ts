@@ -5,7 +5,6 @@ import { useTheGraphQuery } from '~/hooks/useQuery';
 import { ExchangeDefinition, TokenDefinition } from '@melonproject/melonjs';
 import { useEnvironment } from '~/hooks/useEnvironment';
 import { fromTokenBaseUnit } from '~/utils/fromTokenBaseUnit';
-import { decodeFunctionSignature, DecodedFunctionSignature } from '~/utils/decodeFunctionSignature';
 
 export interface CallOnExchange {
   id: string;
@@ -15,7 +14,7 @@ export interface CallOnExchange {
   sellAsset?: TokenDefinition;
   buyQuantity?: BigNumber;
   sellQuantity?: BigNumber;
-  signature?: DecodedFunctionSignature;
+  methodName?: string;
 }
 
 export interface FundTradeHistoryQueryVariables {
@@ -44,6 +43,7 @@ const FundTradeHistoryQuery = gql`
           orderValue3
           orderValue6
           methodSignature
+          methodName
         }
       }
     }
@@ -81,7 +81,7 @@ export const useFundTradeHistoryQuery = (address: string) => {
           sellQuantity,
           id: item.id,
           timestamp: item.timestamp,
-          signature: decodeFunctionSignature(item.methodSignature),
+          methodName: item.methodName,
           exchange: environment.getExchange(item.exchange?.id),
         } as CallOnExchange;
       }) as CallOnExchange[],

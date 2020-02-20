@@ -11,7 +11,9 @@ export const ScrollableTable = styled.div<ScrollableTableProps>`
   white-space: nowrap;
   margin-bottom: 25px;
 
-  ${props => props.maxHeight && `
+  ${props =>
+    props.maxHeight &&
+    `
     max-height: ${props.maxHeight};
   `}
 `;

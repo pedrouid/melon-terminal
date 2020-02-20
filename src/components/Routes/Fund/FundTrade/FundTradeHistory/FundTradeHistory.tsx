@@ -39,8 +39,10 @@ export const FundTradeHistory: React.FC<FundTradeHistoryProps> = ({ address }) =
                 <HeaderCell>Time</HeaderCell>
                 <HeaderCell>Exchange</HeaderCell>
                 <HeaderCellRightAlign>Buy quantity</HeaderCellRightAlign>
+                <HeaderCell>Buy asset</HeaderCell>
                 <HeaderCellRightAlign>Sell quantity</HeaderCellRightAlign>
-                <HeaderCell>Order type</HeaderCell>
+                <HeaderCell>Sell asset</HeaderCell>
+                <HeaderCell>Type</HeaderCell>
               </HeaderRow>
             </thead>
             <tbody>
@@ -51,12 +53,14 @@ export const FundTradeHistory: React.FC<FundTradeHistoryProps> = ({ address }) =
                   </BodyCell>
                   <BodyCell>{call.exchange?.name}</BodyCell>
                   <BodyCellRightAlign>
-                    <FormattedNumber tooltip={true} value={call.buyQuantity} suffix={call.buyAsset?.symbol} />
+                    <FormattedNumber tooltip={true} value={call.buyQuantity} />
                   </BodyCellRightAlign>
+                  <BodyCell>{call.buyAsset?.symbol}</BodyCell>
                   <BodyCellRightAlign>
-                    <FormattedNumber tooltip={true} value={call.sellQuantity} suffix={call.sellAsset?.symbol} />
+                    <FormattedNumber tooltip={true} value={call.sellQuantity} />
                   </BodyCellRightAlign>
-                  <BodyCell>{call.signature?.label}</BodyCell>
+                  <BodyCell>{call.sellAsset?.symbol}</BodyCell>
+                  <BodyCell>{call.methodName}</BodyCell>
                 </BodyRow>
               ))}
             </tbody>
