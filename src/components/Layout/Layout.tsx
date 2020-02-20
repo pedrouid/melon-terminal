@@ -92,10 +92,14 @@ export const Layout: React.FC = ({ children }) => {
         <Footer>
           <FooterNavigation>
             <FooterItem>
-              <a href="https://melonprotocol.com">About</a>
+              <a href="https://melonprotocol.com" target="_blank">
+                About
+              </a>
             </FooterItem>
             <FooterItem>
-              <a href="https://docs.melonport.com">Documentation</a>
+              <a href="https://docs.melonport.com" target="_blank">
+                Documentation
+              </a>
             </FooterItem>
             <FooterItem>
               <a href="https://github.com/avantgardefinance/interface/issues" target="_blank">
