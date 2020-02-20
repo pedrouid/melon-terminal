@@ -57,26 +57,29 @@ export const FundRequestForQuoteOffer: React.FC<FundRequestForQuoteOfferProps> =
     // Refetch every 10 seconds.
     const observable$ = Rx.timer(500).pipe(
       switchMap(async () => {
-        const result = await (
-          await fetch(`${process.env.MELON_API_GATEWAY}/rfq/quotes`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              market: props.market!,
-              side: props.side!,
-              amount: props.amount!.toString(),
-              model: 'indicative',
-              profile: 'melon',
-              meta: { taker: props.trading },
-            }),
-          })
-        ).json();
+        const key = props.side === 'sell' ? 'value' : 'amount';
+        const body = {
+          [key]: props.amount!.toString(),
+          market: props.market!,
+          side: props.side!,
+          model: 'indicative',
+          profile: 'melon',
+          meta: { taker: props.trading },
+        };
 
-        return props.side === 'buy'
-          ? new BigNumber(result.price ?? 0)
-          : new BigNumber(1).dividedBy(result.price ?? 'NaN');
+        const query = await fetch(`${process.env.MELON_API_GATEWAY}/rfq/quotes`, {
+          body: JSON.stringify(body),
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+
+        const result = await (query).json();
+
+        return props.side === 'sell'
+          ? new BigNumber(1).dividedBy(result.price ?? 'NaN')
+          : new BigNumber(result.price ?? 'NaN')
       }),
       catchError(() => Rx.of(new BigNumber(0)))
     );
@@ -93,23 +96,26 @@ export const FundRequestForQuoteOffer: React.FC<FundRequestForQuoteOfferProps> =
   }, [props.market, props.side, props.amount?.valueOf()]);
 
   const submit = async () => {
+    const key = props.side === 'sell' ? 'value' : 'amount';
+    const body = {
+      [key]: props.amount!.toString(),
+      market: props.market!,
+      side: props.side!,
+      model: 'firm',
+      profile: 'melon',
+      meta: { taker: props.trading },
+    };
+
     try {
-      const result = await (
-        await fetch(`${process.env.MELON_API_GATEWAY}/rfq/quotes`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            market: props.market,
-            side: props.side,
-            amount: props.amount!.toString(),
-            model: 'firm',
-            profile: 'melon',
-            meta: { taker: props.trading },
-          }),
-        })
-      ).json();
+      const query = await fetch(`${process.env.MELON_API_GATEWAY}/rfq/quotes`, {
+        body: JSON.stringify(body),
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      const result = await query.json();
 
       if (result?.data && result.data['0xv2order']) {
         const offer = result.data['0xv2order'] as SignedOrder;
@@ -150,39 +156,46 @@ export const FundRequestForQuoteOffer: React.FC<FundRequestForQuoteOfferProps> =
     })();
   }, [quote]);
 
+  const symbols = props.market?.split('-', 2) ?? [];
+  const maker = props.side === 'sell' ? symbols[1] : symbols[0];
+  const taker = props.side === 'sell' ? symbols[0] : symbols[1];
+  const rate = props.side === 'sell'
+    ? new BigNumber(1).dividedBy(quote?.price ?? 'NaN')
+    : new BigNumber(quote?.price ?? 'NaN')
+
   return (
     <>
       <Subtitle>
         {props.market && ready
-          ? `Rate: (1 ${props.market?.split('-')[0]} = ${state.price.toFixed(4)} ${props.market?.split('-')[1]})`
+          ? `Rate: (1 ${maker} = ${state.price.toFixed(4)} ${taker})`
           : `No Rate`}
       </Subtitle>
       <Button type="button" disabled={!(ready && props.active)} loading={loading} onClick={submit}>
         {loading
           ? ''
           : ready
-          ? `Buy ${state.price.multipliedBy(props.amount!).toFixed(4)} ${props.symbol}`
-          : 'No Offer'}
+            ? `Buy ${state.price.multipliedBy(props.amount!).toFixed(4)} ${props.symbol}`
+            : 'No Offer'}
       </Button>
 
       <TransactionModal transaction={transaction}>
         <NotificationBar kind="neutral">
           <NotificationContent>
-            You are buying{' '}
-            <TokenValue
-              value={quote?.offer.makerAssetAmount}
-              decimals={quote?.maker.decimals}
-              symbol={quote?.maker.symbol}
-            />{' '}
-            in exchange for{' '}
+            You are selling{' '}
             <TokenValue
               value={quote?.offer.takerAssetAmount}
               decimals={quote?.taker.decimals}
               symbol={quote?.taker.symbol}
+            />{' '}
+            in exchange for{' '}
+            <TokenValue
+              value={quote?.offer.makerAssetAmount}
+              decimals={quote?.maker.decimals}
+              symbol={quote?.maker.symbol}
             />
             .<br />
-            (Rate: <TokenValue value={1} digits={0} decimals={0} symbol={quote?.taker.symbol} /> ={' '}
-            <TokenValue value={quote?.price} decimals={0} symbol={quote?.maker.symbol} />)
+            (Rate: <TokenValue value={1} digits={0} decimals={0} symbol={maker} /> ={' '}
+            <TokenValue value={rate} decimals={0} symbol={taker} />)
             <br />
             <br />
             This quote is valid until <FormattedDate timestamp={quote?.offer?.expirationTimeSeconds} />.
