@@ -54,7 +54,7 @@ export const FormattedNumber: React.FC<FormattedNumberData> = ({
       <Color color={color}>
         {tooltip ? (
           <Tooltip
-            value={`${prefix ? ' ' : ''}${numberWithCommas(bnFixed)}${!suffix || suffix === '%' ? '' : ' '}${suffix}`}
+            value={`${prefix ? ' ' : ''}${numberWithCommas(bnFixed)}${!suffix || suffix === '%' ? '' : ' '}${suffix || ''}`}
           >
             {output}
           </Tooltip>
@@ -69,7 +69,7 @@ export const FormattedNumber: React.FC<FormattedNumberData> = ({
     <NoWrap>
       {tooltip ? (
         <Tooltip
-          value={`${prefix ? ' ' : ''}${numberWithCommas(bnFixed)}${!suffix || suffix === '%' ? '' : ' '}${suffix}`}
+          value={`${prefix ? ' ' : ''}${numberWithCommas(bnFixed)}${!suffix || suffix === '%' ? '' : ' '}${suffix || ''}`}
         >
           {output}
         </Tooltip>
