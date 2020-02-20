@@ -72,6 +72,9 @@ export function zeroExOrderbook(
   const provider = useMemo(() => {
     const network = environment.network as NetworkEnum;
     const endpoint = endpoints[network];
+    if (!endpoint) {
+      return undefined;
+    }
 
     return OrderbookProvider.getOrderbookForWebsocketProvider({
       httpEndpoint: endpoint.http,
