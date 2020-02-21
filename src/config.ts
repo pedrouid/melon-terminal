@@ -41,6 +41,13 @@ export const config: ConfigMap = {
           name: 'Digix Gold Token',
           historic: true,
         },
+        {
+          symbol: 'ENG',
+          address: '0xf0ee6b27b759c9893ce4f094b49ad28fd15a23e4',
+          name: 'Enigma',
+          decimals: 8,
+          historic: true,
+        },
       ],
       exchanges: [
         {
