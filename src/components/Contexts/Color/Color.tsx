@@ -1,5 +1,5 @@
 import React, { createContext, useState } from 'react';
-import { theme } from '~/theme';
+import { lightTheme, darkTheme } from '~/theme';
 
 export interface ColorContextValue {
   color: string;
@@ -13,6 +13,9 @@ export interface ColorProviderProps {
 }
 
 function randomColor() {
+  const isDarkMode = localStorage.getItem('isDarkMode');
+  const theme = isDarkMode === 'true' ? darkTheme : lightTheme;
+
   return theme.logoColors[Math.floor(Math.random() * theme.logoColors.length)];
 }
 

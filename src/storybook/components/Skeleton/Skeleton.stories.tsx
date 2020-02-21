@@ -55,7 +55,7 @@ export const WithBlocksContained: React.FC = () => {
       <SkeletonBody>
         <Bar>
           <BarContent justify="between">
-            <Headline title="My title" text="My subtitle" icon="icon" />
+            <Headline title="My title" text="My subtitle" icon="WALLET" />
           </BarContent>
         </Bar>
         <Container>
@@ -78,7 +78,7 @@ export const WithBlocksFull: React.FC = () => {
       <SkeletonBody>
         <Bar>
           <BarContent justify="between">
-            <Headline title="My title" text="My subtitle" icon="icon" />
+            <Headline title="My title" text="My subtitle" icon="WALLET" />
           </BarContent>
         </Bar>
         <Container full={true}>

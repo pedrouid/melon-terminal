@@ -29,7 +29,8 @@
     "test": "react-app-rewired test",
     "lint": "tslint --project .",
     "format": "prettier --write 'src/**/*.{ts,tsx}'",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "svgr": "svgr  --no-dimensions --ext tsx -d src/storybook/components/Icons/svg/ svgr/*"
   },
   "dependencies": {
     "@0x/order-utils": "^8.5.0-beta.4",
@@ -83,6 +84,7 @@
     "@storybook/addon-notes": "^5.2.8",
     "@storybook/addon-options": "^5.2.8",
     "@storybook/react": "^5.2.8",
+    "@svgr/cli": "^5.1.0",
     "@types/jest": "^24.9.0",
     "@types/lru-cache": "^5.1.0",
     "@types/node": "^13.1.1",

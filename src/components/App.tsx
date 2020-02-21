@@ -17,6 +17,7 @@ import { method as frame } from './Layout/ConnectionSelector/Frame/Frame';
 import { method as ganache } from './Layout/ConnectionSelector/Ganache/Ganache';
 import { method as fortmatic } from './Layout/ConnectionSelector/Fortmatic/Fortmatic';
 import { method as anonymous } from './Layout/ConnectionSelector/Anonymous/Anonymous';
+import { DarkModeProvider } from './Contexts/DarkMode/DarkMode';
 
 const AppComponent = () => {
   const start = process.env.MELON_TESTNET ? ganache : anonymous;
@@ -24,21 +25,23 @@ const AppComponent = () => {
 
   return (
     <Router>
-      <Theme>
-        <PageTitleProvider>
-          <ModalProvider backgroundComponent={ModalBackground}>
-            <ConnectionProvider methods={methods} default={start} disconnect={anonymous}>
-              <ApolloProvider>
-                <AccountProvider>
-                  <Layout>
-                    <AppRouter />
-                  </Layout>
-                </AccountProvider>
-              </ApolloProvider>
-            </ConnectionProvider>
-          </ModalProvider>
-        </PageTitleProvider>
-      </Theme>
+      <DarkModeProvider>
+        <Theme>
+          <PageTitleProvider>
+            <ModalProvider backgroundComponent={ModalBackground}>
+              <ConnectionProvider methods={methods} default={start} disconnect={anonymous}>
+                <ApolloProvider>
+                  <AccountProvider>
+                    <Layout>
+                      <AppRouter />
+                    </Layout>
+                  </AccountProvider>
+                </ApolloProvider>
+              </ConnectionProvider>
+            </ModalProvider>
+          </PageTitleProvider>
+        </Theme>
+      </DarkModeProvider>
     </Router>
   );
 };

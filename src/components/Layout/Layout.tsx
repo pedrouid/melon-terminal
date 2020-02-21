@@ -1,5 +1,4 @@
 import React from 'react';
-import { format } from 'date-fns';
 import { useLocation } from 'react-router';
 import { usePriceFeedUpdateQuery } from '~/components/Layout/PriceFeedUpdate.query';
 import { Link, NavLink } from '~/storybook/components/Link/Link';
@@ -23,6 +22,7 @@ import { Icons } from '~/storybook/components/Icons/Icons';
 import { NetworkEnum } from '~/types';
 import { useVersionQuery } from '~/components/Layout/Version.query';
 import * as S from './Layout.styles';
+import { DarkModeSwitch } from '~/storybook/components/DarkModeSwitch/DarkModeSwitch';
 import { FormattedDate } from '../Common/FormattedDate/FormattedDate';
 
 const graphiql = JSON.parse(process.env.MELON_INCLUDE_GRAPHIQL || 'false');
@@ -43,8 +43,8 @@ export const Layout: React.FC = ({ children }) => {
           <HeaderContent>
             <HeaderTitle>
               <Link to="/">
-                {!home && <Icons name="LEFTARROW" size="small" />}
-                <S.AppName>Melon Terminal</S.AppName>
+                {!home && <Icons name="LEFTARROW" size="small" colored={true} />}
+                <S.AppName>Melon Manager Interface</S.AppName>
               </Link>
             </HeaderTitle>
             <LogoContainer>
@@ -58,6 +58,7 @@ export const Layout: React.FC = ({ children }) => {
               </LogoMobile>
             </LogoContainer>
             <ConnectionInfo>
+              <DarkModeSwitch />
               {!account.loading && account.fund && (
                 <ConnectionInfoItem>
                   <NavLink to={`/fund/${account.fund}`} title={account.fund} activeClassName="active">

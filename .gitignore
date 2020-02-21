@@ -22,3 +22,6 @@ build/
 !.env.defaults
 !.env.schema
 !.env.example
+
+* Ignore SVGR
+svgr/

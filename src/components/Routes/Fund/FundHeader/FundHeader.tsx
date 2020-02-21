@@ -27,7 +27,7 @@ export const FundHeader: React.FC<FundHeaderProps> = ({ address }) => {
   return (
     <Bar>
       <BarContent justify="between">
-        <Headline title={fund.name} text={<EtherscanLink address={address} />} icon="fund" />
+        <Headline title={fund.name} text={<EtherscanLink address={address} />} icon="ETHEREUM" />
         <RequiresFundSetupComplete fallback={false}>
           <DataBlockSection>
             <DataBlock label="Share price">

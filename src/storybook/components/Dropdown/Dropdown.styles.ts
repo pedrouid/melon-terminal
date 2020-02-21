@@ -68,6 +68,7 @@ export const DropdownSelect = styled.select`
   border-radius: 0;
   border: none;
   background: transparent;
+  color: ${props => props.theme.mainColors.textColor};
   padding: ${props => props.theme.spaceUnits.xs} ${props => props.theme.spaceUnits.xl}
     ${props => props.theme.spaceUnits.xs} ${props => props.theme.spaceUnits.s};
   line-height: 1.6;

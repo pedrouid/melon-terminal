@@ -24,7 +24,7 @@ export const DictionaryEntry = styled.div`
 `;
 
 export const DictionaryLabel = styled.div`
-  color: ${props => props.theme.mainColors.secondaryDark};
+  color: ${props => props.theme.mainColors.secondaryDarkAlpha};
   @media (${props => props.theme.mediaQueries.s}) {
     width: 40%;
   }

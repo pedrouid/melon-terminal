@@ -19,7 +19,7 @@ export const ScrollableTable = styled.div<ScrollableTableProps>`
 `;
 
 export const Table = styled.table`
-  background-color: ${props => props.theme.otherColors.white};
+  background-color: ${props => props.theme.mainColors.primary};
   width: 100%;
   border-spacing: 0;
 `;
@@ -42,7 +42,7 @@ export const HeaderCellRightAlign = styled.th<HeaderCellProps>`
 
 export const HeaderRow = styled.tr`
   font-weight: bold;
-  border-bottom: 1px solid ${props => props.theme.mainColors.border};
+  border-bottom: 1px solid ${props => props.theme.mainColors.textColor};
 `;
 
 export interface BodyCellProps {

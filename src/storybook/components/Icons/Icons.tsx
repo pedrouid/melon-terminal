@@ -1,65 +1,42 @@
-import React from 'react';
-import ANT from './svg/tokens/ant.svg';
-import BAT from './svg/tokens/bat.svg';
-import DAI from './svg/tokens/dai.svg';
-import ENG from './svg/tokens/eng.svg';
-import KNC from './svg/tokens/knc.svg';
-import LINK from './svg/tokens/link.svg';
-import MANA from './svg/tokens/mana.svg';
-import MKR from './svg/tokens/mkr.svg';
-import MLN from './svg/tokens/mln.svg';
-import OMG from './svg/tokens/omg.svg';
-import REN from './svg/tokens/ren.svg';
-import REP from './svg/tokens/rep.svg';
-import RLC from './svg/tokens/rlc.svg';
-import SAI from './svg/tokens/sai.svg';
-import USDC from './svg/tokens/usdc.svg';
-import USDT from './svg/tokens/usdt.svg';
-import WBTC from './svg/tokens/wbtc.svg';
-import WETH from './svg/tokens/weth.svg';
-import ZRX from './svg/tokens/zrx.svg';
-import DGX from './svg/tokens/dgx.svg';
-import EUR from './svg/tokens/eur.svg';
-import METAMASK from './svg/wallet/metamask.svg';
-import FRAME from './svg/wallet/frame.svg';
-import GANACHE from './svg/wallet/ganache.svg';
-import TWITTER from './svg/socialNetwork/twitter.svg';
-import LEFTARROW from './svg/leftArrow.svg';
-import SWAPARROWS from './svg/swapArrows.svg';
-import EXCHANGE from './svg/exchange.svg';
-import FORTMATIC from './svg/wallet/fortmatic.svg';
+import React, { Suspense, lazy } from 'react';
 import * as S from './Icons.styles';
 
+// TODO: add colors props
+
 const availableIcons = {
-  ANT,
-  BAT,
-  DAI,
-  ENG,
-  KNC,
-  LINK,
-  MANA,
-  MKR,
-  MLN,
-  OMG,
-  REN,
-  REP,
-  RLC,
-  SAI,
-  USDC,
-  USDT,
-  WBTC,
-  WETH,
-  ZRX,
-  DGX,
-  EUR,
-  METAMASK,
-  FRAME,
-  GANACHE,
-  TWITTER,
-  LEFTARROW,
-  SWAPARROWS,
-  EXCHANGE,
-  FORTMATIC,
+  ANT: lazy(() => import('./svg/tokens/Ant')),
+  BAT: lazy(() => import('./svg/tokens/Bat')),
+  DAI: lazy(() => import('./svg/tokens/Dai')),
+  ENG: lazy(() => import('./svg/tokens/Eng')),
+  KNC: lazy(() => import('./svg/tokens/Knc')),
+  LINK: lazy(() => import('./svg/tokens/Link')),
+  MANA: lazy(() => import('./svg/tokens/Mana')),
+  MKR: lazy(() => import('./svg/tokens/Mkr')),
+  MLN: lazy(() => import('./svg/tokens/Mln')),
+  OMG: lazy(() => import('./svg/tokens/Omg')),
+  REN: lazy(() => import('./svg/tokens/Ren')),
+  REP: lazy(() => import('./svg/tokens/Rep')),
+  RLC: lazy(() => import('./svg/tokens/Rlc')),
+  SAI: lazy(() => import('./svg/tokens/Sai')),
+  USDC: lazy(() => import('./svg/tokens/Usdc')),
+  USDT: lazy(() => import('./svg/tokens/Usdt')),
+  WBTC: lazy(() => import('./svg/tokens/Wbtc')),
+  WETH: lazy(() => import('./svg/tokens/Weth')),
+  ZRX: lazy(() => import('./svg/tokens/Zrx')),
+  DGX: lazy(() => import('./svg/tokens/Dgx')),
+  EUR: lazy(() => import('./svg/tokens/Eur')),
+  METAMASK: lazy(() => import('./svg/wallet/Metamask')),
+  FRAME: lazy(() => import('./svg/wallet/Frame')),
+  GANACHE: lazy(() => import('./svg/wallet/Ganache')),
+  TWITTER: lazy(() => import('./svg/socialNetwork/Twitter')),
+  LEFTARROW: lazy(() => import('./svg/LeftArrow')),
+  SWAPARROWS: lazy(() => import('./svg/SwapArrows')),
+  EXCHANGE: lazy(() => import('./svg/Exchange')),
+  FORTMATIC: lazy(() => import('./svg/wallet/Fortmatic')),
+  SUN: lazy(() => import('./svg/Sun')),
+  MOON: lazy(() => import('./svg/Moon')),
+  ETHEREUM: lazy(() => import('./svg/Ethereum')),
+  WALLET: lazy(() => import('./svg/Wallet')),
 };
 
 export type IconName = keyof typeof availableIcons;
@@ -73,9 +50,13 @@ export type IconsProps = React.ComponentProps<typeof S.IconsWrapper> & {
 export const Icons: React.FC<IconsProps> = ({ name, size, pointer, ...props }) => {
   size = size || 'normal';
 
+  const Component = availableIcons[name];
+
   return (
     <S.IconsWrapper {...props} size={size} pointer={pointer}>
-      <S.Img src={availableIcons[name]} size={size} />
+      <Suspense fallback={<S.Loading />}>
+        <Component />
+      </Suspense>
     </S.IconsWrapper>
   );
 };

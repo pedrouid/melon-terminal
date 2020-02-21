@@ -1,49 +1,21 @@
 import { createGlobalStyle } from 'styled-components';
 
-export const theme = {
-  mainColors: {
-    primary: 'rgb(255, 255, 255)',
-    primaryAlpha: 'rgba(255, 255, 255, 0.6)',
-    primaryDark: 'rgb(29,29,29)',
-    secondary: 'rgb(242, 242, 242)',
-    secondaryDark: 'rgb(120, 120, 120)',
-    secondaryDarkAlpha: 'rgb(196, 196, 196)',
-    border: 'rgb(29, 29, 29)',
-  },
-  logoColors: [
-    '#000000',
-    '#85ca5d',
-    '#5291e1',
-    '#ff00b4',
-    '#00ffbc',
-    '#8ea5ff',
-    '#c493ff',
-    '#ffb5b5',
-    '#8fb8ff',
-    '#fd81eb',
-  ],
-  border: {
-    borderDefault: '1px solid rgb(29,29,29)',
-    borderSecondary: '1px solid rgb(196,196,196)',
-    borderRadius: '0px',
-    borderColor: 'rgb(29,29,29)',
-  },
-  statusColors: {
-    primaryProfit: 'rgb(141, 197, 103)',
-    secondaryProfit: 'rgb(243, 249, 241)',
-    primaryLoss: 'rgb(206, 88, 102)',
-    secondaryLoss: 'rgb(252, 240, 242)',
-    warning: 'rgb(249,209,118)',
-    neutral: 'rgb(74,194,238)',
-  },
-  otherColors: {
-    black: 'rgb(0, 0, 0)',
-    white: 'rgb(255, 255, 255)',
-    grey: 'rgb(155, 155, 155)',
-    red: 'rgb(244,67,54)',
-    green: 'rgb(76,175,80)',
-    logo: '#0B0B09',
-  },
+const logoColorsLightMode = [
+  '#000000',
+  '#85ca5d',
+  '#5291e1',
+  '#ff00b4',
+  '#00ffbc',
+  '#8ea5ff',
+  '#c493ff',
+  '#ffb5b5',
+  '#8fb8ff',
+  '#fd81eb',
+];
+
+const logoColorsDarkMode = ['#ededed', '#ffa41b', '#9818d6', '#61d4b3', '#fdd365', '#fb8d62', '#fd2eb3'];
+
+export const globalTheme = {
   spaceUnits: {
     xxxs: '2px',
     xxs: '4px',
@@ -136,6 +108,100 @@ export const theme = {
   },
 };
 
+export const lightTheme = {
+  mainColors: {
+    primary: 'rgb(255, 255, 255)',
+    primaryAlpha: 'rgba(255, 255, 255, 0.6)',
+    primaryDark: 'rgb(29,29,29)',
+    secondary: 'rgb(242, 242, 242)',
+    secondaryDark: 'rgb(120, 120, 120)',
+    secondaryDarkAlpha: 'rgb(120, 120, 120)',
+    border: 'rgb(29, 29, 29)',
+    progressBar: 'rgb(29, 29, 29)',
+    textColor: 'rgb(0, 0, 0)',
+  },
+  border: {
+    borderDefault: '1px solid rgb(29,29,29)',
+    borderSecondary: '1px solid rgb(196,196,196)',
+    borderRadius: '0px',
+    borderColor: 'rgb(29,29,29)',
+  },
+  statusColors: {
+    primaryProfit: 'rgb(141, 197, 103)',
+    secondaryProfit: 'rgb(243, 249, 241)',
+    primaryLoss: 'rgb(206, 88, 102)',
+    secondaryLoss: 'rgb(252, 240, 242)',
+    warning: 'rgb(249,209,118)',
+    neutral: 'rgb(74,194,238)',
+  },
+  otherColors: {
+    black: 'rgb(0, 0, 0)',
+    white: 'rgb(255, 255, 255)',
+    grey: 'rgb(155, 155, 155)',
+    red: 'rgb(244,67,54)',
+    green: 'rgb(76,175,80)',
+    logo: '#0B0B09',
+    badge: 'rgb(230, 230, 230)',
+    progressBar: 'rgba(230, 230, 230, 0.8)',
+  },
+  orderbookColors: {
+    askDark: 'darkred',
+    ask: 'rgb(244,67,54)',
+    orderbook: 'darkgreen',
+    orderbookLight: 'limegreen',
+    hover: 'rgba(0, 0, 0, 0.2)',
+  },
+  logoColors: logoColorsLightMode,
+  ...globalTheme,
+};
+
+export const darkTheme = {
+  mainColors: {
+    primary: '#313131',
+    primaryAlpha: '#3B4252',
+    primaryDark: '#e5dfdf',
+    secondary: '#313131',
+    secondaryDark: '#313131',
+    secondaryDarkAlpha: 'rgb(196, 196, 196)',
+    border: 'rgb(29, 29, 29)',
+    progressBar: '#e5dfdf',
+    textColor: '#e5dfdf',
+  },
+  border: {
+    borderDefault: '1px solid rgb(196, 196, 196)',
+    borderSecondary: '1px solid rgb(196,196,196)',
+    borderRadius: '0px',
+    borderColor: 'rgb(196, 196, 196)',
+  },
+  statusColors: {
+    primaryProfit: 'rgb(141, 197, 103)',
+    secondaryProfit: 'rgb(243, 249, 241)',
+    primaryLoss: 'rgb(206, 88, 102)',
+    secondaryLoss: 'rgb(252, 240, 242)',
+    warning: 'rgb(249,209,118)',
+    neutral: 'rgb(74,194,238)',
+  },
+  otherColors: {
+    black: 'rgb(0, 0, 0)',
+    white: 'rgb(255, 255, 255)',
+    grey: 'rgb(155, 155, 155)',
+    red: 'rgb(244,67,54)',
+    green: 'rgb(76,175,80)',
+    logo: '#0B0B09',
+    badge: 'black',
+    progressBar: 'black',
+  },
+  orderbookColors: {
+    askDark: 'darkred',
+    ask: 'rgb(244,67,54)',
+    orderbook: 'darkgreen',
+    orderbookLight: 'limegreen',
+    hover: 'rgba(0, 0, 0, 0.2)',
+  },
+  logoColors: logoColorsDarkMode,
+  ...globalTheme,
+};
+
 export const Global = createGlobalStyle`
   *,
   *::before,
@@ -161,26 +227,27 @@ export const Global = createGlobalStyle`
   body {
     margin: 0;
     min-height: 100%;
-    background-color: ${theme.mainColors.secondary};
+    background-color: ${props => props.theme.mainColors.secondary};
+    color: ${props => props.theme.mainColors.textColor}
   }
 
   h1, h2, h3 {
-    margin-bottom: ${theme.spaceUnits.m};
-    font-size: ${theme.fontSizes.xxl};
+    margin-bottom: ${lightTheme.spaceUnits.m};
+    font-size: ${lightTheme.fontSizes.xxl};
     font-weight: bold;
     position: relative;
   }
 
 
   h2, h3 {
-    padding-bottom: ${theme.spaceUnits.xs};
-    border-bottom : ${theme.border.borderSecondary};
-    margin-bottom: ${theme.spaceUnits.xs};
+    padding-bottom: ${lightTheme.spaceUnits.xs};
+    border-bottom : ${lightTheme.border.borderSecondary};
+    margin-bottom: ${lightTheme.spaceUnits.xs};
   }
 
   h4 {
-    font-size: ${theme.fontSizes.xl};
-    margin-bottom: ${theme.spaceUnits.xs};
+    font-size: ${lightTheme.fontSizes.xl};
+    margin-bottom: ${lightTheme.spaceUnits.xs};
   }
 
   a {
@@ -188,8 +255,8 @@ export const Global = createGlobalStyle`
     align-items: center;
     text-decoration: underline;
     cursor: pointer;
-    color: ${theme.otherColors.black};
-    transition: ${theme.transition.defaultAll};
+    color: ${props => props.theme.mainColors.textColor};
+    transition: ${lightTheme.transition.defaultAll};
     :hover{
       opacity: 0.6;
     }
@@ -198,11 +265,11 @@ export const Global = createGlobalStyle`
   hr {
     border: 0;
     height: 0;
-    border-top: 1px solid ${theme.mainColors.border};
-    margin: ${theme.spaceUnits.s} 0;
+    border-top: 1px solid ${lightTheme.mainColors.border};
+    margin: ${lightTheme.spaceUnits.s} 0;
   }
 
   p {
-    margin-bottom: ${theme.spaceUnits.m};
+    margin-bottom: ${lightTheme.spaceUnits.m};
   }
 `;

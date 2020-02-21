@@ -10,7 +10,7 @@ export const Default: React.FC = () => {
   return (
     <Bar>
       <BarContent justify="between">
-        <Headline title="My title" text="My subtitle" icon="icon" />
+        <Headline title="My title" text="My subtitle" icon="WALLET" />
       </BarContent>
     </Bar>
   );
@@ -30,7 +30,7 @@ export const WithButtons: React.FC = () => {
   return (
     <Bar>
       <BarContent justify="between">
-        <Headline title="My title" text="My subtitle" icon="icon" />
+        <Headline title="My title" text="My subtitle" icon="WALLET" />
         <DataBlockSection>
           <Button>button 1</Button>
           <Button>button 2</Button>
@@ -46,7 +46,7 @@ export const WithDataBlock: React.FC = () => {
   return (
     <Bar>
       <BarContent justify="between">
-        <Headline title="My title" text="My subtitle" icon="icon" />
+        <Headline title="My title" text="My subtitle" icon="WALLET" />
         <DataBlockSection>
           <DataBlock label="Share Price">1.0000000 WETH/Share</DataBlock>
           <DataBlock label="AUM">0.1000 WETH</DataBlock>

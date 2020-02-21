@@ -2,6 +2,7 @@ import styled from 'styled-components';
 
 export const Footer = styled.div`
   display: flex;
+  background-color: ${props => props.theme.mainColors.secondary};
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;

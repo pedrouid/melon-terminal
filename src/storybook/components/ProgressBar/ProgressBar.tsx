@@ -11,7 +11,7 @@ export const Container = styled.div`
 `;
 
 export const ProgressBar = styled.div`
-  background-color: rgba(230, 230, 230, 0.8);
+  background-color: ${props => props.theme.otherColors.progressBar};
   position: absolute;
   width: calc(100% - 20px);
   border-radius: 10px;
@@ -21,7 +21,7 @@ export const ProgressBar = styled.div`
 export const Progress = styled(animated.div)`
   height: 10px;
   width: 0;
-  background-color: rgb(29, 29, 29);
+  background-color: ${props => props.theme.mainColors.progressBar};
   border-radius: 10px;
 `;
 

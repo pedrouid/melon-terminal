@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
-  background-color: white;
+  background-color: ${props => props.theme.otherColors.white};
   border-radius: 3px;
   border: 1px solid silver;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.18);

@@ -3,7 +3,7 @@ import { Icons } from './Icons';
 
 export default { title: 'Atoms|Icons' };
 
-export const ANT: React.FC = () => <Icons name="BAT" />;
+export const ANT: React.FC = () => <Icons name="ANT" />;
 export const BAT: React.FC = () => <Icons name="BAT" />;
 export const DAI: React.FC = () => <Icons name="DAI" />;
 export const ENG: React.FC = () => <Icons name="ENG" />;
@@ -32,3 +32,5 @@ export const LEFTARROW: React.FC = () => <Icons name="LEFTARROW" />;
 export const SWAPARROWS: React.FC = () => <Icons name="SWAPARROWS" />;
 export const EXCHANGE: React.FC = () => <Icons name="EXCHANGE" />;
 export const FORTMATIC: React.FC = () => <Icons name="FORTMATIC" />;
+export const SUN: React.FC = () => <Icons name="SUN" />;
+export const MOON: React.FC = () => <Icons name="MOON" />;

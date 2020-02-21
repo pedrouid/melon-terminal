@@ -64,6 +64,7 @@ export const ConnectionInfoItem = styled.div`
 
     &.active {
       background: ${props => props.theme.mainColors.secondaryDarkAlpha};
+      color: ${props => props.theme.mainColors.primary};
     }
 
     &:hover {

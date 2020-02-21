@@ -32,7 +32,7 @@ export const Button = styled.button<ButtonProps>`
     opacity: 0.75;
   }
   :active{
-    background: rgb(0,0,0);
+    background: ${props => props.theme.otherColors.white};
   }
   ${props =>
     props.kind === 'secondary' &&
@@ -62,7 +62,7 @@ export const Button = styled.button<ButtonProps>`
   ${props =>
     props.disabled &&
     css`
-      color: ${props => props.theme.mainColors.secondaryDark};
+      color: ${props => props.theme.mainColors.textColor};
       background: ${props => props.theme.mainColors.secondaryDarkAlpha};
       pointer-events: none;
     `}

@@ -57,23 +57,22 @@ export const OrderbookItem = styled.div<OrderbookItemProps>`
   line-height: 1.25rem;
 
   &:hover {
-    background-color: rgba(0, 0, 0, 0.2);
+    background-color: ${props => props.theme.orderbookColors.hover};
   }
 
   ${props =>
     props.selected &&
     css`
-      background-color: rgba(0, 0, 0, 0.2);
+      background-color: ${props.theme.orderbookColors.hover};
     `}
 `;
 
 export const OrderbookMidprice = styled.div`
   width: 100%;
   text-align: center;
-  background-color: white;
-  // border: solid black;
+  background-color: ${props => props.theme.otherColors.white};
   padding: 4px 0;
-  color: black;
+  color: ${props => props.theme.otherColors.black};
 `;
 
 export interface OrderbookSideProps {
@@ -87,11 +86,11 @@ export const OrderbookSide = styled.div<OrderbookSideProps>`
     props.side === 'asks' &&
     css`
       ${OrderbookPrice} {
-        color: darkred;
+        color: ${props.theme.orderbookColors.askDark};
       }
 
       ${OrderbookHighlight} {
-        color: red;
+        color: ${props.theme.orderbookColors.ask};
       }
     `}
 
@@ -99,11 +98,11 @@ export const OrderbookSide = styled.div<OrderbookSideProps>`
     props.side === 'bids' &&
     css`
       ${OrderbookPrice} {
-        color: darkgreen;
+        color: ${props.theme.orderbookColors.orderbook};
       }
 
       ${OrderbookHighlight} {
-        color: limegreen;
+        color: ${props.theme.orderbookColors.orderbookLight};
       }
     `}
 `;

@@ -34,7 +34,7 @@ export const Input = styled.input<InputProps>`
   background: ${props => props.theme.mainColors.primary};
   height: ${props => props.theme.spaceUnits.xxl};
   box-shadow: inset 1px 4px 4px rgba(200, 200, 200, 0.25);
-
+  color: ${props => props.theme.mainColors.textColor};
   &::placeholder {
     color: ${props => props.theme.mainColors.secondaryDarkAlpha};
   }

@@ -21,7 +21,7 @@ export const DataLabel = styled.p`
   display: inline-block;
   margin-bottom: ${props => props.theme.spaceUnits.xs};
   margin-right: ${props => props.theme.spaceUnits.xs};
-  color: ${props => props.theme.mainColors.secondaryDark};
+  color: ${props => props.theme.mainColors.textColor};
   white-space: nowrap;
   @media (${props => props.theme.mediaQueries.m}) {
     display: block;

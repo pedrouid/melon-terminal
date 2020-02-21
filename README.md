@@ -29,3 +29,19 @@ Please note that all repositories hosted under this organization follow our [Cod
 [yarn]: https://yarnpkg.com
 [node]: https://nodejs.org
 [coc]: https://github.com/Avantgarde-Finance/melonjs/blob/master/CODE_OF_CONDUCT.md
+
+## SVGR
+
+Create a svgr folder:
+
+```
+mdkir svgr
+```
+
+Add all your svg files inside the svgr folder.
+
+Run SVGR:
+
+```
+yarn svgr
+```

@@ -1,17 +1,21 @@
 import styled, { keyframes } from 'styled-components';
 
-export const Badge = styled.div`
+export interface BadgeProps {
+  selected?: boolean;
+}
+
+export const Badge = styled.div<BadgeProps>`
   display: inline-block;
   position: relative;
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  color: white;
+  color: ${props => props.theme.mainColors.textColor};
   display: flex;
   justify-content: center;
   align-items: center;
   font-weight: bold;
-  background-color: rgba(${(props: { selected?: boolean }) => (props.selected ? '29, 29, 29' : '230, 230, 230')});
+  background-color: ${props => (props.selected ? props.theme.mainColors.progressBar : props.theme.otherColors.badge)};
   transition: background-color 1000ms linear;
   z-index: 1;
   &:first-child {
