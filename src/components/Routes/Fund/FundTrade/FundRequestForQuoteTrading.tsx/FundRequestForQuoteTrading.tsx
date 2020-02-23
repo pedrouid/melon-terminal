@@ -76,7 +76,7 @@ function useMarkets() {
         baseEntries.set(quoteToken, [current.id, 'buy']);
 
         const quoteEntries = carry.get(quoteToken) ?? new Map();
-        // quoteEntries.set(baseToken, [current.id, 'sell']);
+        quoteEntries.set(baseToken, [current.id, 'sell']);
 
         return carry.set(baseToken, baseEntries).set(quoteToken, quoteEntries);
       }, new Map<TokenDefinition, Map<TokenDefinition, [string, 'sell' | 'buy']>>());
