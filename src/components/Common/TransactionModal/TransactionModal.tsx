@@ -140,15 +140,27 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
               <S.EthGasStation>
                 <S.EthGasStationButton onClick={() => !loading && setGasPrice(gas!.low)} disabled={loading}>
                   <S.EthGasStationButtonGwei>{gas.low}</S.EthGasStationButtonGwei>
-                  <S.EthGasStationButtonText>Low Gas Price</S.EthGasStationButtonText>
+                  <S.EthGasStationButtonText>
+                    Low
+                    <br />
+                    Gas Price
+                  </S.EthGasStationButtonText>
                 </S.EthGasStationButton>
                 <S.EthGasStationButton onClick={() => !loading && setGasPrice(gas!.average)} disabled={loading}>
                   <S.EthGasStationButtonGwei>{gas.average}</S.EthGasStationButtonGwei>
-                  <S.EthGasStationButtonText>Average Gas Price</S.EthGasStationButtonText>
+                  <S.EthGasStationButtonText>
+                    Average
+                    <br />
+                    Gas Price
+                  </S.EthGasStationButtonText>
                 </S.EthGasStationButton>
                 <S.EthGasStationButton onClick={() => !loading && setGasPrice(gas!.fast)} disabled={loading}>
                   <S.EthGasStationButtonGwei>{gas.fast}</S.EthGasStationButtonGwei>
-                  <S.EthGasStationButtonText>Fast Gas Price</S.EthGasStationButtonText>
+                  <S.EthGasStationButtonText>
+                    Fast
+                    <br />
+                    Gas Price
+                  </S.EthGasStationButtonText>
                 </S.EthGasStationButton>
               </S.EthGasStation>
             )}
