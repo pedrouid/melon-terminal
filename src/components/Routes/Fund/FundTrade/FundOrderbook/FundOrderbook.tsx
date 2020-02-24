@@ -6,7 +6,7 @@ import { TokenDefinition, ExchangeDefinition } from '@melonproject/melonjs';
 import { FormattedNumber } from '~/components/Common/FormattedNumber/FormattedNumber';
 import BigNumber from 'bignumber.js';
 import { FundOrderbookPrice } from './FundOrderbookPrice';
-
+import { Grid, GridCol, GridRow } from '~/storybook/components/Grid/Grid';
 
 export interface FundOrderbookProps {
   exchanges: ExchangeDefinition[];
@@ -60,56 +60,51 @@ export const FundOrderbook: React.FC<FundOrderbookProps> = props => {
   const decimals = orders?.decimals ?? 8;
 
   return (
-    <S.Wrapper>
+    <Grid fluid={true}>
+      <GridRow noGap={true} justify="right">
+        <GridCol align="right">Price</GridCol>
+        <GridCol align="right">Quantity</GridCol>
+        <GridCol align="right">Total</GridCol>
+      </GridRow>
       <S.OrderbookSide side="asks">
-        <S.OrderbookHeader>
-          <S.OrderbookLabel  width={'20%'}>
-            Price
-          </S.OrderbookLabel>
-          <S.OrderbookLabel>Quantity</S.OrderbookLabel>
-          <S.OrderbookLabel>Total</S.OrderbookLabel>
-        </S.OrderbookHeader>
-
-        <S.OrderbookBody>
-          {(orders?.asks ?? []).map(item => (
-            <S.OrderbookItem key={item.id} selected={item.id === props.selected?.id} onClick={() => toggle(item)}>
-              <S.OrderbookData  width={'20%'}>
-                <FundOrderbookPrice price={item.price} decimals={orders?.decimals} change={item.change} />
-              </S.OrderbookData>
-              <S.OrderbookData>
+        {(orders?.asks ?? []).map(item => (
+          <S.OrderbookItem key={item.id} selected={item.id === props.selected?.id} onClick={() => toggle(item)}>
+            <GridRow key={item.id} noGap={true} justify="right">
+              <GridCol align="right">
+                <FundOrderbookPrice price={item.price} decimals={orders?.decimals} change={item.change} />{' '}
+              </GridCol>
+              <GridCol align="right">
                 <FormattedNumber value={item.quantity} />
-              </S.OrderbookData>
-              <S.OrderbookData>
+              </GridCol>
+              <GridCol align="right">
                 <FormattedNumber value={item.total!} />
-              </S.OrderbookData>
-            </S.OrderbookItem>
-          ))}
-        </S.OrderbookBody>
+              </GridCol>
+            </GridRow>
+          </S.OrderbookItem>
+        ))}
       </S.OrderbookSide>
-
-      <S.OrderbookMidprice>
-        <div>
+      <GridRow>
+        <S.OrderbookMidprice>
           MID: <FormattedNumber value={midPrice} decimals={decimals} />
-        </div>
-      </S.OrderbookMidprice>
-
+        </S.OrderbookMidprice>
+      </GridRow>
       <S.OrderbookSide side="bids">
-        <S.OrderbookBody>
-          {(orders?.bids ?? []).map(item => (
-            <S.OrderbookItem key={item.id} selected={item.id === props.selected?.id} onClick={() => toggle(item)}>
-              <S.OrderbookData  width={'20%'}>
-                <FundOrderbookPrice price={item.price} decimals={orders?.decimals} change={item.change} />
-              </S.OrderbookData>
-              <S.OrderbookData>
+        {(orders?.bids ?? []).map(item => (
+          <S.OrderbookItem key={item.id} selected={item.id === props.selected?.id} onClick={() => toggle(item)}>
+            <GridRow key={item.id} noGap={true}>
+              <GridCol align="right">
+                <FundOrderbookPrice price={item.price} decimals={orders?.decimals} change={item.change} />{' '}
+              </GridCol>
+              <GridCol align="right">
                 <FormattedNumber value={item.quantity} />
-              </S.OrderbookData>
-              <S.OrderbookData>
+              </GridCol>
+              <GridCol align="right">
                 <FormattedNumber value={item.total!} />
-              </S.OrderbookData>
-            </S.OrderbookItem>
-          ))}
-        </S.OrderbookBody>
+              </GridCol>
+            </GridRow>
+          </S.OrderbookItem>
+        ))}
       </S.OrderbookSide>
-    </S.Wrapper>
+    </Grid>
   );
 };
