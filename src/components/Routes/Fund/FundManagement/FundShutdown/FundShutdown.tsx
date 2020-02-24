@@ -1,14 +1,13 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import { useEnvironment } from '~/hooks/useEnvironment';
 import { useTransaction } from '~/hooks/useTransaction';
 import { Button } from '~/storybook/components/Button/Button';
 import { TransactionModal } from '~/components/Common/TransactionModal/TransactionModal';
-import { Hub, Version, Trading } from '@melonproject/melonjs';
+import { Version, Trading } from '@melonproject/melonjs';
 import { useAccount } from '~/hooks/useAccount';
 import { Block, BlockActions } from '~/storybook/components/Block/Block';
 import { SectionTitle } from '~/storybook/components/Title/Title';
 import { useFundShutdownQuery } from '~/components/Routes/Fund/FundManagement/FundShutdown/FundShutdown.query';
-import { Spinner } from '~/storybook/components/Spinner/Spinner';
 
 export interface ShutdownProps {
   address: string;
@@ -17,18 +16,13 @@ export interface ShutdownProps {
 export const Shutdown: React.FC<ShutdownProps> = ({ address }) => {
   const environment = useEnvironment()!;
   const account = useAccount();
-  const [info, _] = useFundShutdownQuery(address);
+  const [info, query] = useFundShutdownQuery(address);
 
-  const assetsInTrading = useMemo(() => {
-    return info.routes?.trading?.lockedAssets;
-  }, [info]);
-
-  const hub = new Hub(environment, address);
-
+  const assets = info.routes?.trading?.lockedAssets;
   const transaction = useTransaction(environment, {
     onAcknowledge: async () => {
-      if (assetsInTrading) {
-        const version = new Version(environment, await hub.getVersion());
+      if (assets && assets.length) {
+        const version = new Version(environment, info.routes?.version?.address!);
         const tx = version.shutDownFund(account.address!, address);
         transaction.start(tx, 'Shutdown fund');
       }
@@ -36,14 +30,12 @@ export const Shutdown: React.FC<ShutdownProps> = ({ address }) => {
   });
 
   const submit = async () => {
-    if (assetsInTrading) {
-      const assets = (info!.routes!.accounting!.holdings!.map(holding => holding.token?.address) || []) as string[];
-
-      const trading = new Trading(environment, (await hub.getRoutes()).trading);
-      const tx = trading.returnBatchToVault(account.address!, assets);
+    if (assets && assets.length) {
+      const trading = new Trading(environment, info.routes?.trading?.address!);
+      const tx = trading.returnBatchToVault(account.address!, assets.map(asset => asset.address!));
       transaction.start(tx, 'Return assets to vault');
     } else {
-      const version = new Version(environment, await hub.getVersion());
+      const version = new Version(environment, info.routes?.version?.address!);
       const tx = version.shutDownFund(account.address!, address);
       transaction.start(tx, 'Shutdown fund');
     }
@@ -56,15 +48,12 @@ export const Shutdown: React.FC<ShutdownProps> = ({ address }) => {
         Shutting down your fund closes the fund for new investors and trades will no longer be possible. Investors can
         still redeem their shares whenever they want.
       </p>
-      {info?.address ? (
-        <BlockActions>
-          <Button type="submit" kind="danger" onClick={() => submit()}>
-            Shut Down Fund
-          </Button>
-        </BlockActions>
-      ) : (
-        <Spinner />
-      )}
+
+      <BlockActions>
+        <Button type="submit" kind="danger" disabled={query.loading} loading={query.loading} onClick={() => submit()}>
+          Shut Down Fund
+        </Button>
+      </BlockActions>
 
       <TransactionModal transaction={transaction} />
     </Block>
