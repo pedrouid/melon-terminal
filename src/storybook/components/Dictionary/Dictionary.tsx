@@ -26,14 +26,19 @@ export const DictionaryEntry = styled.div`
 export const DictionaryLabel = styled.div`
   color: ${props => props.theme.mainColors.secondaryDarkAlpha};
   @media (${props => props.theme.mediaQueries.s}) {
-    width: 40%;
+    width: 50%;
   }
 `;
 
-export const DictionaryData = styled.div`
+interface DictionaryDataProps {
+  textAlign?: 'center' | 'left' | 'right';
+}
+
+export const DictionaryData = styled.div<DictionaryDataProps>`
   width: 100%;
+  text-align: ${props => props.textAlign || 'left'};
   @media (${props => props.theme.mediaQueries.s}) {
-    width: 60%;
+    width: 50%;
     padding-left: ${props => props.theme.spaceUnits.s};
   }
 `;
