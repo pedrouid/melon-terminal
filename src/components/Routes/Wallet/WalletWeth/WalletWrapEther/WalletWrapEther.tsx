@@ -15,6 +15,7 @@ import * as S from './WalletWrapEther.styles';
 import { toTokenBaseUnit } from '~/utils/toTokenBaseUnit';
 import { fromTokenBaseUnit } from '~/utils/fromTokenBaseUnit';
 import { TokenValue } from '~/components/Common/TokenValue/TokenValue';
+import { NotificationBar, NotificationContent } from '~/storybook/components/NotificationBar/NotificationBar';
 
 export const WalletWrapEther: React.FC = () => {
   const environment = useEnvironment()!;
@@ -33,7 +34,9 @@ export const WalletWrapEther: React.FC = () => {
   });
 
   const defaultValues = {
-    quantityEth: account.eth?.isLessThan(new BigNumber('1e18')) ? fromTokenBaseUnit(account.eth, 18) : new BigNumber(1),
+    quantityEth: account.eth?.isLessThan(new BigNumber('1e18'))
+      ? fromTokenBaseUnit(account.eth.minus(new BigNumber('1e16')), 18)
+      : new BigNumber(1),
   };
 
   const form = useForm<typeof defaultValues>({
@@ -50,6 +53,11 @@ export const WalletWrapEther: React.FC = () => {
     transaction.start(tx, 'Wrap Ether');
   });
 
+  const amount = form.watch('quantityEth') as BigNumber;
+  const showNotification =
+    !account.eth?.isLessThan(toTokenBaseUnit(amount, 18)) &&
+    account.eth?.minus(toTokenBaseUnit(amount, 18)).isLessThan(new BigNumber('1e16'));
+
   return (
     <Block>
       <Title>Wrap Ether</Title>
@@ -64,6 +72,15 @@ export const WalletWrapEther: React.FC = () => {
             </S.WalletWrapEtherBalance>
           </S.WalletWrapEtherBalances>
           <Input id="quantityEth" name="quantityEth" label="Quantity" type="number" step="any" />
+
+          {showNotification && (
+            <NotificationBar kind="warning">
+              <NotificationContent>
+                Only a very small amount of ETH will be left in your wallet after this transaction, but you need some
+                ETH in your wallet to pay transaction fees.
+              </NotificationContent>
+            </NotificationBar>
+          )}
           <BlockActions>
             <Button type="submit" disabled={!!form.errors.quantityEth}>
               Wrap Ether
@@ -72,7 +89,7 @@ export const WalletWrapEther: React.FC = () => {
         </form>
       </FormContext>
 
-      <TransactionModal transaction={transaction} />
+      <TransactionModal transaction={transaction}></TransactionModal>
     </Block>
   );
 };
