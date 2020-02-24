@@ -102,8 +102,8 @@ export const FundFactSheet: React.FC<FundFactSheetProps> = ({ address }) => {
     (Math.pow(1 + returnSinceInception / 100, oneYear / (afterChange.timestamp - firstChange.timestamp)) - 1) * 100;
 
   const creationTime = creation.getTime() || Date.now();
-  const oneMonthAgo = Date.now() - 30 * 24 * 60 * 60 * 1000;
-  const olderThanOneMonth = creationTime < oneMonthAgo;
+  const oneYearAgo = Date.now() - 365 * 24 * 60 * 60 * 1000;
+  const olderThanOneYear = creationTime < oneYearAgo;
 
   const volatility =
     normalizedCalculations &&
@@ -222,7 +222,7 @@ export const FundFactSheet: React.FC<FundFactSheetProps> = ({ address }) => {
       <DictionaryEntry>
         <DictionaryLabel>Annualized return</DictionaryLabel>
         <DictionaryData>
-          {olderThanOneMonth ? (
+          {olderThanOneYear ? (
             <FormattedNumber value={annualizedReturn} colorize={true} decimals={2} suffix="%" />
           ) : (
             <>Too early to tell</>
@@ -232,7 +232,7 @@ export const FundFactSheet: React.FC<FundFactSheetProps> = ({ address }) => {
       <DictionaryEntry>
         <DictionaryLabel>Annual volatility</DictionaryLabel>
         <DictionaryData>
-          {olderThanOneMonth ? (
+          {olderThanOneYear ? (
             <FormattedNumber value={volatility} colorize={false} decimals={2} suffix="%" />
           ) : (
             <>Too early to tell</>
