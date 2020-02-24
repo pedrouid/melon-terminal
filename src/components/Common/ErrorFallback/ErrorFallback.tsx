@@ -4,29 +4,34 @@ import { Grid, GridRow } from '~/storybook/components/Grid/Grid';
 import { NotificationBar, NotificationContent } from '~/storybook/components/NotificationBar/NotificationBar';
 import { Container } from '~/storybook/components/Container/Container';
 
-export const ErrorFallback: React.FC<FallbackProps> = ({ error, componentStack }) => (
-  <Container>
-    <Grid>
-      <GridRow>
-        <NotificationBar kind="error">
-          <NotificationContent>
-            <p>
-              <strong>Oops! An error occured!</strong>
-            </p>
-            <p>Here’s what we know…</p>
-            {error && (
+export const ErrorFallback: React.FC<FallbackProps> = ({ error, componentStack }) => {
+  const errorReportingUri = encodeURI(
+    `https://github.com/avantgardefinance/melon-terminal/issues/new?title=General error "${error?.message}";body=${error?.stack}`
+  );
+
+  return (
+    <Container>
+      <Grid>
+        <GridRow>
+          <NotificationBar kind="error">
+            <NotificationContent>
               <p>
-                <strong>Error:</strong> {error.toString()}
+                <strong>Oops, something went wrong!</strong>
               </p>
-            )}
-            {componentStack && (
+
+              <p>Please reload the page in your browser (Ctrl/Cmd R) and try again.</p>
+
               <p>
-                <strong>Stacktrace:</strong> {componentStack}
+                If the error does not disappear after reloading, please file an{' '}
+                <a href={errorReportingUri} target="_blank">
+                  error report
+                </a>
+                .
               </p>
-            )}
-          </NotificationContent>
-        </NotificationBar>
-      </GridRow>
-    </Grid>
-  </Container>
-);
+            </NotificationContent>
+          </NotificationBar>
+        </GridRow>
+      </Grid>
+    </Container>
+  );
+};

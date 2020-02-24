@@ -89,7 +89,7 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
 
   const currentStep = progressToStep(state.progress);
   const errorReportingUri = encodeURI(
-    `https://github.com/avantgardefinance/interface/issues/new?title=Error in transaction "${state.name}";body=${error?.stack}`
+    `https://github.com/avantgardefinance/melon-terminal/issues/new?title=Error in transaction "${state.name}";body=${error?.stack}`
   );
 
   return (
