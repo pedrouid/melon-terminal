@@ -159,25 +159,25 @@ export const FundFactSheet: React.FC<FundFactSheetProps> = ({ address }) => {
       </DictionaryEntry>
       <DictionaryEntry>
         <DictionaryLabel>Gross asset value (GAV)</DictionaryLabel>
-        <DictionaryData>
+        <DictionaryData textAlign="right">
           <TokenValue value={accounting?.grossAssetValue} symbol="WETH" decimals={0} />
         </DictionaryData>
       </DictionaryEntry>
       <DictionaryEntry>
         <DictionaryLabel>Net asset value (NAV)</DictionaryLabel>
-        <DictionaryData>
+        <DictionaryData textAlign="right">
           <TokenValue value={accounting?.netAssetValue} symbol="WETH" decimals={0} />
         </DictionaryData>
       </DictionaryEntry>
       <DictionaryEntry>
         <DictionaryLabel>Total number of shares</DictionaryLabel>
-        <DictionaryData>
+        <DictionaryData textAlign="right">
           <TokenValue value={shares?.totalSupply} decimals={0} />
         </DictionaryData>
       </DictionaryEntry>
       <DictionaryEntry>
         <DictionaryLabel>Share price</DictionaryLabel>
-        <DictionaryData>
+        <DictionaryData textAlign="right">
           <TokenValue value={accounting?.sharePrice} symbol="WETH" decimals={0} />
         </DictionaryData>
       </DictionaryEntry>
@@ -187,19 +187,19 @@ export const FundFactSheet: React.FC<FundFactSheetProps> = ({ address }) => {
       </DictionaryEntry>
       <DictionaryEntry>
         <DictionaryLabel>Management fee</DictionaryLabel>
-        <DictionaryData>
+        <DictionaryData textAlign="right">
           <FormattedNumber value={managementFee?.rate} decimals={0} suffix="%" />
         </DictionaryData>
       </DictionaryEntry>
       <DictionaryEntry>
         <DictionaryLabel>Performance fee</DictionaryLabel>
-        <DictionaryData>
+        <DictionaryData textAlign="right">
           <FormattedNumber value={performanceFee?.rate} decimals={0} suffix="%" />
         </DictionaryData>
       </DictionaryEntry>
       <DictionaryEntry>
         <DictionaryLabel>Performance fee period</DictionaryLabel>
-        <DictionaryData>
+        <DictionaryData textAlign="right">
           <FormattedNumber value={performanceFee?.period} decimals={0} suffix="days" />
         </DictionaryData>
       </DictionaryEntry>

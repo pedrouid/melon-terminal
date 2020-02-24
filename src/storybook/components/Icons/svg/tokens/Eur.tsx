@@ -1,6 +1,6 @@
 import React, { SVGProps } from 'react';
 
-const SvgEur = (props: SVGProps<SVGSVGElement>) => (
+const SvgTt = (props: SVGProps<SVGSVGElement>) => (
   <svg {...props}>
     <g fill="none" fillRule="evenodd">
       <circle cx={16} cy={16} fill="#0f8ff8" r={16} />
@@ -12,4 +12,4 @@ const SvgEur = (props: SVGProps<SVGSVGElement>) => (
   </svg>
 );
 
-export default SvgEur;
+export default SvgTt;

@@ -2,18 +2,26 @@ import styled from 'styled-components';
 
 export const FundOrderbookTrading = styled.div`
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   flex-wrap: wrap;
   justify-content: space-between;
+  @media (${props => props.theme.mediaQueries.m}) {
+    flex-direction: row;
+  }
 `;
 
 export const FundOrderbook = styled.div`
-  flex: 0.7 1;
-  padding-left: ${props => props.theme.spaceUnits.l};
-  border-left: 1px solid #c4c4c4;
+  flex: 0.5 1;
+  margin-top: ${props => props.theme.spaceUnits.l};
+  @media (${props => props.theme.mediaQueries.m}) {
+    padding-left: ${props => props.theme.spaceUnits.l};
+    border-left: 1px solid #c4c4c4;
+  }
 `;
 
 export const FundOrderbookForm = styled.div`
   flex: 0.5 1;
-  padding-right: ${props => props.theme.spaceUnits.l};
+  @media (${props => props.theme.mediaQueries.m}) {
+    padding-right: ${props => props.theme.spaceUnits.l};
+  }
 `;

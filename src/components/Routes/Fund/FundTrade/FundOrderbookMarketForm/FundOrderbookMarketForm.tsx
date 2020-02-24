@@ -235,7 +235,7 @@ export const FundOrderbookMarketForm: React.FC<FundOrderbookMarketFormProps> = p
           )}
 
           <BlockActions>
-            <Button type="button" disabled={!ready} onClick={submit}>
+            <Button type="button" length="stretch" disabled={!ready} onClick={submit}>
               Submit
             </Button>
           </BlockActions>

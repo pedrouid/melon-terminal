@@ -37,7 +37,7 @@ export interface OrderbookDataProps {
 export const OrderbookData = styled.span<OrderbookDataProps>`
   font-size: ${props => props.theme.fontSizes.s};
   text-align: ${props => (props.left ? 'left' : 'right')};
-  width: ${props => (props.width ? props.width : '33%')};
+  width: ${props => (props.width ? props.width : '40%')};
 `;
 
 export const OrderbookPrice = styled.span``;

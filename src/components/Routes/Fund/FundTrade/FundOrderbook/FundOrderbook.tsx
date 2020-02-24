@@ -7,6 +7,7 @@ import { FormattedNumber } from '~/components/Common/FormattedNumber/FormattedNu
 import BigNumber from 'bignumber.js';
 import { FundOrderbookPrice } from './FundOrderbookPrice';
 
+
 export interface FundOrderbookProps {
   exchanges: ExchangeDefinition[];
   setSelected: (order?: OrderbookItem) => void;
@@ -62,7 +63,7 @@ export const FundOrderbook: React.FC<FundOrderbookProps> = props => {
     <S.Wrapper>
       <S.OrderbookSide side="asks">
         <S.OrderbookHeader>
-          <S.OrderbookLabel left={true} width={'auto'}>
+          <S.OrderbookLabel  width={'20%'}>
             Price
           </S.OrderbookLabel>
           <S.OrderbookLabel>Quantity</S.OrderbookLabel>
@@ -72,7 +73,7 @@ export const FundOrderbook: React.FC<FundOrderbookProps> = props => {
         <S.OrderbookBody>
           {(orders?.asks ?? []).map(item => (
             <S.OrderbookItem key={item.id} selected={item.id === props.selected?.id} onClick={() => toggle(item)}>
-              <S.OrderbookData left={true} width={'auto'}>
+              <S.OrderbookData  width={'20%'}>
                 <FundOrderbookPrice price={item.price} decimals={orders?.decimals} change={item.change} />
               </S.OrderbookData>
               <S.OrderbookData>
@@ -96,7 +97,7 @@ export const FundOrderbook: React.FC<FundOrderbookProps> = props => {
         <S.OrderbookBody>
           {(orders?.bids ?? []).map(item => (
             <S.OrderbookItem key={item.id} selected={item.id === props.selected?.id} onClick={() => toggle(item)}>
-              <S.OrderbookData left={true} width={'auto'}>
+              <S.OrderbookData  width={'20%'}>
                 <FundOrderbookPrice price={item.price} decimals={orders?.decimals} change={item.change} />
               </S.OrderbookData>
               <S.OrderbookData>

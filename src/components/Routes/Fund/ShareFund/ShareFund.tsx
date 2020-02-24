@@ -42,7 +42,7 @@ export const ShareFund: React.FC<ShareFundProps> = ({ address }) => {
       <NotificationContent>
         Tell the world about your on-chain investment vehicle{' '}
         <a onClick={onClick}>
-          <Icons name="TWITTER" size="small" />
+          <Icons name="TWITTER" size="small" colored={true} />
         </a>
       </NotificationContent>
     </NotificationBar>

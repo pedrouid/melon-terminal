@@ -37,12 +37,12 @@ export const FundMetrics: React.FC = () => {
     <Dictionary>
       <SectionTitle>Network Metrics</SectionTitle>
       <Grid>
-        <GridRow>
-          <GridCol xs={12} sm={6}>
+        <GridRow justify="space-around">
+          <GridCol xs={8} sm={4}>
             {funds && (
               <DictionaryEntry>
                 <DictionaryLabel>Number of funds</DictionaryLabel>
-                <DictionaryData>
+                <DictionaryData textAlign="right">
                   {parseInt(funds.active ?? '0', 10) + parseInt(funds.nonActive ?? '0', 10)}
                 </DictionaryData>
               </DictionaryEntry>
@@ -50,20 +50,20 @@ export const FundMetrics: React.FC = () => {
             {investors && (
               <DictionaryEntry>
                 <DictionaryLabel>Number of investors</DictionaryLabel>
-                <DictionaryData>{parseInt(investors.numberOfInvestors ?? '0', 10)}</DictionaryData>
+                <DictionaryData textAlign="right">{parseInt(investors.numberOfInvestors ?? '0', 10)}</DictionaryData>
               </DictionaryEntry>
             )}
           </GridCol>
-          <GridCol xs={12} sm={6}>
+          <GridCol xs={8} sm={5}>
             <DictionaryEntry>
               <DictionaryLabel>Total AUM (in ETH)</DictionaryLabel>
-              <DictionaryData>
+              <DictionaryData textAlign="right">
                 <FormattedNumber tooltip={true} decimals={0} value={weiToEth} suffix="ETH" />
               </DictionaryData>
             </DictionaryEntry>
             <DictionaryEntry>
               <DictionaryLabel>Total AUM (in USD)</DictionaryLabel>
-              <DictionaryData>
+              <DictionaryData textAlign="right">
                 <FormattedNumber value={mlnPrice} decimals={0} suffix="USD" />
               </DictionaryData>
             </DictionaryEntry>
