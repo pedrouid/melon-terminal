@@ -10,10 +10,15 @@ const FundShutdownQuery = gql`
     fund(address: $address) {
       address
       routes {
+        version {
+          address
+        }
         trading {
+          address
           lockedAssets
         }
         accounting {
+          address
           holdings {
             token {
               address

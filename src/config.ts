@@ -48,6 +48,20 @@ export const config: ConfigMap = {
           decimals: 8,
           historic: true,
         },
+        {
+          symbol: 'OMG',
+          address: '0xd26114cd6EE289AccF82350c8d8487fedB8A0C07',
+          name: 'OmiseGo',
+          decimals: 18,
+          historic: true,
+        },
+        {
+          symbol: 'USDT',
+          address: '0xdac17f958d2ee523a2206206994597c13d831ec7',
+          name: 'Tether USD',
+          decimals: 6,
+          historic: true,
+        },
       ],
       exchanges: [
         {
