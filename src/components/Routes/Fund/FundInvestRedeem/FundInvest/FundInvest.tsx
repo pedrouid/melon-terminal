@@ -82,7 +82,12 @@ export const FundInvest: React.FC<FundInvestProps> = ({ address }) => {
   }
 
   const totalSupply = result?.fund?.routes?.shares?.totalSupply;
-  const fallback = <>Investments in this fund have been disabled.</>;
+  const fallback = (
+    <>
+      The Melon Terminal does not support investments in funds which are running on deprecated versions of the Melon
+      protocol.
+    </>
+  );
 
   return (
     <Block>
