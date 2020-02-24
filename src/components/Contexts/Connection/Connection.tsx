@@ -141,8 +141,11 @@ export function reducer(state: ConnectionState, action: ConnectionAction): Conne
     }
 
     case ConnectionActionType.NETWORK_CHANGED: {
-      const deployment = state.network === action.network ? state.deployment : undefined;
-      return { ...state, deployment, network: action.network };
+      const identical = state.network === action.network;
+      const deployment = identical ? state.deployment : undefined;
+      const account = identical ? state.account : undefined;
+      const accounts = identical ? state.accounts : undefined;
+      return { ...state, account, accounts, deployment, network: action.network };
     }
 
     case ConnectionActionType.ACCOUNTS_CHANGED: {
@@ -196,6 +199,7 @@ export function reducer(state: ConnectionState, action: ConnectionAction): Conne
 
 export interface ConnectionContext {
   environment?: DeployedEnvironment;
+  network?: NetworkEnum;
   accounts?: Address[];
   account?: Address;
   method?: string;
@@ -220,6 +224,7 @@ export interface ConnectionMethod {
   icon?: IconName;
   component: React.ComponentType<ConnectionMethodProps>;
   connect: () => Rx.Observable<ConnectionAction>;
+  supported: () => boolean;
 }
 
 export interface ConnectionProviderProps {
@@ -278,13 +283,13 @@ export const ConnectionProvider: React.FC<ConnectionProviderProps> = props => {
 
   // Load the deployment based on the current network whenever it changes.
   useEffect(() => {
-    if (!state.network) {
+    const current = state.network ? config[state.network] : undefined;
+    if (current == null) {
       return;
     }
 
     dispatch(deploymentLoading());
 
-    const current = config[state.network];
     const subscription = Rx.from(current.deployment()).subscribe({
       next: deployment => dispatch(deploymentLoaded(deployment)),
       error: error => dispatch(deploymentError(error)),
@@ -294,6 +299,10 @@ export const ConnectionProvider: React.FC<ConnectionProviderProps> = props => {
   }, [state.network]);
 
   const status = useMemo(() => {
+    if (state.network == null || state.network === NetworkEnum.UNSUPPORTED) {
+      return ConnectionStatus.OFFLINE;
+    }
+
     if (state.network && state.deployment) {
       return ConnectionStatus.CONNECTED;
     }
@@ -307,8 +316,12 @@ export const ConnectionProvider: React.FC<ConnectionProviderProps> = props => {
 
   // Create the environment once the required values are available.
   const environment = useMemo(() => {
+    if (state.network == null || state.network === NetworkEnum.UNSUPPORTED) {
+      return undefined;
+    }
+
     if (state.eth && state.network && state.deployment) {
-      return createEnvironment(state.eth, state.deployment, state.network, config[state.network]);
+      return createEnvironment(state.eth, state.deployment, state.network, config[state.network]!);
     }
 
     return undefined;
@@ -318,6 +331,7 @@ export const ConnectionProvider: React.FC<ConnectionProviderProps> = props => {
   const context: ConnectionContext = {
     environment,
     status,
+    network: state.network,
     account: state.account,
     accounts: state.accounts,
     method: state.method,

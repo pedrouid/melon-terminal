@@ -68,6 +68,7 @@ export const FortmaticComponent: React.FC<ConnectionMethodProps> = ({ connect, d
 
 export const method: ConnectionMethod = {
   connect,
+  supported: () => true,
   component: FortmaticComponent,
   icon: 'FORTMATIC',
   name: 'fortmatic',

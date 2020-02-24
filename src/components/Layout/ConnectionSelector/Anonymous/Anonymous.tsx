@@ -83,6 +83,7 @@ export const Anonymous: React.FC<ConnectionMethodProps> = ({ connect, active }) 
 
 export const method: ConnectionMethod = {
   connect,
+  supported: () => true,
   component: Anonymous,
   name: 'anonymous',
   label: 'Anonymous',

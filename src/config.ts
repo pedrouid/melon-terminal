@@ -10,7 +10,7 @@ export interface Config {
 }
 
 export type ConfigMap = {
-  [index in NetworkEnum]: Config;
+  [index in NetworkEnum]?: Config;
 };
 
 async function loadDeployment(fallback: () => Promise<any>, source?: string) {

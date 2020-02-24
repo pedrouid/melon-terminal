@@ -13,15 +13,25 @@ import { AppRouter } from '~/components/AppRouter';
 
 // TODO: Consider excluding ganache in production builds entirely.
 import { method as metamask } from './Layout/ConnectionSelector/MetaMask/MetaMask';
+import { method as dapper } from './Layout/ConnectionSelector/Dapper/Dapper';
+import { method as coinbase } from './Layout/ConnectionSelector/Coinbase/Coinbase';
 import { method as frame } from './Layout/ConnectionSelector/Frame/Frame';
 import { method as ganache } from './Layout/ConnectionSelector/Ganache/Ganache';
-import { method as fortmatic } from './Layout/ConnectionSelector/Fortmatic/Fortmatic';
+// import { method as fortmatic } from './Layout/ConnectionSelector/Fortmatic/Fortmatic';
 import { method as anonymous } from './Layout/ConnectionSelector/Anonymous/Anonymous';
 import { DarkModeProvider } from './Contexts/DarkMode/DarkMode';
 
 const AppComponent = () => {
-  const start = process.env.MELON_TESTNET ? ganache : anonymous;
-  const methods = process.env.MELON_TESTNET ? [ganache, metamask, frame, fortmatic] : [metamask, frame, fortmatic];
+  const common = [metamask, dapper, coinbase, frame];
+  let start = process.env.MELON_TESTNET ? ganache : anonymous;
+  let methods = process.env.MELON_TESTNET ? [ganache, ...common] : common;
+  let switchable = true;
+
+  if (coinbase.supported()) {
+    start = coinbase;
+    methods = [coinbase];
+    switchable = false;
+  }
 
   return (
     <Router>
@@ -32,7 +42,7 @@ const AppComponent = () => {
               <ConnectionProvider methods={methods} default={start} disconnect={anonymous}>
                 <ApolloProvider>
                   <AccountProvider>
-                    <Layout>
+                    <Layout connectionSwitch={switchable}>
                       <AppRouter />
                     </Layout>
                   </AccountProvider>

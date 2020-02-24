@@ -32,7 +32,10 @@ export const Shutdown: React.FC<ShutdownProps> = ({ address }) => {
   const submit = async () => {
     if (assets && assets.length) {
       const trading = new Trading(environment, info.routes?.trading?.address!);
-      const tx = trading.returnBatchToVault(account.address!, assets.map(asset => asset.address!));
+      const tx = trading.returnBatchToVault(
+        account.address!,
+        assets.map(asset => asset.address!)
+      );
       transaction.start(tx, 'Return assets to vault');
     } else {
       const version = new Version(environment, info.routes?.version?.address!);

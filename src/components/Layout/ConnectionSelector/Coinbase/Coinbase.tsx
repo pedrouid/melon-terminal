@@ -4,8 +4,6 @@ import { map, switchMap, mapTo } from 'rxjs/operators';
 import { Eth } from 'web3-eth';
 import { networkFromId } from '~/utils/networkFromId';
 import {
-  networkChanged,
-  accountsChanged,
   connectionEstablished,
   ConnectionAction,
   ConnectionMethod,
@@ -16,12 +14,12 @@ import { Button } from '~/storybook/components/Button/Button';
 
 const supported = () => {
   const ethereum = (window as any).ethereum;
-  return !!(ethereum && ethereum.isMetaMask);
+  return !!(ethereum && ethereum.isCoinbaseWallet);
 };
 
 const connect = (): Rx.Observable<ConnectionAction> => {
   const ethereum = (window as any).ethereum;
-  if (!ethereum || !ethereum.isMetaMask) {
+  if (!ethereum || !ethereum.isCoinbaseWallet) {
     return Rx.NEVER;
   }
 
@@ -30,38 +28,29 @@ const connect = (): Rx.Observable<ConnectionAction> => {
   });
 
   const enable$ = Rx.defer(() => ethereum.enable() as Promise<string[]>);
-  const timer$ = Rx.timer(100).pipe(mapTo([]));
-  const initial$ = Rx.race(enable$, timer$).pipe(
+  const initial$ = enable$.pipe(
     switchMap(async accounts => {
       const network = networkFromId(await eth.net.getId());
       return connectionEstablished(eth, network, accounts);
     })
   );
 
-  const network$ = Rx.fromEvent<string>(ethereum, 'networkChanged').pipe(
-    map(id => networkChanged(networkFromId(parseInt(id, 10))))
-  );
-
-  const accounts$ = Rx.concat(enable$, Rx.fromEvent<string[]>(ethereum, 'accountsChanged')).pipe(
-    map(accounts => accountsChanged(accounts))
-  );
-
-  return Rx.concat(initial$, Rx.merge(accounts$, network$));
+  return initial$;
 };
 
-export const MetaMask: React.FC<ConnectionMethodProps> = ({ connect, disconnect, active }) => {
+export const Coinbase: React.FC<ConnectionMethodProps> = ({ connect, disconnect, active }) => {
   return (
     <>
-      <SectionTitle>Metamask</SectionTitle>
+      <SectionTitle>Coinbase</SectionTitle>
       {!active ? (
         <Button length="stretch" onClick={() => connect()}>
           Connect
         </Button>
       ) : (
-        <Button length="stretch" onClick={() => disconnect()}>
-          Disconnect
+          <Button length="stretch" onClick={() => disconnect()}>
+            Disconnect
         </Button>
-      )}
+        )}
     </>
   );
 };
@@ -69,8 +58,7 @@ export const MetaMask: React.FC<ConnectionMethodProps> = ({ connect, disconnect,
 export const method: ConnectionMethod = {
   connect,
   supported,
-  component: MetaMask,
-  icon: 'METAMASK',
-  name: 'metamask',
-  label: 'MetaMask',
+  component: Coinbase,
+  name: 'coinbase',
+  label: 'Coinbase',
 };

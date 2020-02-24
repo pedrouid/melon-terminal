@@ -27,7 +27,11 @@ import { FormattedDate } from '../Common/FormattedDate/FormattedDate';
 
 const graphiql = JSON.parse(process.env.MELON_INCLUDE_GRAPHIQL || 'false');
 
-export const Layout: React.FC = ({ children }) => {
+export interface LayoutProps {
+  connectionSwitch: boolean;
+}
+
+export const Layout: React.FC<LayoutProps> = (props) => {
   const location = useLocation()!;
   const [update] = usePriceFeedUpdateQuery();
   const environment = useEnvironment();
@@ -82,14 +86,17 @@ export const Layout: React.FC = ({ children }) => {
                   </NavLink>
                 </ConnectionInfoItem>
               )}
-              <ConnectionInfoItem>
-                <ConnectionSelector />
-              </ConnectionInfoItem>
+
+              {props.connectionSwitch && (
+                <ConnectionInfoItem>
+                  <ConnectionSelector />
+                </ConnectionInfoItem>
+              )}
             </ConnectionInfo>
           </HeaderContent>
         </HeaderContainer>
       </SkeletonHead>
-      <SkeletonBody>{children}</SkeletonBody>
+      <SkeletonBody>{props.children}</SkeletonBody>
       <SkeletonFeet>
         <Footer>
           <FooterNavigation>

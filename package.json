@@ -30,7 +30,7 @@
     "lint": "tslint --project .",
     "format": "prettier --write 'src/**/*.{ts,tsx}'",
     "typecheck": "tsc --noEmit",
-    "svgr": "svgr  --no-dimensions --ext tsx -d src/storybook/components/Icons/svg/ svgr/*"
+    "svgr": "svgr --no-dimensions --ext tsx -d src/storybook/components/Icons/svg/ svgr/*"
   },
   "dependencies": {
     "@0x/order-utils": "^8.5.0-beta.4",

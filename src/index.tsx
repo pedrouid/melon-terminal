@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import { App } from '~/components/App';
 
 const ethereum = (window as any).ethereum;
-if (typeof ethereum !== 'undefined') {
+if (!!(ethereum && ethereum.isMetaMask)) {
   ethereum.autoRefreshOnNetworkChange = false;
 }
 
