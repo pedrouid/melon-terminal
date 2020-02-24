@@ -6,6 +6,7 @@ import { TokenDefinition, ExchangeDefinition } from '@melonproject/melonjs';
 import { FormattedNumber } from '~/components/Common/FormattedNumber/FormattedNumber';
 import BigNumber from 'bignumber.js';
 import { FundOrderbookPrice } from './FundOrderbookPrice';
+import { Grid, GridCol, GridRow } from '~/storybook/components/Grid/Grid';
 
 export interface FundOrderbookProps {
   exchanges: ExchangeDefinition[];
@@ -62,7 +63,7 @@ export const FundOrderbook: React.FC<FundOrderbookProps> = props => {
     <S.Wrapper>
       <S.OrderbookSide side="asks">
         <S.OrderbookHeader>
-          <S.OrderbookLabel left={true} width={'auto'}>
+          <S.OrderbookLabel  width={'20%'}>
             Price
           </S.OrderbookLabel>
           <S.OrderbookLabel>Quantity</S.OrderbookLabel>
@@ -72,7 +73,7 @@ export const FundOrderbook: React.FC<FundOrderbookProps> = props => {
         <S.OrderbookBody>
           {(orders?.asks ?? []).map(item => (
             <S.OrderbookItem key={item.id} selected={item.id === props.selected?.id} onClick={() => toggle(item)}>
-              <S.OrderbookData left={true} width={'auto'}>
+              <S.OrderbookData  width={'20%'}>
                 <FundOrderbookPrice price={item.price} decimals={orders?.decimals} change={item.change} />
               </S.OrderbookData>
               <S.OrderbookData>
@@ -96,7 +97,7 @@ export const FundOrderbook: React.FC<FundOrderbookProps> = props => {
         <S.OrderbookBody>
           {(orders?.bids ?? []).map(item => (
             <S.OrderbookItem key={item.id} selected={item.id === props.selected?.id} onClick={() => toggle(item)}>
-              <S.OrderbookData left={true} width={'auto'}>
+              <S.OrderbookData  width={'20%'}>
                 <FundOrderbookPrice price={item.price} decimals={orders?.decimals} change={item.change} />
               </S.OrderbookData>
               <S.OrderbookData>
