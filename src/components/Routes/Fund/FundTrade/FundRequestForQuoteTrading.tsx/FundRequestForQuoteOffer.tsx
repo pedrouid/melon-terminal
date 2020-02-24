@@ -15,7 +15,6 @@ import { NotificationBar, NotificationContent } from '~/storybook/components/Not
 import { FormattedNumber } from '~/components/Common/FormattedNumber/FormattedNumber';
 import { TokenValue } from '~/components/Common/TokenValue/TokenValue';
 import { toTokenBaseUnit } from '~/utils/toTokenBaseUnit';
-import { GraphQLEnumType } from 'graphql';
 
 export interface FundRequestForQuoteOfferProps {
   active: boolean;
@@ -155,10 +154,8 @@ export const FundRequestForQuoteOffer: React.FC<FundRequestForQuoteOfferProps> =
     (async () => {
       const trading = new Trading(environment, props.trading);
       const adapter = await ZeroExV2TradingAdapter.create(environment, props.exchange.exchange, trading);
-      const tx =
-        props.side === 'sell'
-          ? adapter.takeOrder(account.address!, quote.offer, quantity)
-          : adapter.takeOrder(account.address!, quote.offer);
+      const tx = adapter.takeOrder(account.address!, quote.offer, quantity);
+
       transaction.start(tx, 'Take order');
     })();
   }, [quote]);
@@ -186,12 +183,7 @@ export const FundRequestForQuoteOffer: React.FC<FundRequestForQuoteOfferProps> =
         <NotificationBar kind="neutral">
           <NotificationContent>
             You are selling{' '}
-            <TokenValue
-              value={props.side === 'sell' ? quantity : quote?.offer.takerAssetAmount}
-              decimals={quote?.taker.decimals}
-              symbol={quote?.taker.symbol}
-            />{' '}
-            in exchange for{' '}
+            <TokenValue value={quantity} decimals={quote?.taker.decimals} symbol={quote?.taker.symbol} /> in exchange for{' '}
             <TokenValue
               value={quote?.offer.makerAssetAmount}
               decimals={quote?.maker.decimals}
