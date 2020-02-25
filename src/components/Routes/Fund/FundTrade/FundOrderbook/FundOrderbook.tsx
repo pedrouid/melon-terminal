@@ -60,51 +60,57 @@ export const FundOrderbook: React.FC<FundOrderbookProps> = props => {
   const decimals = orders?.decimals ?? 8;
 
   return (
-    <Grid fluid={true}>
-      <GridRow noGap={true} justify="right">
-        <GridCol align="right">Price</GridCol>
-        <GridCol align="right">Quantity</GridCol>
-        <GridCol align="right">Total</GridCol>
+    <Grid>
+      <GridRow noGap={true} justify='flex-start'>
+        <GridCol align="flex-end">Price</GridCol>
+        <GridCol align="flex-end">Quantity</GridCol>
+        <GridCol align="flex-end">Total</GridCol>
       </GridRow>
-      <S.OrderbookSide side="asks">
-        {(orders?.asks ?? []).map(item => (
-          <S.OrderbookItem key={item.id} selected={item.id === props.selected?.id} onClick={() => toggle(item)}>
-            <GridRow key={item.id} noGap={true} justify="right">
-              <GridCol align="right">
-                <FundOrderbookPrice price={item.price} decimals={orders?.decimals} change={item.change} />{' '}
-              </GridCol>
-              <GridCol align="right">
-                <FormattedNumber value={item.quantity} />
-              </GridCol>
-              <GridCol align="right">
-                <FormattedNumber value={item.total!} />
-              </GridCol>
-            </GridRow>
-          </S.OrderbookItem>
-        ))}
-      </S.OrderbookSide>
-      <GridRow>
-        <S.OrderbookMidprice>
-          MID: <FormattedNumber value={midPrice} decimals={decimals} />
+
+      {(orders?.asks ?? []).map(item => (
+        <S.OrderbookRow
+          key={item.id}
+          noGap={true}
+          side='asks'
+          selected={item.id === props.selected?.id}
+          onClick={() => toggle(item)}
+          justify='space-evenly'
+        >
+          <GridCol align="flex-end">
+            <FundOrderbookPrice price={item.price} decimals={orders?.decimals} change={item.change} />{' '}
+          </GridCol>
+          <GridCol align="flex-end">
+            <FormattedNumber value={item.quantity} />
+          </GridCol>
+          <GridCol align="flex-end">
+            <FormattedNumber value={item.total!} />
+          </GridCol>
+        </S.OrderbookRow>
+      ))}
+        <S.OrderbookMidprice justify='center'>
+          MID:  <FormattedNumber value={midPrice} decimals={decimals} />
         </S.OrderbookMidprice>
-      </GridRow>
-      <S.OrderbookSide side="bids">
-        {(orders?.bids ?? []).map(item => (
-          <S.OrderbookItem key={item.id} selected={item.id === props.selected?.id} onClick={() => toggle(item)}>
-            <GridRow key={item.id} noGap={true}>
-              <GridCol align="right">
-                <FundOrderbookPrice price={item.price} decimals={orders?.decimals} change={item.change} />{' '}
-              </GridCol>
-              <GridCol align="right">
-                <FormattedNumber value={item.quantity} />
-              </GridCol>
-              <GridCol align="right">
-                <FormattedNumber value={item.total!} />
-              </GridCol>
-            </GridRow>
-          </S.OrderbookItem>
-        ))}
-      </S.OrderbookSide>
+
+      {(orders?.bids ?? []).map(item => (
+        <S.OrderbookRow
+          key={item.id}
+          noGap={true}
+          side='bids'
+          selected={item.id === props.selected?.id}
+          onClick={() => toggle(item)}
+          justify='space-evenly'
+        >
+          <GridCol align='flex-end'>
+            <FundOrderbookPrice price={item.price} decimals={orders?.decimals} change={item.change} />{' '}
+          </GridCol>
+          <GridCol align='flex-end'>
+            <FormattedNumber value={item.quantity} />
+          </GridCol>
+          <GridCol align='flex-end'>
+            <FormattedNumber value={item.total!} />
+          </GridCol>
+        </S.OrderbookRow>
+      ))}
     </Grid>
   );
 };
