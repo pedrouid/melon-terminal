@@ -69,6 +69,9 @@ export const FundOrderbookTrading: React.FC<FundOrderbookTradingProps> = props =
                 setOrder(order);
               }}
             />
+            <S.FundOrderbookFooter>
+              Orderbook is the aggregation of the OasisDEX and 0x relayers orderbooks.
+            </S.FundOrderbookFooter>
           </S.FundOrderbook>
         )}
       </S.FundOrderbookTrading>
