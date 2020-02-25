@@ -1,27 +1,14 @@
 import React from 'react';
 import * as Rx from 'rxjs';
-import { equals } from 'ramda';
 import { Eth } from 'web3-eth';
 import { HttpProvider } from 'web3-providers';
 import {
   ConnectionMethod,
   ConnectionAction,
-  networkChanged,
   connectionEstablished,
   ConnectionMethodProps,
 } from '~/components/Contexts/Connection/Connection';
-import {
-  map,
-  expand,
-  concatMap,
-  retryWhen,
-  delay,
-  take,
-  distinctUntilChanged,
-  share,
-  skip,
-  catchError,
-} from 'rxjs/operators';
+import { map, retryWhen, delay, take, share } from 'rxjs/operators';
 import { networkFromId } from '~/utils/networkFromId';
 import { SectionTitle } from '~/storybook/components/Title/Title';
 import { Button } from '~/storybook/components/Button/Button';
@@ -43,26 +30,13 @@ const connect = (): Rx.Observable<ConnectionAction> => {
   return Rx.using(create, resource => {
     const eth = (resource as EthResource).eth;
     const connect$ = Rx.defer(async () => networkFromId(await eth.net.getId())).pipe(
-      retryWhen(error => error.pipe(delay(1000))),
+      retryWhen(error => error.pipe(delay(10000))),
       take(1),
       share()
     );
 
-    const enable$ = connect$.pipe(map(network => connectionEstablished(eth, network)));
-    const network$ = connect$.pipe(
-      expand(() =>
-        Rx.timer(1000).pipe(
-          concatMap(() => eth.net.getId()),
-          map(id => networkFromId(id)),
-          catchError(() => Rx.of(undefined))
-        )
-      ),
-      distinctUntilChanged((a, b) => equals(a, b)),
-      map(network => networkChanged(network)),
-      skip(1)
-    );
-
-    return Rx.concat(enable$, network$);
+    const initial$ = connect$.pipe(map(network => connectionEstablished(eth, network)));
+    return initial$;
   });
 };
 

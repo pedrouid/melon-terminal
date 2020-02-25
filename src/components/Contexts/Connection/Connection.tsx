@@ -6,6 +6,7 @@ import { Address, DeploymentOutput, DeployedEnvironment, sameAddress } from '@me
 import { NetworkEnum } from '~/types';
 import { Eth } from 'web3-eth';
 import { IconName } from '~/storybook/components/Icons/Icons';
+import { map } from 'rxjs/operators';
 
 export enum ConnectionStatus {
   OFFLINE,
@@ -127,6 +128,36 @@ export function deploymentError(error: Error): DeploymentError {
   return { error, type: ConnectionActionType.DEPLOYMENT_ERROR };
 }
 
+function init(props: ConnectionProviderProps): ConnectionState {
+  const common = {
+    network: undefined,
+    deployment: undefined,
+    account: undefined,
+    accounts: undefined,
+    method: undefined,
+  };
+
+  const validUntil = parseInt(window.localStorage.getItem('connection.validity') || '0', 10);
+  const storedMethod = window.localStorage.getItem('connection.method');
+  const storedAccount = window.localStorage.getItem('connection.account') || undefined;
+
+  if (!!validUntil && Date.now() <= validUntil) {
+    if (!!storedMethod && props.methods.some(method => method.name === storedMethod)) {
+      return {
+        ...common,
+        method: storedMethod,
+        account: storedAccount,
+      };
+    }
+  }
+
+  // Fall back to the default connection method if the selected values are no longer valid.
+  return {
+    ...common,
+    method: props.default.name,
+  };
+}
+
 export function reducer(state: ConnectionState, action: ConnectionAction): ConnectionState {
   switch (action.type) {
     case ConnectionActionType.METHOD_CHANGED: {
@@ -234,35 +265,47 @@ export interface ConnectionProviderProps {
 }
 
 export const ConnectionProvider: React.FC<ConnectionProviderProps> = props => {
-  const [state, dispatch] = useReducer(reducer, undefined, () => {
-    const development = process.env.NODE_ENV === 'development';
-
-    // During local development, the default connection method is fetched from local storage for persistence
-    // during testing sessions where the developer wants to refresh the browser window.
-    return {
-      method: (development && window.localStorage.getItem('connection.method')) || props.default.name,
-      account: (development && window.localStorage.getItem('connection.account')) || undefined,
-    };
-  });
+  const [state, dispatch] = useReducer<React.Reducer<ConnectionState, ConnectionAction>, ConnectionProviderProps>(
+    reducer,
+    props,
+    init
+  );
 
   useEffect(() => {
-    // Only store the previously selected connection method on local development.
-    if (process.env.NODE_ENV === 'development' && state.method) {
-      window.localStorage.setItem('connection.method', state.method);
-    }
+    // Update the validity timestamp every 10 seconds. We automatically re-connect to the previously
+    // selected connection method if the site is reloaded within the max. validity time span.
+    const observable$ = Rx.timer(0, 10000).pipe(
+      map(() => {
+        // Set the validity to one hour in development.
+        if (process.env.NODE_ENV === 'development') {
+          return Date.now() + 3600000;
+        }
 
-    if (process.env.NODE_ENV === 'development' && !state.method) {
+        // Set the validity to 60 seconds in production.
+        return Date.now() + 60000;
+      })
+    );
+    const subscription = observable$.subscribe(now => {
+      window.localStorage.setItem('connection.validity', `${now}`);
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!state.method) {
       window.localStorage.removeItem('connection.method');
+    } else {
+      window.localStorage.setItem('connection.method', state.method);
     }
   }, [state.method]);
 
   useEffect(() => {
-    // Only store the previously selected account on local development.
-    if (process.env.NODE_ENV === 'development' && state.account) {
+    if (state.account) {
       window.localStorage.setItem('connection.account', state.account);
-    }
-
-    if (process.env.NODE_ENV === 'development' && !state.account) {
+    } else {
       window.localStorage.removeItem('connection.account');
     }
   }, [state.account]);

@@ -31,7 +31,7 @@ export interface LayoutProps {
   connectionSwitch: boolean;
 }
 
-export const Layout: React.FC<LayoutProps> = (props) => {
+export const Layout: React.FC<LayoutProps> = props => {
   const location = useLocation()!;
   const [update] = usePriceFeedUpdateQuery();
   const environment = useEnvironment();
@@ -138,6 +138,8 @@ export const Layout: React.FC<LayoutProps> = (props) => {
             {environment?.network && <FooterItem>{NetworkEnum[environment.network]}</FooterItem>}
 
             {version && <FooterItem>Protocol {version.name}</FooterItem>}
+
+            <FooterItem>Staging</FooterItem>
           </FooterNavigation>
         </Footer>
       </SkeletonFeet>
