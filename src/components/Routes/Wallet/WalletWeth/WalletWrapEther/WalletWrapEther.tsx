@@ -34,9 +34,13 @@ export const WalletWrapEther: React.FC = () => {
   });
 
   const defaultValues = {
-    quantityEth: account.eth?.isLessThan(new BigNumber('1e18'))
-      ? fromTokenBaseUnit(account.eth.minus(new BigNumber('1e16')), 18)
-      : new BigNumber(1),
+    quantityEth: BigNumber.minimum(
+      BigNumber.maximum(
+        fromTokenBaseUnit((account.eth || new BigNumber(0)).minus(new BigNumber('1e16')), 18),
+        new BigNumber(0)
+      ),
+      new BigNumber(1)
+    ),
   };
 
   const form = useForm<typeof defaultValues>({
