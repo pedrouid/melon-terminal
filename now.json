@@ -1,5 +1,4 @@
 {
-  "alias": ["melon.avantgarde.finance"],
   "rewrites": [
     { "source": "^/static/(.*)", "destination": "/static/$1" },
     { "source": "^/favicon.png", "destination": "/favicon.png" },
