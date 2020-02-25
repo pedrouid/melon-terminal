@@ -79,7 +79,7 @@ export const config: ConfigMap = {
           historic: true,
         },
         {
-          name: 'OasisDex (old)',
+          name: 'OasisDEX (old)',
           id: 'OasisDexOld',
           adapter: '0x1Eb5F58058686FDE3322CD22bed96BA36d7f7f63',
           exchange: '0x39755357759cE0d7f32dC8dC45414CCa409AE24e',
