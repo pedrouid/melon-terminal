@@ -4,6 +4,7 @@ import { useConnectionState } from '~/hooks/useConnectionState';
 import { ConnectionStatus } from '~/components/Contexts/Connection/Connection';
 import { Spinner } from '~/storybook/components/Spinner/Spinner';
 import { NetworkEnum } from '~/types';
+import { Container } from '~/storybook/components/Container/Container';
 
 export interface RequiresConnectionProps {
   fallback?: React.ReactNode;
@@ -24,21 +25,27 @@ export const RequiresConnection: React.FC<RequiresConnectionProps> = ({ children
     const output =
       fallback === true ? (
         <Fallback>
-          You are connected to an unsupported network. We currently only support Mainnet, Rinkeby and Kovan.
+          <Container>
+            You are connected to an unsupported network. We currently only support Mainnet, Rinkeby and Kovan.
+          </Container>
         </Fallback>
       ) : (
-        fallback
-      );
+          fallback
+        );
 
     return <>{output || null}</>;
   }
 
   const output =
     fallback === true ? (
-      <Fallback>You have to be connected to a supported network to see this page.</Fallback>
+      <Fallback>
+        <Container>
+          You have to be connected to a supported network to see this page.
+        </Container>
+      </Fallback>
     ) : (
-      fallback
-    );
+        fallback
+      );
 
   return <>{output || null}</>;
 };
