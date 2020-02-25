@@ -24,11 +24,11 @@ export const RequiresConnection: React.FC<RequiresConnectionProps> = ({ children
   if (connection.network === NetworkEnum.UNSUPPORTED) {
     const output =
       fallback === true ? (
-        <Fallback>
-          <Container>
+        <Container>
+          <Fallback>
             You are connected to an unsupported network. We currently only support Mainnet, Rinkeby and Kovan.
-          </Container>
-        </Fallback>
+          </Fallback>
+        </Container>
       ) : (
           fallback
         );
@@ -38,11 +38,11 @@ export const RequiresConnection: React.FC<RequiresConnectionProps> = ({ children
 
   const output =
     fallback === true ? (
-      <Fallback>
-        <Container>
+      <Container>
+        <Fallback>
           You have to be connected to a supported network to see this page.
-        </Container>
-      </Fallback>
+        </Fallback>
+      </Container>
     ) : (
         fallback
       );
