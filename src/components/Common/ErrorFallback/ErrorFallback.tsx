@@ -4,9 +4,13 @@ import { Grid, GridRow } from '~/storybook/components/Grid/Grid';
 import { NotificationBar, NotificationContent } from '~/storybook/components/NotificationBar/NotificationBar';
 import { Container } from '~/storybook/components/Container/Container';
 
-export const ErrorFallback: React.FC<FallbackProps> = ({ error, componentStack }) => {
+export const ErrorFallback: React.FC<FallbackProps> = ({ error }) => {
+  if (error?.name === 'ChunkLoadError') {
+    window.location.reload(true);
+  }
+
   const errorReportingUri = encodeURI(
-    `https://github.com/avantgardefinance/melon-terminal/issues/new?title=General error "${error?.message}";body=${error?.stack}`
+    `https://github.com/avantgardefinance/melon-terminal/issues/new?title=General error "${error?.name}";body=${error?.stack}`
   );
 
   return (
