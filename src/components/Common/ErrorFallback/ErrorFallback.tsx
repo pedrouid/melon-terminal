@@ -37,9 +37,9 @@ export const ErrorFallback: React.FC<FallbackProps> = ({ error }) => {
             If the error does not disappear after reloading, please file an{' '}
             <a href={uri} target="_blank">
               error report
-                </a>
+            </a>
             .
-              </p>
+          </p>
         </NotificationContent>
       </NotificationBar>
     </Container>

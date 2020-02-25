@@ -30,8 +30,8 @@ export const RequiresConnection: React.FC<RequiresConnectionProps> = ({ children
           </Fallback>
         </Container>
       ) : (
-          fallback
-        );
+        fallback
+      );
 
     return <>{output || null}</>;
   }
@@ -39,13 +39,11 @@ export const RequiresConnection: React.FC<RequiresConnectionProps> = ({ children
   const output =
     fallback === true ? (
       <Container>
-        <Fallback>
-          You have to be connected to a supported network to see this page.
-        </Fallback>
+        <Fallback>You have to be connected to a supported network to see this page.</Fallback>
       </Container>
     ) : (
-        fallback
-      );
+      fallback
+    );
 
   return <>{output || null}</>;
 };

@@ -8,13 +8,7 @@ import {
   connectionEstablished,
   ConnectionMethodProps,
 } from '~/components/Contexts/Connection/Connection';
-import {
-  map,
-  retryWhen,
-  delay,
-  take,
-  share,
-} from 'rxjs/operators';
+import { map, retryWhen, delay, take, share } from 'rxjs/operators';
 import { networkFromId } from '~/utils/networkFromId';
 import { SectionTitle } from '~/storybook/components/Title/Title';
 import { Button } from '~/storybook/components/Button/Button';
@@ -55,8 +49,8 @@ export const Anonymous: React.FC<ConnectionMethodProps> = ({ connect, active }) 
           Connect
         </Button>
       ) : (
-          <span>Currently selected</span>
-        )}
+        <span>Currently selected</span>
+      )}
     </>
   );
 };

@@ -142,7 +142,7 @@ function init(props: ConnectionProviderProps): ConnectionState {
   const storedAccount = window.localStorage.getItem('connection.account') || undefined;
 
   if (!!validUntil && Date.now() <= validUntil) {
-    if (!!storedMethod && props.methods.some((method) => method.name === storedMethod)) {
+    if (!!storedMethod && props.methods.some(method => method.name === storedMethod)) {
       return {
         ...common,
         method: storedMethod,
@@ -265,21 +265,27 @@ export interface ConnectionProviderProps {
 }
 
 export const ConnectionProvider: React.FC<ConnectionProviderProps> = props => {
-  const [state, dispatch] = useReducer<React.Reducer<ConnectionState, ConnectionAction>, ConnectionProviderProps>(reducer, props, init);
+  const [state, dispatch] = useReducer<React.Reducer<ConnectionState, ConnectionAction>, ConnectionProviderProps>(
+    reducer,
+    props,
+    init
+  );
 
   useEffect(() => {
     // Update the validity timestamp every 10 seconds. We automatically re-connect to the previously
     // selected connection method if the site is reloaded within the max. validity time span.
-    const observable$ = Rx.timer(0, 10000).pipe(map(() => {
-      // Set the validity to one hour in development.
-      if (process.env.NODE_ENV === 'development') {
-        return Date.now() + 3600000;
-      }
+    const observable$ = Rx.timer(0, 10000).pipe(
+      map(() => {
+        // Set the validity to one hour in development.
+        if (process.env.NODE_ENV === 'development') {
+          return Date.now() + 3600000;
+        }
 
-      // Set the validity to 60 seconds in production.
-      return Date.now() + 60000;
-    }));
-    const subscription = observable$.subscribe((now) => {
+        // Set the validity to 60 seconds in production.
+        return Date.now() + 60000;
+      })
+    );
+    const subscription = observable$.subscribe(now => {
       window.localStorage.setItem('connection.validity', `${now}`);
     });
 

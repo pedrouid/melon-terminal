@@ -182,7 +182,7 @@ export const FundRequestForQuoteOffer: React.FC<FundRequestForQuoteOfferProps> =
       <TransactionModal transaction={transaction}>
         <NotificationBar kind="neutral">
           <NotificationContent>
-            You are selling{' '}
+            Final quote: You are selling{' '}
             <TokenValue value={quantity} decimals={quote?.taker.decimals} symbol={quote?.taker.symbol} /> in exchange
             for{' '}
             <TokenValue
