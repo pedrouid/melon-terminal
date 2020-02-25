@@ -187,19 +187,19 @@ export const FundFactSheet: React.FC<FundFactSheetProps> = ({ address }) => {
       </DictionaryEntry>
       <DictionaryEntry>
         <DictionaryLabel>Management fee</DictionaryLabel>
-        <DictionaryData textAlign="right">
+        <DictionaryData>
           <FormattedNumber value={managementFee?.rate} decimals={0} suffix="%" />
         </DictionaryData>
       </DictionaryEntry>
       <DictionaryEntry>
         <DictionaryLabel>Performance fee</DictionaryLabel>
-        <DictionaryData textAlign="right">
+        <DictionaryData>
           <FormattedNumber value={performanceFee?.rate} decimals={0} suffix="%" />
         </DictionaryData>
       </DictionaryEntry>
       <DictionaryEntry>
         <DictionaryLabel>Performance fee period</DictionaryLabel>
-        <DictionaryData textAlign="right">
+        <DictionaryData>
           <FormattedNumber value={performanceFee?.period} decimals={0} suffix="days" />
         </DictionaryData>
       </DictionaryEntry>
