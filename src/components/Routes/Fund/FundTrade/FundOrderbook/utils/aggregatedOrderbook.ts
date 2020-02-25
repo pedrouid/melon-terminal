@@ -56,7 +56,7 @@ export function findPriceChange(base: BigNumber, comparison?: BigNumber) {
 
 /**
  * Returns the index at which the smallest price change occurs in two arrays of [[OrderbookItem]]s.
- * Used to control how many decimals to show in an orderbook render function.
+ * Used to control how many decimals to show in an order book render function.
  *
  * @param bids an array of [[OrderbookItem]]
  * @param asks an array of [[OrderbookItem]]

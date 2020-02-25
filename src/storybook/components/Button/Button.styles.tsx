@@ -62,7 +62,6 @@ export const Button = styled.button<ButtonProps>`
   ${props =>
     props.disabled &&
     css`
-      color: ${props => props.theme.mainColors.textColor};
       background: ${props => props.theme.mainColors.secondaryDarkAlpha};
       pointer-events: none;
     `}

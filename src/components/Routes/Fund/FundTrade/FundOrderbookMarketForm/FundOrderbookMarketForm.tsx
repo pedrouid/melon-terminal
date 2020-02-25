@@ -244,7 +244,7 @@ export const FundOrderbookMarketForm: React.FC<FundOrderbookMarketFormProps> = p
 
       {!order && (
         <NotificationBar kind="neutral">
-          <NotificationContent>Please choose an offer from the orderbook.</NotificationContent>
+          <NotificationContent>Please choose an offer from the order book.</NotificationContent>
         </NotificationBar>
       )}
 

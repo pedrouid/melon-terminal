@@ -125,7 +125,7 @@ export const WalletFundSetup: React.FC = () => {
       feeRates: [managementFeeRate, performanceFeeRate],
     });
 
-    transaction.start(tx, 'Begin setup (Step 1 of 9)');
+    transaction.start(tx, 'Begin setup');
   });
 
   const fallback = transactionFinished ? (
@@ -241,7 +241,17 @@ export const WalletFundSetup: React.FC = () => {
           </GridRow>
         </Grid>
       </RequiresFundSetupNotStarted>
-      <TransactionModal transaction={transaction} />
+      <TransactionModal transaction={transaction}>
+        <NotificationBar kind="neutral">
+          <NotificationContent>
+            <p>Begin Setup (Step 1 of 9)</p>
+            <p>
+              This transaction stores all the parameters related to your new fund and creates the skeleton of your new
+              fund.
+            </p>
+          </NotificationContent>
+        </NotificationBar>
+      </TransactionModal>
     </>
   );
 };

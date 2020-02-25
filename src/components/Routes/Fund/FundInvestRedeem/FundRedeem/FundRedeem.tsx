@@ -97,6 +97,7 @@ export const FundRedeem: React.FC<FundRedeemProps> = ({ address }) => {
   return (
     <Block>
       <SectionTitle>Redeem</SectionTitle>
+
       {hasInvested && shares && !shares?.balanceOf?.isZero() && (
         <>
           <p>
@@ -127,6 +128,7 @@ export const FundRedeem: React.FC<FundRedeemProps> = ({ address }) => {
         </>
       )}
       {(!hasInvested || shares?.balanceOf?.isZero() || !shares?.balanceOf) && <>You don't own any shares.</>}
+
       <TransactionModal transaction={transaction} />
     </Block>
   );

@@ -35,7 +35,7 @@ export const FundOrderbookTrading: React.FC<FundOrderbookTradingProps> = props =
 
   return (
     <Block>
-      <SectionTitle>Orderbook Trading</SectionTitle>
+      <SectionTitle>Order Book Trading</SectionTitle>
 
       <S.FundOrderbookTrading>
         <S.FundOrderbookForm>
@@ -69,6 +69,10 @@ export const FundOrderbookTrading: React.FC<FundOrderbookTradingProps> = props =
                 setOrder(order);
               }}
             />
+            <S.FundOrderbookFooter>
+              The order book is the aggregation of the OasisDEX and/or 0x Relayers order books (depending on the
+              configured exchanges).
+            </S.FundOrderbookFooter>
           </S.FundOrderbook>
         )}
       </S.FundOrderbookTrading>

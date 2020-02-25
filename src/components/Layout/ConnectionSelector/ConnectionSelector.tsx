@@ -66,6 +66,7 @@ export const ConnectionSelector = () => {
   const ref = useRef<any>();
   const [open, setOpen] = useState(false);
   const connection = useConnectionState();
+  const current = connection.methods.find(item => item.name === connection.method);
 
   useEffect(() => {
     if (!open) {
@@ -85,32 +86,18 @@ export const ConnectionSelector = () => {
     };
   }, [open]);
 
-  const icon = useMemo(() => {
-    switch (connection.method) {
-      case 'metamask':
-        return 'METAMASK';
-      case 'frame':
-        return 'FRAME';
-      case 'ganache':
-        return 'GANACHE';
-      case 'fortmatic':
-        return 'FORTMATIC';
-      default:
-        return null;
-    }
-  }, [connection.method]);
-
   return (
     <S.ConnectionSelector ref={ref}>
       <S.ConnectionSelectorToggle>
-        {icon ? (
-          <Icons name={icon} onClick={() => setOpen(!open)} className={open ? 'active' : undefined} />
+        {current && current.icon ? (
+          <Icons name={current.icon} onClick={() => setOpen(!open)} className={open ? 'active' : undefined} />
         ) : (
           <S.ConnectionLabel onClick={() => setOpen(!open)} className={open ? 'active' : undefined}>
-            Login
+            {current ? current.label : 'Login'}
           </S.ConnectionLabel>
         )}
       </S.ConnectionSelectorToggle>
+
       {open && (
         <S.ConnectionSelectorBox>
           {connection.methods.map(method => {
@@ -121,6 +108,10 @@ export const ConnectionSelector = () => {
                   value: address,
                 }))
               : [];
+
+            if (!active && !method.supported()) {
+              return null;
+            }
 
             return (
               <ConnectionButton

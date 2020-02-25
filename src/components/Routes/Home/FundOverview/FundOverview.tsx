@@ -78,8 +78,9 @@ const useFilteredFunds = (funds: FundProcessed[], search: string, filter: boolea
       return funds;
     }
 
+    const searchString = search.toLowerCase();
     return funds.filter(({ name, status }) => {
-      const matches = !search || name.toLowerCase().includes(search);
+      const matches = !search || name.toLowerCase().includes(searchString);
       return matches && (!filter || status === 'Active');
     });
   }, [funds, search, filter]);

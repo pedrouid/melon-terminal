@@ -25,3 +25,8 @@ export const FundOrderbookForm = styled.div`
     padding-right: ${props => props.theme.spaceUnits.l};
   }
 `;
+
+export const FundOrderbookFooter = styled.div`
+  font-size: ${props => props.theme.fontSizes.xs};
+  text-align: right;
+`;

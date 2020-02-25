@@ -15,7 +15,9 @@ const FundShutdownQuery = gql`
         }
         trading {
           address
-          lockedAssets
+          lockedAssets {
+            address
+          }
         }
         accounting {
           address

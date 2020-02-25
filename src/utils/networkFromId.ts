@@ -16,4 +16,6 @@ export function networkFromId(id?: number): NetworkEnum | undefined {
   if (id === 4447 && !!config[NetworkEnum.TESTNET]) {
     return NetworkEnum.TESTNET;
   }
+
+  return NetworkEnum.UNSUPPORTED;
 }

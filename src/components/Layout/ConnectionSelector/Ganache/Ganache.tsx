@@ -60,6 +60,7 @@ export const Ganache: React.FC<ConnectionMethodProps> = ({ connect, disconnect, 
 
 export const method: ConnectionMethod = {
   connect,
+  supported: () => true,
   component: Ganache,
   icon: 'GANACHE',
   name: 'ganache',

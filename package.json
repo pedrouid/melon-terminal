@@ -30,7 +30,7 @@
     "lint": "tslint --project .",
     "format": "prettier --write 'src/**/*.{ts,tsx}'",
     "typecheck": "tsc --noEmit",
-    "svgr": "svgr  --no-dimensions --ext tsx -d src/storybook/components/Icons/svg/ svgr/*"
+    "svgr": "svgr --no-dimensions --ext tsx -d src/storybook/components/Icons/svg/ svgr/*"
   },
   "dependencies": {
     "@0x/order-utils": "^8.5.0-beta.4",
@@ -38,7 +38,7 @@
     "@0x/orderbook": "^2.2.1",
     "@apollo/react-hooks": "^3.1.3",
     "@melonproject/melongql": "^0.0.39",
-    "@melonproject/melonjs": "^0.0.103",
+    "@melonproject/melonjs": "^0.0.105",
     "apollo-cache-inmemory": "^1.6.3",
     "apollo-client": "^2.6.4",
     "apollo-link": "^1.2.13",

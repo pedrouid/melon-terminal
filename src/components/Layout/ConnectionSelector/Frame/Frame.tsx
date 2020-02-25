@@ -105,6 +105,7 @@ export const Frame: React.FC<ConnectionMethodProps> = ({ connect, disconnect, ac
 
 export const method: ConnectionMethod = {
   connect,
+  supported: () => true,
   component: Frame,
   icon: 'FRAME',
   name: 'frame',

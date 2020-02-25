@@ -19,6 +19,7 @@ import { standardDeviation } from '~/utils/finance';
 import { TwitterLink } from '~/components/Common/TwitterLink/TwitterLink';
 import { useAccount } from '~/hooks/useAccount';
 import { TokenValue } from '~/components/Common/TokenValue/TokenValue';
+import { range } from 'ramda';
 
 export interface NormalizedCalculation {
   sharePrice: BigNumber;
@@ -30,6 +31,12 @@ export interface NormalizedCalculation {
 export interface FundFactSheetProps {
   address: string;
 }
+
+export const numberPadding = (digits: number, maxDigits: number) => {
+  return range(0, maxDigits - digits)
+    .map(() => String.fromCharCode(160))
+    .join('');
+};
 
 export const FundFactSheet: React.FC<FundFactSheetProps> = ({ address }) => {
   const [fund, fundQuery] = useFundDetailsQuery(address);
@@ -87,6 +94,12 @@ export const FundFactSheet: React.FC<FundFactSheetProps> = ({ address }) => {
     };
   });
 
+  const gavDigits = accounting?.grossAssetValue.integerValue().toString().length;
+  const navDigits = accounting?.netAssetValue.integerValue().toString().length;
+  const sharesDigits = shares?.totalSupply.integerValue().toString().length;
+  const sharePriceDigits = accounting?.sharePrice.integerValue().toString().length;
+  const maxDigits = Math.max(gavDigits || 0, navDigits || 0, sharesDigits || 0, sharePriceDigits || 0);
+
   const numbersLength = normalizedCalculations.length;
   const firstChange = (normalizedCalculations?.[0] || []) as NormalizedCalculation;
   const afterChange = (normalizedCalculations?.[numbersLength - 1] || []) as NormalizedCalculation;
@@ -102,8 +115,8 @@ export const FundFactSheet: React.FC<FundFactSheetProps> = ({ address }) => {
     (Math.pow(1 + returnSinceInception / 100, oneYear / (afterChange.timestamp - firstChange.timestamp)) - 1) * 100;
 
   const creationTime = creation.getTime() || Date.now();
-  const oneMonthAgo = Date.now() - 30 * 24 * 60 * 60 * 1000;
-  const olderThanOneMonth = creationTime < oneMonthAgo;
+  const oneYearAgo = Date.now() - 365 * 24 * 60 * 60 * 1000;
+  const olderThanOneYear = creationTime < oneYearAgo;
 
   const volatility =
     normalizedCalculations &&
@@ -159,25 +172,29 @@ export const FundFactSheet: React.FC<FundFactSheetProps> = ({ address }) => {
       </DictionaryEntry>
       <DictionaryEntry>
         <DictionaryLabel>Gross asset value (GAV)</DictionaryLabel>
-        <DictionaryData textAlign="right">
+        <DictionaryData>
+          <span>{numberPadding(gavDigits || 0, maxDigits)}</span>
           <TokenValue value={accounting?.grossAssetValue} symbol="WETH" decimals={0} />
         </DictionaryData>
       </DictionaryEntry>
       <DictionaryEntry>
         <DictionaryLabel>Net asset value (NAV)</DictionaryLabel>
-        <DictionaryData textAlign="right">
+        <DictionaryData>
+          <span>{numberPadding(navDigits || 0, maxDigits)}</span>
           <TokenValue value={accounting?.netAssetValue} symbol="WETH" decimals={0} />
         </DictionaryData>
       </DictionaryEntry>
       <DictionaryEntry>
         <DictionaryLabel>Total number of shares</DictionaryLabel>
-        <DictionaryData textAlign="right">
+        <DictionaryData>
+          <span>{numberPadding(sharesDigits || 0, maxDigits)}</span>
           <TokenValue value={shares?.totalSupply} decimals={0} />
         </DictionaryData>
       </DictionaryEntry>
       <DictionaryEntry>
         <DictionaryLabel>Share price</DictionaryLabel>
-        <DictionaryData textAlign="right">
+        <DictionaryData>
+          <span>{numberPadding(sharePriceDigits || 0, maxDigits)}</span>
           <TokenValue value={accounting?.sharePrice} symbol="WETH" decimals={0} />
         </DictionaryData>
       </DictionaryEntry>
@@ -222,7 +239,7 @@ export const FundFactSheet: React.FC<FundFactSheetProps> = ({ address }) => {
       <DictionaryEntry>
         <DictionaryLabel>Annualized return</DictionaryLabel>
         <DictionaryData>
-          {olderThanOneMonth ? (
+          {olderThanOneYear ? (
             <FormattedNumber value={annualizedReturn} colorize={true} decimals={2} suffix="%" />
           ) : (
             <>Too early to tell</>
@@ -232,7 +249,7 @@ export const FundFactSheet: React.FC<FundFactSheetProps> = ({ address }) => {
       <DictionaryEntry>
         <DictionaryLabel>Annual volatility</DictionaryLabel>
         <DictionaryData>
-          {olderThanOneMonth ? (
+          {olderThanOneYear ? (
             <FormattedNumber value={volatility} colorize={false} decimals={2} suffix="%" />
           ) : (
             <>Too early to tell</>

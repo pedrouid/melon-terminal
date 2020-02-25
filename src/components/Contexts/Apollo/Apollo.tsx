@@ -94,7 +94,7 @@ const useTheGraphApollo = (environment?: DeployedEnvironment) => {
   const client = useMemo(() => {
     // TODO: Fix network enum.
     const network = (environment?.network as any) as undefined | NetworkEnum;
-    const subgraph = network && config[network] && config[network].subgraph;
+    const subgraph = !!(network && config[network]) ? config[network]!.subgraph : undefined;
     const data = subgraph
       ? createHttpLink({
           uri: subgraph,

@@ -8,12 +8,12 @@ export interface DarkModeValue {
 export const DarkMode = createContext<DarkModeValue>({} as DarkModeValue);
 
 function storeDarkMode(isDarkMode: boolean) {
-  return localStorage.setItem('isDarkMode', isDarkMode.toString());
+  return localStorage.setItem('isDarkMode', JSON.stringify(isDarkMode));
 }
 
 export const DarkModeProvider: React.FC = props => {
   const stored = localStorage.getItem('isDarkMode');
-  const [isDarkMode, setIsDarkMode] = useState(stored === 'true' ? true : false);
+  const [isDarkMode, setIsDarkMode] = useState(!!JSON.parse(stored || 'false'));
 
   const setDarkMode = () => {
     storeDarkMode(!isDarkMode);
