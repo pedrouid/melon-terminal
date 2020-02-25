@@ -4,6 +4,7 @@ import { Icons } from './Icons';
 export default { title: 'Atoms|Icons' };
 
 export const ANT: React.FC = () => <Icons name="ANT" />;
+export const DAPPER: React.FC = () => <Icons name="DAPPER" />;
 export const BAT: React.FC = () => <Icons name="BAT" />;
 export const DAI: React.FC = () => <Icons name="DAI" />;
 export const ENG: React.FC = () => <Icons name="ENG" />;

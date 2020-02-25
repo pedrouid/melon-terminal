@@ -1,7 +1,6 @@
 import React, { Suspense, lazy } from 'react';
 import * as S from './Icons.styles';
 
-// TODO: add colors props
 
 const availableIcons = {
   ANT: lazy(() => import('./svg/tokens/Ant')),
@@ -25,6 +24,7 @@ const availableIcons = {
   ZRX: lazy(() => import('./svg/tokens/Zrx')),
   DGX: lazy(() => import('./svg/tokens/Dgx')),
   EUR: lazy(() => import('./svg/tokens/Eur')),
+  DAPPER: lazy(() => import('./svg/tokens/Dapper')),
   METAMASK: lazy(() => import('./svg/wallet/Metamask')),
   FRAME: lazy(() => import('./svg/wallet/Frame')),
   GANACHE: lazy(() => import('./svg/wallet/Ganache')),

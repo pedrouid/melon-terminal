@@ -59,6 +59,7 @@ export const method: ConnectionMethod = {
   connect,
   supported,
   component: Dapper,
+  icon: 'DAPPER',
   name: 'dapper',
   label: 'Dapper',
 };
