@@ -89,13 +89,13 @@ export const ConnectionSelector = () => {
   return (
     <S.ConnectionSelector ref={ref}>
       <S.ConnectionSelectorToggle>
-        {(current && current.icon) ? (
+        {current && current.icon ? (
           <Icons name={current.icon} onClick={() => setOpen(!open)} className={open ? 'active' : undefined} />
         ) : (
-            <S.ConnectionLabel onClick={() => setOpen(!open)} className={open ? 'active' : undefined}>
-              {current ? current.label : 'Login'}
-            </S.ConnectionLabel>
-          )}
+          <S.ConnectionLabel onClick={() => setOpen(!open)} className={open ? 'active' : undefined}>
+            {current ? current.label : 'Login'}
+          </S.ConnectionLabel>
+        )}
       </S.ConnectionSelectorToggle>
 
       {open && (
@@ -104,9 +104,9 @@ export const ConnectionSelector = () => {
             const active = method.name === connection.method;
             const accounts = active
               ? (connection.accounts || []).map((address, index) => ({
-                name: `${index}: ${address}`,
-                value: address,
-              }))
+                  name: `${index}: ${address}`,
+                  value: address,
+                }))
               : [];
 
             if (!active && !method.supported()) {

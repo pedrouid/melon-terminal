@@ -47,10 +47,10 @@ export const Coinbase: React.FC<ConnectionMethodProps> = ({ connect, disconnect,
           Connect
         </Button>
       ) : (
-          <Button length="stretch" onClick={() => disconnect()}>
-            Disconnect
+        <Button length="stretch" onClick={() => disconnect()}>
+          Disconnect
         </Button>
-        )}
+      )}
     </>
   );
 };

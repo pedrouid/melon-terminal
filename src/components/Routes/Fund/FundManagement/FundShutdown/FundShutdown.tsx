@@ -19,10 +19,13 @@ export const Shutdown: React.FC<ShutdownProps> = ({ address }) => {
   const [info, query] = useFundShutdownQuery(address);
 
   const assets = info.routes?.trading?.lockedAssets;
+  const tradingAddress = info.routes?.trading?.address;
+  const versionAddress = info.routes?.version?.address;
+
   const transaction = useTransaction(environment, {
     onAcknowledge: async () => {
-      if (assets && assets.length) {
-        const version = new Version(environment, info.routes?.version?.address!);
+      if (!!assets?.length) {
+        const version = new Version(environment, versionAddress!);
         const tx = version.shutDownFund(account.address!, address);
         transaction.start(tx, 'Shutdown fund');
       }
@@ -30,15 +33,13 @@ export const Shutdown: React.FC<ShutdownProps> = ({ address }) => {
   });
 
   const submit = async () => {
-    if (assets && assets.length) {
-      const trading = new Trading(environment, info.routes?.trading?.address!);
-      const tx = trading.returnBatchToVault(
-        account.address!,
-        assets.map(asset => asset.address!)
-      );
+    if (!!assets?.length) {
+      const trading = new Trading(environment, tradingAddress!);
+      const tokens = assets.map(asset => asset.address!);
+      const tx = trading.returnBatchToVault(account.address!, tokens);
       transaction.start(tx, 'Return assets to vault');
     } else {
-      const version = new Version(environment, info.routes?.version?.address!);
+      const version = new Version(environment, versionAddress!);
       const tx = version.shutDownFund(account.address!, address);
       transaction.start(tx, 'Shutdown fund');
     }

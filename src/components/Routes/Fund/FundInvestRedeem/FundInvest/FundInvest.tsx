@@ -89,7 +89,12 @@ export const FundInvest: React.FC<FundInvestProps> = ({ address }) => {
       <SectionTitle>Invest</SectionTitle>
 
       <RequiresFundNotShutDown fallback="This fund is already shut down. You can only invest in active funds.">
-        <RequiresFundCreatedAfter after={new Date('2019-12-19')} fallback={"The Melon Terminal does not support investments in funds which are running on deprecated versions of the Melon protocol."}>
+        <RequiresFundCreatedAfter
+          after={new Date('2019-12-19')}
+          fallback={
+            'The Melon Terminal does not support investments in funds which are running on deprecated versions of the Melon protocol.'
+          }
+        >
           {action === 'cancel' && (
             <CancelRequest
               address={address}
@@ -142,6 +147,6 @@ export const FundInvest: React.FC<FundInvestProps> = ({ address }) => {
           <TransactionModal transaction={transaction} />
         </RequiresFundCreatedAfter>
       </RequiresFundNotShutDown>
-    </Block >
+    </Block>
   );
 };

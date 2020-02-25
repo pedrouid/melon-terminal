@@ -31,7 +31,7 @@ export interface LayoutProps {
   connectionSwitch: boolean;
 }
 
-export const Layout: React.FC<LayoutProps> = (props) => {
+export const Layout: React.FC<LayoutProps> = props => {
   const location = useLocation()!;
   const [update] = usePriceFeedUpdateQuery();
   const environment = useEnvironment();
