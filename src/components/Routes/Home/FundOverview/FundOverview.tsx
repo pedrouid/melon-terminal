@@ -78,8 +78,9 @@ const useFilteredFunds = (funds: FundProcessed[], search: string, filter: boolea
       return funds;
     }
 
+    const searchString = search.toLowerCase();
     return funds.filter(({ name, status }) => {
-      const matches = !search || name.toLowerCase().includes(search);
+      const matches = !search || name.toLowerCase().includes(searchString);
       return matches && (!filter || status === 'Active');
     });
   }, [funds, search, filter]);
@@ -271,15 +272,15 @@ export const FundOverview: React.FC = () => {
                     {sorted.item.key === heading.key && (sorted.item.order === 'asc' ? <>&uarr;</> : <>&darr;</>)}
                   </HeaderCell>
                 ) : (
-                  <HeaderCellRightAlign
-                    hover={true}
-                    key={key}
-                    onClick={heading.key ? () => handleChangeSortableItem(heading.key) : undefined}
-                  >
-                    {heading.value}
-                    {sorted.item.key === heading.key && (sorted.item.order === 'asc' ? <>&uarr;</> : <>&darr;</>)}
-                  </HeaderCellRightAlign>
-                )
+                    <HeaderCellRightAlign
+                      hover={true}
+                      key={key}
+                      onClick={heading.key ? () => handleChangeSortableItem(heading.key) : undefined}
+                    >
+                      {heading.value}
+                      {sorted.item.key === heading.key && (sorted.item.order === 'asc' ? <>&uarr;</> : <>&darr;</>)}
+                    </HeaderCellRightAlign>
+                  )
               )}
             </HeaderRow>
           </thead>
@@ -312,10 +313,10 @@ export const FundOverview: React.FC = () => {
                 </BodyRowHover>
               ))
             ) : (
-              <BodyRow>
-                <BodyCell colSpan={12}>No records to display</BodyCell>
-              </BodyRow>
-            )}
+                <BodyRow>
+                  <BodyCell colSpan={12}>No records to display</BodyCell>
+                </BodyRow>
+              )}
           </tbody>
         </Table>
       </ScrollableTable>
