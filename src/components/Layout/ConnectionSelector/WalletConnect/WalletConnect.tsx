@@ -2,7 +2,7 @@ import React from 'react';
 // @ts-ignore
 import WalletConnectProvider from '@walletconnect/web3-provider';
 import { Eth } from 'web3-eth';
-import { map, switchMap, mapTo } from 'rxjs/operators';
+import { map, switchMap, startWith, mapTo } from 'rxjs/operators';
 import * as Rx from 'rxjs';
 import {
   networkChanged,
@@ -37,9 +37,8 @@ const connect = () => {
   return Rx.using(create, resource => {
     const eth = (resource as EthResource).eth;
 
-    const enable$ = Rx.defer(() => provider.enable() as Promise<string[]>);
-    const timer$ = Rx.timer(100).pipe(mapTo([]));
-    const initial$ = Rx.race(enable$, timer$).pipe(
+    const enable$ = Rx.defer(() => ethereum.enable() as Promise<string[]>).pipe(startWith([]));
+    const initial$ = enable$.pipe(
       switchMap(async accounts => {
         const network = networkFromId(await eth.net.getId());
         return connectionEstablished(eth, network, accounts);
