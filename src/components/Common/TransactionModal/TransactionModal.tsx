@@ -17,6 +17,7 @@ import { useCoinAPI } from '~/hooks/useCoinAPI';
 import { useEnvironment } from '~/hooks/useEnvironment';
 import { NetworkEnum } from '~/types';
 import { TokenValue } from '../TokenValue/TokenValue';
+import { ScrollableTable } from '~/storybook/components/Table/Table';
 
 function progressToStep(progress: number) {
   if (progress >= TransactionProgress.EXECUTION_FINISHED) {
@@ -178,72 +179,74 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
                       disabled={loading && estimated}
                     />
 
-                    <S.CostsTable>
-                      <S.CostsTableHead>
-                        <S.CostsTableRow>
-                          <S.CostsTableHeaderCellText />
-                          <S.CostsTableHeaderCell>Amount</S.CostsTableHeaderCell>
-                          <S.CostsTableHeaderCell>Costs [ETH]</S.CostsTableHeaderCell>
-                          <S.CostsTableHeaderCell>Costs [USD]</S.CostsTableHeaderCell>
-                        </S.CostsTableRow>
-                      </S.CostsTableHead>
-
-                      <S.CostsTableBody>
-                        {options && options.gas && gasPriceEth && (
+                    <ScrollableTable>
+                      <S.CostsTable>
+                        <S.CostsTableHead>
                           <S.CostsTableRow>
-                            <S.CostsTableCellText>Gas</S.CostsTableCellText>
-                            <S.CostsTableCell>
-                              <FormattedNumber value={options.gas} decimals={0} />
-                            </S.CostsTableCell>
-                            <S.CostsTableCell>
-                              <TokenValue value={gasPriceEth} symbol="ETH" />
-                            </S.CostsTableCell>
-                            <S.CostsTableCell>
-                              <TokenValue value={gasPriceUsd} symbol="USD" />
-                            </S.CostsTableCell>
+                            <S.CostsTableHeaderCellText />
+                            <S.CostsTableHeaderCell>Amount</S.CostsTableHeaderCell>
+                            <S.CostsTableHeaderCell>Costs [ETH]</S.CostsTableHeaderCell>
+                            <S.CostsTableHeaderCell>Costs [USD]</S.CostsTableHeaderCell>
                           </S.CostsTableRow>
-                        )}
+                        </S.CostsTableHead>
 
-                        {options && options.amgu && (
-                          <S.CostsTableRow>
-                            <S.CostsTableCellText>Asset management gas</S.CostsTableCellText>
-                            <S.CostsTableCell />
-                            <S.CostsTableCell>
-                              <TokenValue value={options.amgu} symbol="ETH" />
-                            </S.CostsTableCell>
-                            <S.CostsTableCell>
-                              <TokenValue value={amguUsd} symbol="USD" />
-                            </S.CostsTableCell>
-                          </S.CostsTableRow>
-                        )}
+                        <S.CostsTableBody>
+                          {options && options.gas && gasPriceEth && (
+                            <S.CostsTableRow>
+                              <S.CostsTableCellText>Gas</S.CostsTableCellText>
+                              <S.CostsTableCell>
+                                <FormattedNumber value={options.gas} decimals={0} />
+                              </S.CostsTableCell>
+                              <S.CostsTableCell>
+                                <TokenValue value={gasPriceEth} symbol="ETH" />
+                              </S.CostsTableCell>
+                              <S.CostsTableCell>
+                                <TokenValue value={gasPriceUsd} symbol="USD" />
+                              </S.CostsTableCell>
+                            </S.CostsTableRow>
+                          )}
 
-                        {options && options.incentive && (
-                          <S.CostsTableRow>
-                            <S.CostsTableCellText>Incentive</S.CostsTableCellText>
-                            <S.CostsTableCell />
-                            <S.CostsTableCell>
-                              <TokenValue value={options.incentive} symbol="ETH" />
-                            </S.CostsTableCell>
-                            <S.CostsTableCell>
-                              <TokenValue value={incentiveUsd} symbol="USD" />
-                            </S.CostsTableCell>
-                          </S.CostsTableRow>
-                        )}
+                          {options && options.amgu && (
+                            <S.CostsTableRow>
+                              <S.CostsTableCellText>Asset management gas</S.CostsTableCellText>
+                              <S.CostsTableCell />
+                              <S.CostsTableCell>
+                                <TokenValue value={options.amgu} symbol="ETH" />
+                              </S.CostsTableCell>
+                              <S.CostsTableCell>
+                                <TokenValue value={amguUsd} symbol="USD" />
+                              </S.CostsTableCell>
+                            </S.CostsTableRow>
+                          )}
 
-                        {totalEth && (
-                          <S.CostsTableRowTotal>
-                            <S.CostsTableCellText>Total</S.CostsTableCellText>
-                            <S.CostsTableCell />
-                            <S.CostsTableCell>
-                              <TokenValue value={totalEth} symbol="ETH" />
-                            </S.CostsTableCell>
-                            <S.CostsTableCell>
-                              <TokenValue value={totalUsd} symbol="USD" />
-                            </S.CostsTableCell>
-                          </S.CostsTableRowTotal>
-                        )}
-                      </S.CostsTableBody>
-                    </S.CostsTable>
+                          {options && options.incentive && (
+                            <S.CostsTableRow>
+                              <S.CostsTableCellText>Incentive</S.CostsTableCellText>
+                              <S.CostsTableCell />
+                              <S.CostsTableCell>
+                                <TokenValue value={options.incentive} symbol="ETH" />
+                              </S.CostsTableCell>
+                              <S.CostsTableCell>
+                                <TokenValue value={incentiveUsd} symbol="USD" />
+                              </S.CostsTableCell>
+                            </S.CostsTableRow>
+                          )}
+
+                          {totalEth && (
+                            <S.CostsTableRowTotal>
+                              <S.CostsTableCellText>Total</S.CostsTableCellText>
+                              <S.CostsTableCell />
+                              <S.CostsTableCell>
+                                <TokenValue value={totalEth} symbol="ETH" />
+                              </S.CostsTableCell>
+                              <S.CostsTableCell>
+                                <TokenValue value={totalUsd} symbol="USD" />
+                              </S.CostsTableCell>
+                            </S.CostsTableRowTotal>
+                          )}
+                        </S.CostsTableBody>
+                      </S.CostsTable>
+                    </ScrollableTable>
                   </S.TransactionModalFeeForm>
                 </>
               )}
