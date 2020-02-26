@@ -17,6 +17,7 @@ import { networkFromId } from '~/utils/networkFromId';
 
 interface EthResource extends Rx.Unsubscribable {
   eth: Eth;
+  provider: any;
 }
 
 // melon default provider
@@ -30,12 +31,12 @@ const connect = () => {
       transactionConfirmationBlocks: 1,
     });
 
-    return { eth, unsubscribe: () => provider.close() };
+    return { eth, provider, unsubscribe: () => provider.close() };
   };
 
   return Rx.using(create, resource => {
     const eth = (resource as EthResource).eth;
-    const provider = eth.currentProvider as any;
+    const provider = (resource as EthResource).provider;
 
     const enable$ = Rx.defer(() => provider.enable() as Promise<string[]>).pipe(startWith([]));
     const initial$ = enable$.pipe(
