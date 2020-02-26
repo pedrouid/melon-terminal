@@ -20,12 +20,10 @@ import { method as ganache } from './Layout/ConnectionSelector/Ganache/Ganache';
 import { method as walletconnect } from './Layout/ConnectionSelector/WalletConnect/WalletConnect';
 import { method as anonymous } from './Layout/ConnectionSelector/Anonymous/Anonymous';
 
-const AppComponent = () => {
-  const common = [metamask, dapper, coinbase, frame, walletconnect];
-  let start = anonymous;
-  let methods = process.env.MELON_TESTNET ? [ganache, ...common] : common;
-  let switchable = true;
-};
+const common = [metamask, dapper, coinbase, frame, walletconnect];
+let start = anonymous;
+let methods = process.env.MELON_TESTNET ? [ganache, ...common] : common;
+let switchable = true;
 
 if (coinbase.supported()) {
   start = coinbase;
