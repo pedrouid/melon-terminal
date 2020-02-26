@@ -27,6 +27,7 @@ import { Holding } from '@melonproject/melongql';
 import BigNumber from 'bignumber.js';
 import { fromTokenBaseUnit } from '~/utils/fromTokenBaseUnit';
 import { SignedOrder } from '@0x/order-utils';
+import { TransactionDescription } from '~/components/Common/TransactionModal/TransactionDescription';
 
 export interface FundOrderbookMarketFormProps {
   trading: string;
@@ -160,14 +161,14 @@ export const FundOrderbookMarketForm: React.FC<FundOrderbookMarketFormProps> = p
       const adapter = await OasisDexTradingAdapter.create(environment, exchange.exchange, trading);
       const offer = await market.getOffer((order as OasisDexOrderbookItem).order.id);
       const tx = adapter.takeOrder(account.address!, order!.order.id, offer, quantity);
-      return transaction.start(tx, 'Take order');
+      return transaction.start(tx, 'Take order on OasisDEX');
     }
 
     if (order!.exchange === ExchangeIdentifier.ZeroExV3) {
       const adapter = await ZeroExV3TradingAdapter.create(environment, exchange.exchange, trading);
       const offer = order?.order.order as SignedOrder;
       const tx = adapter.takeOrder(account.address!, offer, quantity);
-      return transaction.start(tx, 'Take order');
+      return transaction.start(tx, 'Take order on 0x');
     }
   });
 
@@ -248,7 +249,14 @@ export const FundOrderbookMarketForm: React.FC<FundOrderbookMarketFormProps> = p
         </NotificationBar>
       )}
 
-      <TransactionModal transaction={transaction} />
+      <TransactionModal transaction={transaction}>
+        {transaction.state.name === 'Take order on OasisDEX' && (
+          <TransactionDescription title="Take order on OasisDEX">{description}</TransactionDescription>
+        )}
+        {transaction.state.name === 'Take order on 0x' && (
+          <TransactionDescription title="Take order on OasisDEX">{description}</TransactionDescription>
+        )}
+      </TransactionModal>
     </FormContext>
   );
 };

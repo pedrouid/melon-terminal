@@ -1,6 +1,6 @@
 import React from 'react';
 import BigNumber from 'bignumber.js';
-import { ExchangeDefinition, Hub, MelonEngineTradingAdapter, TokenDefinition, Trading } from '@melonproject/melonjs';
+import { ExchangeDefinition, MelonEngineTradingAdapter, TokenDefinition, Trading } from '@melonproject/melonjs';
 import { useEnvironment } from '~/hooks/useEnvironment';
 import { Button } from '~/storybook/components/Button/Button';
 import { useTransaction } from '~/hooks/useTransaction';
@@ -11,6 +11,7 @@ import { toTokenBaseUnit } from '~/utils/toTokenBaseUnit';
 import { useAccount } from '~/hooks/useAccount';
 import { Subtitle } from '~/storybook/components/Title/Title';
 import { FormattedNumber } from '~/components/Common/FormattedNumber/FormattedNumber';
+import { TransactionDescription } from '~/components/Common/TransactionModal/TransactionDescription';
 
 export interface FundMelonEngineTradingProps {
   trading: string;
@@ -44,7 +45,7 @@ export const FundMelonEngineTrading: React.FC<FundMelonEngineTradingProps> = pro
       takerQuantity: toTokenBaseUnit(props.quantity, props.taker.decimals),
     });
 
-    transaction.start(tx, 'Take order');
+    transaction.start(tx, 'Take order on the Melon engine');
   };
 
   return (
@@ -64,7 +65,11 @@ export const FundMelonEngineTrading: React.FC<FundMelonEngineTradingProps> = pro
           'No Offer'
         )}
       </Button>
-      <TransactionModal transaction={transaction} />
+      <TransactionModal transaction={transaction}>
+        <TransactionDescription title="Take order on the Melon engine">
+          You are taking an order on the Melon engine.
+        </TransactionDescription>
+      </TransactionModal>
     </>
   );
 };

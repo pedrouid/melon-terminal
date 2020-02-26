@@ -22,7 +22,7 @@ import {
   CheckboxIcon,
   CheckboxLabel,
 } from '~/storybook/components/Checkbox/Checkbox';
-import { NotificationBar, NotificationContent } from '~/storybook/components/NotificationBar/NotificationBar';
+import { TransactionDescription } from '~/components/Common/TransactionModal/TransactionDescription';
 
 interface TransactionPipelineItem {
   previous: string;
@@ -205,12 +205,7 @@ export const FundSetupTransactions: React.FC = () => {
             )}
 
             <TransactionModal transaction={transaction}>
-              <NotificationBar kind="neutral">
-                <NotificationContent>
-                  <p>{step?.notificationHeader}</p>
-                  <p>{step?.notificationBody}</p>
-                </NotificationContent>
-              </NotificationBar>
+              <TransactionDescription title={step?.notificationHeader}>{step?.notificationBody}</TransactionDescription>
             </TransactionModal>
           </Block>
         </GridCol>

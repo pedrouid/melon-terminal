@@ -12,6 +12,7 @@ import { Spinner } from '~/storybook/components/Spinner/Spinner';
 import { Checkboxes } from '~/storybook/components/Checkbox/Checkbox';
 import { useAccount } from '~/hooks/useAccount';
 import { useFundExchangesQuery } from './FundExchanges.query';
+import { TransactionDescription } from '~/components/Common/TransactionModal/TransactionDescription';
 
 export interface ExchangesProps {
   address: string;
@@ -99,7 +100,11 @@ export const FundExchanges: React.FC<ExchangesProps> = ({ address }) => {
         </form>
       </FormContext>
 
-      <TransactionModal transaction={transaction} />
+      <TransactionModal transaction={transaction}>
+        <TransactionDescription title="Add exchange">
+          You are adding an exchange to the list of allowed exchanges.
+        </TransactionDescription>
+      </TransactionModal>
     </Block>
   );
 };

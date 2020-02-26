@@ -20,6 +20,7 @@ import { Subtitle } from '~/storybook/components/Title/Title';
 import { Button } from '~/storybook/components/Button/Button';
 import { catchError, map, expand, switchMapTo } from 'rxjs/operators';
 import { FormattedNumber } from '~/components/Common/FormattedNumber/FormattedNumber';
+import { TransactionDescription } from '~/components/Common/TransactionModal/TransactionDescription';
 
 export interface FundKyberTradingProps {
   trading: string;
@@ -106,7 +107,7 @@ export const FundKyberTrading: React.FC<FundKyberTradingProps> = props => {
       takerAsset: props.taker.address,
     });
 
-    transaction.start(tx, 'Take order');
+    transaction.start(tx, 'Take order on Kyber');
   };
 
   return (
@@ -126,7 +127,9 @@ export const FundKyberTrading: React.FC<FundKyberTradingProps> = props => {
           'No Offer'
         )}
       </Button>
-      <TransactionModal transaction={transaction} />
+      <TransactionModal transaction={transaction}>
+        <TransactionDescription title="Take order on Kyber">You are taking an order on Kyber.</TransactionDescription>
+      </TransactionModal>
     </>
   );
 };

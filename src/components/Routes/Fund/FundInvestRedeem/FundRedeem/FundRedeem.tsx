@@ -22,6 +22,8 @@ import {
 } from '~/storybook/components/Checkbox/Checkbox';
 import { toTokenBaseUnit } from '~/utils/toTokenBaseUnit';
 import { FormattedNumber } from '~/components/Common/FormattedNumber/FormattedNumber';
+import { TransactionDescription } from '~/components/Common/TransactionModal/TransactionDescription';
+import { useFund } from '~/hooks/useFund';
 
 export interface FundRedeemProps {
   address: string;
@@ -31,6 +33,7 @@ export const FundRedeem: React.FC<FundRedeemProps> = ({ address }) => {
   const environment = useEnvironment()!;
   const account = useAccount();
   const [result, query] = useFundInvestQuery(address);
+  const fund = useFund();
 
   const participationAddress = result?.account?.participation?.address;
   const hasInvested = result?.account?.participation?.hasInvested;
@@ -66,6 +69,7 @@ export const FundRedeem: React.FC<FundRedeemProps> = ({ address }) => {
   });
 
   const redeemAll = form.watch('redeemAll') as boolean;
+  const shareQuantity = form.watch('shareQuantity') as BigNumber;
 
   useEffect(() => {
     if (redeemAll) {
@@ -128,8 +132,23 @@ export const FundRedeem: React.FC<FundRedeemProps> = ({ address }) => {
         </>
       )}
       {(!hasInvested || shares?.balanceOf?.isZero() || !shares?.balanceOf) && <>You don't own any shares.</>}
-
-      <TransactionModal transaction={transaction} />
+      <TransactionModal transaction={transaction}>
+        <TransactionDescription title="Redeem shares">
+          You are redeeming{' '}
+          {redeemAll ? (
+            <>
+              all your <FormattedNumber value={shares?.balanceOf} />
+              shares{' '}
+            </>
+          ) : (
+            <>
+              <FormattedNumber value={shareQuantity} /> shares (of your total of{' '}
+              <FormattedNumber value={shares?.balanceOf} /> shares){' '}
+            </>
+          )}{' '}
+          of the fund &laquo;{fund.name}.&raquo; You will you receive a slice of the fund's assets.
+        </TransactionDescription>
+      </TransactionModal>
     </Block>
   );
 };

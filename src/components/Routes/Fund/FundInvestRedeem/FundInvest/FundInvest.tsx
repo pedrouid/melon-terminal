@@ -14,6 +14,7 @@ import { RequiresFundCreatedAfter } from '~/components/Gates/RequiresFundCreated
 import { TransactionModal } from '~/components/Common/TransactionModal/TransactionModal';
 import { usePriceFeedUpdateQuery } from '~/components/Layout/PriceFeedUpdate.query';
 import { TokenValue } from '~/components/Common/TokenValue/TokenValue';
+import { TransactionDescription } from '~/components/Common/TransactionModal/TransactionDescription';
 import { RequiresFundNotShutDown } from '~/components/Gates/RequiresFundNotShutDown/RequiresFundNotShutDown';
 
 export interface FundInvestProps {
@@ -144,7 +145,18 @@ export const FundInvest: React.FC<FundInvestProps> = ({ address }) => {
               </p>
             </>
           )}
-          <TransactionModal transaction={transaction} />
+          <TransactionModal transaction={transaction}>
+            {transaction.state.name === 'Approve' && (
+              <TransactionDescription title="Approve">
+                You are approving the fund's Participation contract to transfer your investment amount to itself.{' '}
+              </TransactionDescription>
+            )}
+            {transaction.state.name === 'Invest' && (
+              <TransactionDescription title="Request investment">
+                You are creating the actual investment request into the fund.
+              </TransactionDescription>
+            )}
+          </TransactionModal>
         </RequiresFundCreatedAfter>
       </RequiresFundNotShutDown>
     </Block>

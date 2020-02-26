@@ -10,6 +10,9 @@ import { useAccount } from '~/hooks/useAccount';
 import { useTransaction } from '~/hooks/useTransaction';
 import { TransactionModal } from '~/components/Common/TransactionModal/TransactionModal';
 import { TokenValue } from '~/components/Common/TokenValue/TokenValue';
+import { TransactionDescription } from '~/components/Common/TransactionModal/TransactionDescription';
+import { FormattedNumber } from '~/components/Common/FormattedNumber/FormattedNumber';
+import { fromTokenBaseUnit } from '~/utils/fromTokenBaseUnit';
 
 export const WalletOverviewInvestmentRequest: React.FC<InvestmentRequest> = props => {
   const environment = useEnvironment()!;
@@ -77,7 +80,23 @@ export const WalletOverviewInvestmentRequest: React.FC<InvestmentRequest> = prop
         </BodyCellRightAlign>
         <BodyCell>{!query.loading && buttonAction()}</BodyCell>
       </BodyRow>
-      <TransactionModal transaction={transaction} />
+      <TransactionModal transaction={transaction}>
+        {status?.canCancelRequest && (
+          <TransactionDescription title="Cancel investment request">
+            Your investment request will be cancelled. The initially requested investment amount of{' '}
+            <FormattedNumber value={props.requestAmount} suffix={props.requestAsset} /> will be returned to your wallet
+          </TransactionDescription>
+        )}
+        {status?.investmentRequestState === 'VALID' && (
+          <TransactionDescription title="Execute investment request">
+            Your investment request will be executed. You will receive{' '}
+            <FormattedNumber value={fromTokenBaseUnit(props.requestShares, 18)} /> shares of the fund &laquo;
+            {props.name}&raquo; for the maximal amount of{' '}
+            <FormattedNumber value={fromTokenBaseUnit(props.requestAmount, 18)} suffix={props.requestAsset} /> (the
+            exact amount is calculated from the current share price)
+          </TransactionDescription>
+        )}
+      </TransactionModal>
     </>
   );
 };

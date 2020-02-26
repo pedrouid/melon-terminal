@@ -18,6 +18,7 @@ import { NotificationBar, NotificationContent } from '~/storybook/components/Not
 import { RequiresFundSetupNotStarted } from '~/components/Gates/RequiresFundSetupNotStarted/RequiresFundSetupNotStarted';
 import { Fallback } from '~/components/Common/Fallback/Fallback';
 import { Link } from '~/storybook/components/Link/Link';
+import { TransactionDescription } from '~/components/Common/TransactionModal/TransactionDescription';
 
 export interface WalletFundSetupForm {
   name: string;
@@ -242,15 +243,9 @@ export const WalletFundSetup: React.FC = () => {
         </Grid>
       </RequiresFundSetupNotStarted>
       <TransactionModal transaction={transaction}>
-        <NotificationBar kind="neutral">
-          <NotificationContent>
-            <p>Begin Setup (Step 1 of 9)</p>
-            <p>
-              This transaction stores all the parameters related to your new fund and creates the skeleton of your new
-              fund.
-            </p>
-          </NotificationContent>
-        </NotificationBar>
+        <TransactionDescription title="Begin Setup (Step 1 of 9)">
+          This transaction stores all the parameters related to your new fund and creates the skeleton of your new fund.
+        </TransactionDescription>
       </TransactionModal>
     </>
   );

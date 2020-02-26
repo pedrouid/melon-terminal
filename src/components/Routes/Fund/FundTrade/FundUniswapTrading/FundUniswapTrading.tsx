@@ -20,6 +20,7 @@ import { Subtitle } from '~/storybook/components/Title/Title';
 import { Button } from '~/storybook/components/Button/Button';
 import { catchError, map, switchMapTo, expand } from 'rxjs/operators';
 import { FormattedNumber } from '~/components/Common/FormattedNumber/FormattedNumber';
+import { TransactionDescription } from '~/components/Common/TransactionModal/TransactionDescription';
 
 export interface FundUniswapTradingProps {
   trading: string;
@@ -145,7 +146,11 @@ export const FundUniswapTrading: React.FC<FundUniswapTradingProps> = props => {
           'No Offer'
         )}
       </Button>
-      <TransactionModal transaction={transaction} />
+      <TransactionModal transaction={transaction}>
+        <TransactionDescription title="Take order on Uniswap">
+          You are taking an order on Uniswap.
+        </TransactionDescription>
+      </TransactionModal>
     </>
   );
 };
