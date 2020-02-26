@@ -12,21 +12,23 @@ import {
 import { SectionTitle } from '~/storybook/components/Title/Title';
 import { Button } from '~/storybook/components/Button/Button.styles';
 import { networkFromId } from '~/utils/networkFromId';
+import { getConfig } from '~/config';
+import { NetworkEnum } from '~/types';
 
 interface EthResource extends Rx.Unsubscribable {
   eth: Eth;
 }
 
-// melon default provider
 const connect = () => {
+  const config = getConfig(NetworkEnum.MAINNET)!;
   const customNodeOptions = {
-    rpcUrl: process.env.MELON_FORTMATIC_PROVIDER,
-    chainId: process.env.MELON_FORTMATIC_NETWORK,
+    rpcUrl: config.provider,
+    chainId: 1,
   };
 
   const fm = new Fortmatic(process.env.MELON_FORTMATIC_KEY, customNodeOptions);
   const provider = fm.getProvider();
-
+  getConfig;
   const create = () => {
     const eth = new Eth(provider, undefined, {
       transactionConfirmationBlocks: 1,
@@ -68,7 +70,7 @@ export const FortmaticComponent: React.FC<ConnectionMethodProps> = ({ connect, d
 
 export const method: ConnectionMethod = {
   connect,
-  supported: () => true,
+  supported: () => !!getConfig(NetworkEnum.MAINNET),
   component: FortmaticComponent,
   icon: 'FORTMATIC',
   name: 'fortmatic',

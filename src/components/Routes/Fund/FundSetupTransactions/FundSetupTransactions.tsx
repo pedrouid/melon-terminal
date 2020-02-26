@@ -23,6 +23,7 @@ import {
   CheckboxLabel,
 } from '~/storybook/components/Checkbox/Checkbox';
 import { TransactionDescription } from '~/components/Common/TransactionModal/TransactionDescription';
+import { getNetworkName } from '~/config';
 
 interface TransactionPipelineItem {
   previous: string;
@@ -149,7 +150,8 @@ export const FundSetupTransactions: React.FC = () => {
     setChecked(newChecked);
 
     if (fund && acknowledged && progress === 'COMPLETE') {
-      return history.push(`/fund/${fund!.address}`);
+      const prefix = getNetworkName(environment.network)!;
+      return history.push(`/${prefix}/fund/${fund!.address}`);
     }
 
     if (acknowledged && next) {
