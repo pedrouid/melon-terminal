@@ -21,23 +21,23 @@ interface EthResource extends Rx.Unsubscribable {
 
 // melon default provider
 const connect = () => {
-  const customNodeOptions = {
-    infuraId: process.env.MELON_WALLETCONNECT_INFURA_ID,
-  };
-
-  const provider = new WalletConnectProvider(customNodeOptions);
-
   const create = () => {
+    const provider = new WalletConnectProvider({
+      infuraId: process.env.MELON_WALLETCONNECT_INFURA_ID,
+    });
+
     const eth = new Eth(provider, undefined, {
       transactionConfirmationBlocks: 1,
     });
+
     return { eth, unsubscribe: () => provider.close() };
   };
 
   return Rx.using(create, resource => {
     const eth = (resource as EthResource).eth;
+    const provider = eth.currentProvider;
 
-    const enable$ = Rx.defer(() => ethereum.enable() as Promise<string[]>).pipe(startWith([]));
+    const enable$ = Rx.defer(() => provider.enable() as Promise<string[]>).pipe(startWith([]));
     const initial$ = enable$.pipe(
       switchMap(async accounts => {
         const network = networkFromId(await eth.net.getId());
