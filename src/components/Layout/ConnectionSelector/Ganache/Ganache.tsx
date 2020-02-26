@@ -12,14 +12,17 @@ import {
 } from '~/components/Contexts/Connection/Connection';
 import { SectionTitle } from '~/storybook/components/Title/Title';
 import { Button } from '~/storybook/components/Button/Button';
+import { getConfig } from '~/config';
+import { NetworkEnum } from '~/types';
 
 interface EthResource extends Rx.Unsubscribable {
   eth: Eth;
 }
 
 const connect = (): Rx.Observable<ConnectionAction> => {
+  const config = getConfig(NetworkEnum.TESTNET)!;
   const create = (): EthResource => {
-    const provider = new HttpProvider(process.env.MELON_TESTNET_PROVIDER);
+    const provider = new HttpProvider(config.provider);
     const eth = new Eth(provider, undefined, {
       transactionConfirmationBlocks: 1,
     });
@@ -60,7 +63,7 @@ export const Ganache: React.FC<ConnectionMethodProps> = ({ connect, disconnect, 
 
 export const method: ConnectionMethod = {
   connect,
-  supported: () => true,
+  supported: () => !!getConfig(NetworkEnum.TESTNET),
   component: Ganache,
   icon: 'GANACHE',
   name: 'ganache',

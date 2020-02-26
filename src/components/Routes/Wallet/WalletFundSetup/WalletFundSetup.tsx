@@ -19,6 +19,7 @@ import { RequiresFundSetupNotStarted } from '~/components/Gates/RequiresFundSetu
 import { Fallback } from '~/components/Common/Fallback/Fallback';
 import { Link } from '~/storybook/components/Link/Link';
 import { TransactionDescription } from '~/components/Common/TransactionModal/TransactionDescription';
+import { getNetworkName } from '~/config';
 
 export interface WalletFundSetupForm {
   name: string;
@@ -93,7 +94,8 @@ export const WalletFundSetup: React.FC = () => {
         history.push('/wallet');
       }
 
-      history.push(`/fund/${account.fund}`, {
+      const prefix = getNetworkName(environment.network);
+      history.push(`/${prefix}/fund/${account.fund}`, {
         start: true,
       });
     },
@@ -129,12 +131,13 @@ export const WalletFundSetup: React.FC = () => {
     transaction.start(tx, 'Begin setup');
   });
 
+  const prefix = getNetworkName(environment.network);
   const fallback = transactionFinished ? (
     <></>
   ) : (
     <Fallback kind="error">
       You have already started to setup your fund or your fund has already been fully setup. Go to{' '}
-      <Link to={`/fund/${account.fund}`}>your fund</Link> to view your fund.
+      <Link to={`/${prefix}/fund/${account.fund}`}>your fund</Link> to view your fund.
     </Fallback>
   );
 
