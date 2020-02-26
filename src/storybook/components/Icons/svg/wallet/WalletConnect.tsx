@@ -1,6 +1,6 @@
 import React, { SVGProps } from 'react';
 
-const SvgFortmatic = (props: SVGProps<SVGSVGElement>) => (
+const SvgWalletConnect = (props: SVGProps<SVGSVGElement>) => (
  <svg width="300px" height="185px" viewBox="0 0 300 185" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" {...props}>
     <title>WalletConnect</title>
     <desc>Created with Sketch.</desc>
