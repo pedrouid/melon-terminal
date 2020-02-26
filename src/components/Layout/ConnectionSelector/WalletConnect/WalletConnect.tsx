@@ -2,9 +2,11 @@ import React from 'react';
 // @ts-ignore
 import WalletConnectProvider from '@walletconnect/web3-provider';
 import { Eth } from 'web3-eth';
-import { retryWhen, delay } from 'rxjs/operators';
+import { map, switchMap, mapTo } from 'rxjs/operators';
 import * as Rx from 'rxjs';
 import {
+  networkChanged,
+  accountsChanged,
   connectionEstablished,
   ConnectionMethodProps,
   ConnectionMethod,
@@ -35,15 +37,23 @@ const connect = () => {
   return Rx.using(create, resource => {
     const eth = (resource as EthResource).eth;
 
-    const connection$ = Rx.defer(async () => {
-      await provider.enable();
-      const [id, accounts] = await Promise.all([eth.net.getId(), eth.getAccounts()]);
-      const network = networkFromId(id);
+    const enable$ = Rx.defer(() => provider.enable() as Promise<string[]>);
+    const timer$ = Rx.timer(100).pipe(mapTo([]));
+    const initial$ = Rx.race(enable$, timer$).pipe(
+      switchMap(async accounts => {
+        const network = networkFromId(await eth.net.getId());
+        return connectionEstablished(eth, network, accounts);
+      })
+    );
 
-      return connectionEstablished(eth, network, accounts);
-    }).pipe(retryWhen(error => error.pipe(delay(1000))));
+    const network$ = Rx.fromEvent<string>(provider, 'networkChanged').pipe(
+      map(id => networkChanged(networkFromId(parseInt(id, 10))))
+    );
 
-    return Rx.concat(connection$, Rx.NEVER);
+    const accounts$ = Rx.concat(enable$, Rx.fromEvent<string[]>(provider, 'accountsChanged')).pipe(
+      map(accounts => accountsChanged(accounts))
+    );
+    return Rx.concat(initial$, Rx.merge(accounts$, network$));
   });
 };
 
