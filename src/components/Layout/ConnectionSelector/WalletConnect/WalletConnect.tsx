@@ -35,7 +35,7 @@ const connect = () => {
 
   return Rx.using(create, resource => {
     const eth = (resource as EthResource).eth;
-    const provider = eth.currentProvider;
+    const provider = eth.currentProvider as any;
 
     const enable$ = Rx.defer(() => provider.enable() as Promise<string[]>).pipe(startWith([]));
     const initial$ = enable$.pipe(
