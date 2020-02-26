@@ -25,7 +25,7 @@ const AppComponent = () => {
   let start = anonymous;
   let methods = process.env.MELON_TESTNET ? [ganache, ...common] : common;
   let switchable = true;
-
+};
 
 if (coinbase.supported()) {
   start = coinbase;
