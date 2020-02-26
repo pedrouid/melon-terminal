@@ -138,8 +138,6 @@ export const Layout: React.FC<LayoutProps> = props => {
             {environment?.network && <FooterItem>{NetworkEnum[environment.network]}</FooterItem>}
 
             {version && <FooterItem>Protocol {version.name}</FooterItem>}
-
-            <FooterItem>Staging</FooterItem>
           </FooterNavigation>
         </Footer>
       </SkeletonFeet>
